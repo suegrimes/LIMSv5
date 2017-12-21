@@ -29,6 +29,27 @@ gem 'jbuilder', '~> 2.5'
 # Observers is now a separate gem
 gem 'rails-observers'
 
+# handle MS Excel using Open XML Format
+gem 'rubyXL', '~> 3.3.3'
+
+# ruby encyrption
+gem 'ezcrypto'
+
+# date validation
+gem 'validates_timeliness'
+
+# file uploading
+gem 'carrierwave'
+
+# authorization library
+gem 'cancan'
+
+# rails jquery support
+gem 'jquery-rails'
+
+# boostrap CSS framework
+gem 'bootstrap', '~> 4.0.0.beta2'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

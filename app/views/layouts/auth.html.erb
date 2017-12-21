@@ -1,0 +1,12 @@
+
+<!-- layout for authentication -->
+
+<% content_for :single_panel do %>
+  <div class="row align-items-center justify-content-center bkg-sample-slides">
+    <div id="auth-panel" class="col-5">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :file => 'layouts/application' %>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SeqLIMS</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+    <%= render :file => 'layouts/header' %>
+
+    <div style='color:red'> <%= flash[:error]%></div>
+    <div style='color:green'> <%= flash[:notice]%></div>
+
+    <%= content_for?(:top_navigation) ? yield(:top_navigation) : nil %>
+
+    <%= content_for?(:panel_1) ? yield(:panel_1) : nil %>
+    <%= content_for?(:panel_2) ? yield(:panel_2) : nil %>
+    <%= content_for?(:panel_3) ? yield(:panel_3) : nil %>
+
+    <%= yield %>
+
+    <%= render :file => 'layouts/footer' %>
+
+  </body>
+</html>

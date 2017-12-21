@@ -1,0 +1,29 @@
+<div id="utils" style="float:right">
+
+  <div class="version">
+    <% env_descr  = (DEMO_APP == true ? "(DEMO)" : (Rails.env == 'production' ? nil : "(#{Rails.env})"))%>
+    <% if APP_VERSION %>
+      Version: <%= APP_VERSION %>
+    <% end %>
+    <span class="grey"><%=h env_descr %></span><br>
+    <% if Rails.env != 'production' %>
+      <span class="grey">
+        Rails <%= Rails.version %> - Ruby <%= RUBY_VERSION %>
+      </span>
+    <% end %>
+  </div>
+
+  <div class="header-util-image">
+    <%= image_tag("twisted_sequence.gif", :height => "40") %>
+  </div>
+
+  <div class="header-util-links">
+    <% if (logged_in? && controller.action_name != "logout") %>
+        <div class="logout-link">
+          <%= link_to 'User Profile', edit_user_path(current_user) %>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to 'Logout', logout_url %>
+        </div>
+    <% end %>
+  </div>
+
+</div>

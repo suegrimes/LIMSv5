@@ -9,6 +9,39 @@
   </head>
 
   <body>
-    <%= yield %>
+
+    <%= render :file => 'layouts/header' %>
+
+    <div id="main-container" class="container">
+
+      <!-- flash box -->
+      <div id="flash-row" class="row">
+        <div class="col-3"></div>
+        <div style='color:red'> <%= flash[:error]%></div>
+        <div style='color:green'> <%= flash[:notice]%></div>
+      </div>
+
+      <!-- top navigation -->
+      <div id="top-nav-row" class="row">
+        <%= content_for?(:top_navigation) ? yield(:top_navigation) : nil %>
+      </div>
+
+      <% if content_for?(:single_panel) %>
+        <!-- row defined in single_panel -->
+        <%= yield(:single_panel) %>
+
+      <% else %>
+        <div id="panel-row" class="row bkg-sample-slides"">
+          <!-- render up to 3 panels -->
+          <%= content_for?(:panel_1) ? yield(:panel_1) : nil %>
+          <%= content_for?(:panel_2) ? yield(:panel_2) : nil %>
+          <%= content_for?(:panel_3) ? yield(:panel_3) : nil %>
+        </div>
+      <% end %>
+
+    </div>
+
+    <%= render :file => 'layouts/footer' %>
+
   </body>
 </html>
