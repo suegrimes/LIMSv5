@@ -17,10 +17,20 @@ class WelcomeController < ApplicationController
   end
 
   def user_login
+    # in case someone navigates here while already logged in
+    if logged_in?
+      flash[:notice] = "Already logged in as #{self.current_user.login} - Logout to change user"
+      redirect_to :root
+      return
+    end
     #self.current_user = User.authenticate(params[:login], params[:password])
-    # using bootstrap_forms_for(@user) puts user params inside a hash
+    # using bootstrap_forms_for(@user) puts user params inside a user hash
     user_params = params[:user]
-    self.current_user = User.authenticate(user_params[:login], user_params[:password])
+    if user_params
+      self.current_user = User.authenticate(user_params[:login], user_params[:password])
+    else
+      raise "Missing user parameters"
+    end
     # Authorization::current_user = @user   # for declarative_authorization #
     if logged_in?
       log_entry("Login")
