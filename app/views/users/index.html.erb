@@ -1,11 +1,17 @@
-<h1>User Listing</h1>
-<table class="list">
-  <tr>
-    <th>Login</th>
-	<th>Email</th>
-	<th>Roles</th>
-    <% if can? :delete, User %><th></th><% end %>
-  </tr>
+<h4>User Listing</h4>
+
+<table class="table table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Login</th>
+      <th scope="col">Email</th>
+      <th scope="col">Roles</th>
+      <% if can? :delete, User %>
+        <th scope="col"></th>
+      <% end %>
+    </tr>
+  </thead>
+
   <% for user in @users do %>
   <tr>
   	<% if can? :edit, user %>

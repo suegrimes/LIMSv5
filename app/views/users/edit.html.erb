@@ -1,37 +1,21 @@
-<h1>Edit User</h1>
 
-<%= tagged_form_for(@user) do |f| -%>
-  <%= render '/shared/errors', model: @user %>
+<%= bootstrap_form_for(@user) do |f| %>
+  <%= f.text_field :login %>
+  <%= f.email_field :email %>
 
-<fieldset class="form">
-<legend>User Details</legend>
+  <!-- need to hand craft this one, since we use the password field below -->
+  <div class="form-group">
+    <input placeholder="Current password" class="form-control" type="password" name="curr_user[current_password]" id="cur_password">
+  </div>
 
-  <table class="form">
-  <% if DEMO_APP && current_user.login != @user.login %>
-    <tr><th>Login:</th><td><%=h @user.login %>&nbsp;&nbsp;<strong>Email:</strong>&nbsp;&nbsp;<%=h @user.email %></td></tr>
-    <tr><td></td></tr>	
-  <% else %>
-    <tr><%= f.text_field :login %></tr>  
-    <tr><%= f.text_field :email %></tr>
-	<tr>
-      <th><%= label :curr_user, :current_password %></th>
-      <td><%= password_field :curr_user, :current_password %></td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>
-    <tr><%= f.password_field :password, :label => 'New Password' %></tr>
-    <tr><%= f.password_field :password_confirmation, :label => 'New Password Confirmation' %></tr>
-  <% end %>
-  
+  <%= f.password_field :password, label: "New password" %>
+  <%= f.password_field :password_confirmation, label: "Confirm password" %>
+  <%= f.submit "Update user", class: "btn btn-primary" %>
+
   <% if can? :update, Role %>
-    <tr><th><%= f.label :roles %></th>
-    <td><% for role in @roles do %>
+    <% for role in @roles do %>
       <% next if role.name == 'admin' && !current_user.has_role?("admin") %>
-      <%= check_box_tag "user[role_ids][]", role.id, @user.has_role?(role.name,'admin_does_not_default') -%>
-      <%= role.name %>
-    <% end %></td></tr>
+      <%= f.check_box role, @user.has_role?(role.name,'admin_does_not_default'), label: role.name %>
+    <% end %>
   <% end %>
-  </table>
-</fieldset>
-<%=raw break_clear %>
-<div><%= f.submit 'Update' -%></div>
 <% end %>

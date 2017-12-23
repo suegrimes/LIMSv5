@@ -17,11 +17,14 @@ class WelcomeController < ApplicationController
   end
 
   def user_login
-    self.current_user = User.authenticate(params[:login], params[:password])
+    #self.current_user = User.authenticate(params[:login], params[:password])
+    # using bootstrap_forms_for(@user) puts user params inside a hash
+    user_params = params[:user]
+    self.current_user = User.authenticate(user_params[:login], user_params[:password])
     # Authorization::current_user = @user   # for declarative_authorization #
     if logged_in?
       log_entry("Login")
-      if params[:remember_me] == "1"
+      if user_params[:remember_me] == "1"
         self.current_user.remember_me
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end

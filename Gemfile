@@ -50,6 +50,9 @@ gem 'jquery-rails'
 # boostrap CSS framework
 gem 'bootstrap', '~> 4.0.0.beta2'
 
+# boostrap form builder
+gem 'bootstrap_form'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

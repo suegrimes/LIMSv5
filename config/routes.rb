@@ -9,6 +9,6 @@ Rails.application.routes.draw do
 
   resources :users
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
-  get 'reset/:reset_code' => 'users#reset', :as => :reset
+  match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
 
 end
