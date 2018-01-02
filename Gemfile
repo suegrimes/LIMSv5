@@ -42,7 +42,7 @@ gem 'validates_timeliness'
 gem 'carrierwave'
 
 # authorization library
-gem 'cancan'
+gem 'cancancan', '~> 2.0'
 
 # rails jquery support
 gem 'jquery-rails'
