@@ -1,0 +1,30 @@
+
+<!-- layout for the samples pages -->
+
+<% content_for :top_navigation do %>
+  <!-- keep left side blank -->
+  <div class="col-3">
+  </div>
+  <div class="col-9">
+    <%= render "layouts/main/main_nav" %>
+  </div>
+<% end %>
+
+<% content_for :panel_1 do %>
+  <div id="left-panel" class="col-3">
+    <!-- put some content here -->
+    Left Panel Placeholder
+  </div>
+<% end %>
+
+<% content_for :panel_2 do %>
+  <div id="main-panel" class="col-9">
+
+    <!-- render the samples navigation -->
+    <%= render "samples/samples_nav" %>
+
+    <%= yield %>
+  </div>
+<% end %>
+
+<%= render :file => 'layouts/application' %>

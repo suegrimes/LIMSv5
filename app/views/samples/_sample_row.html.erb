@@ -1,0 +1,41 @@
+<% row_tags     ||= 'yes' %>
+<% barcode_link ||= 'none' %>
+<% nonblank_comments = !sample.comments.blank? %>
+
+<% if row_tags == 'yes' %><tr><% end %>
+
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>> 
+<% if    barcode_link == 'edit' %><%= link_to sample.barcode_key, edit_sample_path(sample)%> 
+<% elsif barcode_link == 'show' %><%= link_to sample.barcode_key, sample_path(sample)%>
+<% else %>                        <%=h sample.barcode_key %>
+<% end %>
+</td>
+
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.alt_identifier %></td>
+
+<% if sample.clinical_sample == 'yes' %><td class=<%= "dotted_border_bottom" if nonblank_comments %>> Clinical </td>
+<% else %>                              <td class=<%= "dotted_border_bottom" if nonblank_comments %>>Sample: <%=h sample.source_barcode_key %></td>
+<% end %>
+
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_date %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_category %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.tumor_normal %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_type %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_amt %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_remaining%></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.room_and_freezer %></td>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_and_position%></td>
+<% if can? :edit, sample %>
+<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=link_to 'Edit', edit_sample_path(sample) %></td>
+<% end %>
+
+<% if !sample.comments.blank? %> 
+  </tr>  
+  <tr>
+  	<td></td>
+    <td colspan="11" style="border-top:0;">     
+      <div>Sample Comments:&nbsp;<%=h sample.comments %></div>
+    </td>
+<% end %>
+
+<% if row_tags == 'yes' %></tr><% end %>

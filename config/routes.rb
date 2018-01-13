@@ -11,6 +11,18 @@ Rails.application.routes.draw do
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
   match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
 
+  # Routes for clinical samples/sample characteristics
+  resources :sample_characteristics do
+    get 'add_new_sample', on: :member
+    post 'add_another_sample', on: :member
+    post 'new_sample', on: :collection
+  end
+  resources :pathologies
+
+  post 'patient_sample' => 'sample_characteristics#new_sample', :as => :add_pt_sample
+  match 'modify_sample' => 'sample_characteristics#edit_params', :as => :modify_sample, :via => [:get, :post]
+  post 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
+
    # Routes for physical source samples
   resources :samples do
     collection do
@@ -30,5 +42,10 @@ Rails.application.routes.draw do
       #get :auto_complete_for_barcode_key
     end
   end
+
+  # Routes for patients
+  resources :patients
+  match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
+  match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
 end

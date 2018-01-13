@@ -1,7 +1,11 @@
 class SamplesController < ApplicationController
+  layout Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
   load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]
+
+  def index
+  end
   
   #########################################################################################
   #        Methods to show, edit, update samples                                          #

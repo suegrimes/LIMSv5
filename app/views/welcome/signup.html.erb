@@ -1,5 +1,6 @@
-
 <%= bootstrap_form_for(@user, url: {action: "add_user"}) do |f| %>
+  <%= render '/shared/errors', model: @user %>
+
   <%= f.text_field :login %>
   <%= f.email_field :email %>
   <%= f.password_field :password, label: "Password" %>

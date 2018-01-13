@@ -134,7 +134,9 @@ class UsersController < ApplicationController
   end
     
   def update_params_allowed
-    params.require(:user).permit(:login, :email, :password, :password_confirmation, :roles, :role_ids)
+    # mhayden: note that simply listing :role_id does not work since it is on an association
+    # needs to be role_ids: []
+    params.require(:user).permit(:login, :email, :password, :password_confirmation, role_ids: [])
   end
     
 end

@@ -10,7 +10,7 @@ class WelcomeController < ApplicationController
   
   def index
     if logged_in?
-      render 'index', layout: 'main'
+      render 'index', layout: 'main/main'
     else
       render 'login'
     end

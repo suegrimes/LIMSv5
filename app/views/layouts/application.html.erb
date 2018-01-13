@@ -8,7 +8,8 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
+  <!-- see common.js -->
+  <body data-controller="<%=controller_name%>" data-action="<%=action_name%>">
 
     <%= render :file => 'layouts/header' %>
 

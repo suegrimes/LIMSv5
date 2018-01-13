@@ -1,0 +1,32 @@
+<div class="card">
+  <h6 class="card-header">Edit Sample Acquisition</h6>
+  <div class="card-body">
+
+<%= form_tag(action: 'edit_params') do %>
+  <%= hidden_field_tag(:filter, 'edit')%>
+
+  <div class="form-group row">
+    <label for="mrn" class="col-auto col-form-label col-form-label-sm">MRN:</label>
+    <div class="col-auto">
+      <%= text_field_tag :mrn, nil, size: 12, placeholder: "MRN", class: "form-control" %>
+    </div>
+
+    <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+    <div class="col-auto">
+      <%= text_field_tag :patient_id, nil, size: 12, placeholder: "Patient ID", class: "form-control" %>
+    </div>
+
+    <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+    <div class="col-auto">
+      <%= text_field_tag :barcode_key, nil, size: 12, placeholder: "Barcode", class: "form-control" %>
+    </div>
+  </div>
+
+  <%= submit_tag 'Submit',  class: "btn btn-primary" %>
+<% end %>
+
+  <p class="font-italic">
+    Enter parameters to select tables to edit.
+  </p>
+
+</div>

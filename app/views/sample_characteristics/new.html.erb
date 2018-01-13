@@ -1,0 +1,21 @@
+<div class="card">
+  <h6 class="card-header">New Clinical Sample</h6>
+  <div class="card-body">
+
+<%= form_tag url_for(:action => 'new_sample') do %>
+
+  <div class="form-group row">
+    <label for="mrn" class="col-auto col-form-label col-form-label-sm">MRN:</label>
+    <div class="col-auto">
+      <%= text_field_tag :mrn_nr, nil, placeholder: "MRN or Birthdate (YYYYMMDD)", size: 30, class: "form-control" %>
+    </div>
+  </div>
+
+  <%= submit_tag 'Submit',  class: "btn btn-primary" %>
+<% end %>
+
+<p class="font-italic">Enter MRN number if available, otherwise Birthdate (YYYYMMDD).  
+<br/>If neither is available, use 'NA' and the system will assign an MRN in the format: NA_nnnnn where nnnnn is the uniquely assigned patient id </p>
+
+  </div>
+</div>

@@ -59,7 +59,7 @@ class SampleCharacteristic < ApplicationRecord
   
   def self.find_with_samples(patient_id=nil)
     condition_array = (patient_id.nil? ? nil : ['sample_characteristics.patient_id = ?', patient_id])
-    self.includes(:samples).where(*condition_array).order('sample_characteristics.patient_id, samples.barcode_key')
+    self.includes(:samples).where(*condition_array).order('sample_characteristics.patient_id, samples.barcode_key').references(:patient_id)
     #self.find(:all, :include => :samples,
     #                :order   => 'sample_characteristics.patient_id, samples.barcode_key',
     #                :conditions => condition_array)
@@ -70,7 +70,7 @@ class SampleCharacteristic < ApplicationRecord
     #                :order   => 'sample_characteristics.patient_id, sample_characteristics.collection_date DESC',
     #               :conditions => condition_array)
     sample_characteristics = self.includes(:patient, :samples).where(sql_where(condition_array))
-                                 .order('sample_characteristics.patient_id, sample_characteristics.collection_date DESC')
+                                 .order('sample_characteristics.patient_id, sample_characteristics.collection_date DESC').references(:patient_id)
     return sample_characteristics.size, 
            sample_characteristics.group_by {|samp_char| [samp_char.patient_id, samp_char.patient.mrn]}
   end

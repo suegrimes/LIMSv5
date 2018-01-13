@@ -1,0 +1,27 @@
+<h5>New Sample for Patient: <%=h @patient.id %>/<%=h @patient.mrn %> </h5>
+
+<%= form_for :patient, :url => {:action => 'create'} do |f| %>
+  <%= render '/shared/errors', model: @patient %>
+  
+  <%=f.hidden_field(:id) %>
+  <%=hidden_field_tag(:mrn_nr, params[:mrn_nr]) %>
+  
+  <%= render :partial => '/patients/patient_form', :locals => {:f => f, :patient => @patient, :patient_id => @patient.id} %>
+  
+    <%= fields_for @sample_characteristic do |c| %>
+        <%= render '/shared/errors', model: @sample_characteristic %>
+	  
+      <%= render :partial => 'clinical_form',   :locals => {:f => c} %>
+  
+	  <% for sample in @sample_characteristic.samples %>
+	    <%= c.fields_for :samples, sample do |s| %>
+         <%= render :partial => 'samples_form', :locals => {:s => s,
+                                                            :sample => sample,
+                                                            :removable => 'no'} %>
+		<% end %>
+	  <% end %>
+	  
+	<% end %>
+  
+  <%= f.submit "Save", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'Back', :back %>
+  <% end %>

@@ -1,21 +1,37 @@
 
 <%= bootstrap_form_for(@user) do |f| %>
-  <%= f.text_field :login %>
-  <%= f.email_field :email %>
+  <%= render '/shared/errors', model: @user %>
 
-  <!-- need to hand craft this one, since we use the password field below -->
-  <div class="form-group">
-    <input placeholder="Current password" class="form-control" type="password" name="curr_user[current_password]" id="cur_password">
-  </div>
+  <h6>User Details</h6>
 
-  <%= f.password_field :password, label: "New password" %>
-  <%= f.password_field :password_confirmation, label: "Confirm password" %>
-  <%= f.submit "Update user", class: "btn btn-primary" %>
+  <% if DEMO_APP && current_user.login != @user.login %>
+    Login:&nbsp;&nbsp;<%=h @user.login %>&nbsp;&nbsp;<strong>Email:</strong>&nbsp;&nbsp;<%=h @user.email %>
+  <% else %>
+
+    <%= f.text_field :login %>
+    <%= f.email_field :email %>
+
+    <!-- need to hand craft this one, since we use the password field below -->
+    <div class="form-group">
+      <label class="control-label required" for="curr_user[current_password]">Current Password</label>
+      <input placeholder="Current password" class="form-control" type="password" name="curr_user[current_password]" id="cur_password">
+    </div>
+
+    <%= f.password_field :password, label: "New Password", placeholder: "New password" %>
+    <%= f.password_field :password_confirmation, label: "Confirm Password", placeholder: "Current password" %>
+  <% end %>
 
   <% if can? :update, Role %>
+    <%= f.label "Roles:" %><br>
     <% for role in @roles do %>
       <% next if role.name == 'admin' && !current_user.has_role?("admin") %>
-      <%= f.check_box role, @user.has_role?(role.name,'admin_does_not_default'), label: role.name %>
+        <div class="form-check form-check-inline">
+        <%= check_box_tag "user[role_ids][]", role.id, @user.has_role?(role.name,'admin_does_not_default'), id: "user_role_ids_#{role.id}" %>
+        <%= role.name %>
+      </div>
     <% end %>
   <% end %>
+  <br/>
+
+  <%= f.submit "Update User", class: "btn btn-primary" %>
 <% end %>

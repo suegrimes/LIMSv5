@@ -1,0 +1,69 @@
+<div class="card">
+  <h6 class="card-header">Patient Details</h6>
+
+  <div class="form-group row">
+  <% if controller.action_name == 'new' || controller.controller_name == 'patients' %>
+    <label for="mrn" class="col-auto col-form-label col-form-label-sm">MRN:</label>
+    <div class="col-auto">
+      <%=f.text_field(:mrn, size: 10, class: "form-control")%>
+    </div>
+
+  <% elsif can? :read, Patient %>
+
+    <label for="" class="col-auto col-form-label col-form-label-sm">MRN:</label>
+    <div class="col-auto">
+      <%=h patient.mrn%>
+    </div>
+  <% end %>
+  
+    <label for="" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+    <div class="col-auto">
+      <%=h patient_id %>
+    </div>
+      <% hidden_field_tag(:patient_id, patient_id) %>
+  </div>
+
+  <div class="form-group row">
+    <label for="patient_organism" class="col-auto col-form-label col-form-label-sm">Organism:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:organism, @organisms, :c_value, :c_value, {}, {class: "form-control"})%>
+    </div>
+
+    <label for="patient_gender" class="col-auto col-form-label col-form-label-sm">Gender:</label>
+    <div class="col-auto">
+      <%=f.select(:gender, %w{U M F}, {}, {class: "form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="patient_ethnicity" class="col-auto col-form-label col-form-label-sm">Ethnicity:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:ethnicity, @ethnicity, :c_value, :c_value, {:include_blank => 'Select ethnicity'}, {class: "form-control"})%>
+    </div>
+
+    <label for="patient_race" class="col-auto col-form-label col-form-label-sm">Race:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:race, @races, :c_value, :c_value, {:include_blank => 'Select race'}, {class: "form-control"})%>
+    </div>
+  </div>
+	
+  <div class="form-group row">
+  <% if controller.action_name == 'new_sample' || controller.controller_name == 'patients' %> 
+
+    <label for="patient_hipaa_data" class="col-auto col-form-label col-form-label-sm">PHI Notes:</label>
+    <div class="col-auto">
+      <%#=f.text_field(:hipaa_data, size: 30, class: "form-control") %>
+      <%=f.text_field(:hipaa_data, class: "form-control") %>
+    </div>
+
+  <% elsif can? :read, Patient %>
+
+    <label for="" class="col-auto col-form-label col-form-label-sm">PHI Notes:</label>
+    <div class="col-auto">
+      <%=h patient.hipaa_data %>
+    </div>
+
+  <% end %>
+  </div>
+
+</div>
