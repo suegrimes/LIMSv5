@@ -29,6 +29,16 @@ tbody {
   background-color: white
 }
 
+/* class for smaller font sizes in table data */
+table.table-font-sm td {
+  font-size: .875rem
+}
+
+/* class for smaller font sizes in table header */
+thead.thead-font-sm th {
+  font-size: .875rem
+}
+
 /* Single-direction drop shadow */
 hr.down-shadow {
     height: 10px;
