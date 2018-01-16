@@ -7,11 +7,14 @@
                                                      :patient => @sample_characteristic.patient } %>  
   <%= render :partial => 'clinical_form',    :locals => {:f => f} %>
   
-  <%=raw break_clear %>
   
-  <span class="table_title">Physical Sample(s):</span>
-  <table class="list">
+<div class="card">
+<h6 class="card-header">Physical Sample(s)</h6>
+
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
     <%= render :partial => 'samples/sample_hdr' %>
+    </thead>
 	
     <% for sample in @sample_characteristic.samples %>
 	   <% if !sample.id.nil?%>
@@ -19,15 +22,19 @@
 	   <% end %>
     <% end %>	
   </table>
+</div>
 
     <div id="sample_link">
     <%= link_to 'Add another sample for this patient/collection date', add_another_sample_sample_characteristic_path(@sample_characteristic.id),
               :id => "add_more", :remote => true, :"data-method" => 'post' %>
     </div>
     <%= javascript_tag do %>
-        $('#add_more').bind("ajax:complete", function(event, data){
-        $('#sample_link').toggle();
-        $('#load_more').html(data.responseText); // insert content
+        $('#add_more').bind("ajax:success", function(event){
+           var detail = event.detail;
+           var response_data = detail[0], status = detail[1], xhr = detail[2];
+          $('#sample_link').toggle();
+          $('#load_more').html(xhr.responseText); // insert content
+          reset_styling();
         });
     <% end %>
 
