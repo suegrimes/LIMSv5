@@ -1,4 +1,4 @@
-<h1>Editing Sample Acquisition details for Patient: <%= @sample_characteristic.patient_id %>, Collection Date: <%= @sample_characteristic.collection_date %></h1>
+<h5>Editing Sample Acquisition details for Patient: <%= @sample_characteristic.patient_id %>, Collection Date: <%= @sample_characteristic.collection_date %></h5>
 
 <%= form_for @sample_characteristic do |f| %>
   <%= render '/shared/errors', model: @sample_characteristic %>
@@ -37,5 +37,5 @@
       <% end %>
     </div>
   
-<%=raw break_clear(f.submit "Update") %>
+<%=raw break_clear(f.submit "Update", class: "btn btn-primary") %>
 <% end %>

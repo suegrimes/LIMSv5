@@ -1,0 +1,60 @@
+<h5>Samples for Patient: <%=h @sample_characteristic.patient_id %>, Collection Date: <%=h @sample_characteristic.collection_date %></h5>
+
+<%= render :partial => 'sample_characteristics/patient_info', 
+                       :locals => {:patient => @sample_characteristic.patient,
+                                   :sample_characteristic => @sample_characteristic}%>
+
+<%= render :partial => 'sample_characteristics/clinical_info', 
+                       :locals => {:sample_characteristic => @sample_characteristic}%>
+
+<% if @sample_characteristic.pathology %>								   
+<%= render :partial => 'pathologies/pathology_info',
+                       :locals => {:pathology => @sample_characteristic.pathology} %>
+<% end%>
+<%=raw break_clear %>
+
+<span class="table_title">Physical Samples:</span>
+<table class="list">
+  <%= render :partial => 'samples/sample_hdr' %>
+  
+  <% for sample in @sample_characteristic.samples %>
+    <% if !sample.id.nil? %>
+      <%= render :partial => 'samples/sample_row', :locals => {:sample => sample, 
+                                                               :barcode_link => 'show'} %>
+	<% else %>
+	  <% @new_sample_with_error = sample %>
+	<% end %>
+  <% end %> 
+</table>
+
+<% if @new_sample_with_error %>
+  <%= form_for @sample_characteristic, :url => {:action => 'update'} do |f| %>
+  
+	  <% f.fields_for :samples, @new_sample_with_error do |s| %>
+         <%= render :partial => 'samples_form', :locals => {:s => s,
+                                                            :sample => @new_sample_with_error} %>
+      <% end %>
+	  
+    <%=raw break_clear(submit_tag "Submit") %>
+  <% end %>
+  
+<% elsif @added_sample_id %>
+    <div id="sample_link">
+    <%= link_to 'Add another sample for this patient/collection date', add_another_sample_sample_characteristic_path(@sample_characteristic.id),
+                :id => "add_more", :remote => true, :"data-method" => 'post' %>
+    </div>
+    <%= javascript_tag do %>
+        $('#add_more').bind("ajax:complete", function(event, data){
+        $('#sample_link').toggle();
+        $('#load_more').html(data.responseText); // insert content
+        });
+    <% end %>
+
+    <%= form_for @sample_characteristic, :url => {:action => 'update'} do |f| %>
+      <div id="load_more"></div>
+    <%=raw break_clear(submit_tag "Submit") %>
+    <% end %>
+
+<% end %>
+
+

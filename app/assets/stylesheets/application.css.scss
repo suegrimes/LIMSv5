@@ -24,6 +24,11 @@
   background-image: asset-url('samples01-bg.gif')
 }
 
+/* remove backgrouns image from table bodies */
+tbody {
+  background-color: white
+}
+
 /* Single-direction drop shadow */
 hr.down-shadow {
     height: 10px;
