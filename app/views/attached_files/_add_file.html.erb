@@ -1,0 +1,20 @@
+<%= form_for :attached_file, url: attach_file_path(@attached_file), html: { :multipart => true } do |f| -%> 
+  
+  <%= hidden_field_tag(:obj_klass, obj.class.name)%>
+  <%= hidden_field_tag(:obj_id, obj.id)%>
+
+<fieldset class="form">
+<legend>New <%= name_of_klass(obj).downcase %>&nbsp;attachment:</legend>
+  <table class="form">
+	<tr>
+	  <th>File name:</th>
+	  <td><%= f.file_field :document, :size=>30%>  <%= f.hidden_field :document_cache%></td>
+	</tr>
+	<tr>
+	  <th>Notes:</th>
+	  <td><%= f.text_field(:notes, :size => 65) %></td>  
+	</tr>
+  </table>
+</fieldset>
+<%=raw break_clear(f.submit("Upload File"))%>
+<% end %>
