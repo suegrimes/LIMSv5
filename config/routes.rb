@@ -48,4 +48,10 @@ Rails.application.routes.draw do
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
   match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
+   # Routes for handling file attachments
+  resources :attached_files
+  match 'attach_params' => 'attached_files#get_params', :as => :attach_params, :via => [:get, :post]
+  match 'display_file/:id' => 'attached_files#show', :as => :display_file, :via => [:get]
+  match 'attach_file' => 'attached_files#create', :via => [:get, :post]
+
 end
