@@ -27,7 +27,7 @@
 
     <label for="left_right" class="col-auto col-form-label col-form-label-sm">Left or Right:</label>
     <div class="col-auto">
-      <%=f.select(:left_right, %w[NA L R], {:wraptags => 'none'}, {class: "form-control"}) %>
+      <%=f.select(:left_right, [['NA',nil],['L','L'],['R','R']], {:wraptags => 'none'}, {class: "form-control"}) %>
     </div>
   </div>
 
