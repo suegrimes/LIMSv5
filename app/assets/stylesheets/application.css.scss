@@ -73,6 +73,11 @@ hr.down-shadow {
   padding-bottom: .5rem;
 }
 
+/* bold form labels */
+form label, .card label {
+  font-weight: 500;
+}
+
 /* top navigation styling */
 #top-nav .nav-link {
   border-bottom-left-radius: 0px;
