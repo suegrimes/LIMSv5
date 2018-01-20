@@ -1,5 +1,6 @@
 <div class="card">
   <h6 class="card-header">Physical Sample</h6>
+  <div class="card-body">
 
   <div class="form-group row">
     <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
@@ -83,4 +84,5 @@
     <%= render :partial => 'shared/storage_container_tags', :locals => {:f => c, :barcode => f.object.barcode_key} %>
   <% end %>
 
+  </div>
 </div>

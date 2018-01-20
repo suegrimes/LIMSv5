@@ -17,6 +17,9 @@ function common_init() {
 
   // set common styling
   reset_styling()
+
+  // alert when clicking a not implemented link
+  alert_not_implmented()
 }
 
 // Get the controller and action names from the body tag
@@ -53,9 +56,16 @@ function logger(msg) {
 
 // common alert function if different from browser
 function my_alert(msg) {
-  if (alertify) {
-    alertify.alert(msg);
-  } else {
+  if (typeof alertify === 'undefined') {
     alert(msg);
+  } else {
+    alertify.alert(msg);
   }
+}
+
+function alert_not_implmented() {
+  $("a[href='not-yet']").click(function(evt) {
+    evt.preventDefault();
+    my_alert("Not implemented yet");
+  });
 }

@@ -1,21 +1,22 @@
 <div class="card">
   <h6 class="card-header">Sample Acquisition</h6>
+  <div class="card-body">
 
   <div class="form-group row">
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Collect date:</label>
+    <label for="collection_date" class="col-auto col-form-label col-form-label-sm">Collect date:</label>
     <div class="col-auto">
       <%= f.date_field 'collection_date', class: "form-control" %>
       <%#= f.datepicker 'collection_date', dateFormat: "yy-mm-dd", maxDate: '0', changeMonth: true, changeYear: true, size: 15 %>
     </div>
 
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Clinic from:</label>
+    <label for="clinic_or_location" class="col-auto col-form-label col-form-label-sm">Clinic from:</label>
     <div class="col-auto">
       <%=f.collection_select(:clinic_or_location, @clinics, :c_value, :c_value, {:include_blank => 'Select clinic'}, {class: "form-control"})%>
     </div>
   </div>
 
   <div class="form-group row">
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Consent protocol:</label>
+    <label for="consent_protocol_id" class="col-auto col-form-label col-form-label-sm">Consent protocol:</label>
     <div class="col-auto">
       <%=f.collection_select(:consent_protocol_id, @consent_protocols, :id, :name_ver, {:include_blank => 'Select protocol'}, {class: "form-control"}) %>
     </div>
@@ -24,12 +25,12 @@
 
 <% if controller.action_name == 'edit' && f.object.clinic_or_location == 'NCCC' %>
   <div class="form-group row">
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">NCCC Path No:</label>
+    <label for="nccc_pathno" class="col-auto col-form-label col-form-label-sm">NCCC Path No:</label>
     <div class="col-auto">
       <%=f.text_field(:nccc_pathno, class: "form-control") %>
     </div>
 
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">NCCC Tumor ID:</label>
+    <label for="nccc_tumor_id" class="col-auto col-form-label col-form-label-sm">NCCC Tumor ID:</label>
     <div class="col-auto">
       <%=f.text_field(:nccc_tumor_id, class: "form-control") %>
     </div>
@@ -38,11 +39,12 @@
 
 
   <div class="form-group row">
-    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+    <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
     <div class="col-auto">
       <%=f.text_area :comments, cols: 80, rows: 2, class: "form-control" %>
     </div>
   </div>
 
+  </div>
 </div>
 

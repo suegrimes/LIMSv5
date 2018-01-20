@@ -18,6 +18,8 @@
 //Import Boostrap
 @import "bootstrap";
 
+/* global variables */
+
 /* some global styles */
 
 .bkg-sample-slides {
@@ -41,14 +43,40 @@ thead.thead-font-sm th {
 
 /* Single-direction drop shadow */
 hr.down-shadow {
-    height: 10px;
-    border: 0;
-    box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  height: 10px;
+  border: 0;
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
-// add margin at bottom of card header when used for forms
-form h6.card-header {
+#second-nav {
+  margin-bottom: 1rem;
+}
+
+/*
+ * styles to make forms more compact
+ * Note: bootstrap cards with card bodies are used for most forms
+*/
+.card-body {
+  padding: .5rem;
+}
+.form-group.row {
   margin-bottom: .5rem;
+  margin-left: 0px;
+}
+.card {
+  margin-top: .5rem;
+}
+.card-header {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+/* top navigation styling */
+#top-nav .nav-link {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 // width styling classes

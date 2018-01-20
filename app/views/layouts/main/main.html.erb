@@ -2,22 +2,22 @@
 
 <% content_for :top_navigation do %>
   <!-- keep left side blank -->
-  <div class="col-3">
+  <div class="col-2">
   </div>
-  <div class="col-9">
+  <div class="col-10">
     <%= render "layouts/main/main_nav" %>
   </div>
 <% end %>
 
 <% content_for :panel_1 do %>
-  <div id="left-panel" class="col-3">
+  <div id="left-panel" class="col-2 bkg-sample-slides">
     <!-- put some content here -->
     Left Panel Placeholder
   </div>
 <% end %>
 
 <% content_for :panel_2 do %>
-  <div id="main-panel" class="col-9">
+  <div id="main-panel" class="col-10 bkg-sample-slides">
     <%= yield %>
   </div>
 <% end %>

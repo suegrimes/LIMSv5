@@ -40,7 +40,7 @@ function fetch_error(evt_elem, evt, xhr, status, error) {
 
 function samples_tab_active() {
   // remove any currently active
-  $('.nav-tabs .nav-link').removeClass('active');
+  $('#top-nav .nav-link').removeClass('active');
   // add active to samples tab
-  $('.nav-tabs #samples-tab').addClass('active');
+  $('#top-nav #samples-tab').addClass('active');
 }

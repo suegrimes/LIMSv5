@@ -32,7 +32,7 @@
         <%= yield(:single_panel) %>
 
       <% else %>
-        <div id="panel-row" class="row bkg-sample-slides"">
+        <div id="panel-row" class="row">
           <!-- render up to 3 panels -->
           <%= content_for?(:panel_1) ? yield(:panel_1) : nil %>
           <%= content_for?(:panel_2) ? yield(:panel_2) : nil %>
