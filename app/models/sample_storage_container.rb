@@ -19,8 +19,11 @@
 #
 
 class SampleStorageContainer < ApplicationRecord
-  belongs_to :freezer_location
-  belongs_to :stored_sample, :polymorphic => true
+  #belongs_to :freezer_location
+  #belongs_to :stored_sample, :polymorphic => true
+  # Rails 5 defaults to required: true, so make it explicitly optional
+  belongs_to :freezer_location, optional: true
+  belongs_to :stored_sample, optional: true, polymorphic: true
 
   before_create :upd_sample_name
 

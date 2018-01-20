@@ -57,7 +57,9 @@ class SamplesController < ApplicationController
   def update
     @sample = Sample.find(params[:id])
     
-    if @sample.update_attributes(params[:sample])
+    #if @sample.update_attributes(update_params)
+    # update_attributes is depracated
+    if @sample.update(update_params)
       flash[:notice] = 'Sample was successfully updated'
       redirect_to(@sample)
     else
@@ -99,6 +101,17 @@ protected
     @amount_uom         = category_filter(@category_dropdowns, 'unit of measure') 
     @containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.list_all_by_room
+  end
+
+  def update_params
+    params.require(:sample).permit(
+      :alt_identifier, :tumor_normal, :sample_tissue, :left_right, :sample_type, :tissue_preservation,
+      :sample_container, :vial_type, :amount_uom, :amount_initial, :sample_remaining, :comments,
+      sample_storage_container_attributes: [
+        :sample_name_or_barcode, :container_type, :container_name,
+        :position_in_container, :freezer_location_id
+      ]
+    )
   end
 
 end

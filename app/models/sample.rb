@@ -35,23 +35,24 @@ class Sample < ApplicationRecord
   
   #attr_accessible :barcode_key, :source_sample_id, :amount_uom, :sample_date, :tumor_normal, :sample_container, :vial_type, :amount_initial, :sample_remaining, :comments, :amount_rem
   
-  belongs_to :patient
-  belongs_to :sample_characteristic
-  belongs_to :source_sample, :class_name => 'Sample', :foreign_key => 'source_sample_id'
-  has_many   :samples, :foreign_key => 'source_sample_id'
-  belongs_to :user, :foreign_key => 'updated_by'
-  has_one    :histology, :dependent => :destroy
+  # Rails 5 defaults to required: true, so make it explicitly optional
+  belongs_to :patient, optional: true
+  belongs_to :sample_characteristic, optional: true
+  belongs_to :source_sample, optional: true, class_name: 'Sample', foreign_key: 'source_sample_id'
+  has_many   :samples, foreign_key: 'source_sample_id'
+  belongs_to :user, optional: true, foreign_key: 'updated_by'
+  has_one    :histology, dependent: :destroy
   has_many :processed_samples
-  has_one :sample_storage_container, :as => :stored_sample, :dependent => :destroy
-  has_many :attached_files, :as => :sampleproc
+  has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
+  has_many :attached_files, as: :sampleproc
   
   accepts_nested_attributes_for :sample_storage_container
   
   validates_presence_of :barcode_key
-  validates_uniqueness_of :barcode_key, :message => 'is not unique'
+  validates_uniqueness_of :barcode_key, message: 'is not unique'
 
   #validates_presence_of :sample_date, :if => Proc.new {|a| a.new_record? }
-  validates_date :sample_date, :allow_blank => true
+  validates_date :sample_date, allow_blank: true
   
   #validates_format_of :barcode_key, :with => /^([^\.])*$/, :message => "invalid - cannot use '.'"  # only use this validation if source_sample_id is null
   
@@ -100,8 +101,11 @@ class Sample < ApplicationRecord
   # After save, look for any dissections from the source sample updated, and update those as well
   def upd_dissections
     source_sample_id = self.id 
-    dissected_samples = Sample.find_all_by_source_sample_id(source_sample_id)
-    if !dissected_samples.nil?
+    #dissected_samples = Sample.find_all_by_source_sample_id(source_sample_id)
+    # find_all_by is depracated, use where
+    # where returns a relation which may respond to empty?
+    dissected_samples = Sample.where(source_sample_id: source_sample_id)
+    if !dissected_samples.empty?
       source_flds_for_upd = SOURCE_FLDS_FOR_DISSECT.delete_if {|sfld| sfld == 'tumor_normal' && !self.tumor_normal.nil?}
       sample_params = build_params_from_obj(self, source_flds_for_upd)
       dissected_samples.each do |dsample|
