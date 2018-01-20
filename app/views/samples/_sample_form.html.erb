@@ -80,9 +80,10 @@
     </div>
   </div>
 
+  </div> <!-- card body -->
+</div>  <!-- card -->
+
   <%= f.fields_for :sample_storage_container do |c| %>
     <%= render :partial => 'shared/storage_container_tags', :locals => {:f => c, :barcode => f.object.barcode_key} %>
   <% end %>
 
-  </div>
-</div>
