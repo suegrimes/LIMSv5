@@ -24,7 +24,7 @@
 #
 
 class Item < ApplicationRecord
-  belongs_to :order
+  belongs_to :order, optional: true
   
   validates_presence_of :requester_name, :company_name, :chemical_flag, :catalog_nr,
                         :item_description, :item_quantity, :deliver_site

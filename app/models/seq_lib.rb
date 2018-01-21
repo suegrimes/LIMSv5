@@ -36,8 +36,8 @@ require 'rubyXL'
 
 class SeqLib < ApplicationRecord
   
-  belongs_to :user, :foreign_key => :updated_by
-  belongs_to :adapter
+  belongs_to :user, optional: true, foreign_key: :updated_by
+  belongs_to :adapter, optional: true
   has_many :lib_samples, :dependent => :destroy
   has_many :mlib_samples, :class_name => 'LibSample', :foreign_key => :splex_lib_id
   has_many :flow_lanes
@@ -196,7 +196,8 @@ class SeqLib < ApplicationRecord
   end
   
   def self.upd_lib_status(flow_cell, lib_status)
-    flow_lanes = FlowLane.find_all_by_flow_cell_id(flow_cell.id)
+    #flow_lanes = FlowLane.find_all_by_flow_cell_id(flow_cell.id)
+    flow_lanes = FlowLane.where(flow_cell_id: flow_cell.id)
     flow_lanes.each do |lane|
       self.update(lane.seq_lib_id, :lib_status => lib_status) if lane.seq_lib.lib_status != 'C'
     end
@@ -270,12 +271,16 @@ class SeqLib < ApplicationRecord
 
   def self.upd_mplex_splex(splex_lib)
     # Find all cases where supplied sequencing library is one of the 'samples' in a multiplex library
-    lib_samples = LibSample.find_all_by_splex_lib_id(splex_lib.id)
+    #lib_samples = LibSample.find_all_by_splex_lib_id(splex_lib.id)
+    lib_samples = LibSample.where(splex_lib_id: splex_lib.id)
     
     # If any cases found, collect all the multiplex libraries and their associated 'samples'(=singleplex libs)
-    if !lib_samples.nil?
+    #if !lib_samples.nil?
+    if !lib_samples.empty?
       mplex_ids  = lib_samples.collect(&:seq_lib_id)
-      mplex_libs = self.find_all_by_id(mplex_ids, :include => {:lib_samples => :splex_lib})
+      #mplex_libs = self.find_all_by_id(mplex_ids, :include => {:lib_samples => :splex_lib})
+#TODO: not sure about this
+      mplex_libs = self.where(id: mplex_ids).includes(:lib_samples).where(id: splex_lib.id)
       
       mplex_libs.each do |lib|
         self.upd_mplex_fields(lib) if lib.barcode_key[0,1] == 'L'

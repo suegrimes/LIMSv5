@@ -12,7 +12,7 @@
 #
 
 class Category < ApplicationRecord
-  belongs_to :cgroup
+  belongs_to :cgroup, optional: true
   has_many :category_values
   accepts_nested_attributes_for :category_values, :reject_if => proc {|attrs| attrs[:c_value].blank?},
                                                   :allow_destroy => true

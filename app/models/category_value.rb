@@ -11,7 +11,7 @@
 #
 
 class CategoryValue < ApplicationRecord
-  belongs_to :category
+  belongs_to :category, optional: true
   
   def self.populate_dropdown_for_id(category_id)
     self.where(:category_id => category_id).order(:c_position).all

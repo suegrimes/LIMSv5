@@ -23,12 +23,12 @@
 
 class LibSample < ApplicationRecord
   
-  belongs_to :seq_lib
-  belongs_to :splex_lib, :class_name => 'SeqLib', :foreign_key => :splex_lib_id
-  belongs_to :processed_sample
-  belongs_to :adapter
-  belongs_to :index1_tag, :class_name => "IndexTag", :foreign_key => :index1_tag_id
-  belongs_to :index2_tag, :class_name => "IndexTag", :foreign_key => :index2_tag_id
+  belongs_to :seq_lib, optional: true
+  belongs_to :splex_lib, optional: true, class_name: 'SeqLib', foreign_key: :splex_lib_id
+  belongs_to :processed_sample, optional: true
+  belongs_to :adapter, optional: true
+  belongs_to :index1_tag, optional: true, class_name: "IndexTag", foreign_key: :index1_tag_id
+  belongs_to :index2_tag, optional: true, class_name: "IndexTag", foreign_key: :index2_tag_id
   
   validates_presence_of :sample_name
   validates_presence_of :adapter_id, :if => Proc.new {|s| !s.seq_lib_id.nil? }
@@ -130,7 +130,9 @@ class LibSample < ApplicationRecord
   def self.upd_mplex_sample_fields(seq_lib)
     lsample_attrs = {}
     
-    lib_samples = self.find_all_by_splex_lib_id(seq_lib.id)  # Find any multiplex libraries which include this single lib
+    # find_all_by is deprecated, use where
+    #lib_samples = self.find_all_by_splex_lib_id(seq_lib.id)  # Find any multiplex libraries which include this single lib
+    lib_samples = self.where(splex_lib_id: seq_lib.id)  # Find any multiplex libraries which include this single lib
     if lib_samples
       # Set up those attributes that come from lib_samples table of singleplex lib
       # Should always be one and only one lib_sample for a singleplex lib; but test for existence of lib_samples just in case

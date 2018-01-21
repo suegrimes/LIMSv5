@@ -20,7 +20,7 @@
 
 class Histology < ApplicationRecord
   
-  belongs_to :sample
+  belongs_to :sample, optional: true
   has_many :attached_files, :as => :sampleproc
   
   validates_date :he_date

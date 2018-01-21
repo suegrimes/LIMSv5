@@ -12,7 +12,7 @@
 #
 
 class Researcher < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   
   #scope :active, :conditions => {:active_inactive => 'A'}
   scope :active, -> { where(active_inactive: 'A') }

@@ -23,8 +23,8 @@
 #
 
 class RunDir < ApplicationRecord
-  belongs_to :storage_device
-  belongs_to :flow_cell
+  belongs_to :storage_device, optional: true
+  belongs_to :flow_cell, optional: true
   
   validates_uniqueness_of :storage_device_id, :scope => :flow_cell_id, :message => 'already exists for this sequencing run'
   validates_date :date_sized, :date_copied, :date_verified, :allow_blank => true

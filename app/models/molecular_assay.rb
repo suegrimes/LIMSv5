@@ -25,8 +25,8 @@ class MolecularAssay < ApplicationRecord
   
   #attr_accessible :owner, :preparation_date, :protocol_id, :notes
   
-  belongs_to :protocol
-  belongs_to :processed_sample
+  belongs_to :protocol, optional: true
+  belongs_to :processed_sample, optional: true
   has_many :attached_files, :as => :sampleproc
   
   validates_presence_of :owner, :protocol_id, :volume, :concentration

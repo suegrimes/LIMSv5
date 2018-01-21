@@ -18,7 +18,7 @@ class AttachedFile < ApplicationRecord
   FILES_ROOT = (SITE_URL.include?('stanford.edu') ? File.join(Rails.root, "..", "..", "shared", "attached_files") :
                                                    File.join(Rails.root, "..", "LIMSFiles", "AttachedFile"))
   
-  belongs_to :sampleproc, :polymorphic => true
+  belongs_to :sampleproc, optional: true, polymorphic: true
 
   mount_uploader :document, AttachmentUploader
   #skip_callback :save, :after, :remove_previously_stored_document

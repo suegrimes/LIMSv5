@@ -31,9 +31,9 @@
 #
 
 class ProcessedSample < ApplicationRecord
-  belongs_to :sample
-  belongs_to :patient
-  belongs_to :user, :foreign_key => 'updated_by'
+  belongs_to :sample, optional: true
+  belongs_to :patient, optional: true
+  belongs_to :user, optional: true, foreign_key: 'updated_by'
   has_many :molecular_assays
   has_many :lib_samples
   has_many :seq_libs, :through => :lib_samples

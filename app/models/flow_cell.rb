@@ -25,7 +25,7 @@
 #
 
 class FlowCell < ApplicationRecord
-  belongs_to :seq_machine
+  belongs_to :seq_machine, optional: true
   has_many :flow_lanes, :dependent => :destroy
   has_many :run_dirs,   :dependent => :destroy
   has_many :attached_files, :as => :sampleproc

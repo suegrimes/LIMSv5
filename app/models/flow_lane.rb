@@ -25,9 +25,9 @@
 
 class FlowLane < ApplicationRecord
   
-  belongs_to :flow_cell
-  belongs_to :seq_lib
-  belongs_to :adapter
+  belongs_to :flow_cell, optional: true
+  belongs_to :seq_lib, optional: true
+  belongs_to :adapter, optional: true
   has_one    :align_qc
   has_one    :lane_metric
   has_and_belongs_to_many :publications, :join_table => :publication_lanes
@@ -51,7 +51,9 @@ class FlowLane < ApplicationRecord
   def self.upd_seq_key(flow_cell)
     cell_attrs = {:sequencing_key => flow_cell.sequencing_key,
                   :machine_type   => flow_cell.machine_type}
-    flow_lanes = self.find_all_by_flow_cell_id(flow_cell.id)
+    # find_all_by is deprecated
+    #flow_lanes = self.find_all_by_flow_cell_id(flow_cell.id)
+    flow_lanes = self.where(flow_cell_id: flow_cell.id)
     self.upd_multi_lanes(flow_lanes, cell_attrs) if flow_lanes
   end
 
@@ -69,7 +71,9 @@ class FlowLane < ApplicationRecord
                   :alignment_ref    => seq_lib.alignment_ref}
                   
     # Find all flow lanes which reference the above sequencing library, and perform update
-    flow_lanes = self.find_all_by_seq_lib_id(seq_lib.id)            
+    # find_all_by is deprecated
+    #flow_lanes = self.find_all_by_seq_lib_id(seq_lib.id)            
+    flow_lanes = self.where(seq_lib_id: seq_lib.id)
     self.upd_multi_lanes(flow_lanes, lib_attrs) if flow_lanes
   end
   

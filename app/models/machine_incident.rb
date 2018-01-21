@@ -12,7 +12,7 @@
 #
 
 class MachineIncident < ApplicationRecord
-  belongs_to :seq_machine
+  belongs_to :seq_machine, optional: true
   
   validates_date :incident_date
 end

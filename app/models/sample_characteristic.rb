@@ -25,9 +25,9 @@ class SampleCharacteristic < ApplicationRecord
   require 'ezcrypto'
   
   has_many :samples, :dependent => :destroy
-  belongs_to :patient
-  belongs_to :consent_protocol
-  belongs_to :pathology
+  belongs_to :patient, optional: true
+  belongs_to :consent_protocol, optional: true
+  belongs_to :pathology, optional: true
   
   accepts_nested_attributes_for :samples
   validates_associated :samples
