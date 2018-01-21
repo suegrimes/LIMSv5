@@ -24,8 +24,9 @@ class PathologiesController < ApplicationController
       flash.now[:notice] = 'Please enter MRN or patient ID'  
     end
     
-    @sample_characteristics = SampleCharacteristic.find_all_by_patient_id(@patient_id, :include => [:patient, :pathology, :samples],
-                                                                          :conditions => "samples.source_sample_id IS NULL")
+    #@sample_characteristics = SampleCharacteristic.find_all_by_patient_id(@patient_id, :include => [:patient, :pathology, :samples], :conditions => "samples.source_sample_id IS NULL")
+    # find_all_by_ is deprecated
+    @sample_characteristics = SampleCharacteristic.where(patient_id: @patient_id).includes(:patient, :pathology, :samples).where("samples.source_sample_id IS NULL").references(:samples)
     if @sample_characteristics.size == 0
       error_found = true
       flash.now[:error] = 'Error - invalid patient id, or no samples exist for this patient'
@@ -91,8 +92,10 @@ class PathologiesController < ApplicationController
   def index
     if params[:patient_id]
       @patient_id             = params[:patient_id]
-      @pathologies            = Pathology.includes(:sample_characteristics => :samples).where('samples.source_sample_id IS NULL').find_all_by_patient_id(params[:patient_id])
-      @sample_characteristics = SampleCharacteristic.includes(:samples).where('samples.source_sample_id IS NULL AND pathology_id IS NULL').find_all_by_patient_id(params[:patient_id])
+      #@pathologies            = Pathology.includes(:sample_characteristics => :samples).where('samples.source_sample_id IS NULL').find_all_by_patient_id(params[:patient_id])
+      @pathologies = Pathology.includes(sample_characteristics: :samples).where('samples.source_sample_id IS NULL').references(:samples).where(patient_id: @patient_id)
+      #@sample_characteristics = SampleCharacteristic.includes(:samples).where('samples.source_sample_id IS NULL AND pathology_id IS NULL').find_all_by_patient_id(params[:patient_id])
+      @sample_characteristics = SampleCharacteristic.includes(:samples).where('samples.source_sample_id IS NULL AND pathology_id IS NULL').where(patient_id: @patient_id])
     else
       @pathologies = Pathology.includes(:sample_characteristics => :samples).where('samples.source_sample_id IS NULL')
     end

@@ -11,7 +11,9 @@ class ProcessedSamplesController < ApplicationController
   end
   
   def show_by_sample
-    @processed_samples = ProcessedSample.find_all_by_sample_id(params[:sample_id])
+    # find_all_by_ is deprecated
+    #@processed_samples = ProcessedSample.find_all_by_sample_id(params[:sample_id])
+    @processed_samples = ProcessedSample.where(sample_id: params[:sample_id])
     @sample  = Sample.find_by_id(params[:sample_id])
     render :action => 'index'
   end
