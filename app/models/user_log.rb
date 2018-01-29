@@ -17,6 +17,9 @@ class UserLog < ApplicationRecord
   # LOG_LEVEL = 'all'  :  Log access to all controllers/methods (user_logs table)
   # LOG_LEVEL = 'none' :  No logging
   LOG_LEVEL = 'all'
+
+  CONTROLLER_NAME_LEN = 25
+  ACTION_NAME_LEN = 25
   
   def self.add_entry(controller, current_user, ip_address)
     return if LOG_LEVEL == 'none'
@@ -29,13 +32,17 @@ class UserLog < ApplicationRecord
         UserLogin.add_entry('logout', current_user, ip_address)
       end
     end
+
+    # truncate controller or action names too long for the DB column
+    controller_name = controller.controller_name[0...CONTROLLER_NAME_LEN]
+    action_name = controller.action_name[0...ACTION_NAME_LEN]
     
     # Add detailed log entry (any controller/action); LOG_LEVEL == 'all'
     UserLog.create(:ip_address      => ip_address,
                    :user_id         => (current_user.nil? ?  nil  : current_user.id),
                    :user_login      => (current_user.nil? ? 'nil' : current_user.login),
-                   :controller_name => controller.controller_name,
-                   :action_name     => controller.action_name,
+                   :controller_name => controller_name,
+                   :action_name     => action_name,
                    :log_timestamp   => Time.now)              if LOG_LEVEL == 'all' 
   end
   
