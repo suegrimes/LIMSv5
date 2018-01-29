@@ -31,9 +31,9 @@ DEMO_USERS = ['admin', 'clinical', 'researcher']
 # Orders_Delivery <Delivery>      where <Delivery> is Deliver, Debug or None
 # Orders_To <Email>               where <Email> is comma-separated list of email addresses to which new orders should be sent
 
-EMAIL_CREATE = {}
+EMAIL_CREATE = {samples: 'NoEmail'}
 EMAIL_TO = {}
-EMAIL_DELIVERY = {}
+EMAIL_DELIVERY = {samples: 'None'}
 
 if FileTest.file?(email_file)
   CSV.foreach(email_file, {:col_sep => "\t"}) do |erow|
