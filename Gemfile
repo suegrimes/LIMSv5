@@ -47,6 +47,12 @@ gem 'cancancan', '~> 2.0'
 # rails jquery support
 gem 'jquery-rails'
 
+# rails jquery-ui support
+gem 'jquery-ui-rails'
+
+# jquery-ui autocomplete for rails
+gem 'rails-jquery-autocomplete'
+
 # boostrap CSS framework
 gem 'bootstrap', '~> 4.0.0.beta2'
 
