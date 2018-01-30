@@ -1,3 +1,4 @@
+
 // standard init functions
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
@@ -11,6 +12,8 @@ function samples_init() {
 function sample_characteristics_init() {
   samples_tab_active();
 }
+
+//--------------------------------------------------------
 
 // sample index page init function
 function samples_index_init() {

@@ -1,0 +1,14 @@
+<h5>Editing extracted sample: <%=h @processed_sample.barcode_key %></h5>
+
+<%= render :partial => 'sample_characteristics/clinical_summary', :locals => {:sample_characteristic => @processed_sample.sample.sample_characteristic,
+                                                                              :patient => @processed_sample.sample.patient }%>
+
+<%= render :partial => 'samples/sample_info', :locals => {:sample => @processed_sample.sample,
+                                                          :source => 'Source'} %>
+
+<%= form_for(@processed_sample) do |f| %>
+  <%= render '/shared/errors', model: @processed_sample %>
+  
+  <%= render :partial => 'processed_sample_form', :locals => {:f => f} %>
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>

@@ -1,4 +1,5 @@
-<!-- layout for the main application -->
+
+<!-- layout for the samples pages -->
 
 <% content_for :top_navigation do %>
   <!-- keep left side blank -->
@@ -17,7 +18,11 @@
 <% end %>
 
 <% content_for :panel_2 do %>
-  <div id="main-panel" class="col-10 bkg-sample-slides">
+  <div id="main-panel" class="col-10">
+
+    <!-- render the processing navigation -->
+    <%= render "dissected_samples/processing_nav" %>
+
     <%= yield %>
   </div>
 <% end %>

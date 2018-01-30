@@ -34,6 +34,25 @@ Rails.application.routes.draw do
 
   resources :sample_queries, :only => :index
 
+  resources :histologies do
+    collection do
+      get :auto_complete_for_barcode_key
+    end
+  end
+
+  match 'upd_sample' => 'samples#edit_params', :as => :upd_sample, :via => [:get, :post]
+  match 'edit_samples' => 'samples#edit_by_barcode', :as => :edit_samples, :via => [:get]
+  match 'unprocessed_query' => 'sample_queries#new_query', :as => :unprocessed_query, :via => [:get]
+  match 'samples_for_patient' => 'sample_queries#list_samples_for_patient', :as => :samples_list, :via => [:get]
+  match 'samples_from_source' => 'sample_queries#list_samples_for_characteristic', :as => :samples_list1, :via => [:get]
+  match 'export_samples' => 'sample_queries#export_samples', :as => :export_samples,  :via => [:post]
+
+  get 'storage_query' => 'storage_queries#new_query', :as => :storage_query
+
+   # Routes for dissected samples
+  resources :dissected_samples
+  match 'new_dissection' => 'dissected_samples#new_params', :as => :new_dissection, :via => [:get, :post]
+  match 'add_dissection' => 'dissected_samples#new', :via => [:get, :post]
 
    # Routes for extracted samples
   get 'processed_samples/autocomplete_processed_sample_barcode_search'
@@ -42,16 +61,29 @@ Rails.application.routes.draw do
       #get :auto_complete_for_barcode_key
     end
   end
+  resources :psample_queries, :only => :index
+
+  match 'new_extraction' => 'processed_samples#new_params', :as => :new_extraction, :via => [:get, :post]
+  match 'add_extraction' => 'processed_samples#new', :via => [:get, :post]
+  match 'edit_psamples' => 'processed_samples#edit_by_barcode', :as => :edit_psamples, :via => [:get, :post]
+  match 'samples_processed' => 'processed_samples#show_by_sample', :as => :samples_processed, :via => [:get, :post]
+  get 'processed_query' => 'psample_queries#new_query', :as => :processed_query
+  match 'export_psamples' => 'psample_queries#export_samples', :as => :export_psamples, :via => [:post]
 
   # Routes for patients
   resources :patients
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
   match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
-   # Routes for handling file attachments
+  # Routes for handling file attachments
   resources :attached_files
   match 'attach_params' => 'attached_files#get_params', :as => :attach_params, :via => [:get, :post]
   match 'display_file/:id' => 'attached_files#show', :as => :display_file, :via => [:get]
   match 'attach_file' => 'attached_files#create', :via => [:get, :post]
+
+  get 'container_query' => 'sample_storage_containers#new_query', :as => :container_query
+
+  # test route
+  get 'test' => 'test#index'
 
 end

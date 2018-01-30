@@ -1,0 +1,143 @@
+<% if controller.action_name == 'new' %>
+  <div class="card">
+    <h6 class="card-header">From Sample:</h6>
+    <div class="card-body">
+
+      <div class="form-group row">
+        <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+        <div class="col-auto">
+	  <%= text_field_tag :barcode_key, @sample.barcode_key, disabled: true, class:  "form-control" %>
+        </div>
+
+        <label for="sample_tissue" class="col-auto col-form-label col-form-label-sm">Sample Site:</label>
+        <div class="col-auto">
+	  <%= text_field_tag :sample_tissue, @sample.sample_tissue, disabled: true, class:  "form-control" %>
+        </div>
+      </div>
+	  
+      <div class="form-group row">
+        <label for="sample_type" class="col-auto col-form-label col-form-label-sm">Sample type:</label>
+        <div class="col-auto">
+          <%= text_field_tag :sample_type, @sample.sample_type, disabled: true, class:  "form-control" %>
+        </div>
+
+        <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">OR Designation:</label>
+        <div class="col-auto">
+          <%= text_field_tag :tumor_normal, @sample.tumor_normal, disabled: true, class:  "form-control" %>
+        </div>
+      </div>
+	  
+      <div class="form-group row">
+        <label for="amount_uom" class="col-auto col-form-label col-form-label-sm">Amt UOM:</label>
+        <div class="col-auto">
+          <%= text_field_tag :amount_uom, @sample.amount_uom, disabled: true, class:  "form-control" %>
+        </div>
+
+        <label for="amount_initial" class="col-auto col-form-label col-form-label-sm">Initial Amt:</label>
+        <div class="col-auto">
+          <%= text_field_tag :amount_initial, @sample.amount_initial, disabled: true, class:  "form-control" %>
+        </div>
+      </div>
+	  
+      <div class="form-group row">
+        <label for="sample_remaining" class="col-auto col-form-label col-form-label-sm">Remaining?</label>
+        <div class="col-auto">
+	  <%= select(:sample, :sample_remaining, %w[Y N], {}, :wraptags => 'none', class:  "form-control")%>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<% end %>
+
+  <div class="card">
+    <h6 class="card-header">Extracted Sample Info</h6>
+    <div class="card-body">
+
+      <div class="form-group row">
+        <label for="extraction_type" class="col-auto col-form-label col-form-label-sm">Type:</label>
+        <div class="col-auto">
+	  <%=f.collection_select(:extraction_type, @extraction_type, :c_value, :c_value, {}, class: "form-control")%>
+        </div>
+
+        <label for="processing_date" class="col-auto col-form-label col-form-label-sm">Processing Date:</label>
+        <div class="col-auto">
+      <%#=f.datepicker 'processing_date', dateFormat: "yy-mm-dd", maxDate: '0', changeMonth: true, changeYear: true, yearRange: "#{Sample::START_YEAR}", size: 15, label: "Processing Date" %>
+          <%=f.date_field 'processing_date', max: Time.current.to_date, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="protocol_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label>
+        <div class="col-auto">
+	  <%=f.collection_select(:protocol_id, @protocols, :id, :protocol_name,
+                            {:include_blank => 'Select protocol'}, class: "form-control")%>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="vial" class="col-auto col-form-label col-form-label-sm">Vial:</label>
+        <div class="col-auto">
+	  <%=f.collection_select(:vial, @vial_vol, :c_value, :c_value, {}, class: "form-control")%>
+        </div>
+
+        <label for="support" class="col-auto col-form-label col-form-label-sm">Support:</label>
+        <div class="col-auto">
+	  <%=f.collection_select(:support, @support, :c_value, :c_value, {}, class: "form-control")%>
+        </div>
+
+        <label for="elution_buffer" class="col-auto col-form-label col-form-label-sm">Elution Buffer:</label>
+        <div class="col-auto">
+	  <%=f.collection_select(:elution_buffer, @elution_buffer, :c_value, :c_value,
+                            {:include_blank => 'Select..'}, class: "form-control")%>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="final_vol" class="col-auto col-form-label col-form-label-sm">Volume (ul):</label>
+        <div class="col-auto">
+	  <%=f.text_field :final_vol, :size => 12, class: "form-control" %>
+        </div>
+
+        <label for="final_conc" class="col-auto col-form-label col-form-label-sm">Conc (ng/ul):</label>
+        <div class="col-auto">
+	  <%=f.text_field :final_conc, :size => 12, class: "form-control" %>
+        </div>
+
+        <label for="psample_remaining" class="col-auto col-form-label col-form-label-sm">Rem?</label>
+        <div class="col-auto">
+          <%=f.select(:psample_remaining, ['Y','N'], {}, {class: "form-control"}) %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="final_a260_a280" class="col-auto col-form-label col-form-label-sm">a260/a280:</label>
+        <div class="col-auto">
+	  <%=f.text_field :final_a260_a280, :size => 8, class: "form-control" %>
+        </div>
+
+        <label for="final_a260_a230" class="col-auto col-form-label col-form-label-sm">a260/a230:</label>
+        <div class="col-auto">
+          <%=f.text_field :final_a260_a230, :size => 8, class: "form-control" %>
+        </div>
+
+        <label for="final_rin_nr" class="col-auto col-form-label col-form-label-sm">RIN#:</label>
+        <div class="col-auto">
+	  <%=f.text_field :final_rin_nr, :size => 6, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+        <div class="col-auto">
+	  <%=f.text_area :comments, :tdcolspan => 5, :cols => 80, :rows => 2, class: "form-control"%>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<%= f.fields_for :sample_storage_container do |c| %>
+  <%= render :partial => 'shared/storage_container', :locals => {:f => c, :barcode => f.object.barcode_key} %>
+<% end %>

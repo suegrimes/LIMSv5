@@ -1,4 +1,6 @@
 class ProcessedSamplesController < ApplicationController
+  layout 'main/processing'
+
   load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]
@@ -81,7 +83,8 @@ class ProcessedSamplesController < ApplicationController
 
   # POST /processed_samples
   def create
-    @processed_sample = ProcessedSample.new(params[:processed_sample])
+    #@processed_sample = ProcessedSample.new(params[:processed_sample])
+    @processed_sample = ProcessedSample.new(create_params)
     @sample = Sample.find(params[:processed_sample][:sample_id])
     
     Sample.transaction do
@@ -89,7 +92,8 @@ class ProcessedSamplesController < ApplicationController
       if params[:processed_sample][:input_amount]
         params[:sample].merge!(:amount_rem => @sample.amount_rem - params[:processed_sample][:input_amount].to_f)
       end
-      @sample.update_attributes!(params[:sample])
+      #@sample.update_attributes!(params[:sample])
+      @sample.update_attributes!(update_sample_params)
       flash[:notice] = 'Processed sample was successfully created'
       redirect_to(:action => 'show_by_sample',
                   :sample_id => params[:processed_sample][:sample_id])
@@ -107,7 +111,7 @@ class ProcessedSamplesController < ApplicationController
     @processed_sample = ProcessedSample.find(params[:id])
  
     ProcessedSample.transaction do
-      @processed_sample.update_attributes!(params[:processed_sample])
+      @processed_sample.update_attributes!(update_params)
       flash[:notice] = 'Processed sample successfully updated'
       redirect_to(@processed_sample)
     end
@@ -148,6 +152,26 @@ protected
     @protocols          = Protocol.find_for_protocol_type('E')  #Extraction protocols
     @containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.all
+  end
+
+  def create_params
+    params.require(:processed_sample).permit(
+      :sample_id, :patient_id, :input_uom, :extraction_type, :processing_date, :protocol_id, :vial,
+      :support, :elution_buffer, :final_vol, :final_conc, :psample_remaining, :final_a260_a280, :final_a260_a230,
+      :final_rin_nr, :comments,
+      {sample_storage_container_attributes: [
+            :sample_name_or_barcode, :container_type, :container_name,
+            :position_in_container, :freezer_location_id
+      ]}
+    )
+  end
+
+  def update_params
+    create_params
+  end
+
+  def update_sample_params
+    params.require(:sample).permit(:amount_rem)
   end
 
  end

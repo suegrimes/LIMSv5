@@ -64,7 +64,13 @@ class SampleCharacteristicsController < ApplicationController
     
     @patient = Patient.find(params[:patient][:id])
     #@patient.update_attributes(params[:patient])
-    @patient.update_attributes(patient_params)
+    unless @patient.update_attributes(patient_params)
+      dropdowns
+      sample_dropdowns
+      flash[:error] = 'Error - Patient could not be updated, Clinical sample/characteristics not saved'
+      render :action => 'new_sample'
+      return
+    end
     
     params[:sample_characteristic].merge!(:patient_id  => params[:patient][:id])
     #@sample_characteristic = SampleCharacteristic.new(params[:sample_characteristic])
@@ -146,14 +152,19 @@ logger.debug "condition_array: #{condition_array.inspect}"
     @sample_characteristic = SampleCharacteristic.find(params[:id])
     if params[:sample]
       params[:sample].merge!(:sample_characteristic_id  => @sample_characteristic.id)
-      @sample = Sample.new(params[:sample])
+      #@sample = Sample.new(params[:sample])
+      @sample = Sample.new(sample_params)
     end
 
     # Update sample characteristics and add new sample if new sample entered
     save_successful = false
-    if @sample_characteristic.update_attributes(params[:sample_characteristic])
-      save_successful = true
-      flash[:notice] = 'Clinical sample characteristics successfully updated'
+    # ensure there is a sample_characteristic param as this may come from ajax call
+    # with just a sample param from add_another_sample
+    if params[:sample_characteristic]
+      if @sample_characteristic.update_attributes(sample_characteristic_params)
+        save_successful = true
+        flash[:notice] = 'Clinical sample characteristics successfully updated'
+      end
     end
 
     if params[:sample]
@@ -304,41 +315,37 @@ private
   # define permitted attributes for strong parameters feature
   # cancancan will look for "create_params" and "update_params" methods while loading resources
   # so these are here to prevent an exception
-  # the more fine grain methods can be used in place of params[;patient] for example,
-  # when passed to #new or #update_attributes
   def create_params
-    patient_params
-    mrn_param
     sample_characteristic_params
   end
 
+  def update_params
+    sample_characteristic_params
+  end
+    
   def patient_params
     params.require(:patient).permit(:organism, :gender, :ethnicity, :race, :hipaa_data)
   end
 
-  def mrn_param
-    params.permit(:mrn_nr)
-  end
-
   def sample_characteristic_params
-    params.require(:sample_characteristic).permit(
-      :clinic_or_location, :consent_protocol_id, :comments,
-      {samples_attributes: [
-        {"0": [
-          :patient_id, :barcode_key, :tumor_normal, :sample_tissue, :left_right, :sample_type,
-          :tissue_preservation, :sample_container, :vial_type, :amount_uom, :amount_initial,
-          :sample_remaining, :comments,
-          {sample_storage_container_attributes: [
-            :sample_name_or_barcode, :sample_name_or_barcode, :sample_name_or_barcode,
-            :position_in_container, :freezer_location_id
-          ]}
-        ]}
-      ]}
-    )
+    params.require(:sample_characteristic).permit(:patient_id,  # this was merged in
+      :collection_date, :clinic_or_location, :consent_protocol_id, :comments, samples_attributes: samples_attributes)
   end
 
-  def update_params
-    create_params
+  def sample_params
+     # :sample_characteristic_id  was merged in
+     params.require(:sample).permit(*([:sample_characteristic_id] + samples_attributes))
   end
-    
+
+  def samples_attributes
+    [:patient_id, :barcode_key, :tumor_normal, :sample_tissue, :left_right, :sample_type,
+     :tissue_preservation, :sample_container, :vial_type, :amount_uom, :amount_initial,
+     :sample_remaining, :comments,
+     sample_storage_container_attributes: [
+       :sample_name_or_barcode, :container_type, :container_name,
+       :position_in_container, :freezer_location_id
+      ]
+    ]
+  end
+
 end

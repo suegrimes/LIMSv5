@@ -1,0 +1,79 @@
+<h5>Listing <%= @type_of_sample.camelize %> Samples - <%=h @heading_string %></h5>
+
+<%= form_tag :action => :export_samples do %>
+
+<%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+<br/><br/>
+
+<table class="table table-bordered table-sm table-font-sm">
+<thead class="thead-light">
+  <tr>
+    <th>Barcode</th>
+    <th>Source</th>
+    <th>Sample Date</th>
+    <th>OR Designation</th>
+    <th>Container Type</th>
+    <th>Amount</th>
+    <th>Rem?</th>
+    <th>Room/Freezer</th>
+    <th>Container</th>
+    <th>Upd By</th>
+    <th>Extracted?</th>
+	<th></th>
+  </tr>
+</thead>
+  
+  <% if @samples_by_patient %>
+    <% @samples_by_patient.sort.each do | patient_id, samples| %>
+    <tr>
+    <td colspan=12><b>Patient: </b>
+    <% if can? :read, Patient %>
+      <%=link_to patient_id[0], patient_path(:id => patient_id[0]) %> / <%=h patient_id[1]%>
+    <% else %>
+      <%=h patient_id[0] %>
+    <% end %>
+    </td>
+    </tr>
+
+    <% for sample in samples %>
+      <% nonblank_comments = have_comments?(sample) %>
+      <tr>
+
+        <% if can? :edit, Sample %>
+      	<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%= link_to sample.barcode_key, (sample.source_sample_id.nil? ? edit_sample_path(sample.id) : edit_dissected_sample_path(sample.id) ) %></td>
+        <% else %>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.barcode_key %></td>
+        <% end %>
+        <% if sample.clinical_sample == 'yes' %>
+		<td class=<%= "dotted_border_bottom" if nonblank_comments %>> Clinical </td>
+        <% else %>
+		<td class=<%= "dotted_border_bottom" if nonblank_comments %>>Sample: <%=h sample.source_barcode_key %></td>
+        <% end %>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_date %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.tumor_normal %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_type %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_amt %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_remaining%></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.room_and_freezer %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_and_position %></td>
+		<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.user.login if sample.user %></td>
+		<%= render :partial => 'sample_links', :locals => {:sample => sample,
+                                               :sample_characteristic => sample.sample_characteristic} %>
+	    <%= hidden_field_tag("export_id[]", sample.id)  %>
+      </tr>
+	  <% if nonblank_comments %>
+	  <tr>
+		<td colspan="11">Comments: <%=h sample.comments %></td>
+	  </tr>
+	  <% end %>
+    <% end %>
+	
+  <% end %>
+<% end %>
+</table>
+<%end %>
+
+<% if params[:add_new] == 'yes'%>
+  <p>Click <%= link_to 'here', new_dissected_sample_path(:source_sample_id => params[:source_sample_id]) %> 
+     to add additional dissected sample from same source sample </p>
+<% end %>

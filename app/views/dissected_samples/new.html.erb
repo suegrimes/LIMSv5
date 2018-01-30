@@ -1,0 +1,18 @@
+<h5>New dissection from sample: <%=h @source_sample.barcode_key %></h5>
+
+<%= render :partial => 'sample_characteristics/clinical_summary', :locals => {:sample_characteristic => @source_sample.sample_characteristic,
+                                                                              :patient => @source_sample.patient } %>
+																			  
+<%= render :partial => 'samples/sample_info', :locals => {:sample => @source_sample,
+                                                          :source => 'Source' } %>
+
+<%= form_for @sample, :url => {:controller => 'dissected_samples', :action => :create} do |f| %>
+  <% @sample.errors.full_messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+  
+  <%= render :partial => 'dsample_form', :locals => {:f => f, :dissect => @source_sample} %> 
+
+  <%=f.submit "Save",  class: "btn btn-primary" %>
+<% end %>
+

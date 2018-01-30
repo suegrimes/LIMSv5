@@ -1,6 +1,7 @@
 <% if source_sample.samples && source_sample.samples.size > 0 %> 
-<span class="table_title">Dissected Samples (<%= source_sample.samples.size %> samples)</span>
-  <table class="list">
+<h6>Dissected Samples (<%= source_sample.samples.size %> samples)</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
   <tr>
     <th>Barcode</th>
     <th>Sample Date</th>
@@ -11,6 +12,8 @@
     <th>Room/Freezer</th>
     <th>Container</th>
   </tr>
+  </thead>
+
   <% for sample in source_sample.samples %>
     <tr>
       <td><%=link_to sample.barcode_key, sample_path(sample)%></td>

@@ -1,0 +1,29 @@
+
+<h5>Select source sample for extraction</h5>
+
+<%= form_tag url_for(:action => :new), :method => :get do %>
+
+<table class="table table-bordered table-sm table-font-sm">
+
+<thead class="thead-light">
+<tr>
+  <th></th>
+  <%= render :partial => 'samples/sample_hdr', :locals => {:row_tags => 'no'} %>
+</tr>
+</thead>
+
+<% for sample in @samples %>
+  <tr>
+  <td>
+    <div class="radio radio-select">
+      <%= radio_button_tag(:source_id, sample.id)%>
+    </div>
+  </td>
+  <%= render :partial => 'samples/sample_row', :locals => {:sample => sample,
+                                                           :row_tags => 'no'} %>
+  </tr>
+<% end %>
+</table>
+
+<%= submit_tag 'Select', class: "btn btn-primary" %>
+<% end %>

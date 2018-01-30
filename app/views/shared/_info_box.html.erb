@@ -31,7 +31,11 @@
               <% if fld[2].is_a?(Date) %>
                 <%= date_field("", fld[1], options.merge!({value: fld[2] })) %>
               <% else %>
-                <%= text_field("", fld[1], options.merge!({value: fld[2], size: fld[2].size })) %>
+                <% if fld[2].respond_to? :size %>
+                  <%= text_field("", fld[1], options.merge!({value: fld[2], size: fld[2].size })) %>
+                <% else %>
+                  <%= text_field("", fld[1], options.merge!({value: fld[2]})) %>
+                <% end %>
               <% end %>
             </div>
 		  

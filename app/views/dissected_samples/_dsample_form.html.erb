@@ -1,0 +1,89 @@
+<div class="card">
+  <h6 class="card-header">Dissected Sample Info</h6>
+  <div class="card-body">
+
+  <%=f.hidden_field(:source_sample_id)%>
+  <%=f.hidden_field(:barcode_key)%>
+  <% tissue = (dissect.sample_tissue.nil? ? '[Unknown]' : dissect.sample_tissue) %>
+  <% sample_site = [tissue, dissect.left_right].join(' - ') %>
+  
+  <div class="form-group row">
+    <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+    <div class="col-auto">
+      <%= f.text_field(:barcode_key, value: f.object.barcode_key, disabled: true, class: "form-control") %>
+    </div>
+
+    <label for="sample_site" class="col-auto col-form-label col-form-label-sm">Sample Site - L/R:</label>
+    <div class="col-auto">
+      <%= f.text_field(:sample_site, value: sample_site, disabled: true, class: "form-control") %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="sample_type" class="col-auto col-form-label col-form-label-sm">Sample Type:</label>
+    <div class="col-auto">
+      <%= f.text_field(:sample_type, value: dissect.sample_type, disabled: true, class: "form-control") %>
+    </div>
+
+    <label for="tissue_preservation" class="col-auto col-form-label col-form-label-sm">Preservation:</label>
+    <div class="col-auto">
+      <%= f.text_field(:tissue_preservation, value: dissect.tissue_preservation, disabled: true, class: "form-control") %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="sample_date" class="col-auto col-form-label col-form-label-sm">Date Created:</label>
+    <div class="col-auto">
+      <%= f.date_field(:sample_date, max: Time.current.to_date, class: "form-control") %>
+      <%#=f.datepicker 'sample_date', dateFormat: "yy-mm-dd", maxDate: Time.current.to_date, changeMonth: true, changeYear: true, yearRange: "-10", size: 15, label: "Date Created" %>
+    </div>
+
+    <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">Tumor/Normal:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:tumor_normal, @tumor_normal, :c_value, :c_value, {}, {class: "form-control"}) %>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="sample_container" class="col-auto col-form-label col-form-label-sm">Container:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:sample_container, @sample_units, :c_value, :c_value, {}, {class: "form-control"})%>
+    </div>
+
+    <label for="vial_type" class="col-auto col-form-label col-form-label-sm">Vial Type:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:vial_type, @vial_types, :c_value, :c_value, {:include_blank => true}, {class: "form-control"})%>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="amount_uom" class="col-auto col-form-label col-form-label-sm">Amt Unit:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:amount_uom, @amount_uom, :c_value, :c_value, {}, {class: "form-control"}) %>
+    </div>
+
+    <label for="amount_initial" class="col-auto col-form-label col-form-label-sm">Initial Amt:</label>
+    <div class="col-auto">
+      <%=f.text_field :amount_initial, :size => 10, class: "form-control" %>
+    </div>
+
+    <label for="sample_remaining" class="col-auto col-form-label col-form-label-sm">Rem?:</label>
+    <div class="col-auto">
+      <%=f.select(:sample_remaining, %w{Y N}, {}, {class: "form-control"})%>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+    <div class="col-auto">
+      <%=f.text_area(:comments, :cols => "80", :rows => "2", class: "form-control") %>
+    </div>
+  </div>
+
+  </div> <!-- card body -->
+</div>  <!-- card -->
+
+<%= f.fields_for :sample_storage_container do |c| %>
+  <%= render :partial => 'shared/storage_container', :locals => {:f => c, :barcode => f.object.barcode_key} %>
+<% end %>

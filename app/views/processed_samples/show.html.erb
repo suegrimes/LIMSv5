@@ -1,0 +1,89 @@
+<h5>Details for Extraction: <%=h @processed_sample.barcode_key %></h5>
+<%= render :partial => 'sample_characteristics/clinical_summary', :locals => {:sample_characteristic => @processed_sample.sample.sample_characteristic,
+                                                                              :patient => @processed_sample.sample.patient }%>
+
+<%= render :partial => 'samples/sample_info', :locals => {:sample => @processed_sample.sample,
+                                                          :source => 'Source'} %>
+<% histology = (@processed_sample.sample.histology ? @processed_sample.sample.histology :
+        (@processed_sample.sample.source_sample && @processed_sample.sample.source_sample.histology ? @processed_sample.sample.source_sample.histology : nil)) %>
+<% if histology %>
+    <%= render :partial => 'histologies/histology_summary', :locals => {:histology => histology, :click_to_link => 'show'} %>
+<% end %>
+
+<%= render :partial => 'processed_sample_info', :locals => {:processed_sample => @processed_sample} %>
+<%= render :partial => 'attached_files/show_file', :locals => {:obj => @processed_sample} %>
+<%=raw break_clear %>
+
+<h6>Sequencing Libraries
+  <% if @processed_sample.seq_libs %> (<%= @processed_sample.seq_libs.size %> libraries) <% end %></h6>
+  <% if @processed_sample.seq_libs && @processed_sample.seq_libs.size > 0 %>
+  <table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Lib Barcode</th>
+    <th>S/M</th>
+    <th>Library Name</th>
+	<th>Owner</th>
+	<th>Prep Date</th>
+	<th>Adapter</th>
+	<th>Index1</th>
+    <th>Index2</th>
+	<th colspan="2">Sample Conc</th>
+	<th>Project</th>
+	<th>Alignment Ref</th>
+  </tr>
+  </thead>
+
+  <% for lib_sample in @processed_sample.lib_samples %>
+  <% if lib_sample.seq_lib %>
+    <% seq_lib = lib_sample.seq_lib %>
+    <tr>
+  	  <td><%= link_to seq_lib.lib_barcode, seq_lib %></td>
+      <td><%=h seq_lib.library_type %></td>
+      <td><%=h seq_lib.lib_name %></td>
+	  <td><%=h seq_lib.owner_abbrev %></td>
+	  <td><%=h seq_lib.preparation_date %></td>
+	  <td><%=h seq_lib.adapter_name %></td>
+      <td title="<%= lib_sample.index1_tag_seq %>"><%=h lib_sample.index1_tag_nr %></td>
+      <td title="<%= lib_sample.index2_tag_seq %>"><%=h lib_sample.index2_tag_nr %></td>
+	  <td><%=h format_conc(seq_lib.sample_conc_ngul)%> ng/ul</td>
+	  <td><%=h format_conc(seq_lib.sample_conc_nm)%> nM</td>
+	  <td><%=h seq_lib.project %></td>
+	  <td><%=h seq_lib.alignment_ref %></td>
+    </tr>
+  <% end %>
+  <% end %>
+</table>
+<% else %>
+<%=raw break_clear %>
+<% end %>
+
+<h6>Molecular Assays 
+  <% if @processed_sample.molecular_assays %> (<%= @processed_sample.molecular_assays.size %> assays) <% end %></h6>
+  <% if @processed_sample.molecular_assays && @processed_sample.molecular_assays.size > 0 %>
+  <table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Assay Barcode</th>
+	<th>Protocol</th>
+	<th>Owner</th>
+	<th>Prep Date</th>
+	<th>Volume(ul)</th>
+	<th>Conc(ng/ul)</th>
+  </tr>
+  </thead>
+
+  <% for molecular_assay in @processed_sample.molecular_assays %>
+  <tr>
+  	<td><%= link_to molecular_assay.barcode_key, molecular_assay %></td>
+	<td><% if molecular_assay.protocol %><%=h molecular_assay.protocol.protocol_name %><% end %></td>
+	<td><%=h molecular_assay.owner_abbrev %></td>
+	<td><%=h molecular_assay.preparation_date %></td>
+	<td><%=h molecular_assay.volume %></td>
+	<td><%=h molecular_assay.concentration %></td>
+  </tr>
+  <% end %>
+</table>
+<% else %>
+<%=raw break_clear %>
+<% end %>

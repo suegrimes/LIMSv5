@@ -212,7 +212,8 @@ class Sample < ApplicationRecord
     #                             :conditions => condition_array,
     #                             :order => 'samples.patient_id,
     #                             (if(samples.source_barcode_key IS NOT NULL, samples.source_barcode_key, samples.barcode_key)), samples.barcode_key')
-    self.includes(:patient, {:sample_characteristic => :pathology}, :source_sample, :histology, :sample_storage_container, :processed_samples, :user)
+    #self.includes(:patient, {:sample_characteristic => :pathology}, :source_sample, :histology, :sample_storage_container, :processed_samples, :user)
+    self.left_outer_joins(:patient, {:sample_characteristic => :pathology}, :source_sample, :histology, :sample_storage_container, :processed_samples, :user).references(:sample_characteristic)
         .where(sql_where(condition_array)).order('samples.patient_id')
   end
 

@@ -11,11 +11,12 @@
 <%= render :partial => 'pathologies/pathology_info',
                        :locals => {:pathology => @sample_characteristic.pathology} %>
 <% end%>
-<%=raw break_clear %>
 
-<span class="table_title">Physical Samples:</span>
-<table class="list">
+<h6>Physical Samples:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+<thead class="thead-light thead-font-sm">
   <%= render :partial => 'samples/sample_hdr' %>
+</thead>
   
   <% for sample in @sample_characteristic.samples %>
     <% if !sample.id.nil? %>
@@ -44,15 +45,17 @@
                 :id => "add_more", :remote => true, :"data-method" => 'post' %>
     </div>
     <%= javascript_tag do %>
-        $('#add_more').bind("ajax:complete", function(event, data){
+        $('#add_more').bind("ajax:success", function(event, data){
+        var detail = event.detail;
+        var response_data = detail[0], status = detail[1], xhr = detail[2];
         $('#sample_link').toggle();
-        $('#load_more').html(data.responseText); // insert content
+        $('#load_more').html(xhr.responseText); // insert content
         });
     <% end %>
 
     <%= form_for @sample_characteristic, :url => {:action => 'update'} do |f| %>
       <div id="load_more"></div>
-    <%=raw break_clear(submit_tag "Submit") %>
+    <%=submit_tag "Submit", class: "btn btn-primary" %>
     <% end %>
 
 <% end %>

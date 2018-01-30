@@ -1,0 +1,107 @@
+<h5><%= @type_of_sample.camelize %> Samples - Processing Tree</h5>
+
+<% if @samples_by_patient && @nr_samples[1] > 0 %>
+
+<%= form_tag :action => :export_samples do %>
+  <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+  <br/><br/>
+
+  <table class="table table-bordered table-sm table-font-sm">  
+    <% @samples_by_patient.sort.each do | patient_id, samples| %>
+    <tr>
+    <th colspan=13><b>Patient: </b>
+      <% if can? :read, Patient %>
+          <%=link_to patient_id[0], patient_path(:id => patient_id[0]) %> / <%=h patient_id[1]%>
+      <% else %>
+          <%=h patient_id[0] %>
+      <% end %>
+    </th>
+    </tr>
+    
+  <thead class="thead-light thead-font-sm">
+    <tr>
+      <th>Barcode</th>
+      <th>Date Entered</th>
+      <th>Patient DX</th>
+      <th>Sample Type</th>
+      <th>OR Designation</th>
+      <th>Sample H&E</th>
+      <th>Processing Dt</th>
+      <th>Rem?</th>
+      <th>Room/Freezer</th>
+      <th>Container</th>
+	  <th>Upd By</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+
+    <% for sample in samples %>
+	  <% nonblank_comments = have_comments?(sample) %>
+      <tr>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%= link_to sample.barcode_key, sample_path(sample)%></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h format_date(sample.created_at) %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>>
+          <% if sample.sample_characteristic.pathology %><%=h sample.sample_characteristic.pathology.pathology_classification %><% end %>
+        </td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_category %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.tumor_normal %></td>
+
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>>
+          <% if sample.histology %><%=h sample.histology.histopathology %>
+          <% elsif sample.clinical_sample == 'no' && sample.source_sample.histology %><%=h sample.source_sample.histology.histopathology %>
+          <% end %>
+		</td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>>
+          <% if sample.clinical_sample == 'no' %><%=h sample.sample_date %><% end %>
+		</td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_remaining %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.room_and_freezer %></td>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_and_position %></td>
+		<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.user.login if sample.user %>
+
+		<% if can? :delete, sample %>
+          <% if !@source_sample_ids.include?(sample.id) && sample.processed_samples.size == 0 %>
+            <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%= link_to 'Delete', sample, :confirm => 'Are you sure?', :method => :delete %></td>
+          <% else %>
+            <td class="ltgrey <%= 'dotted_border_bottom' if nonblank_comments %>"> Delete </td>
+          <% end %>
+        <% end %>
+
+        <%= hidden_field_tag("export_id[]", sample.id)  %>
+      </tr>
+	  
+	  <% if nonblank_comments %>   
+      <tr>
+        <td colspan="12" style="border-top:0;">
+          <% if sample.sample_characteristic.pathology && !sample.sample_characteristic.pathology.comments.blank? %>        
+            <div>Patient Pathology Comments:&nbsp;<%=h sample.sample_characteristic.pathology.comments %></div>
+          <% end %>
+          <% if !sample.comments.blank? %>
+            <div>Sample Comments:&nbsp;<%=h sample.comments %></div>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+	  
+      <% for processed_sample in sample.processed_samples %>
+        <tr>
+          <td><%=link_to processed_sample.barcode_key, processed_sample_path(processed_sample)%></td>
+          <td><%=h format_date(processed_sample.created_at) %></td>
+          <td>&nbsp;</td>
+          <td><%=h processed_sample.extraction_type %></td>
+          <td><%=h sample.tumor_normal %></td>
+          <td>&nbsp;</td>
+          <td><%=h processed_sample.processing_date %></td>
+          <td><%=h processed_sample.psample_remaining %></td>
+          <td><%=h processed_sample.room_and_freezer %></td>
+          <td><%=h processed_sample.container_and_position %></td>
+		  <td><%=h processed_sample.user.login if processed_sample.user %>
+          <td>&nbsp;</td>
+        </tr>
+      <% end %>   
+    <% end %>
+    <% end %> <!-- end of each patient loop -->
+    </table>
+  <% end %> <!-- end of form -->
+ 
+  <% end %> <!-- end of 'if' patient -->

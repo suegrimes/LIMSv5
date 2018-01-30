@@ -1,4 +1,6 @@
 class SampleQueriesController < ApplicationController
+  layout 'main/samples'
+
   authorize_resource :class => Sample
   before_action :dropdowns, :only => :new_query
   
@@ -11,7 +13,8 @@ class SampleQueriesController < ApplicationController
     params[:rpt_type] ||= 'tree'
     @type_of_sample = (params[:stype] ||= ' ')
     
-    @sample_query = SampleQuery.new(params[:sample_query])
+    #@sample_query = SampleQuery.new(params[:sample_query])
+    @sample_query = SampleQuery.new(sample_query_params)
     
     if @sample_query.valid?
       @condition_array = define_conditions(params)
@@ -295,6 +298,14 @@ protected
                    :ss => xsample.sample_storage_container}
     sample_xref.merge!({:ps => psample, :pc => psample.sample_storage_container}) if psample
     return sample_xref
+  end
+
+  def sample_query_params
+    params.require(:sample_query).permit(
+      :mrn, :patient_id, :organism, :race, :gender, :ethnicity, :barcode_string, :alt_identifier,
+      :consent_protocol_id, :clinic_or_location, :tumor_normal, :sample_tissue, :sample_type,
+      :tissue_preservation, :date_filter, :from_date, :to_date, :updated_by
+    )
   end
     
 end

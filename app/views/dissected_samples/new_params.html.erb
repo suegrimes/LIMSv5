@@ -1,0 +1,19 @@
+<div class="card">
+  <h6 class="card-header">Specify Source Sample for New Dissection</h6>
+  <div class="card-body">
+
+<%= form_tag '/add_dissection' do %>
+
+  <div class="form-group row">
+    <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+    <div class="col-auto">
+      <%= text_field_tag :barcode_key, nil, placeholder: "Barcode", size: 30, class: "form-control" %>
+    </div>
+  </div>
+
+  <%= submit_tag "Submit", class: "btn btn-primary" %>
+<%end%>
+
+  </div>
+</div>
+
