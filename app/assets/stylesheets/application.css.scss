@@ -36,6 +36,13 @@ table.table-font-sm td {
   font-size: .875rem
 }
 
+/* class for smaller font sizes in table data inputs */
+table.table-font-sm td {
+  & input, & select {
+    font-size: .875rem
+  }
+}
+
 /* class for smaller font sizes in table header */
 thead.thead-font-sm th {
   font-size: .875rem
@@ -92,6 +99,14 @@ form label, .card label {
 #top-nav .nav-link {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+
+/* utility classes */
+.hidden {
+  display: none;
+}
+.clear {
+  clear: both;
 }
 
 // width styling classes

@@ -18,8 +18,10 @@
       <!-- flash box -->
       <div id="flash-row" class="row">
         <div class="col-3"></div>
-        <div style='color:red'> <%= flash[:error]%></div>
-        <div style='color:green'> <%= flash[:notice]%></div>
+        <div id="flash_box">
+          <div class="text-danger"> <%= flash[:error]%></div>
+          <div class='text-success'> <%= flash[:notice]%></div>
+        </div>
       </div>
 
       <!-- top navigation -->

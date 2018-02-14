@@ -1,4 +1,4 @@
-// geeneric ajax binding function
+// generic ajax binding function
 //
 // selector is a jquery selector string
 // fcn_label is a string to pass into error messages
@@ -9,7 +9,7 @@
 //    success_alert - if true alert user on success, default is true
 //    reset_styling - if true reset the styling after executing the success function, default is false
 
-// Note: handler function signatures have changed in Rails 5.1:
+// Note: handler function signatures have changed in Rails 5.1 when using rails-ujs:
 // 0 or one event parametr is passed and old params are in event.detail[] array
 
 function ajax_bind(selector, data, fcn_label, fcn_success, fcn_error, options) {
@@ -41,7 +41,6 @@ function ajax_bind(selector, data, fcn_label, fcn_success, fcn_error, options) {
   }).on("ajax:error", selector, data, function(evt) {
     var detail = evt.detail;
     var error = detail[0], status = detail[1], xhr = detail[2];
-logger("ajax_bind("+selector+"): error: "+error);
     $(this).removeClass("waiting");
     if (fcn_error) {
       fcn_error(this, evt, xhr, status, error);
@@ -87,7 +86,15 @@ function set_header_flash_messages(xhr) {
   //alert("fm.inspect: "+Object.inspect(fm));
   for(var key in fm) {
     if (fm.hasOwnProperty(key)) {
-      var html = '<div class="'+key+' flash_msg" id="flash_'+key+'">'+fm[key]+'</div>';
+      var html = $('<div class="'+key+' flash_msg" id="flash_'+key+'">'+fm[key]+'</div>');
+      // bootstrap customization
+      bs_class = "";
+      if (key == "notice") {
+        bs_class = "text-success"
+      } else if (key == "error") {
+        bs_class = "text-danger"
+      }
+      html.addClass(bs_class);
       box.append(html);
     }
   }

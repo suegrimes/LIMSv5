@@ -1,0 +1,134 @@
+<h5>Create Multiple Dissections from Sample Parameters</h5>
+
+<div id="default-values">
+
+<div class="card">
+  <h6 class="card-header">Sample Parameters to Replicate</h6>
+  <div class="card-body">
+
+<%= form_for(@sample, id: "default-values") do |f|%>
+   <%=f.hidden_field(:next_barcode_key, :value => @next_barcode_key) %>
+
+  <div class="form-group row">
+    <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+    <div class="col-auto">
+      <%=f.text_field :barcode_key, disabled: true, size: 14, class: "form-control barcode" %>
+    </div>
+
+    <label for=":sample_date" class="col-auto col-form-label col-form-label-sm">Sample Date:</label>
+    <div class="col-auto">
+      <%= f.date_field :sample_date, class: "form-control" %>
+    </div>
+
+    <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">Tumor/Normal:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:tumor_normal, @tumor_normal, :c_value, :c_value, {}, {class: "form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="sample_container" class="col-auto col-form-label col-form-label-sm">Container:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:sample_container, @sample_units, :c_value, :c_value, {}, {class: "form-control"})%>
+    </div>
+
+    <label for="vial_type" class="col-auto col-form-label col-form-label-sm">Vial Type:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:vial_type, @vial_types, :c_value, :c_value, {:include_blank => true}, {class: "form-control"})%>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="amount_uom" class="col-auto col-form-label col-form-label-sm">Amt Unit:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:amount_uom, @amount_uom, :c_value, :c_value, {}, {class: "form-control"})%>
+    </div>
+
+    <label for="amount_initial" class="col-auto col-form-label col-form-label-sm">Dissection Amount:</label>
+    <div class="col-auto">
+      <%=f.text_field :amount_initial, size: 10, class: "form-control" %>
+    </div>
+
+    <label for="sample_remaining" class="col-auto col-form-label col-form-label-sm">Remain?:</label>
+    <div class="col-auto">
+      <%=f.select(:sample_remaining, %w[Y N], {}, {class: "form-control"})%>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+    <div class="col-auto">
+      <%=f.text_area :comments, cols: 40, rows: 1, class: "form-control" %>
+    </div>
+  </div>
+
+  <%#= f.fields_for :sample_storage_container do |c| %>
+    <%#= render :partial => 'shared/storage_container_tags', :locals => {:f => c, :barcode => f.object.barcode_key} %>
+  <%# end %>
+
+  <%= f.fields_for :sample_storage_container do |c| %>
+  <div class="form-group row">
+    <%#=f.hidden_field(:sample_name_or_barcode, :value => barcode) %>
+
+    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Container Type:</label>
+    <div class="col-auto">
+      <%=c.collection_select(:container_type, @containers, :c_value, :c_value, {include_blank: 'Select..'}, {class: "form-control"}) %>
+    </div>
+
+    <label for="container_name" class="col-auto col-form-label col-form-label-sm">Name/#:</label>
+    <div class="col-auto">
+      <%=c.text_field(:container_name, size: 15, class: "form-control") %>
+    </div>
+
+    <!-- make this hidden here, but visible in edit grid -->
+    <%=c.text_field(:position_in_container, hidden: true, size: 10, class: "form-control" )  %>
+
+    <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
+    <div class="col-auto">
+      <%=c.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {:include_blank => 'Select..'}, {class: "form-control"}) %>
+    </div>
+  </div>
+  <% end %>
+
+<% end %>
+
+  </div>  <!-- card-body -->
+</div>  <!-- card -->
+
+</div>  <!-- default-values -->
+
+<div class="card">
+  <div class="card-body">
+    <div class="form-group row">
+      <label for="nr_dissections" class="col-auto col-form-label col-form-label-sm">Number of Dissections:</label>
+      <div class="col-auto">
+        <%= number_field_tag :nr_dissections, 1, min: 1, max: 26, class: "form-control" %>
+      </div>
+
+      <div class="col-auto">
+        <%=button_tag("Replicate", id: "replicate-button", class: "btn btn-outline-primary") %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden content until Replicate button clicked -->
+<div id="edit-table-container" class="hidden">
+  <%= form_for :sample, url: "create_multi", method: :post, remote: true, html: {"data-type": "json"} do |f| %>
+  <table id="edit-table" class="table table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
+      <tr>
+        <th>Barcode</th>
+        <th>Dissection Amount</th>
+        <th>Remain?</th>
+        <th>Position</th>
+        <th>Container Name</th>
+        <th>Room/Freezer</th>
+        <th>Vial Type</th>
+        <th>Comments</th>
+      </tr>
+    </thead>
+  </table>
+  <%=f.submit "Save All", data: {disable_with: "Saving..."}, class: "btn btn-primary" %>
+  <% end %>
+</div>

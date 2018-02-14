@@ -53,6 +53,10 @@
         });
     <% end %>
 
+    <div id="multi_dissections_link">
+      <%= link_to('Add multiple dissections for this source sample', add_multi_dissected_sample_path(@added_sample_id)) %>
+    </div>
+
     <%= form_for @sample_characteristic, :url => {:action => 'update'} do |f| %>
       <div id="load_more"></div>
     <%=submit_tag "Submit", class: "btn btn-primary" %>

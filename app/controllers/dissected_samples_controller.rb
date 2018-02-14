@@ -1,7 +1,8 @@
 class DissectedSamplesController < ApplicationController
   layout 'main/processing'
 
-  before_action :dropdowns, :only => :edit
+  #before_action :dropdowns, :only => :edit
+  before_action :dropdowns, :only => [:edit, :add_multi]
 
   def index
   end
@@ -74,6 +75,71 @@ class DissectedSamplesController < ApplicationController
       render :action => "new" 
     end
   end
+
+  # add multiple dissections
+  def add_multi
+    @sample = Sample.includes(:sample_characteristic, :patient).find(params[:id])
+    @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
+    @next_barcode_key = Sample.next_dissection_barcode(@sample.id, @sample.barcode_key)
+  end
+  
+  # create multiple dissections in one request
+  # return a JSON response with array of saved ids and any error(s) that may have occured
+  # operation will stop after the first dissection save that fails
+  # return status 201 CREATED if any were created and 200 OK if not
+  # actual save error messages and status will be packaged in the JSON repsonse
+  def create_multi
+    authorize! :create, Sample
+logger.debug "#{self.class}#create_multi: request.xhr: #{request.xhr?}"
+
+    @source_sample_id = params[:id]
+    return bad_request_error("Missing source sample id parameter") if @source_sample_id.nil?
+    @source_sample = Sample.find(@source_sample_id)
+    return bad_request_error("Cannot find source sample for id: #{@source_sample_id}") if @source_sample.nil?
+
+    # convert hash with index keys to an array of sample params hashes
+    @sample_params_hash = params[:sample]
+    return bad_request_error("Missing sample parameter") if @sample_params_hash.nil?
+    @sample_params_array = []
+    @sample_params_hash.each do |k, v|
+      i = k.to_i
+      return  bad_request_error("Unexpected key value: #{k}") if (i > 25 || (i == 0 && k != "0"))
+      @sample_params_array[i] = v 
+    end
+    @sample_params_array.compact!
+    @saved_ids = []
+    @sample_params_array.each do |sample|
+      sample.merge!(amount_rem: sample[:amount_initial].to_f)
+      sample.merge!(source_sample_id: @source_sample_id)
+
+      @sample = Sample.new(sample.permit(*create_multi_attr))
+      unless @sample.save
+        # on error we stop saving and return errors on failing object
+        if @saved_ids.size > 0
+          flash[:notice] = "#{@saved_ids.size} Dissections saved" 
+        end
+        flash[:error] = "#{@sample_params_array.size - @saved_ids.size} Dissections not saved"
+
+        respond_to do |format|
+          format.json do
+            render json: {
+              saved_ids: @saved_ids,
+              last_status: :unprocessable_entity,
+              errors: @sample.errors.full_messages
+            }, status: :ok
+          end
+        end
+        return
+      end
+      @saved_ids << @sample.id
+    end
+    flash[:notice] = "All #{@sample_params_array.size} Dissections successfully created"
+    respond_to do |format|
+      format.json do
+        render json: {saved_ids: @saved_ids}, status: :created
+      end
+    end
+  end
   
 protected
   def prepare_for_render_new(source_sample_id)
@@ -102,12 +168,21 @@ protected
   def create_params
     params.require(:sample).permit(
       :source_sample_id, :barcode_key, :sample_date, :tumor_normal, :sample_container,
-      :vial_type, :amount_uom, :amount_initial, :sample_remaining, :comments,
+      :vial_type, :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments,
       {sample_storage_container_attributes: [
         :sample_name_or_barcode, :container_type, :container_name,
         :position_in_container, :freezer_location_id
-       ]}
+      ]}
     )
+  end
+
+  def create_multi_attr
+    [:source_sample_id, :barcode_key, :sample_date, :tumor_normal, :sample_container,
+    :vial_type, :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments,
+    sample_storage_container_attributes: [
+      :container_type, :container_name, :position_in_container, :freezer_location_id
+      ]
+    ]
   end
 
   def update_source_params

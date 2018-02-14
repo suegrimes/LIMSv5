@@ -50,7 +50,10 @@ Rails.application.routes.draw do
   get 'storage_query' => 'storage_queries#new_query', :as => :storage_query
 
    # Routes for dissected samples
-  resources :dissected_samples
+  resources :dissected_samples do
+    get 'add_multi', on: :member
+    post 'create_multi', on: :member
+  end
   match 'new_dissection' => 'dissected_samples#new_params', :as => :new_dissection, :via => [:get, :post]
   match 'add_dissection' => 'dissected_samples#new', :via => [:get, :post]
 

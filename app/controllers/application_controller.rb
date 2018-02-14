@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :log_user_action
 
+  # for ajax, set flash message into the headers
+  after_action :flash_to_headers
+
   cache_sweeper :user_stamper
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -266,4 +269,52 @@ class ApplicationController < ActionController::Base
                   " IP: " + request.remote_ip + " Date/Time: " + Time.now.strftime("%Y-%m-%d %H:%M:%S"))
     UserLog.add_entry(self, User.current_user, request.remote_ip)
   end
+
+  # Ajax related functions
+  # put flash messages into the headers for use in Ajax transport
+  def flash_to_headers
+    return unless request.xhr?
+    flash_json = Hash[flash.map {|k,v| [k,ERB::Util.h(v)] }].to_json
+    response.headers['X-Flash-Messages'] = flash_json
+    flash.discard
+  end
+
+  # can be called generically on a record create error
+  def create_error(instance)
+    server_error(action_error_msg(:create, instance))
+  end
+
+  # can be called generically on a record update error
+  def update_error(instance)
+    server_error(action_error_msg(:update, instance))
+  end
+
+  def action_error_msg(action, instance)
+    inst_errors = instance.errors.full_messages.join("; ")
+    emsg = "ERROR: #{self.class}: #{action}: #{instance.class}: #{inst_errors}"
+#logger.debug "action_error: #{instance.inspect}"
+    return emsg
+  end
+
+  def instance_errors(instance)
+    instance.errors.full_messages.join("; ")
+  end
+
+  def server_error(message)
+    generic_error(:internal_server_error, message)
+  end
+
+  def bad_request_error(message)
+    generic_error(:bad_request, message)
+  end
+
+  def forbidden_error(message)
+    generic_error(:forbidden, message)
+  end
+
+  def generic_error(status, message)
+    logger.debug "#{self.class}: #{status}: " + message
+    render :inline => message, :status => status
+  end
+  
 end
