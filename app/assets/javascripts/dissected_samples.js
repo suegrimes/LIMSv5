@@ -20,27 +20,31 @@ logger("dissected_samples_add_multi_init()");
     input_elements = $("#default-values").find("input, select, textarea").toArray();
 //logger(input_elements);
 
-    // create an instance of the row html to append
-    var table_row = create_table_row(input_elements, "sample");
-    
     // get the number of rows to replicate
     var nr_replicate = $("input#nr_dissections").val();
 //logger("nr_replicate: " + nr_replicate);
 
     // attach the number of rows requested
     for (i = 0; i < nr_replicate; i++) {
-      // clone the table row
-      var row_clone = table_row.get(0).cloneNode(true);
 
-      // increment the barcode suffix
-      var barcode_input = $(row_clone).find(".barcode");
+      // create an instance of the row html to append
+      var table_row = create_table_row(input_elements, "sample");
+    
+      // increment the barcode suffix and re-assign
+      var barcode_input = table_row.find(".barcode");
       var source_barcode = barcode_input.attr("value");
       var next_barcode = $("#sample_next_barcode_key").val();
       barcode_input.attr("value", new_barcode(source_barcode, next_barcode));
-      
-      // attach to the grid
-      var new_row = $(row_clone).appendTo($("#edit-table"));
 
+      // attach to the grid
+      var new_row = table_row.appendTo($("#edit-table"));
+
+      // now that we are attached to the DOM we can change any
+      // values required and trigger the change
+
+      // remove the position_in_container value from the row
+      new_row.find("#sample_sample_storage_container_attributes_position_in_container").val("").trigger("change");
+      
       // copy the selected values from the form and trigger a change event
       copy_selected_values(new_row, "sample", get_row_index());
     }
@@ -51,7 +55,6 @@ logger("dissected_samples_add_multi_init()");
   });
 
 //function ajax_bind(selector, data, fcn_label, fcn_success, fcn_error, options)
-logger("Binding to form");
   ajax_bind("form", "save", "Save All Dissections", save_success, save_error, {no_success_alert: true})
 
   // hijack the submit and detach already saved rows until response
@@ -64,7 +67,7 @@ logger("Binding to form");
 // both complete success and save failures should come here
 function save_success(form, evt, data, status, xhr) {
 logger("save_success; " + status);
-logger(data);
+//logger(data);
   // set any flash messages sent in headers
   set_header_flash_messages(xhr)
 
@@ -84,7 +87,7 @@ logger(data);
 // other unexpected errors should come here
 function save_error(form, evt, xhr, status, error) {
 logger("save_error: " + status);
-logger(error);
+//logger(error);
 }
 
 // handle successsfully saved rows in the edit table
@@ -96,7 +99,7 @@ logger("saved_ids: " + ids);
   // find the rows saved, will be the first n input rows in table
   rows.each(function() {
     var row = $(this);
-    var id = ids.pop()
+    var id = ids.shift()
     row.addClass("data-saved") .attr("data-id", id)
     row.find("#sample_barcode_key").addClass("bg-success text-white");
     row.find("input, select, textarea").attr("disabled", "disabled");
