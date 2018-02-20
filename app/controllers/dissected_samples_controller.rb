@@ -78,7 +78,13 @@ class DissectedSamplesController < ApplicationController
 
   # add multiple dissections
   def add_multi
-    @sample = Sample.includes(:sample_characteristic, :patient).find(params[:id])
+    begin
+      @sample = Sample.includes(:sample_characteristic, :patient).find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Source sample not found, id: #{params[:id]}"
+      redirect_back fallback_location:  {:action => 'new_params'}
+      return
+    end
     @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
     @next_barcode_key = Sample.next_dissection_barcode(@sample.id, @sample.barcode_key)
   end
