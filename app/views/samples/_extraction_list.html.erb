@@ -1,0 +1,32 @@
+<span class="table_title">Extracted Samples
+  <% if sample.processed_samples %> (<%= sample.processed_samples.size %> samples) <% end %></span>
+  <table class="table table-bordered table-sm table-font-sm">
+  <tr>
+    <th>Extracted Sample</th>
+	<th>Type</th>
+    <th>Processing Date</th>
+    <th>Amount(ug)</th>
+    <th>Conc (ng/ul)</th>
+    <th>a260/a280</th>
+    <th>a260/a230</th>
+    <th>RIN#</th>
+    <th>Rem?</th>
+    <th>Room/Freezer</th>
+    <th>Container</th>
+  </tr>
+  <% for processed_sample in sample.processed_samples %>
+    <tr>
+      <td><%=link_to processed_sample.barcode_key, processed_sample_path(processed_sample)%></td>
+      <td><%=h processed_sample.extraction_type %></td>
+      <td><%=h processed_sample.processing_date %></td>
+      <td><%=h processed_sample.final_amt_ug %></td>
+      <td><%=h processed_sample.final_conc %></td>
+      <td><%=h number_with_precision(processed_sample.final_a260_a280, :precision => 3) %></td>
+      <td><%=h number_with_precision(processed_sample.final_a260_a230, :precision => 3) %></td>
+      <td><%=h number_with_precision(processed_sample.final_rin_nr,    :precision => 1) %></td>
+      <td><%=h processed_sample.psample_remaining %></td>
+      <td><%=h processed_sample.room_and_freezer %></td>
+      <td><%=h processed_sample.container_and_position %></td>
+	</tr>
+  <% end %>
+  </table>
