@@ -1,0 +1,59 @@
+<h5>Listing <%= @type_of_sample.camelize %> Samples - <%=h @heading_string %></h5>
+
+  <div class="row form-group source-select">
+    <div class="col-auto">
+    <%= form_tag :action => :export_samples do %>
+      <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+    </div>
+  </div>
+
+<table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
+<thead>
+  <tr>
+    <th></th> <!-- hold source sample indicator tag -->
+    <th>Patient ID</th>
+    <th>Barcode</th>
+    <th>Sample Date</th>
+    <th>Sample Type</th>
+    <th>OR Designation</th>
+    <th>Sample H&E</th>
+    <th>Rem?</th>
+    <th>Room/Freezer</th>
+    <th>Container</th>
+    <th>Upd By</th>
+  </tr>
+</thead>
+  
+  <% if @samples_by_patient %>
+    <% @samples_by_patient.sort.each do | patient_id, samples| %>
+
+    <% for sample in samples %>
+      <tr>
+
+      <!-- hidden column used for filtering -->
+      <% if sample.source_sample_id.nil? %>
+        <td class="source-tag">is-source</td>
+      <% else %>
+        <td class="source-tag">is-dissection</td>
+      <% end %>
+
+        <td><%==link_to patient_id[0], "#{sample_queries_path}?#{{patient_id: patient_id[0], rpt_type: "tree"}.to_query(:sample_query)}" %></td>
+        <td><%=link_to sample.barcode_key, sample_path(sample) %></td>
+        <td><%=h sample.sample_date %></td>
+        <td><%=h sample.sample_category %></td>
+        <td><%=h sample.tumor_normal %></td>
+        <td><% if sample.sample_characteristic.pathology %><%=h sample.sample_characteristic.pathology.pathology_classification %><% end %></td>
+        <td><%=h sample.sample_remaining %></td>
+        <td><%=h sample.room_and_freezer %></td>
+        <td><%=h sample.container_and_position %></td>
+        <td><%=h sample.user.login if sample.user %></td>
+
+        <%= hidden_field_tag("export_id[]", sample.id)  %>
+
+      </tr>
+    <% end %>
+	
+    <% end %>
+  <% end %>
+</table>
+<%end %>

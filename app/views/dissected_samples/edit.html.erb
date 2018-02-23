@@ -10,7 +10,7 @@
                                                                         :click_to_link => 'show'} %>
 <% end %>
 
-<%= tagged_form_for @sample, :url => {:controller => 'dissected_samples', :action => :update} do |f| %>
+<%= form_for @sample, :url => {:controller => 'dissected_samples', :action => :update} do |f| %>
     <%= render '/shared/errors', model: @sample %>
   
   <%= render :partial => 'dsample_form', :locals => {:f => f, :dissect => @sample} %> 

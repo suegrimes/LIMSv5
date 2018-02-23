@@ -31,12 +31,15 @@ class SampleQueriesController < ApplicationController
     
       flash.now[:notice] = 'No samples found for parameters entered' if @nr_samples == 0
    
-      if params[:rpt_type] == 'tree'
+      case params[:rpt_type]
+      when "tree"
         render :action => 'list_as_tree'
+      when "data_tables"
+        render :action => 'data_index'
       else
         render :action => 'index'
       end
-    
+
     else  # Validation errors found
       dropdowns
       render :action => :new_query

@@ -17,4 +17,6 @@
 //= require turbolinks
 //= require jquery-ui/widgets/autocomplete
 //= require autocomplete-rails
+// 3rd party DataTables, see vendor/assets
+//= require datatables.js
 //= require_tree .

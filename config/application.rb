@@ -50,5 +50,11 @@ module SeqLIMS
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # Add vendor directory to asset path for javascript
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'javascripts')
+
+    # Add vendor directory to asset path for stylesheets
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'stylesheets')
+
   end
 end

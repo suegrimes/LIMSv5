@@ -18,6 +18,9 @@
 //Import Boostrap
 @import "bootstrap";
 
+// Import DataTables
+@import "datatables";
+
 /* global variables */
 
 /* some global styles */
@@ -99,6 +102,11 @@ form label, .card label {
 #top-nav .nav-link {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+
+/* topmargin for report type control */
+select#rpt_type {
+   margin-top: .25rem;
 }
 
 /* utility classes */
