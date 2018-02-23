@@ -25,8 +25,8 @@ class PathologiesController < ApplicationController
     end
     
     #@sample_characteristics = SampleCharacteristic.find_all_by_patient_id(@patient_id, :include => [:patient, :pathology, :samples], :conditions => "samples.source_sample_id IS NULL")
-    # find_all_by_ is deprecated
-    @sample_characteristics = SampleCharacteristic.where(patient_id: @patient_id).includes(:patient, :pathology, :samples).where("samples.source_sample_id IS NULL").references(:samples)
+    # find_all_by_ is deprecated and where returns an AR Relation, so use .to_a to return an Array
+    @sample_characteristics = SampleCharacteristic.where(patient_id: @patient_id).includes(:patient, :pathology, :samples).where("samples.source_sample_id IS NULL").references(:samples).to_a
     if @sample_characteristics.size == 0
       error_found = true
       flash.now[:error] = 'Error - invalid patient id, or no samples exist for this patient'
