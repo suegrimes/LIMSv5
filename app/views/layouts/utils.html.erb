@@ -20,7 +20,7 @@
   <div class="header-util-links">
     <% if (logged_in? && controller.action_name != "logout") %>
         <div class="logout-link">
-          <%= link_to 'User Profile', edit_user_path(current_user) %>&nbsp;&nbsp;&nbsp;&nbsp;
+          <%= link_to current_user.login, edit_user_path(current_user) %>&nbsp;&nbsp;&nbsp;&nbsp;
           <%= link_to 'Logout', logout_url %>
         </div>
     <% end %>
