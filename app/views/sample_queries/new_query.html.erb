@@ -8,6 +8,10 @@
   <div class="card-body">
 
     <div class="form-group row">
+      <p class="font-italic font-sm">For barcodes and patients: Enter individual codes separated by commas, enter ranges with '-'. Eg. '1160,1378-1400,1500-1600'</p>
+    </div>
+
+    <div class="form-group row">
     <% if can? :read, Patient %>
 
       <label for="mrn" class="col-auto col-form-label col-form-label-sm">Patient MRN:</label>
@@ -19,16 +23,16 @@
         <strong> -or- </strong>
       </div>
 
-      <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+      <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
       <div class="col-auto">
-        <%= f.text_field(:patient_id, :size => 10, class: "form-control") %>
+        <%= f.text_area(:patient_string, :size => "50x1", class: "form-control")%>
       </div>
 
     <% else %>
 
-      <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+      <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
       <div class="col-auto">
-        <%= f.text_field(:patient_id, :size => 10, class: "form-control") %>
+        <%= f.text_area(:patient_string, :size => "50x1", class: "form-control")%>
       </div>
     <% end %>
     </div>
@@ -61,17 +65,13 @@
     <div class="form-group row">
       <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Sample Barcode(s):</label>
       <div class="col-auto">
-        <%= f.text_area(:barcode_string, :size => "40x2", class: "form-control")%>
+        <%= f.text_area(:barcode_string, :size => "50x1", class: "form-control")%>
       </div>
 
       <label for="alt_identifier" class="col-auto col-form-label col-form-label-sm">Alt Sample#:</label>
       <div class="col-auto">
         <%= f.text_field(:alt_identifier, :size => 12, class: "form-control")%>
       </div>
-    </div>
-
-    <div class="form-group row">
-      <p class="font-italic">Enter individual barcodes separated by commas, enter ranges with '-'. <br /> Eg. '1160,1378-1400,1500-1600'</p>
     </div>
 
     <div class="form-group row">
