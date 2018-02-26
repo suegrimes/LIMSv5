@@ -5,6 +5,15 @@
     <%= form_tag :action => :export_samples do %>
       <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
     </div>
+
+    <label class="col-auto col-form-label">Sample Type:</label>
+    <div class="col-auto">
+      <select class="form-control">
+        <option value="">All</option>
+        <option value="is-source">Source</option>
+        <option value="is-dissection">Dissection</option>
+      </select>
+    </div>
   </div>
 
 <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
