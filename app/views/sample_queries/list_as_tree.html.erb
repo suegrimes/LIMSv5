@@ -61,7 +61,7 @@
 
 		<% if can? :delete, sample %>
           <% if !@source_sample_ids.include?(sample.id) && sample.processed_samples.size == 0 %>
-            <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%= link_to 'Delete', sample, :confirm => 'Are you sure?', :method => :delete %></td>
+            <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%= link_to 'Delete', sample, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
           <% else %>
             <td class="ltgrey <%= 'dotted_border_bottom' if nonblank_comments %>"> Delete </td>
           <% end %>

@@ -27,7 +27,7 @@
 	  <% end %>
 	</td>
 	<% if can? :delete, user %>
-	  <td><%= link_to 'Delete', user, :confirm => 'Are you sure?', :method => :delete %></td>
+	  <td><%= link_to 'Delete', user, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	<% end %>
   </tr>
   <% end %>

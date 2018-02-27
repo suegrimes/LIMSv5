@@ -30,7 +30,7 @@
       <td><%= link_to 'Edit', edit_sample_characteristic_path(sample_characteristic) %>
     <% end %>
 	<% if can? :delete, sample_characteristic && sample_characteristic.samples.count == 0 %>
-	  <td><%= link_to 'Delete', sample_characteristic, :confirm => 'Are you sure?', :method => :delete %></td>
+	  <td><%= link_to 'Delete', sample_characteristic, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	<% elsif can? :delete, sample_characteristic %>
 	  <td class="ltgrey"> Delete </td>
   <% end %>

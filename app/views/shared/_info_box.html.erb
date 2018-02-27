@@ -53,7 +53,7 @@
         <% info_links.each do |lnk| %>
           <% div_options = {:class => "linkborder no-print"} %>
           <% link_options = {:class => "btn btn-sm btn-outline-primary"} %>
-          <% link_options.merge!({:confirm => 'Are you sure', :method => :delete}) if lnk[1] == 'destroy' %>
+          <% link_options.merge!({data: {:confirm => 'Are you sure'}, :method => :delete}) if lnk[1] == 'destroy' %>
           <%= content_tag(:div, (link_to lnk[0], {controller: link_controller, action: lnk[1], id: link_id}, link_options), div_options)%>
         <% end %>
       </div>
