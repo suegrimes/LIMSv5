@@ -12,5 +12,10 @@
   <th>Room/Freezer</th>
   <th>Container</th>
   <th>Upd By</th>
-  <th colspan=2></th>
+  <% if can? :edit, ProcessedSample %>
+  <th/>
+  <% end %>
+  <% if can? :delete, ProcessedSample %>
+  <th/>
+  <% end %>
 </tr>

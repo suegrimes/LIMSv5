@@ -34,6 +34,6 @@
 <% end %>
 
 <% if can? :delete, processed_sample %>
-  <td><%= link_to 'Delete', processed_sample, :confirm => 'Are you sure?', :method => :delete %></td>
+  <td><%= link_to 'Delete', processed_sample, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 <% end %>
 </tr>

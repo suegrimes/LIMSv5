@@ -1,0 +1,21 @@
+<h5>Extracted Samples (Filtered) </h5>
+
+<%= form_tag :action => :export_samples do %>
+  <%= submit_tag "Export Extracted Samples", class: "btn btn-primary" -%>
+  <br/><br/>
+
+<b>Extracted Sample info:</b>
+<% if @processed_samples %> (<%= @processed_samples.size %> samples) <% end %>
+
+<table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
+<thead class="thead-light">
+  <%= render :partial => 'processed_samples/processed_sample_hdr' %>
+</thead>
+
+  <% for processed_sample in @processed_samples %>
+    <%= render :partial => 'processed_samples/processed_sample_row', :locals => {:processed_sample => processed_sample,
+                                                                     :capture_ids => 'yes'} %>
+  <% end %>
+</table>
+
+<% end %>

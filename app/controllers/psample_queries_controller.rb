@@ -9,14 +9,18 @@ class PsampleQueriesController < ApplicationController
     @psample_query = PsampleQuery.new(:to_date   =>  Date.today)
   end
   
-   def index
+  def index
     #@psample_query = PsampleQuery.new(params[:psample_query]) 
     @psample_query = PsampleQuery.new(psample_query_params) 
      
     if @psample_query.valid?
       condition_array = define_conditions(params)
       @processed_samples = ProcessedSample.find_for_query(sql_where(condition_array))
-      render :action => :index
+      if params[:rpt_type] == 'data_tables'
+        render :action => 'data_index'
+      else 
+        render :action => :index
+      end
     else
       dropdowns
       render :action => :new_query
