@@ -86,6 +86,10 @@ Rails.application.routes.draw do
 
   get 'container_query' => 'sample_storage_containers#new_query', :as => :container_query
 
+  # Bulk upload
+  get 'bulk_upload' => 'bulk_upload#new'
+  post 'bulk_upload' => 'bulk_upload#create'
+
   # test route
   get 'test' => 'test#index'
 
