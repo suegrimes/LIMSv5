@@ -62,6 +62,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
 
     # do all processing within a transaction so everything
     # gets rolled back on a save error
+    @errors = []
     ActiveRecord::Base.transaction do
       if !process_upload()
         # rollback all prior saves on any error
@@ -99,7 +100,6 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
 
   # process a spreadsheet opened by a Roo instance
   def process_upload()
-    @errors = []
     
     # keys are the normalized expected sheet names
     # values have the model name(s) and dropdown method prefix
@@ -218,6 +218,7 @@ logger.debug "raw header: #{header}"
   def verify_header_names(key, models_columns, header)
     normalized_header = []
     
+    got_error = false
     header.each_with_index do |h, i|
 logger.debug "verify header: #{h}"
       if h == "id"
@@ -282,9 +283,10 @@ logger.debug "verify header: #{h}"
       next if header_is_known
 
       # error if not recognized, but continue to gather all errors
+      got_error = true
       error(cur_sheet_name, 1, "Header name '#{h}' is not recognized for model(s) #{model_column_names(models_columns)}")
     end
-    return false if !@errors.empty?
+    return false if got_error
 
     @sheet_results[key][:header] = ["id"] + normalized_header.compact
 logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
