@@ -105,7 +105,8 @@ module CategoryValues
 #logger.debug "get_mapped_value: name: #{name} maps: #{maps}" 
     return nil if maps.nil?
     maps.each do |m|
-      if m[0].include?(value)
+      # allow match on aliases and the mapped to value
+      if m[0].include?(value) || m[1] == value
 #logger.debug "get_mapped_value: value: #{value} map to: #{m[1]}"
         return m[1]
       end

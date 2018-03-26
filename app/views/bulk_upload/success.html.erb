@@ -20,7 +20,8 @@
     <% rows.each do |row|%>
       <tr>
         <% row.each do |value| %>
-          <td><%= value.to_s %></td>
+          <% cl = value[1] == 0 ? "text-primary" : "text-secondary" %>
+          <td class="<%=cl%>"><%= value[0].to_s %></td>
         <% end %>
       </tr>
     <% end %>

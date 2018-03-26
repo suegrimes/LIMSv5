@@ -45,12 +45,12 @@ logger.debug "#{self.class}#create @store_path: #{@store_path}"
 
     @ss = open_spreadsheet(@file)
 logger.debug "#{self.class}#process_upload ss.class: #{@ss.class}"
-logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     if @ss.nil?
       flash[:error] =  "Unknown file type for file: #{@file.original_filename}"
       render action: :new
       return
     end
+logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
 
     # for testing only
     #@force_rollback = true
@@ -108,6 +108,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     @sheet_info = {
       patients: { models: [Patient] },
       samples: { models: [SampleCharacteristic, Sample] },
+      samplelocs: { models: [SampleStorageContainer] },
       dissections: { models: [Sample, SampleStorageContainer] },
       extractions: { models: [ProcessedSample, SampleStorageContainer] }
     }
@@ -119,6 +120,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     @sheet_results = {
       patients: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       samples: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
+      samplelocs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       dissections: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       extractions: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
     }
@@ -182,20 +184,25 @@ logger.debug "raw header: #{header}"
     models.each do |model|
       h = {}
       h[:model] = model
-      h[:all_cols] = model.column_names
+      h[:allowed_cols] = model.column_names - ["updated_by", "created_at", "updated_at"]
       content_cols = model.content_columns.map {|cc| cc.name}
-      special_cols= h[:all_cols] - content_cols
+      special_cols = model.column_names - content_cols
       # regular content columns for this model
-      content_cols = content_cols - ["created_at", "updated_at"]
+      #content_cols = content_cols - ["updated_by", "created_at", "updated_at"]
       # foreign key columns
       h[:fk_cols] = special_cols - ["id"]
       h[:allowed_values] = allowed_values(model)
       h[:mapped_values] = mapped_values(model)
       h[:fk_finders] = {} # place to put fk finders mao
       h[:headers] = []  # place to put verified header names
+      h[:dups] = {}     # place to put dup indexes
 #logger.debug "models_columns for model: #{model.name}: #{h}"
       models_columns << h
     end
+
+    resolve_amgiguous_headers(models_columns, header)
+#logger.debug "models_columns[0][:dups]: #{models_columns[0][:dups]}"
+#logger.debug "models_columns[1][:dups]: #{models_columns[1][:dups]}"
 
     return false if !verify_header_names(key, models_columns, header)
     
@@ -239,7 +246,23 @@ logger.debug "verify header: #{h}"
       header_is_known = false
       show_header_in_results = true
       models_columns.each_with_index do |mc, ci|
-        if mc[:all_cols].include?(normalized_header[i])
+
+        # check for ambiguous header name
+        if mc[:dups].has_key?(normalized_header[i])
+#logger.debug "verify_header:  ci: #{ci} found ambiguous header: #{normalized_header[i]}"
+          dup_index = mc[:dups][normalized_header[i]]
+#logger.debug "verify_header: ci: #{ci} dup_index: #{dup_index}"
+          next if dup_index.nil?
+          if dup_index == i
+            header_is_known = true
+            mc[:headers] << [normalized_header[i], i]  # 0 based index
+#logger.debug "header #{h} i: #{i} ci: #{ci} is_ambiguous_model_column mc[:headers]: #{mc[:headers]}"
+            break
+          end
+          next
+        end
+
+        if mc[:allowed_cols].include?(normalized_header[i])
           header_is_known = true
           mc[:headers] << [normalized_header[i], i]  # 0 based index
 #logger.debug "header #{h} is_model_column mc[:headers]: #{mc[:headers]}"
@@ -288,6 +311,9 @@ logger.debug "verify header: #{h}"
     end
     return false if got_error
 
+#logger.debug "mc[0][:headers]: #{models_columns[0][:headers]}"
+#logger.debug "mc[1][:headers]: #{models_columns[1][:headers]}"
+
     @sheet_results[key][:header] = ["id"] + normalized_header.compact
 logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
     return true
@@ -320,7 +346,6 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
     ref_def_keys = [] # _ref definition key value
     models_columns.each_with_index do |mc, mi|
       attributes[mi] = {}  # put attributes to save here
-      saved_row[mi] = []       # array format of values for later display
       mc[:headers].each do |h|
         name = h[0]	# attribute name
         ci = h[1]	# column index 0 based
@@ -332,7 +357,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
 
         # we ignore nil values in the spreadsheet
         if value.nil?
-          saved_row[mi] << ""
+          save_row_value(mi, ci, name, "", saved_row)
           next
         end
 
@@ -359,7 +384,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
             error(cur_sheet_name, rn, "Could not find saved id from reference column #{name} value #{value}")
           else
             attributes[mi][ref_ref_real_attr(name)] = id
-            saved_row[mi] << id
+            save_row_value(mi, ci, name, id, saved_row)
           end
           next
         end
@@ -368,7 +393,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
         if mc[:allowed_values][name]
           if mc[:allowed_values][name].include?(value)
             attributes[mi][name] = value
-            saved_row[mi] << value
+            save_row_value(mi, ci, name, value, saved_row)
           else
             error(cur_sheet_name, rn, "Value '#{value}' in column #{column_id(ci)} not allowed for #{mc[:model].name}.#{name}")
           end
@@ -382,7 +407,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
             error(cur_sheet_name, rn, "Value '#{value}' in column #{column_id(ci)} not allowed for #{mc[:model].name}.#{name}")
           else
             attributes[mi][name] = ret_val
-            saved_row[mi] << ret_val
+            save_row_value(mi, ci, name, ret_val, saved_row)
           end
           next
         end
@@ -393,7 +418,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
           if method
             id = self.send(method, value)
             attributes[mi][fk_finder_real_attr(name)] = id
-            saved_row[mi] << id
+            save_row_value(mi, ci, name, id, saved_row)
             next
           end
         end
@@ -401,14 +426,14 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
         # NULL means put a NULL in the DB, set to nil to do this
         if value == "NULL"
           attributes[mi][name] = nil
-          saved_row[mi] << "nil"
+          save_row_value(mi, ci, name, "nil", saved_row)
           next
         end
 
         # there is no restriction or special handling defined on the value so use it
         # assign the value to the attribute
         attributes[mi][name] = value
-        saved_row[mi] << value
+        save_row_value(mi, ci, name, value, saved_row)
       end
     end
 
@@ -453,12 +478,25 @@ logger.debug "process_row to instantiate: #{attributes.inspect}"
 #logger.debug "Saved _ref header: #{header_name} key: #{ref_key} id: #{ref_id}"
       end
 
-      s_row = [instance.id] + saved_row[0] + (saved_row[1].nil? ? [] : saved_row[1])
-#logger.debug "Saved Row: key: #{key} row: #{s_row}"
+      s_row = final_saved_row(instance.id, saved_row)
+logger.debug "Saved Row: key: #{key} row: #{s_row}"
       @sheet_results[key][:saved_rows] << s_row
     end
 
     return true
+  end
+
+  # saves a row cell value for later display in the saved report page
+  # model_index is the index of the model the value belongs to,
+  # name is the normalized column name, value the value saved,
+  # name_col an array of associations between names and header columns
+  # and saved_row is an array in which to place the values
+  def save_row_value(model_index, col_index, name, value, saved_row)
+    saved_row[col_index] = [value, model_index]
+  end
+
+  def final_saved_row(id, saved_row)
+    [[id, 0]] + saved_row.compact
   end
 
   # inputs should both be either a 1 or 2 element array
@@ -672,6 +710,82 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
       return id unless id.nil?
     end
     return nil
+  end
+
+  # If there is the same attribute name in both models
+  # resolve which model it/they should belong to.
+  # If there are two instances, the first in the header should belong to
+  # the first model and the 2nd to the 2nd model.
+  # If there is only one instance in the header,
+  # if it's position in the header is after any non-dup header
+  # belonging to the 2nd model it is assigned to the 2nd model
+  # else to the first model
+  def resolve_amgiguous_headers(models_columns, raw_header)
+    return if models_columns.size < 2
+    m0_cols = models_columns[0][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
+    m1_cols = models_columns[1][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
+    dup_names = []
+    m0_cols.each do |n1|
+      m1_cols.each do |n2|
+        if n1 == n2
+          dup_names << n1
+        end
+      end
+    end
+#logger.debug "resolve_amgiguous_headers found dup_names: #{dup_names}"
+    return if dup_names.empty?
+    # normalize all headers
+    header = raw_header.map {|h| normalize_header(h) }
+    dup_names.each do |dn|
+#logger.debug "resolve_amgiguous_headers handle dup_name: #{dn}"
+      fi = li = nil
+      # find first instance of the dup name in header
+      header.each_with_index do |h, i|
+        if dn == h
+          fi = i
+          break
+        end
+      end
+#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} first index: #{fi}"
+      # next if the dup name is not used in the sheet
+      next if fi.nil?
+      # find last instance of the dup name in header
+      header.reverse_each.with_index do |h, ri|
+        if dn == h
+          li = (header.size - 1) - ri
+          break
+        end
+      end
+#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} last index: #{li}"
+      if fi == li
+        # one instance of dup name
+        m1_no_dups = models_columns[1][:allowed_cols] - dup_names
+        first_m1_index = nil
+        header.each_with_index do |h, i|
+          if m1_no_dups.include?(h)
+            # we foud the first non-ambiguous header of 2nd model
+            first_m1_index = i
+            break
+          end
+        end
+        if first_m1_index.nil? || fi < first_m1_index
+          # assign to the 1st model
+#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} assign to first"
+          models_columns[0][:dups][dn] = fi
+          models_columns[1][:dups][dn] = nil
+        else
+          # assign to the 2nd model
+#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} assign to second"
+          models_columns[0][:dups][dn] = nil
+          models_columns[1][:dups][dn] = fi
+        end
+      else
+#logger.debug "resolve_amgiguous_headers assign dup_name: #{dn} first index: #{fi} last index: #{li}"
+        # two instances of dup name
+        models_columns[0][:dups][dn] = fi
+        models_columns[1][:dups][dn] = li
+      end
+    end
   end
 
   def ref_ref_real_attr(name)
