@@ -44,6 +44,9 @@ class ProcessedSample < ApplicationRecord
   
   validates_date :processing_date
   before_create :derive_barcode
+
+  validates_presence_of :barcode_key
+  validates_uniqueness_of :barcode_key, message: 'is not unique'
   
   def derive_barcode
     self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
