@@ -73,6 +73,27 @@ protected
         @where_values = add_to_values(@where_values, attr, val)
       end
     end
+
+    if !param_blank?(params[:psample_query][:patient_string])
+      str_vals, str_ranges, errors = compound_string_params('', nil, params[:psample_query][:patient_string])
+#logger.debug "#{self.class}#define_conditions: str_vals: #{str_vals} str_ranges: #{str_ranges}"
+      where_select, where_values   = sql_compound_condition('processed_samples.patient_id', str_vals, str_ranges)
+#logger.debug "#{self.class}#define_conditions: where_select: #{where_select} where_values: #{where_values}"
+      #puts errors if !errors.blank?
+      @where_select.push(where_select)
+      @where_values.push(*where_values)
+    end
+
+    if !param_blank?(params[:psample_query][:barcode_string])
+      bc_flds = ['processed_samples.barcode_key', 'samples.source_barcode_key']
+      str_vals, str_ranges, errors = compound_string_params('', nil, params[:psample_query][:barcode_string])
+#logger.debug "#{self.class}#define_conditions: str_vals: #{str_vals} str_ranges: #{str_ranges}"
+      where_select, where_values   = sql_compound_condition2(bc_flds, str_vals, str_ranges)
+#logger.debug "#{self.class}#define_conditions: where_select: #{where_select} where_values: #{where_values}"
+      #puts errors if !errors.blank?
+      @where_select.push(where_select)
+      @where_values.push(*where_values)
+    end
     
     db_fld = 'processed_samples.processing_date'
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:psample_query], db_fld)
@@ -201,7 +222,7 @@ protected
     
   def psample_query_params
     params.require(:psample_query).permit(
-      :mrn, :patient_id, :barcode_key, :consent_protocol_id, :clinic_or_location,
+      :mrn, :patient_string, :barcode_string, :consent_protocol_id, :clinic_or_location,
       :sample_tissue, :sample_type, :tissue_preservation, :tumor_normal, :protocol_id,
       :extraction_type, :from_date, :to_date, :updated_by
     )
