@@ -8,6 +8,7 @@
 //    no_success_alert - if true no alert user on success, default is false
 //    success_alert - if true alert user on success, default is true
 //    reset_styling - if true reset the styling after executing the success function, default is false
+//    flash_selector - jQuery selector for flash box, default is '#flash_box'
 
 // Note: handler function signatures have changed in Rails 5.1 when using rails-ujs:
 // 0 or one event parametr is passed and old params are in event.detail[] array
@@ -45,25 +46,29 @@ function ajax_bind(selector, data, fcn_label, fcn_success, fcn_error, options) {
     if (fcn_error) {
       fcn_error(this, evt, xhr, status, error);
     }
-    remote_error(xhr, error, fcn_label);
+    if (options && options.flash_selector) {
+      remote_error(xhr, error, fcn_label, options.flash_selector);
+    } else {
+      remote_error(xhr, error, fcn_label);
+    }
   });
 }
 
 // generic error handling for remote ajax call
 
-function remote_error(xhr, error, fcn_label) {
+function remote_error(xhr, error, fcn_label, flash_selector) {
   var label = "Error: ";
   if (fcn_label) {
     label =  fcn_label+": ";
   }
   if (xhr.status == 401) {
-    set_flash("error", xhr.responseText);
+    set_flash("error", xhr.responseText, flash_selector);
 //    shrink_flash_timer(5000, function() {
 //      redirect_relative('users/sign_in');
 //    });
   } else if (xhr.status >= 400 && xhr.status <= 499) {
     // handle client erros
-    set_header_flash_messages(xhr);
+    set_header_flash_messages(xhr, flash_selector);
     my_alert(label+error+" - "+xhr.responseText);
   } else {
     // handle server errors
@@ -72,14 +77,18 @@ function remote_error(xhr, error, fcn_label) {
 }
 
 // set the flash message in the flash box
-function set_flash(key, message) {
+// selector is an optional parameter for the flashbox
+function set_flash(key, message, selector) {
+  if (typeof selector === 'undefined') { selector = '#flash_box"'; }
   var html = '<div class="'+key+' flash_msg" id="flash_'+key+'">'+message+'</div>';
-  $("#flash_box").empty().append(html);
+  $(selector).empty().append(html);
 }
 
 // set flash messages from response headers
-function set_header_flash_messages(xhr) {
-  var box = $("#flash_box");
+// selector is an optional parameter for the flashbox
+function set_header_flash_messages(xhr, selector) {
+  if (typeof selector === 'undefined') { selector = '#flash_box"'; }
+  var box = $(selector);
   box.empty();
   var fm_str = xhr.getResponseHeader("X-Flash-Messages");
   var fm = $.parseJSON(fm_str);

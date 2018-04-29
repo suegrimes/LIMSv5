@@ -1,5 +1,5 @@
 class DissectedSamplesController < ApplicationController
-  layout 'main/processing'
+  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/processing'}
 
   #before_action :dropdowns, :only => :edit
   before_action :dropdowns, :only => [:edit, :add_multi]
@@ -28,6 +28,7 @@ class DissectedSamplesController < ApplicationController
                        :sample_date      => Date.today}
       @sample = Sample.new(sample_params)  
       @sample.build_sample_storage_container
+      render :ajax_new if request.xhr?
     else
       flash[:error] = 'Sample barcode not found, please try again'
       redirect_to :action => 'new_params'
@@ -38,6 +39,8 @@ class DissectedSamplesController < ApplicationController
     @sample = Sample.find(params[:id])
     @source_sample = Sample.includes(:sample_characteristic).find(@sample.source_sample_id)
     @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
+    # special edit form for ajax calls
+    render :ajax_edit if request.xhr?
   end
   
   def update
@@ -49,7 +52,11 @@ class DissectedSamplesController < ApplicationController
       #@source_sample.update_attributes(:sample_remaining => params[:source_sample][:sample_remaining]) if params[:source_sample]
       @source_sample.update_attributes(update_source_params) if params[:source_sample]
       flash[:notice] = 'Dissected sample was successfully updated'
-      redirect_to(@sample)
+      if request.xhr?
+        render :ajax_show
+      else
+        redirect_to(@sample)
+      end
     else
       flash[:error] = 'Error updating dissected sample'
       redirect_to :action => 'edit'
@@ -69,7 +76,11 @@ class DissectedSamplesController < ApplicationController
       #@source_sample.update_attributes(:sample_remaining => params[:source_sample][:sample_remaining]) if params[:source_sample]
       @source_sample.update_attributes(update_source_params) if params[:source_sample]
       flash[:notice] = 'Sample successfully created'
-      redirect_to samples_list1_path(:source_sample_id => params[:sample][:source_sample_id], :add_new => 'yes')
+      if request.xhr?
+        render :ajax_show
+      else
+        redirect_to samples_list1_path(:source_sample_id => params[:sample][:source_sample_id], :add_new => 'yes')
+      end
     else
       prepare_for_render_new(params[:sample][:source_sample_id])
       render :action => "new" 

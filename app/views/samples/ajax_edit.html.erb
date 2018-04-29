@@ -1,0 +1,11 @@
+<h5>Editing Sample: <%= @sample.barcode_key %></h5>
+
+<%= form_for(@sample, remote: true) do |f|%>
+    <%= render '/shared/errors', model: @sample %>
+
+    <%= render :partial => 'sample_form', :locals => {:f => f}%>
+ 
+  <%=raw break_clear(f.submit "Update", class: "btn btn-primary") %>
+<% end %>
+
+

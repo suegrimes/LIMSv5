@@ -20,6 +20,8 @@ class SamplesController < ApplicationController
     @sample_is_new = (params[:new_sample] ||= false)
     @sample = Sample.includes(:sample_characteristic, :patient).find(params[:id])
     @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
+    # special edit form for ajax calls
+    render :ajax_edit if request.xhr?
   end
   
   def edit_params 
@@ -56,19 +58,23 @@ class SamplesController < ApplicationController
   
   def update
     @sample = Sample.find(params[:id])
-    
+
     #if @sample.update_attributes(update_params)
-    # update_attributes is depracated
+    # update_attributes is deprecated
     if @sample.update(update_params)
       flash[:notice] = 'Sample was successfully updated'
-      redirect_to(@sample)
+      if request.xhr?
+        render :ajax_show
+      else
+        redirect_to(@sample)
+      end
     else
       flash[:error] = 'Error updating sample'
       dropdowns
       render :action => 'edit'
     end
   end
-  
+
   # DELETE /samples/1
   def destroy
     @sample = Sample.find(params[:id])

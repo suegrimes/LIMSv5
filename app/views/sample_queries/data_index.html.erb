@@ -1,9 +1,11 @@
 <h5>Listing <%= @type_of_sample.camelize %> Samples - <%=h @heading_string %></h5>
+<h6><%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients)</h6>
+
+<%= form_tag :action => :export_samples do %>
 
   <div class="row form-group source-select">
     <div class="col-auto">
-    <%= form_tag :action => :export_samples do %>
-      <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+      <%= submit_tag "Export Samples", class: "btn btn-secondary" -%>
     </div>
 
     <label class="col-auto col-form-label">Sample Type:</label>
@@ -14,6 +16,19 @@
         <option value="is-dissection">Dissection</option>
       </select>
     </div>
+
+    <div class="col-auto">
+        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Apply to Selected
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <a id="update-sample" class="dropdown-item" >Update Samples</a>
+          <a id="enter-dissection" class="dropdown-item" >Enter Dissections</a>
+        </div>
+    </div>
+  </div>
+
+  <div class="top-alert-box">
   </div>
 
 <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
@@ -65,4 +80,38 @@
     <% end %>
   <% end %>
 </table>
-<%end %>
+<% end %>
+
+<!-- lightbox templates -->
+<div style="display: none">
+
+  <!-- content for lightbox -->
+  <div class="action-lightbox">
+    <h4 class="lightbox-title"></h4>
+    <hr/>
+    <div class="flash-box">
+      <!-- ajax flash messages go here -->
+    </div>
+    <div class="lightbox-body">
+      <!-- ajax returned content goes here -->
+    </div>
+    <hr/>
+    <div class="lightbox-footer">
+      <div class="alert-box">
+        <!-- alerts go here -->
+      </div>
+      <button type="button" class="next-button btn btn-default"></button>
+      <button type="button" class="again-button btn btn-default"></button>
+      <button type="button" class="cancel-button btn btn-default">Cancel All</button>
+      <span class="selections-left"></span>
+    </div>
+  </div>
+
+  <!-- alert template to insert into alert-box -->
+  <div class="alert-template alert alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+</div>

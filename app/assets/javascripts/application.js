@@ -19,4 +19,6 @@
 //= require autocomplete-rails
 // 3rd party DataTables, see vendor/assets
 //= require datatables.js
+// 3rd party Featherligth lightbox, see vendor/assets
+//= require featherlight.js
 //= require_tree .
