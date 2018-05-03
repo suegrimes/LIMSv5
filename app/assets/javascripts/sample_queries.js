@@ -69,6 +69,10 @@ function selected_actions_init() {
       dt_alert("info", "Some selected are not source samples, please de-select");
       return
     }
+
+    // init dissection sticky fields, copied to next new dissection
+    dissection_sticky_fields_init();
+
     // init and open the lightbox
     lightbox_init("Enter Dissection for Selected Samples", "Next Sample", "Another Dissection", new_dissection)
   });
@@ -89,7 +93,7 @@ function lightbox_init(title, next_text, again_text, initiate_fcn) {
   // set the initiating ajax caller function for the action
   window.initiate_fcn = initiate_fcn;
 
-  // get the next row
+  // get the first row
   var first = next_selection();
   if (first == null) {
     dt_alert("No rows have been selected for update");
@@ -168,6 +172,9 @@ function ajax_action(url, id, context, request_label, submit_label) {
 
       // when done attach the respnse html to the lightbox body
       $(this).empty().append(data);
+
+      // do anything needed aftr the initial function response is loaded
+      after_action_loaded(url)
 
       // bind the form for the update ajax return handling
       ajax_bind(featherlight_selector()+" form", "", submit_label+" selected sample", submit_success, submit_error, {flash_selector: flash_selector});
@@ -297,4 +304,62 @@ function bs_alert(selector, type, message) {
 function set_selections_left() {
   var msg = "  Selections Remaining: " + window.selected_rows.length;
   $(".featherlight .selections-left").empty().append(msg);
+}
+
+// things to do after the initial action is done and loaded
+function after_action_loaded(url) {
+  // if this is a new dissection request
+  // copy the saved sticky fields to the form
+  // and arrange to save before commit
+  if (url.startsWith("/dissected_samples/new")) {
+    dissection_sticky_fields_copy();
+
+    // temporarily hijack the submit to save the submitted sticky fields
+    $(featherlight_selector()+" form input[name='commit']").on("click", function() {
+      dissection_sticky_fields_save();
+    });
+  }
+}
+
+// define the fields that are sticky from one instance to the next
+// and init to null
+function dissection_sticky_fields_init() {
+  window.dissection_sticky_fields = {
+    input: ["amount_initial"],
+    select: ["vial_type", "sample_container", "amount_uom"]
+  };
+  window.dissection_sticky_vals = null;
+}
+
+// find and save the sticky fields in an object
+function dissection_sticky_fields_save() {
+logger("dissection_sticky_fields_save()");
+  var sf = window.dissection_sticky_fields;
+  var form = $(featherlight_selector()+" form");
+  var vals = {}
+  for (const tag in sf) {
+    sf[tag].forEach(function(field) {
+      var name = "sample["+field+"]";
+      vals[field] = form.find(tag+"[name='"+name+"']").val();
+    });
+  }
+  window.dissection_sticky_vals = vals;
+}
+
+// get the saved sticky fields and insert into the form input fields
+function dissection_sticky_fields_copy() {
+logger("dissection_sticky_fields_copy()");
+  var vals = window.dissection_sticky_vals;
+  if (vals == null) { return } // first dissection
+  var sf = window.dissection_sticky_fields;
+  var form = $(featherlight_selector()+" form");
+  for (const tag in sf) {
+    sf[tag].forEach(function(field) {
+      var name = "sample["+field+"]";
+      var elem = form.find(tag+"[name='"+name+"']").val(vals[field]);
+      if (tag == "select") {
+        elem.trigger("change");
+      }
+    });
+  }
 }
