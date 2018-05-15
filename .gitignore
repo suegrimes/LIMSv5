@@ -13,7 +13,12 @@
 !/log/.keep
 !/tmp/.keep
 
+/.idea/*
+
 /node_modules
 /yarn-error.log
 
 .byebug_history
+
+# Ignore configuration files
+/config/database.yml

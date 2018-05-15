@@ -13,7 +13,11 @@
   <%= render :partial => 'sample_info1', :locals => {:source => 'Dissected',
                                                      :sample => @sample,
                                                      :click_to_link => 'none',
-                                                     :last_info_box => 'yes'} %>
+                                                     :last_info_box => (@sample.histology ? 'no' : 'yes')} %>
+  <% if @sample.source_sample.histology %>
+    <%= render :partial => 'histologies/histology_summary', :locals => {:histology => @sample.histology,
+                                                                        :last_info_box => 'yes'} %>
+  <% end %>
   <%= render :partial => 'extraction_list', :locals => {:sample => @sample} %>
   
 <% else %>
