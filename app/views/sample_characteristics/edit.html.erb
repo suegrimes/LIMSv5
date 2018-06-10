@@ -40,7 +40,7 @@
 
     <div id='load_more'>
       <% if @sample_with_error %>
-        <%= render :partial => 'samples_form1', :locals => {:sample => @sample_with_error} %>
+        <%= render :partial => 'samples_form1', :locals => {sample: @sample_with_error, edit_sample_storage: @edit_sample_storage} %>
       <% end %>
     </div>
   

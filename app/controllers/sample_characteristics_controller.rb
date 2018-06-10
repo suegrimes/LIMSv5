@@ -1,4 +1,6 @@
 class SampleCharacteristicsController < ApplicationController
+  include StorageManagement
+
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
   load_and_authorize_resource
   protect_from_forgery :except => :add_new_sample
@@ -71,8 +73,21 @@ class SampleCharacteristicsController < ApplicationController
       render :action => 'new_sample'
       return
     end
-    
     params[:sample_characteristic].merge!(:patient_id  => params[:patient][:id])
+
+    # see if a new container is specified, if so create it
+    if (params[:new_storage_container])
+      sample_storage_container_attributes = params[:sample_characteristic][:samples_attributes]["0"][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        sample_dropdowns
+        flash[:error] = 'Error - New storage container could not be created: #{emsg}, Clinical sample/characteristics not saved'
+        render :action => 'new_sample'
+        return
+      end
+    end
+    
     #@sample_characteristic = SampleCharacteristic.new(params[:sample_characteristic])
     @sample_characteristic = SampleCharacteristic.new(sample_characteristic_params)
 
@@ -262,6 +277,8 @@ protected
     @amount_uom         = category_filter(@category_dropdowns, 'unit of measure')
     @freezer_locations  = FreezerLocation.list_all_by_room
     @containers         = category_filter(@category_dropdowns, 'container')
+    # following for new Storage Management UI
+    storage_container_ui_data
   end
   
 private
@@ -343,7 +360,7 @@ private
      :sample_remaining, :comments,
      sample_storage_container_attributes: [
        :sample_name_or_barcode, :container_type, :container_name,
-       :position_in_container, :freezer_location_id
+       :position_in_container, :freezer_location_id, :storage_container_id, :notes
       ]
     ]
   end

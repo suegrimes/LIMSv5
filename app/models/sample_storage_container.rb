@@ -24,8 +24,10 @@ class SampleStorageContainer < ApplicationRecord
   # Rails 5 defaults to required: true, so make it explicitly optional
   belongs_to :freezer_location, optional: true
   belongs_to :stored_sample, optional: true, polymorphic: true
+  belongs_to :storage_container, optional: true
 
-  before_create :upd_sample_name
+  before_create :upd_sample_name, :upd_storage_container_fields
+  before_update :upd_storage_container_fields
 
   def upd_sample_name
     self.sample_name_or_barcode = self.stored_sample.barcode_key
@@ -65,5 +67,14 @@ class SampleStorageContainer < ApplicationRecord
   
   def self.populate_dropdown
     self.where('container_type > ""').order(:container_type).uniq.pluck(:container_type)
+  end
+
+  # keep redundant fields in sync with the storage container it belongs to
+  def upd_storage_container_fields
+    if self.storage_container
+      self.container_type = self.storage_container.container_type
+      self.container_name = self.storage_container.container_name
+      self.freezer_location = self.storage_container.freezer_location
+    end
   end
 end

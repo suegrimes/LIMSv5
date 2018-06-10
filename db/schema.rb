@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20180515193622) do
 
-  create_table "adapters", id: :integer, unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "adapters", id: :integer, unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "runtype_adapter", limit: 25
     t.string "mplex_splex", limit: 1
     t.string "multi_indices", limit: 1
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "align_qc", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "align_qc", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "flow_lane_id", null: false
     t.string "sequencing_key", limit: 50
     t.integer "lane_nr", limit: 1
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["flow_lane_id"], name: "qc_flow_lane_fk"
   end
 
-  create_table "alignment_refs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "alignment_refs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "alignment_key", limit: 20, null: false
     t.string "interface_name", limit: 25
     t.string "genome_build", limit: 50
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "assigned_barcodes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "assigned_barcodes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.date "assign_date"
     t.string "group_name", limit: 30
     t.string "owner_name", limit: 25
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "updated_by"
   end
 
-  create_table "attached_files", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "attached_files", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "sampleproc_id", null: false
     t.string "sampleproc_type", limit: 50, null: false
     t.string "document"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "created_at"
   end
 
-  create_table "categories", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "categories", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "cgroup_id"
     t.string "category", limit: 50, null: false
     t.string "category_description"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "updated_at"
   end
 
-  create_table "category_values", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "category_values", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "category_id", null: false
     t.integer "c_position"
     t.string "c_value", limit: 50, null: false
@@ -116,14 +116,14 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "updated_at"
   end
 
-  create_table "cgroups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "cgroups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "group_name", limit: 25, null: false
     t.integer "sort_order", limit: 2
     t.datetime "created_at"
     t.timestamp "updated_at"
   end
 
-  create_table "consent_protocols", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "consent_protocols", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "consent_nr", limit: 8
     t.string "consent_name", limit: 100
     t.string "consent_abbrev", limit: 50
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "flow_cells", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "flow_cells", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.date "flowcell_date"
     t.string "nr_bases_read1", limit: 4
     t.string "nr_bases_index", limit: 2
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "flow_lanes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "flow_lanes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "flow_cell_id", null: false
     t.integer "seq_lib_id"
     t.string "sequencing_key", limit: 50
@@ -177,9 +177,11 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["seq_lib_id"], name: "fl_seq_lib_fk"
   end
 
-  create_table "freezer_locations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "freezer_locations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "room_nr", limit: 25, null: false
     t.string "freezer_nr", limit: 25
+    t.string "freezer_type", limit: 20
+    t.string "long_term_storage", limit: 1
     t.string "owner_name", limit: 25
     t.string "owner_email", limit: 50
     t.string "comments"
@@ -187,7 +189,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "histologies", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "histologies", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "sample_id"
     t.string "he_barcode_key", limit: 20, null: false
     t.date "he_date"
@@ -203,7 +205,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "index_tags", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "index_tags", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "adapter_id", limit: 2
     t.string "runtype_adapter", limit: 25
     t.integer "index_read", limit: 1
@@ -213,7 +215,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "order_id"
     t.string "po_number", limit: 20
     t.string "requester_name", limit: 30
@@ -235,7 +237,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["order_id"], name: "it_order_fk"
   end
 
-  create_table "lib_samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "lib_samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "seq_lib_id"
     t.integer "splex_lib_id"
     t.string "splex_lib_barcode", limit: 20
@@ -255,7 +257,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["seq_lib_id"], name: "ls_seq_lib_id"
   end
 
-  create_table "machine_incidents", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "machine_incidents", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "seq_machine_id"
     t.date "incident_date", null: false
     t.string "incident_description", null: false
@@ -264,7 +266,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "molecular_assays", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "molecular_assays", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "barcode_key", limit: 20, null: false
     t.integer "processed_sample_id"
     t.integer "protocol_id"
@@ -280,7 +282,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "orders", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "orders", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "company_name", limit: 50
     t.string "order_quote", limit: 100
     t.date "date_ordered"
@@ -295,7 +297,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "updated_by", limit: 2
   end
 
-  create_table "pathologies", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "pathologies", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "patient_id", null: false
     t.date "collection_date"
     t.date "pathology_date"
@@ -313,7 +315,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "patients", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "patients", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.binary "clinical_id_encrypted", limit: 30
     t.string "organism", limit: 25
     t.string "gender", limit: 1
@@ -324,7 +326,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "updated_at"
   end
 
-  create_table "processed_samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "processed_samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "sample_id"
     t.integer "patient_id"
     t.integer "protocol_id"
@@ -354,7 +356,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["sample_id"], name: "ps_sample_fk"
   end
 
-  create_table "protocols", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "protocols", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "protocol_name", limit: 50
     t.string "protocol_abbrev", limit: 25
     t.string "protocol_version", limit: 10
@@ -366,7 +368,17 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "publications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "publication_authors", primary_key: ["publication_id", "researcher_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
+    t.integer "publication_id", null: false
+    t.integer "researcher_id", null: false
+  end
+
+  create_table "publication_lanes", primary_key: ["publication_id", "flow_lane_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
+    t.integer "publication_id", default: 0, null: false
+    t.integer "flow_lane_id", default: 0, null: false
+  end
+
+  create_table "publications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "title_abbrev", limit: 50, null: false
     t.string "title_full"
     t.string "publication_name", limit: 50, null: false
@@ -376,7 +388,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "researchers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "researchers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "user_id"
     t.string "researcher_name", limit: 50, null: false
     t.string "researcher_initials", limit: 3, null: false
@@ -385,18 +397,18 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "active_inactive", limit: 1
   end
 
-  create_table "roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "name"
   end
 
-  create_table "roles_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "roles_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "role_id"
     t.integer "user_id"
     t.index ["role_id"], name: "index_roles_users_on_role_id"
     t.index ["user_id"], name: "index_roles_users_on_user_id"
   end
 
-  create_table "run_dirs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "run_dirs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "flow_cell_id", null: false
     t.string "sequencing_key", limit: 50
     t.integer "storage_device_id", limit: 2, null: false
@@ -416,7 +428,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "sample_characteristics", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "sample_characteristics", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "patient_id"
     t.date "collection_date"
     t.string "clinic_or_location", limit: 100
@@ -435,24 +447,24 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "updated_at"
   end
 
-  create_table "sample_storage_containers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "sample_storage_containers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "stored_sample_id"
     t.string "stored_sample_type", limit: 50
     t.string "sample_name_or_barcode", limit: 25, default: "", null: false
-    t.string "container_type", limit: 10
+    t.string "container_type", limit: 15
     t.string "container_name", limit: 25, default: "", null: false
     t.string "position_in_container", limit: 15
     t.integer "freezer_location_id"
     t.integer "storage_container_id"
-    t.string "row_nr", limit: 2
-    t.string "position_nr", limit: 3, default: ""
+    t.string "xx_row_nr", limit: 2
+    t.string "xx_position_nr", limit: 3, default: ""
     t.string "notes", limit: 100
     t.integer "updated_by", limit: 2
     t.timestamp "updated_at"
     t.index ["stored_sample_id"], name: "cn_sample_idx"
   end
 
-  create_table "samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "samples", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.integer "patient_id"
     t.integer "sample_characteristic_id"
     t.integer "source_sample_id"
@@ -482,7 +494,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["sample_characteristic_id"], name: "smp_sample_characteristic_fk"
   end
 
-  create_table "seq_libs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "seq_libs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "barcode_key", limit: 20
     t.string "lib_name", limit: 50, null: false
     t.string "library_type", limit: 2
@@ -513,7 +525,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "seq_machines", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "seq_machines", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "machine_name", limit: 20, null: false
     t.string "bldg_location", limit: 12
     t.string "machine_type", limit: 20
@@ -524,7 +536,15 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "storage_devices", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC" do |t|
+  create_table "storage_containers", id: :integer, unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
+    t.string "container_type", limit: 15
+    t.string "container_name", limit: 25
+    t.integer "freezer_location_id"
+    t.string "freezer_type", limit: 20
+    t.string "notes"
+  end
+
+  create_table "storage_devices", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "device_name", limit: 25, null: false
     t.string "building_loc", limit: 25
     t.string "base_run_dir", limit: 50
@@ -533,7 +553,18 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamp "updated_at"
   end
 
-  create_table "user_logins", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "storage_types", id: :integer, unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
+    t.string "container_type", limit: 15, null: false
+    t.integer "nr_rows", limit: 2
+    t.integer "nr_cols", limit: 2
+    t.string "first_row", limit: 1
+    t.string "first_col", limit: 1
+    t.string "freezer_type", limit: 20
+    t.string "notes"
+    t.string "display_format", limit: 8
+  end
+
+  create_table "user_logins", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "ip_address", limit: 20, null: false
     t.integer "user_id", limit: 2
     t.string "user_login", limit: 25, null: false
@@ -541,7 +572,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "logout_timestamp"
   end
 
-  create_table "user_logs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "user_logs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT" do |t|
     t.string "ip_address", limit: 20
     t.integer "user_id", limit: 2
     t.string "user_login", limit: 25, null: false
@@ -564,8 +595,8 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_foreign_key "align_qc", "flow_lanes", name: "align_qc_ibfk_1"
-  add_foreign_key "flow_lanes", "flow_cells", name: "flow_lanes_ibfk_1"
-  add_foreign_key "flow_lanes", "seq_libs", name: "flow_lanes_ibfk_2"
+  add_foreign_key "flow_lanes", "flow_cells", name: "flow_lanes_ibfk_2"
+  add_foreign_key "flow_lanes", "seq_libs", name: "flow_lanes_ibfk_1"
   add_foreign_key "items", "orders", name: "items_ibfk_1"
   add_foreign_key "lib_samples", "seq_libs", name: "lib_samples_ibfk_1"
   add_foreign_key "processed_samples", "samples", name: "processed_samples_ibfk_1"

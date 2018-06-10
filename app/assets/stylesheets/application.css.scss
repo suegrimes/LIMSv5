@@ -112,7 +112,7 @@ form label, .card label {
   border-bottom-right-radius: 0px;
 }
 
-/* topmargin for report type control */
+/* top margin for report type control */
 select#rpt_type {
    margin-top: .25rem;
 }
@@ -123,6 +123,15 @@ select#rpt_type {
 }
 .clear {
   clear: both;
+}
+
+// grid locations width for 2 chars
+table.grid-locations td {
+ min-width: 2em;
+}
+// greyed if filled
+table.grid-locations td.filled {
+  background-color: grey
 }
 
 // width styling classes
