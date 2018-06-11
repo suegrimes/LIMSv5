@@ -1,0 +1,37 @@
+<div class="current-container-fields">
+  <div class="form-group row">
+    <%=f.hidden_field(:sample_name_or_barcode, value: barcode) %>
+    <!-- make storage container id available on save and to javascript -->
+    <%=f.hidden_field(:storage_container_id, value: @storage_container_id, class: "storage-container-id") %>
+
+    <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
+    <div class="col-auto">
+      <%= f.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {:include_blank => 'Select..'}, {class: "freezer form-control"}) %>
+    </div>
+
+    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Container Type:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:container_type, @container_types, :container_type, :container_type, {include_blank: 'Select..'}, {class: "container-type form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="container_name" class="col-auto col-form-label col-form-label-sm">Name/#:</label>
+    <div class="col-auto">
+      <%=f.text_field(:container_name, size: 15, class: "container-name form-control") %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="position_in_container" class="position-in-container col-auto col-form-label col-form-label-sm">Position in Container:</label>
+    <div class="position-in-container col-auto">
+      <%=f.text_field(:position_in_container, class: "form-control" )  %>
+    </div>
+
+    <div class="select-position-btn">
+      <div class="col-auto">
+        <button type="button" class="btn btn-secondary">Show Grid Locations</button>
+      </div>
+    </div>
+  </div>
+</div>

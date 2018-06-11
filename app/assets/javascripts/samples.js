@@ -2,15 +2,47 @@
 // standard init functions
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
+//
+// currently handling both samples and sample_characteristics in this file
 
 // samples controller init function
 function samples_init() {
   samples_tab_active();
 }
 
+// samples edit init
+function samples_edit_init() {
+  // new storage management init
+  storage_container_init();
+
+  // storage containers edit init
+  edit_storage_container_init();
+}
+
 // sample_characteristics controller init function
 function sample_characteristics_init() {
   samples_tab_active();
+}
+
+// sample_characteristics new_sample init
+function sample_characteristics_new_sample_init() {
+  // new storage management init
+  storage_container_init();
+}
+
+// sample_characteristics create init
+function sample_characteristics_create_init() {
+  // new storage management init
+  storage_container_init();
+}
+
+// sample_characteristics new_sample init
+function sample_characteristics_edit_init() {
+  // new storage management init
+  storage_container_init();
+
+  // storage containers edit init
+  edit_storage_container_init();
 }
 
 //--------------------------------------------------------

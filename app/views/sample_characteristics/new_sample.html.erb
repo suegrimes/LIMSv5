@@ -17,6 +17,7 @@
 	    <%= c.fields_for :samples, sample do |s| %>
          <%= render :partial => 'samples_form', :locals => {:s => s,
                                                             :sample => sample,
+                                                            :edit_sample_storage => false,
                                                             :removable => 'no'} %>
 		<% end %>
 	  <% end %>

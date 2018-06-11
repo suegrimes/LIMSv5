@@ -1,0 +1,53 @@
+<div class="existing-new-container-fields">
+  <div class="form-group row">
+    <%=f.hidden_field(:sample_name_or_barcode, :value => barcode) %>
+
+    <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
+    <div class="col-auto">
+      <%= f.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {:include_blank => 'Select..'}, {class: "freezer form-control"}) %>
+    </div>
+
+    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Container Type:</label>
+    <div class="col-auto">
+      <%=f.collection_select(:container_type, @container_types, :container_type, :container_type, {include_blank: 'Select..'}, {class: "container-type form-control"}) %>
+    </div>
+
+    <label for="new_storage_container" class="col-auto col-form-label col-form-label-sm form-check-label">New Container:</label>
+    <div class="col-auto form-check">
+      <input type="checkbox" name="new_storage_container" class="form-control form-check-input" id="new-container-check">
+    </div>
+  </div>
+
+  <div style="display: none" class="new-fields form-group row">
+    <label for="container_name" class="col-auto col-form-label col-form-label-sm">Name/#:</label>
+    <div class="col-auto">
+      <%=f.text_field(:container_name, size: 15, disabled: true, class: "container-name form-control") %>
+    </div>
+
+    <label for="notes" class="col-auto col-form-label col-form-label-sm">Notes:</label>
+    <div class="col-auto">
+      <%=f.text_area :notes, cols: 80, rows: 2, disabled: true, class: "container-notes form-control" %>
+    </div>
+  </div>
+
+  <div class="existing-container form-group row">
+    <label for="storage_container_id" class="col-auto col-form-label col-form-label-sm">Existing Container:</label>
+    <div class="col-auto">
+      <!-- options constructed in JS from json data in @container_data -->
+      <%=f.collection_select(:storage_container_id, {}, nil, nil, {include_blank: 'Select Freezer/Type first'}, {class: "storage-container form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="position_in_container" style="display: none" class="position-in-container col-auto col-form-label col-form-label-sm">Position in Container:</label>
+    <div style="display: none" class="position-in-container col-auto">
+      <%=f.text_field(:position_in_container, class: "form-control" )  %>
+    </div>
+
+    <div class="select-position-btn" style="display: none">
+      <div class="col-auto">
+        <button type="button" class="btn btn-secondary">Show Grid Locations</button>
+      </div>
+    </div>
+  </div>
+</div>

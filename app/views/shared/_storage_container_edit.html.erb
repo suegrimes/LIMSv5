@@ -1,0 +1,31 @@
+<div class="card">
+  <h6 class="card-header">Sample Storage Location</h6>
+  <div class="card-body">
+
+  <div class="form-group row">
+    <label for="which_container" class="col-auto col-form-label col-form-label-sm">Which Container:</label>
+    <div class=col-auto "btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary active">
+        <input type="radio" name="which_container" value="current" autocomplete="off" checked> Current
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="which_container" value="other" autocomplete="off"> Other or New
+      </label>
+    </div>
+  </div>
+
+  <div class="current-container">
+    <%= render :partial => 'shared/container_current', :locals => {f: f, barcode: barcode} %>
+  </div>
+
+  <!-- partial for a different existing or new container, initially not displayed -->
+  <div style="display: none" class="existing-new-container">
+    <%= render :partial => 'shared/container_existing_new', :locals => {f: f, barcode: barcode} %>
+  </div>
+
+  </div>
+</div>
+
+<%= render :partial => 'shared/location_lightbox' %>
+
+<%= render :partial => 'shared/storage_container_data' %>

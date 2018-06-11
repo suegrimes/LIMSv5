@@ -78,6 +78,11 @@ Rails.application.routes.draw do
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
   match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
+  # routes for storage containers
+  resources :storage_containers do
+    get 'positions_used', on: :member
+  end
+
   # Routes for handling file attachments
   resources :attached_files
   match 'attach_params' => 'attached_files#get_params', :as => :attach_params, :via => [:get, :post]

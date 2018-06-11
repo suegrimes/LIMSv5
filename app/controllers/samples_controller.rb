@@ -1,4 +1,6 @@
 class SamplesController < ApplicationController
+  include StorageManagement
+
   layout Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
   load_and_authorize_resource
   
@@ -19,7 +21,14 @@ class SamplesController < ApplicationController
   def edit
     @sample_is_new = (params[:new_sample] ||= false)
     @sample = Sample.includes(:sample_characteristic, :patient).find(params[:id])
-    @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
+    if @sample.sample_storage_container.nil?
+      @sample.build_sample_storage_container
+      @edit_sample_storage = false
+    else
+      @edit_sample_storage = true
+      @storage_container_id = @sample.sample_storage_container.storage_container_id
+    end
+
     # special edit form for ajax calls
     render :ajax_edit if request.xhr?
   end
@@ -57,6 +66,18 @@ class SamplesController < ApplicationController
   end
   
   def update
+    #  see if a new container is specified, if so create it
+     if (params[:new_storage_container])
+      sample_storage_container_attributes = params[:sample][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        flash[:error] = 'Error - New storage container could not be created: #{emsg}, Sample not updated'
+        render :action => 'edit'
+        return
+      end
+    end
+
     @sample = Sample.find(params[:id])
 
     #if @sample.update_attributes(update_params)
@@ -107,6 +128,8 @@ protected
     @amount_uom         = category_filter(@category_dropdowns, 'unit of measure') 
     @containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.list_all_by_room
+    # following for new Storage Management UI
+    storage_container_ui_data
   end
 
   def update_params
@@ -115,7 +138,7 @@ protected
       :sample_container, :vial_type, :amount_uom, :amount_initial, :sample_remaining, :comments,
       sample_storage_container_attributes: [
         :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :freezer_location_id
+        :position_in_container, :freezer_location_id, :storage_container_id, :notes
       ]
     )
   end

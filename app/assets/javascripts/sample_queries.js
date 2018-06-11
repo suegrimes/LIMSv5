@@ -319,6 +319,10 @@ function after_action_loaded(url) {
       dissection_sticky_fields_save();
     });
   }
+
+  // initialize the storage location functions if the corresponding
+  // templates are present
+  ajax_storage_container_init();
 }
 
 // define the fields that are sticky from one instance to the next

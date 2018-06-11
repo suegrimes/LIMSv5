@@ -3,7 +3,7 @@
 <%= form_for(@sample, remote: true) do |f|%>
     <%= render '/shared/errors', model: @sample %>
 
-    <%= render :partial => 'sample_form', :locals => {:f => f}%>
+    <%= render :partial => 'sample_form', :locals => {:f => f, edit_sample_storage: @edit_sample_storage}%>
  
   <%=raw break_clear(f.submit "Update", class: "btn btn-primary") %>
 <% end %>
