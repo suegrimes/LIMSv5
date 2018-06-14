@@ -1,2 +1,0 @@
-Development	http://ec2-54-153-126-21.us-west-1.compute.amazonaws.com
-Tagline	Ji Research Group - Stanford Genome Technology Center

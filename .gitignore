@@ -22,3 +22,6 @@
 
 # Ignore configuration files
 /config/database.yml
+/config/secrets.yml
+
+/app/assets/system
