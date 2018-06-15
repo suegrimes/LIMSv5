@@ -23,5 +23,6 @@
 # Ignore configuration files
 /config/database.yml
 /config/secrets.yml
+/config/system/*
 
-/app/assets/system
+/app/assets/system/*
