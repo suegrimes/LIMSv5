@@ -23,6 +23,5 @@
 # Ignore configuration files
 /config/database.yml
 /config/secrets.yml
-/config/system/*
-
-/app/assets/system/*
+/config/system/ez_keys.txt
+/config/system/emails.txt
