@@ -1,7 +1,7 @@
-environment_file = "#{Rails.root}/app/config/system/environment.txt"
-version_file     = "#{Rails.root}/app/config/system/app_versions.txt"
-email_file       = "#{Rails.root}/shared/config/system/emails.txt"
-ezkeys_file      = "#{Rails.root}/shared/config/system/ez_keys.txt"
+environment_file = "#{Rails.root}/config/system/environment.txt"
+version_file     = "#{Rails.root}/config/system/app_versions.txt"
+email_file       = "#{Rails.root}/config/system/emails.txt"
+ezkeys_file      = "#{Rails.root}/config/system/ez_keys.txt"
 
 require 'active_record_extension'
 require 'csv'
