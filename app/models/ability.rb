@@ -90,23 +90,7 @@ class Ability
           [4,5].include?(val.category.cgroup_id)
         end
       end
-      
-      # Alignment users can enter/update alignment/qc results, alignment refs
-      if user.has_role?("alignment")
-        can :manage, [SeqLib, LibSample, Adapter, IndexTag, FlowCell, FlowLane, AlignQc, LaneMetric,
-                      AlignmentRef, SeqMachine, StorageDevice, RunDir]
-        cannot :delete, [AlignmentRef, SeqMachine, StorageDevice, RunDir]
-      end
-      
-      if user.has_role?("barcodes")
-        can :manage, AssignedBarcode
-      end
-      
-      # Orders users can create orders
-      if user.has_role?("orders")
-        can [:read, :new, :create, :edit, :update], Order
-      end
-      
+
     end
   end
   
