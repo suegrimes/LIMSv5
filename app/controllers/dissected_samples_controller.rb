@@ -38,7 +38,13 @@ class DissectedSamplesController < ApplicationController
   def edit
     @sample = Sample.find(params[:id])
     @source_sample = Sample.includes(:sample_characteristic).find(@sample.source_sample_id)
-    @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
+    if @sample.sample_storage_container.nil?
+      @sample.build_sample_storage_container
+      @edit_sample_storage = false
+    else
+      @edit_sample_storage = true
+      @storage_container_id = @sample.sample_storage_container.storage_container_id
+    end
     # special edit form for ajax calls
     render :ajax_edit if request.xhr?
   end

@@ -1,0 +1,38 @@
+#footer {
+    height: auto;
+    /* overflow: auto; */
+    background: #fff;
+    border-top: 1px solid #C1C1C1;
+    padding: 10px;
+}
+* html #footer {
+    height: auto;
+}
+#footer p {
+    font: bold .8em verdana, sans-serif;
+    color: #750404;
+}
+
+#footer a, #footer a:visited {
+    font: .8em verdana, sans-serif;
+    text-decoration:none;
+    color:#750404;
+}
+
+#footer a:hover {
+    color:#750404;
+    text-decoration: underline;
+}
+#footer .site-blurb {
+    color: #888;
+    font-size: .8em;
+    line-height:1.3em;
+    font-style: italic;
+    white-space: nowrap;
+    margin-top: 1em;
+}
+
+#footer .site-blurb a {
+    font: inherit;
+}
+

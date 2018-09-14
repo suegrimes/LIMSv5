@@ -155,7 +155,7 @@ logger("detaching exist_new_fields");
       $("div.current-container").append(window.current_container_fields);
       window.edit_current_container = true;
     } else {
-      my_alert("Unkown which_container value");
+      my_alert("Unknown which_container value");
     }
   });
 }
@@ -449,7 +449,7 @@ logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first
     }
     tr.appendTo(table);
   }
-//logger("build_grid returns: "+table.html());
+logger("build_grid returns: "+table.html());
   return table;
 }
 

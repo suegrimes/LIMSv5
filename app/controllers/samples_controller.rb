@@ -56,8 +56,15 @@ class SamplesController < ApplicationController
       if @sample.clinical_sample == 'no' 
         redirect_to :controller => :dissected_samples, :action => :edit, :id => @sample.id
       else
-        @sample.build_sample_storage_container if @sample.sample_storage_container.nil?
-        render :action => :edit
+        if @sample.sample_storage_container.nil?
+          @sample.build_sample_storage_container
+          @edit_sample_storage = false
+        else
+          @edit_sample_storage = true
+          @storage_container_id = @sample.sample_storage_container.storage_container_id
+        end
+        # special edit form for ajax calls
+        render :ajax_edit if request.xhr?
       end
     else
       flash.now[:error] = 'No entry found for source barcode: ' + params[:barcode_key]

@@ -85,5 +85,9 @@
 </div>  <!-- card -->
 
 <%= f.fields_for :sample_storage_container do |c| %>
-  <%= render :partial => 'shared/storage_container', :locals => {:f => c, :barcode => f.object.barcode_key} %>
+  <% if @edit_sample_storage %>
+    <%= render :partial => 'shared/storage_container_edit', :locals => {f: c, barcode: f.object.barcode_key} %>
+  <% else %>
+    <%= render :partial => 'shared/storage_container_new', :locals => {f: c, barcode: f.object.barcode_key} %>
+  <% end %>
 <% end %>

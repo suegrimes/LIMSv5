@@ -3,18 +3,23 @@
   <!-- define footer row -->
   <div class="row">
 
-    <!-- define three horizontel coloumns -->
-    <div class="col-sm">
-      <%= "Controller: #{controller_name}" %><br>
-      <%= "Action: #{action_name}" %>
+    <!-- define three horizontal coloumns -->
+    <div class="col-sm site-blurb">
+      <% if Rails.env != 'production' %>
+        Controller: <%= controller_name %>&nbsp;| Action: <%= action_name %>
+      <% else %>
+        <a href="http://med.stanford.edu/sgtc/">Stanford Genome Tech Center</a>&nbsp;|
+        <a href="mailto:sgrimes@stanford.edu">Contact</a>
+      <% end %>
     </div>
 
     <div class="col-sm">
-      footer column 2
+
     </div>
 
-    <div class="col-sm">
-      footer column 3
+    <div class="col-sm site-blurb">
+       Website provided by the <a href="http://dna-discovery.stanford.edu">Ji Research Group</a><br />School of Medicine and Genome Technology Center at Stanford University<br />
+      This website and its content &copy; Stanford University, <%= Time.now.localtime.strftime("%Y") %>. All rights reserved.
     </div>
 
   </div>
