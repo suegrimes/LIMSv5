@@ -25,3 +25,7 @@
 /config/secrets.yml
 /config/system/ez_keys.txt
 /config/system/emails.txt
+
+# Temporarily ignore development (Windows-based) updates to Gemfile
+/Gemfile
+/Gemfile.lock
