@@ -1,0 +1,8 @@
+<h5>Editing extracted sample: <%=h @processed_sample.barcode_key %></h5>
+
+<%= form_for(@processed_sample, remote: true) do |f| %>
+  <%= render '/shared/errors', model: @processed_sample %>
+  
+  <%= render :partial => 'processed_sample_form', :locals => {:f => f} %>
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
