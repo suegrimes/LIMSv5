@@ -71,12 +71,11 @@ class ProcessedSamplesController < ApplicationController
         @processed_sample.build_sample_storage_container
         @edit_sample_storage = false
       else
-        @edit_sample_storage = true
         @storage_container_id = @processed_sample.sample_storage_container.storage_container_id
+        @edit_sample_storage = true
       end
-      # special edit form for ajax calls
+      # special edit form for ajax calls, otherwise defaults to standard :edit view
       render :ajax_edit if request.xhr?
-
     else
       flash[:error] = 'No entry found for extraction barcode: ' + params[:barcode_key]
       redirect_to :controller => :samples, :action => :edit_params
@@ -86,8 +85,15 @@ class ProcessedSamplesController < ApplicationController
   # GET /processed_samples/1/edit
   def edit
     @processed_sample = ProcessedSample.find_one_incl_patient(["processed_samples.id = ?", params[:id]])
-    @processed_sample.build_sample_storage_container if !@processed_sample.sample_storage_container
-    render :action => 'edit'
+    if @processed_sample.sample_storage_container.nil?
+      @processed_sample.build_sample_storage_container
+      @edit_sample_storage = false
+    else
+      @storage_container_id = @processed_sample.sample_storage_container.storage_container_id
+      @edit_sample_storage = true
+    end
+    # special edit form for ajax calls, otherwise defaults to standard :edit view
+    render :ajax_edit if request.xhr?
     #render :action => 'debug'
   end
 

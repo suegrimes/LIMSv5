@@ -425,23 +425,25 @@ logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first
           td = $("<td/>").text(row_label);
         } else {  // build content td
           var col_label = char_at(first_col, j-1)
-          var row_col = col_label + row_label;
-          if (positions_used.includes(row_col)) {
+          var row_col = row_label + col_label;
+          var col_row = col_label + row_label;
+
+          if (positions_used.includes(col_row)) {
             // check if we are editing a current position,
             // and if the value matches this cel, set it and don't show as filled
             if (window.edit_current_container == true &&
-                window.current_position_in_container == row_col) {
-              td = build_clickable_td(row_col);
-              td.text(row_col);
-              table.data("selected_position", row_col);
+                window.current_position_in_container == col_row) {
+              td = build_clickable_td(col_row);
+              td.text(col_row);
+              table.data("selected_position", col_row);
               table.data("selected_td", td);
             } else {
               // uncomment the following line if you want greyed out coordinates
-              //td = $("<td/>").text(row_col);
+              //td = $("<td/>").text(col_row);
               td = $("<td/>").addClass("filled");
             }
           } else {
-            td = build_clickable_td(row_col);
+            td = build_clickable_td(col_row);
           }
         }
         td.appendTo(tr);
