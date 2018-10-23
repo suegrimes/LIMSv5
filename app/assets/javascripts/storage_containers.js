@@ -425,7 +425,7 @@ logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first
           td = $("<td/>").text(row_label);
         } else {  // build content td
           var col_label = char_at(first_col, j-1)
-          var row_col = row_label + col_label;
+          var row_col = col_label + row_label;
           if (positions_used.includes(row_col)) {
             // check if we are editing a current position,
             // and if the value matches this cel, set it and don't show as filled

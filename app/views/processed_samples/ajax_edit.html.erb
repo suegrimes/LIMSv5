@@ -1,0 +1,8 @@
+<h5>Editing extraction: <%=h @processed_sample.barcode_key %></h5>
+
+<%= form_for @processed_sample, url: {controller: 'processed_samples', action: :update}, remote: true do |f| %>
+    <%= render '/shared/errors', model: @processed_sample %>
+  
+  <%= render :partial => 'processed_sample_form', :locals => {:f => f, :dissect => @sample} %>
+  <%=raw break_clear(f.submit "Update", class: "btn btn-primary") %>
+<% end %>

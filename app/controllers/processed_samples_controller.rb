@@ -1,4 +1,6 @@
 class ProcessedSamplesController < ApplicationController
+  include StorageManagement
+
   layout 'main/processing'
 
   load_and_authorize_resource
@@ -65,8 +67,16 @@ class ProcessedSamplesController < ApplicationController
   def edit_by_barcode
     @processed_sample = ProcessedSample.find_one_incl_patient(["processed_samples.barcode_key = ?", params[:barcode_key]])
     if @processed_sample
-      @processed_sample.build_sample_storage_container if !@processed_sample.sample_storage_container
-      render :action => :edit
+      if @processed_sample.sample_storage_container.nil?
+        @processed_sample.build_sample_storage_container
+        @edit_sample_storage = false
+      else
+        @edit_sample_storage = true
+        @storage_container_id = @processed_sample.sample_storage_container.storage_container_id
+      end
+      # special edit form for ajax calls
+      render :ajax_edit if request.xhr?
+
     else
       flash[:error] = 'No entry found for extraction barcode: ' + params[:barcode_key]
       redirect_to :controller => :samples, :action => :edit_params
@@ -152,6 +162,8 @@ protected
     @protocols          = Protocol.find_for_protocol_type('E')  #Extraction protocols
     @containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.all
+    # following for new Storage Management UI
+    storage_container_ui_data
   end
 
   def create_params
