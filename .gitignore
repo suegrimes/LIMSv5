@@ -26,6 +26,7 @@
 /config/system/ez_keys.txt
 /config/system/emails.txt
 
-# Ignore development copy of Gemfile
-/devWinGemfile
+# Ignore development copy of Gemfile and saved prodGemfile
+/devWinGemfile*
+/prodGemfile*
 
