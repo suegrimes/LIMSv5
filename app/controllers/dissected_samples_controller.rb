@@ -1,4 +1,6 @@
 class DissectedSamplesController < ApplicationController
+  include StorageManagement
+
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/processing'}
 
   #before_action :dropdowns, :only => :edit
@@ -185,6 +187,8 @@ protected
     @vial_types         = category_filter(@category_dropdowns, 'vial type')
     @containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.list_all_by_room
+    # following for new Storage Management UI
+    storage_container_ui_data
   end
 
   # allow params for new sample save
