@@ -3,9 +3,18 @@
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 
-// samples controller init function
+// dissected_samples controller init function
 function dissected_samples_init() {
   processing_tab_active();
+}
+
+// dissected_samples edit init
+function dissected_samples_edit_init() {
+    // new storage management init
+    storage_container_init();
+
+    // storage containers edit init
+    edit_storage_container_init();
 }
 
 //--------------------------------------------------------

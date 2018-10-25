@@ -1,0 +1,64 @@
+<div class="card">
+<h6 class="card-header">Diagnosis/Pathology</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="pathology_date" class="col-auto col-form-label col-form-label-sm">Pathology Date:</label>
+      <div class="col-auto">
+        <%=f.date_field :pathology_date, max: Time.current.to_date, class: "form-control" %>
+      </div>
+
+      <label for="pathologist" class="col-auto col-form-label col-form-label-sm">Pathologist:</label>
+      <div class="col-auto">
+        <%=f.text_field :pathologist, max: Time.current.to_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="general_pathology" class="col-auto col-form-label col-form-label-sm">Patient Dx:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:general_pathology, @hpathology, :c_value, :c_value, {:include_blank => 'Select ..'}, class: "form-control")%>
+      </div>
+
+      <label for="pathology_classification" class="col-auto col-form-label col-form-label-sm">Diagnosis/Notes:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:pathology_classification, @pathology_dx, :c_value, :c_value, {:include_blank => 'Select ..'}, class: "form-control")%>
+      </div>
+
+      <label for="xrt_flag" class="col-auto col-form-label col-form-label-sm">XRT?</label>
+      <div class="col-auto">
+        <%=f.select(:xrt_flag, %w{Y N}, {:include_blank => true}, class: "form-control")%>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="tumor_stage" class="col-auto col-form-label col-form-label-sm">Stage:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:tumor_stage, @tumor_stage, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+      </div>
+
+      <label for="t_code" class="col-auto col-form-label col-form-label-sm">T:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:t_code, @tumor_T, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+      </div>
+
+      <label for=n_code" class="col-auto col-form-label col-form-label-sm">N:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:n_code, @tumor_N, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+      </div>
+
+      <label for="m_code" class="col-auto col-form-label col-form-label-sm">M:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:m_code, @tumor_M, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+      <div class="col-auto">
+        <%=f.text_area :comments, :cols => 80, :rows => 2, class: "form-control"%>
+      </div>
+    </div>
+
+  </div>
+</div>
