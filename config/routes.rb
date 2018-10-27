@@ -82,6 +82,9 @@ Rails.application.routes.draw do
   resources :storage_containers do
     get 'positions_used', on: :member
   end
+  match 'export_container' => 'storage_containers#export_container', :as => :export_container, :via => [:post]
+
+  resources :sample_storage_containers, :only => [:edit, :update]
 
   # Routes for handling file attachments
   resources :attached_files
@@ -89,7 +92,8 @@ Rails.application.routes.draw do
   match 'display_file/:id' => 'attached_files#show', :as => :display_file, :via => [:get]
   match 'attach_file' => 'attached_files#create', :via => [:get, :post]
 
-  get 'container_query' => 'sample_storage_containers#new_query', :as => :container_query
+  get 'container_query' => 'storage_containers#new_query', :as => :container_query
+  get 'container_contents' => 'storage_containers#list_contents', :as => :container_contents
 
   # Bulk upload
   get 'bulk_upload' => 'bulk_upload#new'

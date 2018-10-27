@@ -19,6 +19,10 @@ class StorageType < ApplicationRecord
     sql = "select container_type,display_format,nr_rows,nr_cols,first_row,first_col from storage_types;"
     result = ActiveRecord::Base.connection.exec_query(sql)
     result.rows
-  end
+ end
+
+ def self.populate_dropdown
+   self.all
+ end
 
 end

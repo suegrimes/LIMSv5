@@ -1,0 +1,22 @@
+<div class="card">
+  <h6 class="card-header"><%=h f.object.stored_sample_type %>&nbsp;&nbsp;<%=h f.object.sample_name_or_barcode %></h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+    <label for="container_type" class="col-auto col-form-label col-form-label-sm">Container:</label>
+    <div class="col-auto">
+      <%= f.collection_select(:container_type, @storage_types, :container_type, :container_type, {:include_blank => true}, {class: "form-control"}) %>
+    </div>
+
+    <div class="col-auto">
+      <%=f.text_field(:container_name, class: "form-control") %>
+    </div>
+
+    <label for="position_in_container" class="col-auto col-form-label col-form-label-sm">Position:</label>
+    <div class="col-auto">
+      <%=h f.text_field(:position_in_container, class: "form-control") %>
+    </div>
+  </div>
+
+  </div>
+</div>

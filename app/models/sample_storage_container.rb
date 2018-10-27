@@ -25,12 +25,27 @@ class SampleStorageContainer < ApplicationRecord
   belongs_to :freezer_location, optional: true
   belongs_to :stored_sample, optional: true, polymorphic: true
   belongs_to :storage_container, optional: true
+  belongs_to :user, :foreign_key => :updated_by, optional: true
 
   before_create :upd_sample_name, :upd_storage_container_fields
   before_update :upd_storage_container_fields
 
   def upd_sample_name
     self.sample_name_or_barcode = self.stored_sample.barcode_key
+  end
+
+  def type_of_sample
+    stype = 'NotInLIMS'
+    if stored_sample
+      if stored_sample_type == 'Sample'
+        stype = stored_sample.sample_type
+      elsif stored_sample_type == 'ProcessedSample'
+        stype = stored_sample.extraction_type
+      else
+        stype = stored_sample_type
+      end
+    end
+    return stype
   end
   
   def container_desc

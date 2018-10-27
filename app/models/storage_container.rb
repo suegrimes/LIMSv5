@@ -14,6 +14,22 @@ class StorageContainer < ApplicationRecord
   belongs_to :freezer_location
   has_many :sample_storage_containers
 
+  def container_sort
+    (container_name =~ /\A\d\Z/ ? '0' + container_name : container_name)
+  end
+
+  def self.find_for_summary_query(condition_array)
+    self.joins(:freezer_location, :sample_storage_containers)
+        .where(sql_where(condition_array))
+        .group(:freezer_location_id, :container_type, :container_name, :id, :room_nr, :freezer_nr, :owner_name)
+        .count('sample_storage_containers.id')
+  end
+
+  def self.find_for_contents_query(id)
+    self.joins(:freezer_location, :sample_storage_containers => :user)
+        .find(id)
+  end
+
   # construct dropdown data rows  with columns:
   # freezer_location_id, container_type, container_name, container_id, count of samples in container
   # nr_rows, nr_cols
