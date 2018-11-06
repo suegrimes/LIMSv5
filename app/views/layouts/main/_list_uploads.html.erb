@@ -1,7 +1,9 @@
-<% li_html_options = {class: "list-group-item font-sm"} %>
 
-<h6>Uploads:</h6>
+<% a_html_options = {class: "btn btn-secondary font-sm"} %>
 
-<div class="list-group">
-       <%= link_to 'Patients/Samples', bulk_upload_path, li_html_options %>
+<h6 style="padding-top:1em;">Uploads:</h6>
+
+<div class="btn-group-vertical" role="group" aria-label="Uploads">
+  <%= link_to 'Patients/Samples', bulk_upload_path, a_html_options %>
 </div>
+

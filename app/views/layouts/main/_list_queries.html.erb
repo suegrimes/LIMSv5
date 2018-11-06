@@ -1,20 +1,8 @@
-<% li_html_options = {class: "list-group-item font-sm"} %>
+<% a_html_options = {class: "btn btn-secondary font-sm"} %>
 
 <h6>Queries:</h6>
 
-<div class="list-group">
-       <%= link_to 'Source/Dissections', unprocessed_query_path, li_html_options %>
-<!--
-       <%#= link_to 'H&E Slides',         histology_query_path, li_html_options %>
--->
-       <%= link_to 'Extracted Samples',  processed_query_path, li_html_options %>
-<!--
-       <%#= link_to 'Sample Locations',   storage_query_path, li_html_options %>
--->
-       <%= link_to 'Storage Containers', container_query_path, li_html_options %>
-<!--
-       <li><%#= link_to 'Molecular Assays',   mol_assay_query_path, li_html_options %>
-       <li><%#= link_to 'Seq Libraries',      lib_query_path, li_html_options  %>
-       <li><%#= link_to 'Sequencing Runs',    seq_run_query_path, li_html_options %>
--->
+<div class="btn-group-vertical" role="group" aria-label="Queries">
+  <%= link_to 'Source/Dissections', unprocessed_query_path, a_html_options %>
+  <%= link_to 'Extracted Samples',  processed_query_path, a_html_options %>
 </div>
