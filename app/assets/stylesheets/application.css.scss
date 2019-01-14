@@ -146,6 +146,70 @@ table.grid-locations td.filled {
 .em-width-90 {width: 90em}
 .em-width-100 {width: 100em}
 
-.btn-group-vertical .btn, .btn-group-vertical .btn-group {
-  width:169px;
+#samples-tab.nav-link.active, #processing-tab.nav-link.active, #assays-tab.nav-link.active, #sequencing-tab.nav-link.active {
+    background-color: #ddd;
+}
+
+#sample-dropdown.nav-link, #pathology-dropdown.nav-link, #h-e-dropdown.nav-link, #barcodes-dropdown.nav-link {
+  color:#999;
+  background-color:#fff;;
+}
+
+#sample-dropdown.nav-link:hover, #pathology-dropdown.nav-link:hover, #h-e-dropdown.nav-link:hover, #barcodes-dropdown.nav-link:hover {
+  color:#666;
+  background-color:#c0c0c0;
+}
+
+#sample-dropdown.btn-sm:hover, #pathology-dropdown.btn-sm:hover, #h-e-dropdown.btn-sm:hover, #barcodes-dropdown.btn-sm:hover {
+  background-color: #f1f1f1;
+}
+
+#top-nav .nav-link {
+  color: #666;
+}
+
+#top-nav .nav-link:hover {
+  color: #999;
+}
+
+.nav-link a:hover {
+    color: #999;
+}
+
+div.list-group a.font-sm {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+div.list-group a.font-sm:hover {
+    color: #999;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #999;
+    border-color: #999;
+}
+
+.list-group-item.active {
+    padding-bottom:5px;
+}
+
+.list-group-item.active:hover {
+    background-color: #999;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 5px 15px;
+    margin-bottom: -1px;
+    background-color: #DDD;
+    border: 1px solid #999;
+}
+
+.list-group-item:focus, .list-group-item:hover {
+    text-decoration: none;
+    background-color: #f1f1f1;
 }
