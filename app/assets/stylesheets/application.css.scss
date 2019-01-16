@@ -106,12 +106,6 @@ form label, .card label {
   margin-top: .25rem;
 }
 
-/* top navigation styling */
-#top-nav .nav-link {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
 /* top margin for report type control */
 select#rpt_type {
    margin-top: .25rem;
@@ -146,43 +140,54 @@ table.grid-locations td.filled {
 .em-width-90 {width: 90em}
 .em-width-100 {width: 100em}
 
-#samples-tab.nav-link.active, #processing-tab.nav-link.active, #assays-tab.nav-link.active, #sequencing-tab.nav-link.active {
-    background-color: #ddd;
-}
-
-#sample-dropdown.nav-link, #pathology-dropdown.nav-link, #h-e-dropdown.nav-link, #barcodes-dropdown.nav-link {
-  color:#999;
-  background-color:#fff;;
-}
-
-#sample-dropdown.nav-link:hover, #pathology-dropdown.nav-link:hover, #h-e-dropdown.nav-link:hover, #barcodes-dropdown.nav-link:hover {
-  color:#666;
-  background-color:#c0c0c0;
-}
-
-#sample-dropdown.btn-sm:hover, #pathology-dropdown.btn-sm:hover, #h-e-dropdown.btn-sm:hover, #barcodes-dropdown.btn-sm:hover {
-  background-color: #f1f1f1;
-}
+/*
+ * Top Navigation Styling
+*/
 
 #top-nav .nav-link {
   color: #666;
+  background-color: white;
+}
+
+#top-nav .nav-link {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+#top-nav .nav-link.active {
+  background-color: #c0c0c0;
+  color: #333;
 }
 
 #top-nav .nav-link:hover {
-  color: #999;
+  color: #333;
 }
 
-.nav-link a:hover {
-    color: #999;
+/*
+ * Secondary Nav & Dropdown Styling
+*/
+
+#second-nav .btn-group {background-color:#c0c0c0; }
+
+#second-nav .btn-secondary {
+    color: #333;
+    background-color: #c0c0c0;
+    border-color: #c0c0c0;
+    font-size: 0.85rem;
 }
+
+/*
+ * Side Navigation Styling
+*/
 
 div.list-group a.font-sm {
     font-size: 0.75rem;
     color: #666;
+    background-color:#f0f0f0;
 }
 
 div.list-group a.font-sm:hover {
-    color: #999;
+    color: #333;
 }
 
 .list-group-item.active {
@@ -205,7 +210,7 @@ div.list-group a.font-sm:hover {
     display: block;
     padding: 5px 10px;
     margin-bottom: -1px;
-    background-color: #DDD;
+    background-color: none;
     border: 1px solid #999;
 }
 
