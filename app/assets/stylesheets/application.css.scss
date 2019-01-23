@@ -145,8 +145,8 @@ table.grid-locations td.filled {
 */
 
 #top-nav .nav-link {
-  color: #666;
-  background-color: white;
+  color: #808b96;
+  background-color: #f0f0f0;
 }
 
 #top-nav .nav-link {
@@ -160,7 +160,8 @@ table.grid-locations td.filled {
 }
 
 #top-nav .nav-link:hover {
-  color: #333;
+  color: #1c2833;
+  background-color: #e5e5e5;
 }
 
 /*
@@ -170,7 +171,7 @@ table.grid-locations td.filled {
 #second-nav .btn-group {background-color:#c0c0c0; }
 
 #second-nav .btn-secondary {
-    color: #333;
+    color: #212f3c;
     background-color: #c0c0c0;
     border-color: #c0c0c0;
     font-size: 0.85rem;
@@ -182,27 +183,13 @@ table.grid-locations td.filled {
 
 div.list-group a.font-sm {
     font-size: 0.75rem;
-    color: #666;
+    color: #808b96; /* medium-ish grey */
     background-color:#f0f0f0;
 }
 
 div.list-group a.font-sm:hover {
-    color: #333;
-}
-
-.list-group-item.active {
-    z-index: 2;
-    color: #fff;
-    background-color: #999;
-    border-color: #999;
-}
-
-.list-group-item.active {
-    padding-bottom:5px;
-}
-
-.list-group-item.active:hover {
-    background-color: #999;
+    color: #1c2833; /* very dark grey */
+    background-color:#e5e5e5;
 }
 
 .list-group-item {
@@ -214,7 +201,13 @@ div.list-group a.font-sm:hover {
     border: 1px solid #999;
 }
 
-.list-group-item:focus, .list-group-item:hover {
-    text-decoration: none;
-    background-color: #f1f1f1;
+.list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #999;
+    border-color: #999;
+}
+
+.list-group-item.active {
+    padding-bottom:5px;
 }
