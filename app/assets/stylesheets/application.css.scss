@@ -140,41 +140,52 @@ table.grid-locations td.filled {
 .em-width-90 {width: 90em}
 .em-width-100 {width: 100em}
 
+:root {
+  --light-grey: #f0f0f0;
+  --med-light-grey: #dedede;
+  --medium-grey: #808b96;
+  --dark-grey: #999;
+  --very-dark-grey: #1c2833;  
+}
+
 /*
  * Top Navigation Styling
 */
 
 #top-nav .nav-link {
-  color: #808b96;
-  background-color: #f0f0f0;
-}
-
-#top-nav .nav-link {
+  color: var(--medium-grey);
+  background-color: var(--light-grey);
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-bottom:1px solid var(--med-light-grey);
 }
 
 #top-nav .nav-link.active {
-  background-color: #c0c0c0;
-  color: #333;
+  color: var(--very-dark-grey);
+  background-color:var(--med-light-grey); 
 }
 
 #top-nav .nav-link:hover {
-  color: #1c2833;
-  background-color: #e5e5e5;
+  color: #fff;
+  background-color:var(--dark-grey); 
 }
 
 /*
  * Secondary Nav & Dropdown Styling
 */
 
-#second-nav .btn-group {background-color:#c0c0c0; }
+#second-nav .btn-group {background-color:var(--med-light-grey);}
 
 #second-nav .btn-secondary {
-    color: #212f3c;
-    background-color: #c0c0c0;
-    border-color: #c0c0c0;
+    color: var(--very-dark-grey);
+    background-color:var(--med-light-grey);
+    border-color:var(--med-light-grey);
     font-size: 0.85rem;
+}
+
+#second-nav .btn-secondary:hover {
+    color: #fff;
+    background-color:var(--dark-grey);
 }
 
 /*
@@ -183,13 +194,13 @@ table.grid-locations td.filled {
 
 div.list-group a.font-sm {
     font-size: 0.75rem;
-    color: #808b96; /* medium-ish grey */
-    background-color:#f0f0f0;
+    color: var(--medium-grey);
+    background-color:var(--light-grey);
 }
 
 div.list-group a.font-sm:hover {
-    color: #1c2833; /* very dark grey */
-    background-color:#e5e5e5;
+    color: var(--very-dark-grey);
+    background-color:var(--med-light-grey);
 }
 
 .list-group-item {
@@ -198,14 +209,14 @@ div.list-group a.font-sm:hover {
     padding: 5px 10px;
     margin-bottom: -1px;
     background-color: none;
-    border: 1px solid #999;
+    border: 1px solid var(--dark-grey);
 }
 
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background-color: #999;
-    border-color: #999;
+    background-color: var(--dark-grey);
+    border-color: var(--dark-grey);
 }
 
 .list-group-item.active {
