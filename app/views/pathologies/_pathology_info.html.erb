@@ -1,29 +1,30 @@
-<% last_info_box ||= 'no' %>
-<% click_to_link ||= 'show' %>
+<h6>Patient Diagnosis:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Path Rpt Date</th>
+    <th>Pathologist</th>
+    <th>Pathology</th>
+    <th>Diagnosis</th>
+    <th>Tumor Stage</th>
+    <th>TNM</th>
+    <th>XRT?</th>
+    <th>Comments</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
 
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, pathology))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, pathology))%>
-
-<!-- Standard fields to be displayed -->
-<% info_flds   = [[(click_to_link == 'none'? 'Field' : 'Link'), 'Path Rpt Date', pathology.pathology_date, ['pathologies', click_to_link, pathology.id]], 
-                  ['Field', 'Pathologist', pathology.pathologist],
-                  ['Field', 'Diagnosis Type', pathology.general_pathology],
-                  ['Field', 'Diagnosis/Notes', pathology.pathology_classification],
-                  ['Field', 'Stage', pathology.tumor_stage],
-                  ['Field', 'XRT?', pathology.xrt_flag], 
-                  ['Field', 'TNM', pathology.tnm], nil] %>
-			  
-<!-- Only include comments if non-blank -->
-<% info_flds.push(['Field', 'Comments', pathology.comments, {:colspan => 3}]) if !pathology.comments.blank? %>
-
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links << ['Edit', 'edit']  if (can? :edit, pathology) %>
-<% info_links << ['Delete', 'destroy'] if (can? :delete, pathology) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Patient Diagnosis',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'pathologies',
-                                                      :link_id         => pathology.id,
-                                                      :last_info_box   => last_info_box} %>
+  <tr>
+    <td><%=h pathology.pathology_date%></td>
+    <td><%=h pathology.pathologist%></td>
+    <td><%=h pathology.general_pathology%></td>
+    <td><%=h pathology.pathology_classification%></td>
+    <td><%=h pathology.tumor_stage %></td>
+    <td><%=h [pathology.t_code, pathology.n_code, pathology.m_code].join("-")%></td>
+    <td><%=h pathology.xrt_flag %></td>
+    <td><%=h pathology.comments %></td>
+    <% if (can? :edit, pathology) %> <td class="linkborder"><%= link_to 'Edit', edit_pathology_path(pathology) %></td><% end %>
+    <% if (can? :delete, pathology) %> <td class="linkborder"><%= link_to 'Delete', pathology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
+  </tr>
+</table>

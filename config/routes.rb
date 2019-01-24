@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   post 'patient_sample' => 'sample_characteristics#new_sample', :as => :add_pt_sample
   match 'modify_sample' => 'sample_characteristics#edit_params', :as => :modify_sample, :via => [:get, :post]
-  post 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
+  get 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
 
    # Routes for physical source samples
   resources :samples do
