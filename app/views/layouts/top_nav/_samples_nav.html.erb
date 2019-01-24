@@ -1,38 +1,41 @@
-<div id="second-nav" class="rounded-bottom border">
-<ul class="nav nav-pills">
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="sample-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sample</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="sample-new" href="/sample_characteristics/new">New</a>
-      <a class="dropdown-item" id="sample-edit" href="/modify_sample">Edit</a>
-    </div>
-  </li>
+<div id="second-nav" class="btn-group" role="group" aria-label="Button group with nested dropdown">
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="pathology-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Pathology Report</a>
-    <div class="dropdown-menu">
-<!--
-      <a class="dropdown-item" id="pathology-new" href="/new_pathology">New</a>
-      <a class="dropdown-item" id="pathology-edit" href="/new_pathology">Edit</a>
--->
-      <a class="dropdown-item" id="pathology-new" href="/new_pathology">New</a>
-      <a class="dropdown-item" id="pathology-edit" href="not-yet">Edit</a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sample
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="/sample_characteristics/new">New</a>
+      <a class="dropdown-item" href="/modify_sample">Edit</a>
     </div>
-  </li>
+  </div>
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="h-e-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">H&amp;E Slide</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="h-e-new" href="not-yet">New</a>
-      <a class="dropdown-item" id="h-e-edit" href="not-yet">Edit</a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Pathology Report
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="/new_pathology">New</a>
+      <a class="dropdown-item" href="not-yet">Edit</a>
     </div>
-  </li>
+  </div>
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="barcodes-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Barcodes</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="barcodes-manage" href="not-yet">Manage</a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      H&amp;E Slide
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="not-yet">New</a>
+      <a class="dropdown-item" href="not-yet">Edit</a>
     </div>
-  </li>
-</ul>
+  </div>
+
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Barcodes
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="not-yet">Manage</a>
+    </div>
+  </div>
 </div>

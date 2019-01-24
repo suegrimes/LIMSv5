@@ -1,25 +1,29 @@
-<div id="second-nav" class="rounded-bottom border">
-<ul class="nav nav-pills">
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="sample-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dissection</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="dissection-new" href="/new_dissection">New</a>
-    </div>
-  </li>
+<div id="second-nav" class="btn-group" role="group" aria-label="Button group with nested dropdown">
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="pathology-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extraction</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="extraction-new" href="/new_extraction">New</a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dissection
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="/new_dissection">New</a>
     </div>
-  </li>
+  </div>
 
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle btn-sm" id="h-e-dropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sample</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" id="sample-edit" href="/upd_sample">Edit</a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Extractions
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="/new_extraction">New</a>
     </div>
-  </li>
+  </div>
 
-</ul>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sample
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" href="/upd_sample">Edit</a>
+    </div>
+  </div>
 </div>
