@@ -1,0 +1,12 @@
+<h5>New H&E Slide</h5>
+
+<%= bootstrap_form_tag(action: 'new', method: :get) do |f| %>
+  <%= f.text_field :barcode_key, label: "Source barcode:", placeholder: "Source barcode" %>
+
+  <%= f.submit 'Submit',  class: "btn btn-primary" %>
+<%end%>
+
+<p class="font-italic">
+  Specify source barcode from which H&E slide is created
+</p>
+

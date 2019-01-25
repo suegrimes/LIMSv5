@@ -17,13 +17,23 @@ Rails.application.routes.draw do
     post 'add_another_sample', on: :member
     post 'new_sample', on: :collection
   end
-  resources :pathologies
 
   post 'patient_sample' => 'sample_characteristics#new_sample', :as => :add_pt_sample
   match 'modify_sample' => 'sample_characteristics#edit_params', :as => :modify_sample, :via => [:get, :post]
+
+  # Routes for pathology
+  resources :pathologies
   get 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
 
-   # Routes for physical source samples
+  # Routes for H&E slides
+  resources :histologies do
+    collection do
+      get :auto_complete_for_barcode_key
+    end
+  end
+  get 'new_histology' => 'histologies#new_params', :as => :new_he_slide
+
+  # Routes for physical source samples
   resources :samples do
     collection do
       get :auto_complete_for_barcode_key
@@ -33,12 +43,6 @@ Rails.application.routes.draw do
   resources :sample_locs, :only => [:edit, :update]
 
   resources :sample_queries, :only => :index
-
-  resources :histologies do
-    collection do
-      get :auto_complete_for_barcode_key
-    end
-  end
 
   match 'upd_sample' => 'samples#edit_params', :as => :upd_sample, :via => [:get, :post]
   match 'edit_samples' => 'samples#edit_by_barcode', :as => :edit_samples, :via => [:get]
