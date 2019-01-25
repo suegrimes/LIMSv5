@@ -1,12 +1,17 @@
-<h5>New H&E Slide</h5>
+<div class="card">
+  <h6 class="card-header">Add/Update H&E Slide</h6>
+  <div class="card-body">
 
-<%= bootstrap_form_tag(action: 'new', method: :get) do |f| %>
-  <%= f.text_field :barcode_key, label: "Source barcode:", placeholder: "Source barcode" %>
+    <%= bootstrap_form_tag(url: 'histologies/new', method: :get) do %>
 
-  <%= f.submit 'Submit',  class: "btn btn-primary" %>
-<%end%>
+      <div class="form-group row">
+        <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Source barcode:</label>
+        <div class="col-auto">
+          <%= text_field_tag :barcode_key, nil, size: 12, placeholder: "Source barcode", class: "form-control" %>
+        </div>
+      </div>
 
-<p class="font-italic">
-  Specify source barcode from which H&E slide is created
-</p>
-
+      <%= submit_tag 'Submit',  class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
