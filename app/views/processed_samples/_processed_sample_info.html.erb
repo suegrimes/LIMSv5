@@ -1,38 +1,37 @@
-<% last_info_box ||= 'no' %>
-<% link_to_edit ||= 'yes' %>
+<h6>Extraction Details:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Barcode</th>
+    <th>Date</th>
+    <th>Type</th>
+    <th>Vial</th>
+    <th>Support</th>
+    <th>Buffer</th>
+    <th>Volume</th>
+    <th>Conc</th>
+    <th>Remaining?</th>
+    <th>Room/Freezer</th>
+    <th>Storage Container</th>
+  </tr>
+  </thead>
 
-<% click_to_link ||= 'show' %>
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, processed_sample))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, processed_sample))%>
+  <tr>
+    <td><%=h link_to processed_sample.barcode_key, processed_sample_path(processed_sample) %></td>
+    <td><%=h processed_sample.processing_date %></td>
+    <td><%=h processed_sample.extraction_type %></td>
+    <td><%=h processed_sample.vial %></td>
+    <td><%=h processed_sample.support %></td>
+    <td><%=h processed_sample.elution_buffer %></td>
+    <td><%=h processed_sample.final_vol %></td>
+    <td><%=h processed_sample.final_conc %></td>
+    <td><%=h processed_sample.psample_remaining %></td>
+    <td><%=h processed_sample.room_and_freezer %></td>
+    <td><%=h processed_sample.container_and_position %></td>
+    <% if can? :edit, processed_sample %> <td><%= link_to 'Edit', edit_processed_sample_path(processed_sample) %></td><% end %>
+  </tr>
 
-<!-- Standard fields to be displayed -->
-<% info_flds   = [[(click_to_link == 'none'? 'Field' : 'Link'), 'Barcode', processed_sample.barcode_key, ['processed_samples', click_to_link, processed_sample.id]], 
-                  ['Field', 'Processed On', processed_sample.processing_date],
-                  ['Field', 'Type', processed_sample.extraction_type],
-                  ['Field', 'Vial', processed_sample.vial],
-                  ['Field', 'Support', processed_sample.support], 
-                  ['Field', 'Elution Buffer', processed_sample.elution_buffer],
-                  ['Field', 'Volume', processed_sample.final_vol],
-				  ['Field', 'Conc', processed_sample.final_conc],
-                  ['Field', 'a260/a280', processed_sample.final_a260_a280],
-                  ['Field', 'a260/a230', processed_sample.final_a260_a230],
-                  ['Field', 'RIN#', processed_sample.final_rin_nr],
-                  ['Field', 'Rem?', processed_sample.psample_remaining],
-                  ['Field', 'Room/Freezer', processed_sample.room_and_freezer],
-                  ['Field', 'Storage Container', processed_sample.container_and_position],
-                  ] %>
-				  
-<!-- Only include comments if non-blank -->
-<% info_flds.push(['Field', 'Comments', processed_sample.comments, {:colspan => 3}]) if !processed_sample.comments.blank? %>
-
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if link_to_edit == 'yes' && (can? :edit, processed_sample) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Extracted Sample',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'processed_samples',
-                                                      :link_id         => processed_sample.id,
-                                                      :last_info_box   => last_info_box} %>
-													  
+  <% unless processed_sample.comments.blank? %>
+    <tr><td></td><td colspan="9"><%=h processed_sample.comments %></td></tr>
+  <% end %>
+</table>

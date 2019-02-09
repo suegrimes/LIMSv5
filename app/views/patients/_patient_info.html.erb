@@ -1,7 +1,4 @@
 <% show_mrn ||= 'yes' %>
-<% click_to_link ||= 'show' %>
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, patient))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, patient))%>
 
 <h6>Patient Details:</h6>
 <table class="table table-bordered table-sm table-font-sm">

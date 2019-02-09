@@ -1,30 +1,39 @@
-<% last_info_box ||= 'no' %>
-<% click_to_link ||= 'show' %>
+<h6>Pathology/H&E:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <% unless pathology.nil? %>
+      <th>Path Rpt Date</th>
+      <th>Pathology</th>
+      <th>Diagnosis</th>
+      <th>Tumor Stage</th>
+    <% end %>
 
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, pathology))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, pathology))%>
+    <% unless histology.nil? %>
+      <th>H&E slides</th>
+      <th>Histopathology</th>
+    <% end %>
+  </tr>
+  </thead>
 
-<% flds_prpt = []; flds_he = []; %>
+  <tr>
+    <% unless pathology.nil? %>
+      <td><%=h link_to pathology.pathology_date, pathology_path(pathology) %></td>
+      <td><%=h pathology.general_pathology %></td>
+      <td><%=h pathology.pathology_classification %></td>
+      <td><%=h pathology.tumor_stage %></td>
+    <% end %>
 
-<!-- Standard fields to be displayed -->
-<% if !pathology.nil? %>
-<% flds_prpt = [[(click_to_link == 'none'? 'Field' : 'Link'), 'Path Rpt Date', pathology.pathology_date, ['pathologies', click_to_link, pathology.id]], 
-                  ['Field', 'Diagnosis Type', pathology.general_pathology],
-                  ['Field', 'Diagnosis/Notes', pathology.pathology_classification],
-                  ['Field', 'Stage', pathology.tumor_stage]] %>
-<% flds_prpt.push(['Field', 'Comments', pathology.comments], nil) if !pathology.comments.blank? %>
-<% end %>
+    <% unless histology.nil? %>
+      <td><%=h link_to histology.he_barcode_key, histology_path(histology) %></td>
+      <td><%=h histology.histopathology %></td>
+    <% end %>
+  </tr>
 
-<% if !histology.nil? %>
-<% flds_he   = [[(click_to_link == 'none'? 'Field' : 'Link'), 'H&E Barcode', histology.he_barcode_key, ['histologies', click_to_link, histology.id]], 
-                  ['Field', 'H&E Date', histology.he_date],
-                  ['Field', 'Pathologist', histology.pathologist],
-                  ['Field', 'Histopathology', histology.histopathology]] %>
-<% flds_he.push(['Field', 'H&E Comments', histology.comments]) if !histology.comments.blank? %>
-<% end %>
-			  
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Pathology/H&E',
-                                                      :info_flds       => flds_prpt | flds_he,
-                                                      :info_links      => [],
-                                                      :last_info_box   => last_info_box} %>
+  <% if !pathology.nil? && !pathology.comments.blank? %>
+    <tr><td></td><td colspan="5"><%=h pathology.comments %></td></tr>
+  <% end %>
+  <% if !histology.nil? && !histology.comments.blank? %>
+    <tr><td></td><td colspan="5"><%=h histology.comments %></td></tr>
+  <% end %>
+</table>
