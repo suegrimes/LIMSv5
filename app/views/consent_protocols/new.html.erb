@@ -1,0 +1,9 @@
+<%= form_for @consent_protocol, :action => 'create' do |f| %>
+    <%= render '/shared/errors', model: @consent_protocol %>
+  
+  <%= render :partial => 'consent_protocol', :locals => {:f => f} %>
+  
+  <%=f.submit "Create", class: "btn btn-primary" %>
+<% end %>
+
+

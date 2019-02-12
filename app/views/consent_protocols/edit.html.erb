@@ -1,0 +1,11 @@
+<h5>Update consent protocol</h5>
+
+<%= form_for(@consent_protocol) do |f| %>
+    <%= render '/shared/errors', model: @consent_protocol %>
+
+  <%= render :partial => 'consent_protocol', :locals => {:f => f} %>
+    
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'List All', consent_protocols_path %>
