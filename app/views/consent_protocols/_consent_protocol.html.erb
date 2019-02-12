@@ -1,0 +1,34 @@
+<div class="card">
+  <h6 class="card-header">Protocol Details:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="consent_nr" class="col-auto col-form-label col-form-label-sm">Consent Nr:</label>
+      <div class="col-auto">
+        <%= f.text_field :consent_nr, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="consent_abbrev" class="col-auto col-form-label col-form-label-sm">Consent Abbrev:</label>
+      <div class="col-auto">
+        <%= f.text_field :consent_abbrev, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="consent_name" class="col-auto col-form-label col-form-label-sm">Consent Name:</label>
+      <div class="col-auto">
+        <%= f.text_area :consent_name, :cols => 60, :rows => 2, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="email_confirm_to" class="col-auto col-form-label col-form-label-sm">Email To:</label>
+      <div class="col-auto">
+        <%= f.text_field :email_confirm_to, size:30, class: "form-control" %>
+      </div>
+    </div>
+
+  </div>
+</div>
