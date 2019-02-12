@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   end
   get 'new_histology' => 'histologies#new_params', :as => :new_he_slide
 
+  resources :histology_queries, :only => :index
+  get 'he_query' => 'histology_queries#new_query', :as => :he_query
+
   # Routes for physical source samples
   resources :samples do
     collection do

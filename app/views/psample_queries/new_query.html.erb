@@ -63,7 +63,7 @@
     <div class="form-group row">
       <label for="sample_tissue" class="col-auto col-form-label col-form-label-sm">Sample Site:</label>
       <div class="col-auto">
-  	<%= f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value,
+  	    <%= f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value,
                                {:include_blank => 'All'}, {class: "form-control"}) %>
       </div>
       <label for="sample_type" class="col-auto col-form-label col-form-label-sm">Sample Type:</label>
@@ -76,7 +76,7 @@
     <div class="form-group row">
       <label for="tissue_preservation" class="col-auto col-form-label col-form-label-sm">Preservation:</label>
       <div class="col-auto">
-	<%= f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value,
+	      <%= f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value,
                                {:include_blank => 'All'}, {class: "form-control"}) %>
       </div>
       <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">OR Designation:</label>
