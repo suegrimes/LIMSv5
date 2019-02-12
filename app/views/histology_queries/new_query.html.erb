@@ -51,7 +51,7 @@
       <label for="consent_protocol_id" class="col-auto col-form-label col-form-label-sm">Consent Protocol:</label>
       <div class="col-auto">
         <%= f.collection_select(:consent_protocol_id, @consent_protocols, :id, :name_ver,
-                                {:include_blank => 'All'}, {class: "form-control"}) %>
+                                {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"}) %>
       </div>
     </div>
 
@@ -59,7 +59,7 @@
       <label for="clinic_or_location" class="col-auto col-form-label col-form-label-sm">Clinic:</label>
       <div class="col-auto">
         <%= f.collection_select(:clinic_or_location, @clinics, :c_value, :c_value,
-                                {:include_blank => 'All'}, {class: "form-control"}) %>
+                                {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"}) %>
       </div>
       <label for="tissue_preservation" class="col-auto col-form-label col-form-label-sm">Preservation Type:</label>
       <div class="col-auto">

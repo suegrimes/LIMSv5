@@ -106,6 +106,9 @@ Rails.application.routes.draw do
   get 'bulk_upload' => 'bulk_upload#new'
   post 'bulk_upload' => 'bulk_upload#create'
 
+  # Tables for dropdown lists
+  resources :consent_protocols
+
   # test route
   get 'test' => 'test#index'
 

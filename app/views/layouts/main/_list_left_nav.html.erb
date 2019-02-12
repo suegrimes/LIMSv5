@@ -6,11 +6,8 @@
   </li>
 
   <%= link_to 'Source/Dissections', unprocessed_query_path, a_html_options%>
-
-   <%= link_to 'H&E Slides', he_query_path, a_html_options %>
-
+  <%= link_to 'H&E Slides', he_query_path, a_html_options %>
   <%= link_to 'Extracted Samples',  processed_query_path, a_html_options %>
-
   <%= link_to 'Storage Containers', container_query_path, a_html_options %>
 
   <li class="list-group-item active">
@@ -18,5 +15,11 @@
   </li>
 
   <%= link_to 'Patients/Samples', bulk_upload_path, a_html_options %>
+
+  <li class="list-group-item active">
+    Lists:
+  </li>
+
+  <%= link_to 'Consent Protocols', consent_protocols_path, a_html_options %>
 
 </div> 
