@@ -28,5 +28,9 @@
   <% end %>
 </table>
 
-<!-- Add edit and delete links for authorized users -->
+<p>
+<% if can? :edit, @protocol %>
+  <%= link_to 'Edit', edit_protocol_path(@protocol) %> |
+<% end %>
 <%=link_to 'List All', protocols_path(:type => @protocol.protocol_type) %>
+</p>

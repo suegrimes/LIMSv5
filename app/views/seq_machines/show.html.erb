@@ -1,0 +1,28 @@
+<h6>Sequencing Machine Details</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+  	<th>Machine Code</th>
+	  <th>Building</th>
+	  <th>Model</th>
+	  <th>Description</th>
+	  <th>Notes</th>
+  </tr>
+  </thead>
+
+  <tr>
+  	<td><%=h @seq_machine.machine_name%></td>
+	<td><%=h @seq_machine.bldg_location%></td>
+	<td><%=h @seq_machine.machine_type%></td>
+	<td><%=h @seq_machine.machine_desc%></td>
+	<td><%=h @seq_machine.notes%></td>
+  </tr>
+</table>
+
+<p>
+<% if can? :edit, @seq_machine %>
+<%= link_to 'Edit', edit_seq_machine_path(@seq_machine) %> |
+<% end %>
+<%= link_to 'View All', seq_machines_path %>
+</p>
+

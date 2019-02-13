@@ -1,5 +1,5 @@
 class HistologiesController < ApplicationController
-  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
+  layout  'main/samples'
   #load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]

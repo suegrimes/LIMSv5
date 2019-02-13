@@ -1,0 +1,13 @@
+<h5>New sequencer</h5>
+
+<%= form_for(@seq_machine, :action => 'create') do |f| %>
+  <%= render '/shared/errors', model: @seq_machine %>
+
+  <%= render :partial => 'seq_machine_form', :locals => {:f => f} %>
+
+  <%= f.submit "Create", class: "btn btn-primary"  %>
+<% end %>
+
+<%= link_to 'List All', seq_machines_path %>
+
+

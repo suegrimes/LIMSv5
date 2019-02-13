@@ -1,0 +1,43 @@
+<div class="card">
+  <h6 class="card-header">Sequencer Details:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="machine_name" class="col-auto col-form-label col-form-label-sm">Machine Code:</label>
+      <div class="col-auto">
+        <%=f.text_field(:machine_name, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="machine_desc" class="col-auto col-form-label col-form-label-sm">Description:</label>
+      <div class="col-auto">
+        <%=f.text_field(:machine_desc, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value,
+                                  {:include_blank => 'Select..', class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="bldg_location" class="col-auto col-form-label col-form-label-sm">Building:</label>
+      <div class="col-auto">
+        <%= f.select(:bldg_location, %w{SGTC IMH CCSR Core Snyder Other}, class: "form-control") %>
+      </div>
+    </div>
+
+	<% if @seq_machine.machine_name == 'Run_Number' %>
+      <div class="form-group row">
+        <label for="last_seq_num" class="col-auto col-form-label col-form-label-sm">Last run#:</label>
+        <div class="col-auto">
+          <%= f.text_field(:last_seq_num, class: "form-control") %>
+        </div>
+      </div>
+	<% end %>		
+  </div>
+</div>

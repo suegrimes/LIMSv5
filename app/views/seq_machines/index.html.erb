@@ -1,0 +1,33 @@
+<h5>Sequencing Machines</h5>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Machine Code</th>
+    <th>Machine Type</th>
+    <th>Building</th>
+    <th>Description</th>
+    <th>Notes</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+  <% for seq_machine in @seq_machines %>
+  <tr>
+    <td><%=link_to seq_machine.machine_name, seq_machine %></td>
+    <td><%=h seq_machine.machine_type %></td>
+	  <td><%=h seq_machine.bldg_location %></td>
+    <td><%=h seq_machine.machine_desc %></td>
+	  <td><%=h seq_machine.notes %></td>
+	  <% if can? :edit, seq_machine %>
+      <td><%= link_to 'Edit', edit_seq_machine_path(seq_machine) %></td>
+	  <% end %>
+	  <% if can? :delete, seq_machine %>
+      <td><%= link_to 'Delete', seq_machine, :confirm => 'Are you sure?', :method => :delete %></td>
+	  <% end %>
+  </tr>
+  <% end %>
+</table>
+
+<% if can? :new, SeqMachine.new %>
+  <%= link_to 'New sequencing machine', new_seq_machine_path %>
+<% end %>
