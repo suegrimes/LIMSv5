@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   get '/login' => 'welcome#login', :as => :login
   get '/logout' => 'welcome#logout', :as => :logout
 
+  # Reusable routing
+  #concern :file_attachable do
+  #  resources :attached_files, only: :index
+  #end
+
   resources :users
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
   match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
@@ -38,9 +43,7 @@ Rails.application.routes.draw do
 
   # Routes for physical source samples
   resources :samples do
-    collection do
-      get :auto_complete_for_barcode_key
-    end
+    get :auto_complete_for_barcode_key, on: :collection
   end
 
   resources :sample_locs, :only => [:edit, :update]
@@ -66,19 +69,23 @@ Rails.application.routes.draw do
 
    # Routes for extracted samples
   get 'processed_samples/autocomplete_processed_sample_barcode_search'
-  resources :processed_samples do
-    collection do
-      #get :auto_complete_for_barcode_key
-    end
-  end
-  resources :psample_queries, :only => :index
-
+  resources :processed_samples
   match 'new_extraction' => 'processed_samples#new_params', :as => :new_extraction, :via => [:get, :post]
   match 'add_extraction' => 'processed_samples#new', :via => [:get, :post]
   match 'edit_psamples' => 'processed_samples#edit_by_barcode', :as => :edit_psamples, :via => [:get, :post]
   match 'samples_processed' => 'processed_samples#show_by_sample', :as => :samples_processed, :via => [:get, :post]
+  resources :psample_queries, :only => :index
   get 'processed_query' => 'psample_queries#new_query', :as => :processed_query
   match 'export_psamples' => 'psample_queries#export_samples', :as => :export_psamples, :via => [:post]
+
+  # Routes for molecular assays
+  get 'molecular_assays/autocomplete_molecular_assay_source_sample_name'
+  get 'molecular_assays/main' => 'molecular_assays#main_hdr'
+  resources :molecular_assays
+  get 'create_molecular_assays' => 'molecular_assays#create_assays'
+  get 'populate_assays' => 'molecular_assays#populate_assays'
+  get 'molecular_assays/list_added' => 'molecular_assays#list_added'
+  #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays
 
   # Routes for patients
   resources :patients

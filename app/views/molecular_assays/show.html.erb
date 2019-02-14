@@ -1,0 +1,24 @@
+<h5>Details for Molecular Assay: <%= @molecular_assay.barcode_key %></h5>
+<% processed_sample = (@molecular_assay.processed_sample ? @molecular_assay.processed_sample : nil) %>
+
+<% if processed_sample %>
+<%= render :partial => 'sample_characteristics/clinical_summary', :locals => {:sample_characteristic => processed_sample.sample.sample_characteristic,
+                                                                              :patient => processed_sample.sample.patient }%>
+
+<%= render :partial => 'samples/sample_info', :locals => {:sample => processed_sample.sample,
+                                                          :source => 'Source'} %>
+
+<% histology = (processed_sample.sample.histology ? processed_sample.sample.histology :
+               (processed_sample.sample.source_sample && processed_sample.sample.source_sample.histology ? processed_sample.sample.source_sample.histology : nil)) %>
+<% if histology %>
+    <%= render :partial => 'histologies/histology_summary', :locals => {:histology => histology,
+                                                                        :click_to_link => 'show'} %>
+<% end %>
+
+<%= render :partial => 'processed_samples/processed_sample_info', :locals => {:processed_sample => processed_sample} %>
+<%=raw break_clear %>
+<% end %>
+
+<%= render :partial => 'assay_show', :locals => {:molecular_assay => @molecular_assay} %>
+<%= render :partial => 'attached_files/show_file', :locals => {:obj => @molecular_assay} %>
+<%=raw break_clear %>

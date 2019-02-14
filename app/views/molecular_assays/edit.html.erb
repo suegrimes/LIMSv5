@@ -1,0 +1,67 @@
+<h5>Editing Molecular Assay: <%=h @molecular_assay.barcode_key %></h5>
+<%= form_for(@molecular_assay, :action => :update) do |f| %>
+    <%= render '/shared/errors', model: @molecular_assay %>
+
+    <div class="card">
+    <h6 class="card-header">Molecular Assay:</h6>
+    <div class="card-body">
+
+    <div class="form-group row">
+      <%= f.label(:protocol_id, 'Protocol', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.collection_select(:protocol_id, @protocols, :id, :protocol_name, {:include_blank => 'Select Protocol'}, class: "form-control") %>
+      </div>
+
+      <%= f.label(:owner, 'Owner', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.select(:owner, @owners, {}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label(:preparation_date, 'Prep date', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.date_field(:preparation_date, max: Time.current.to_date, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label(:source_sample_name, 'Source DNA/RNA', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.autocomplete_field :source_sample_name, molecular_assays_autocomplete_molecular_assay_source_sample_name_path, size: '12', class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label(:volume, 'Volume', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.text_field(:volume, :size => 8, class:"form-control")%>
+      </div>
+      <%= f.label(:concentration, 'Concentration', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.text_field(:concentration, :size => 8, class:"form-control")%>
+      </div>
+    </div>
+
+     <div class="form-group row">
+        <%= f.label(:plate_number, 'Plate', class:"col-auto col-form-label col-form-label-sm") %>
+        <div class="col-auto">
+          <%= f.text_field(:plate_number, class:"form-control")%>
+        </div>
+        <%= f.label(:plate_coord, 'Coords', class:"col-auto col-form-label col-form-label-sm") %>
+        <div class="col-auto">
+          <%= f.text_field(:plate_coord, class:"form-control")%>
+        </div>
+     </div>
+
+      <div class="form-group row">
+        <%= f.label(:notes, 'Comments', class:"col-auto col-form-label col-form-label-sm") %>
+        <div class="col-auto">
+          <%= f.text_field(:notes, class:"form-control")%>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%=f.submit 'Update', class: "btn btn-primary" %>
+<% end %>

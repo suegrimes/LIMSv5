@@ -14,7 +14,7 @@
   </thead>
 
   <tr>
-    <td><%=h link_to sample.barcode_key, dissected_sample_path(sample) %></td>
+    <td><%=h link_to sample.barcode_key, sample_path(sample) %></td>
     <td><%=h sample.sample_date %></td>
     <td><%=h [sample.sample_tissue, sample.sample_type].join('/') %></td>
     <td><%=h sample.container_type %></td>
