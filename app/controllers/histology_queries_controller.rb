@@ -1,4 +1,6 @@
 class HistologyQueriesController < ApplicationController
+  include SqlQueryBuilder
+
   layout 'main/samples'
 
   authorize_resource :class => Histology
@@ -80,7 +82,7 @@ protected
   def setup_sql_params(params)
     sql_params = {}
 
-    # Standard case, just put sample_query attribute/value into sql_params hash
+    # Standard case, just put histology_query attribute/value into sql_params hash
     params[:histology_query].each do |attr, val|
       sql_params["#{attr}"] = val if !val.blank? && HistologyQuery::ALL_FLDS.include?("#{attr}")
     end

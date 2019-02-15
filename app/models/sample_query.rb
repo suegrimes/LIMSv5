@@ -35,5 +35,4 @@ class SampleQuery
   SCHAR_FLDS = %w{patient_id gender race ethnicity consent_protocol_id clinic_or_location}
   SAMPLE_FLDS = %w{alt_identifier tumor_normal sample_tissue sample_type tissue_preservation updated_by}
   ALL_FLDS    = PATIENT_FLDS | SCHAR_FLDS | SAMPLE_FLDS
-
 end

@@ -1,7 +1,8 @@
 class StorageContainersController < ApplicationController
+  include StorageManagement, SqlQueryBuilder
+
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
 
-  include StorageManagement
   before_action :dropdowns, :only => :new_query
 
   def new_query

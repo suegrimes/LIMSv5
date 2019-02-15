@@ -1,4 +1,6 @@
 class SampleQueriesController < ApplicationController
+  include SqlQueryBuilder
+
   layout 'main/samples'
 
   authorize_resource :class => Sample

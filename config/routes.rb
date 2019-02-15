@@ -86,6 +86,9 @@ Rails.application.routes.draw do
   get 'populate_assays' => 'molecular_assays#populate_assays'
   get 'molecular_assays/list_added' => 'molecular_assays#list_added'
   #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays
+  #
+  resources :molassay_queries, :only => :index
+  get 'mol_assay_query' => 'molassay_queries#new_query'
 
   # Routes for patients
   resources :patients
