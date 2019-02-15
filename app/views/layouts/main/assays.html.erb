@@ -1,0 +1,29 @@
+
+<!-- layout for the sample processing pages -->
+
+<% content_for :top_navigation do %>
+  <!-- keep left side blank -->
+  <div class="col-2">
+  </div>
+  <div class="col-10">
+    <%= render "layouts/main/main_nav" %>
+  </div>
+<% end %>
+
+<% content_for :panel_1 do %>
+  <div id="left-panel" class="col-2">
+    <%= render "layouts/main/list_left_nav" %> 
+  </div>
+<% end %>
+
+<% content_for :panel_2 do %>
+  <div id="main-panel" class="col-10">
+
+    <!-- render the molecular assays navigation -->
+    <%= render "layouts/top_nav/assays_nav" %>
+
+    <%= yield %>
+  </div>
+<% end %>
+
+<%= render :file => 'layouts/application' %>
