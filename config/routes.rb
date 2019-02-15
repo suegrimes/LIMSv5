@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   resources :protocols
   match 'select_protocol_type' => 'protocols#query_params', :as => :select_protocol_type, :via => [:get, :post]
   resources :seq_machines
+  resources :categories
 
   # test route
   get 'test' => 'test#index'

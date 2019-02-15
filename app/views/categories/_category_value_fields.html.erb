@@ -1,0 +1,15 @@
+<div class="col-sm-12 nested-fields form-group form-group-sm row">
+  <%= f.label(:c_position, 'Position', class: "col-form-label col-form-label-sm")%>
+  <div class="col-sm-1">
+  <%= f.text_field(:c_position, class: "form-control") %>
+  </div>
+
+  <%= f.label(:c_value, 'Value', class: "col-form-label col-form-label-sm") %>
+  <div class="col-sm-5">
+  <%= f.text_field(:c_value, class: "form-control") %>
+  </div>
+
+  <div class="links col-sm-2">
+  <%= link_to_remove_association "remove", f %>
+  </div>
+</div>

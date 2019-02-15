@@ -1,0 +1,23 @@
+<h5>Category: <%= @category.category %></h5>
+<div>Description: <%= @category.category_description %></div></br>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Sort order</th>
+    <th>Value</th>
+  </tr>
+  </thead>
+
+  <% for category_value in @category.category_values %>
+    <tr>
+      <td><%= category_value.c_position %></td>
+      <td><%= category_value.c_value %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% if can? :edit, @category %>
+<%= link_to 'Edit', edit_category_path(@category) %> |
+<% end %>
+<%= link_to 'List All', categories_path %>

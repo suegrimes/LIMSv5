@@ -1,0 +1,45 @@
+<h5>New category: <%= @category.category %></h5>
+
+<%= form_for(@category) do |f| %>
+  <%= render '/shared/errors', model: @category %>
+
+  <div class="card">
+    <h6 class="card-header">Category Details:</h6>
+    <div class="card-body">
+
+      <div class="form-group row">
+        <%= f.label(:category, 'Name', class: "col-auto col-form-label col-form-label-sm")%>
+        <div class="col-auto">
+          <%= f.text_field :category, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <%= f.label(:category_description, 'Description', class: "col-auto col-form-label col-form-label-sm")%>
+        <div class="col-md-6">
+          <%= f.text_field :category_description, class: "form-control" %>
+        </div>
+      </div>
+
+      <div id="cvalues">
+        <%= f.fields_for :category_values, :wrapper => 'inline' do |v| %>
+          <div class="form-group row">
+            <%= render :partial => 'category_value_fields', :locals => {f: v} %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-2 offset-sm-7">
+          <%= link_to_add_association 'add value', f, :category_values %>
+        </div>
+      </div>
+
+      <%=f.submit "Create", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div class="links"><%= link_to 'List All', categories_path %></div>
+<% end %>
+
+
