@@ -145,82 +145,27 @@ protected
     @tumor_normal       = category_filter(@category_dropdowns, 'tumor_normal')
     @users              = User.all
   end
-  
+
   def define_conditions(params)
-    @sql_params = setup_sql_params(params)
-    
-    @where_select = []
-    @where_values = []
-    
+    @where_select = []; @where_values = [];
+
     if params[:stype] == 'clinical' || params[:stype] == 'dissected'
       null_or_not = (params[:stype] == 'clinical' ? 'NULL' : 'NOT NULL')
       @where_select.push("samples.source_sample_id IS #{null_or_not}")
     end
-    
-    @sql_params.each do |attr, val|
-      if !param_blank?(val)
-        @where_select = add_to_select(@where_select, attr, val)
-        @where_values = add_to_values(@where_values, attr, val)
-      end
-    end
 
-    if !param_blank?(params[:sample_query][:patient_string])
-      str_vals, str_ranges, errors = compound_string_params('', nil, params[:sample_query][:patient_string])
-      where_select, where_values   = sql_compound_condition('samples.patient_id', str_vals, str_ranges)
-      #puts errors if !errors.blank?
-      @where_select.push(where_select)
-      @where_values.push(*where_values)
-    end
-
-    if !param_blank?(params[:sample_query][:barcode_string])
-      bc_flds = ['samples.barcode_key', 'samples.source_barcode_key']
-      str_vals, str_ranges, errors = compound_string_params('', nil, params[:sample_query][:barcode_string])
-      where_select, where_values   = sql_compound_condition2(bc_flds, str_vals, str_ranges)
-      #puts errors if !errors.blank?
-      @where_select.push(where_select)
-      @where_values.push(*where_values)
-    end
-    
-    dt_fld = (params[:sample_query][:date_filter] == 'Dissection Date' ? 'samples.sample_date' : 'sample_characteristics.collection_date')
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:sample_query], dt_fld)
-    
-    sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
-    return sql_where_clause
-  end
-  
-  def setup_sql_params(params)
-    sql_params = {} 
-    
-    # Standard case, just put sample_query attribute/value into sql_params hash
-    params[:sample_query].each do |attr, val|
-      sql_params["#{attr}"] = val if !val.blank? && SampleQuery::ALL_FLDS.include?("#{attr}")
-    end
-    
     if !params[:sample_query][:mrn].blank?
       patient_id = Patient.find_id_using_mrn(params[:sample_query][:mrn])
-      sql_params['patient_id'] = (patient_id ||= 0)
+      @where_select.push("samples.patient.id = #{patient_id ||= 0}")
     end
-    
-    return sql_params 
-  end
-  
-  def add_to_select(where_select, attr, val)
-    if attr.to_s == 'barcode_key'
-      where_select.push('(samples.barcode_key = ? OR samples.source_barcode_key = ?)')
-    else
-      where_select.push("patients.#{attr}" + sql_condition(val)) if SampleQuery::PATIENT_FLDS.include?("#{attr}")
-      where_select.push("sample_characteristics.#{attr}" + sql_condition(val)) if SampleQuery::SCHAR_FLDS.include?("#{attr}")
-      where_select.push("samples.#{attr}" + sql_condition(val))                if SampleQuery::SAMPLE_FLDS.include?("#{attr}")
-    end
-    return where_select
-  end
-  
-  def add_to_values(where_values, attr, val)
-    if attr.to_s == 'barcode_key'
-      return where_values.push(val, val)
-    else
-      return where_values.push(sql_value(val))
-    end
+
+    @where_select, @where_values = build_sql_where(params[:sample_query], SampleQuery::QUERY_FLDS, @where_select, @where_values)
+
+    dt_fld = (params[:sample_query][:date_filter] == 'Dissection Date' ? 'samples.sample_date' : 'sample_characteristics.collection_date')
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:sample_query], dt_fld)
+
+    sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
+    return sql_where_clause
   end
   
   def export_samples_csv(samples, with_mrn='no')    
