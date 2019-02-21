@@ -1,12 +1,34 @@
 module SqlQueryBuilder
   extend ActiveSupport::Concern
 
+def build_sql_where(params, query_fields, where_select, where_values)
+  query_fields['standard'].each do |sqltable|
+    sqltable.each do |attr|
+      if params.has_key? (attr)
+        where_select.push("#{sqltable}.#{attr}" + sql_condition(params[attr.to_s]) )
+        where_values.push(params[attr.to_s])
+      end
+    end
+  end
+
+  query_fields['compound'].each do |sqltable|
+    sqltable.each do |attr|
+      if params.has_key? (attr)
+        str_vals, str_ranges, errors = compound_string_params('', nil, params[attr.to_s])
+        where_select, where_values   = sql_compound_condition("#{sqltable}.#{attr}", str_vals, str_ranges)
+        @where_select.push(where_select)
+        @where_values.push(*where_values)
+      end
+    end
+  end
+
+end
+
 def sql_compound_condition(sql_fld, fld_vals, fld_ranges)
   where_select = []; where_values = [];
 
   if !fld_vals.empty?
     where_select.push("#{sql_fld} IN (?)")
-    #where_values.push(fld_vals, fld_vals)
     where_values.push(fld_vals)
   end
 

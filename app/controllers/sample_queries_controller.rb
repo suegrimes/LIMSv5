@@ -145,8 +145,31 @@ protected
     @tumor_normal       = category_filter(@category_dropdowns, 'tumor_normal')
     @users              = User.all
   end
-  
-  def define_conditions(params)
+
+  def define_condition(params)
+    @where_select = []
+    @where_values = []
+
+    if params[:stype] == 'clinical' || params[:stype] == 'dissected'
+      null_or_not = (params[:stype] == 'clinical' ? 'NULL' : 'NOT NULL')
+      @where_select.push("samples.source_sample_id IS #{null_or_not}")
+    end
+
+    if !params[:sample_query][:mrn].blank?
+      patient_id = Patient.find_id_using_mrn(params[:sample_query][:mrn])
+      @where_select.push("samples.patient.id = #{patient_id ||= 0}")
+    end
+
+    @where_select, @where_values = build_sql_where(params[:sample_query], {'standard' => SampleQuery::STD_FIELDS}, @where_select, @where_values)
+
+    dt_fld = (params[:sample_query][:date_filter] == 'Dissection Date' ? 'samples.sample_date' : 'sample_characteristics.collection_date')
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:sample_query], dt_fld)
+
+    sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
+    return sql_where_clause
+  end
+
+  def define_conditions_bkup(params)
     @sql_params = setup_sql_params(params)
     
     @where_select = []
