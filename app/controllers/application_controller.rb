@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
 
       else
         case str_val
-          when /^(\w+)$/ #alphanumeric only (not a range)
+          when /^(\w+)(\.*)(\w+)$/ #alphanumeric only (not a range)
             str_vals.push(str_val)
           when /^(\d+)-(\d+)$/ #numeric range, convert to integer so that SQL search will work correctly
             str_ranges.push([$1.to_i, $2.to_i])

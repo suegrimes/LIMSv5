@@ -1,66 +1,60 @@
 module SqlQueryBuilder
   extend ActiveSupport::Concern
 
-def build_sql_where(params, query_fields, where_select, where_values)
-  query_fields['standard'].each do |sqltable|
-    sqltable.each do |attr|
-      if params.has_key? (attr)
-        where_select.push("#{sqltable}.#{attr}" + sql_condition(params[attr.to_s]) )
-        where_values.push(params[attr.to_s])
+  def build_sql_where(params, query_fields, where_select, where_values)
+    query_fields['standard'].each do |sqltable, sql_attr|
+      sql_attr.each do |attr|
+        if params.has_key?(attr.to_sym)
+          attr_val = sql_value(params[attr.to_sym])
+          unless attr_val.blank?
+            where_select.push("#{sqltable}.#{attr}" + sql_condition(attr_val) )
+            where_values.push(attr_val)
+          end
+        end
       end
     end
-  end
 
-  query_fields['compound'].each do |sqltable|
-    sqltable.each do |attr|
-      if params.has_key? (attr)
-        str_vals, str_ranges, errors = compound_string_params('', nil, params[attr.to_s])
-        where_select, where_values   = sql_compound_condition("#{sqltable}.#{attr}", str_vals, str_ranges)
-        @where_select.push(where_select)
-        @where_values.push(*where_values)
+    query_fields['multi_range'].each do |fld, fld_dtls|
+        if params.has_key?(fld.to_sym) and !params[fld.to_sym].blank?
+          tmp_select, tmp_values   = sql_compound_condition(fld_dtls[:sql_attr],params[fld.to_sym], fld_dtls)
+          where_select.push(tmp_select)
+          where_values.push(*tmp_values)
+        end
+    end
+    return where_select, where_values
+  end  #build_sql_where
+
+  def sql_compound_condition(sql_flds, param_val, fld_dtls)
+    where_select = []; where_values = [];
+    sql_flds = [*sql_flds]  #Might be single field or array; if character string convert to array
+
+    str_prefix = (fld_dtls.has_key?(:str_prefix) ? fld_dtls[:str_prefix] : '')
+    str_pad_len = (fld_dtls.has_key?(:pad_len) ? fld_dtls[:pad_len] : nil)
+    fld_vals, fld_ranges, errors = compound_string_params(str_prefix, str_pad_len, param_val)
+    puts "Processing parameter for SQL fld(s): #{sql_flds}"
+    puts fld_vals.inspect, fld_ranges.inspect
+
+    if !fld_vals.empty?
+      fld_in = sql_flds.map{|fld| fld + " IN (?)"}
+      where_select.push(fld_in.join(' OR '))
+      (0..(sql_flds.length-1)).each do #Repeat range for number of sql_fields provided
+        where_values.push(fld_vals)
       end
     end
-  end
 
-end
-
-def sql_compound_condition(sql_fld, fld_vals, fld_ranges)
-  where_select = []; where_values = [];
-
-  if !fld_vals.empty?
-    where_select.push("#{sql_fld} IN (?)")
-    where_values.push(fld_vals)
-  end
-
-  if !fld_ranges.empty?
-    for fld_range in fld_ranges
-      where_select.push("#{sql_fld} BETWEEN ? AND ?")
-      where_values.push(fld_range[0], fld_range[1])
+    if !fld_ranges.empty?
+      for fld_range in fld_ranges
+        fld_between = sql_flds.map{|fld| fld + " BETWEEN ? AND ?"}
+        where_select.push(fld_between.join(' OR '))
+        (0..(sql_flds.length-1)).each do #Repeat range for number of sql_fields provided
+          where_values.push(*fld_range)
+        end
+      end
     end
+
+    where_clause = (where_select.size > 0 ? ['(' + where_select.join(' OR ') + ')'] : [])
+    return where_clause, where_values
   end
-
-  where_clause = (where_select.size > 0 ? ['(' + where_select.join(' OR ') + ')'] : [])
-  return where_clause, where_values
-end
-
-def sql_compound_condition2(sql_flds, fld_vals, fld_ranges)
-  where_select = []; where_values = [];
-
-  if !fld_vals.empty?
-    where_select.push("#{sql_flds[0]} IN (?) OR #{sql_flds[1]} IN (?)")
-    where_values.push(fld_vals, fld_vals)
-  end
-
-  if !fld_ranges.empty?
-    for fld_range in fld_ranges
-      where_select.push("#{sql_flds[0]} BETWEEN ? AND ? OR #{sql_flds[1]} BETWEEN ? AND ?")
-      where_values.push(fld_range[0], fld_range[1], fld_range[0], fld_range[1])
-    end
-  end
-
-  where_clause = (where_select.size > 0 ? ['(' + where_select.join(' OR ') + ')'] : [])
-  return where_clause, where_values
-end
 
 def sql_condition(input_val)
   if input_val.is_a?(Array)
@@ -76,9 +70,10 @@ end
 def sql_value(input_val)
   if input_val.is_a?(String) && input_val[0,4] == 'LIKE'
     input_val = ['%',input_val[5..-1],'%'].join
-    # Hack to deal with Rails 3.2 'error', adding additional blank value to array when multi-item select uses 'Include Blank' value
-  elsif input_val.is_a?(Array) && input_val.size > 1
-    input_val.shift if input_val[0].blank?
+  # Hack to deal with Rails 3.2 'error', adding additional blank value to array when multi-item select uses 'Include Blank' value
+  #elsif input_val.is_a?(Array) && input_val.size > 1
+  elsif input_val.is_a?(Array)
+    input_val.reject! { |val| val.blank? }
   end
   return input_val
 end
