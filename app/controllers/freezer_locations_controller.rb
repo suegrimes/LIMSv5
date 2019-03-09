@@ -53,7 +53,7 @@ class FreezerLocationsController < ApplicationController
     redirect_to(freezer_locations_url) 
   end
 
-  protected
+protected
   def create_params
     params.require(:freezer_location).permit(:room_nr, :freezer_nr, :owner_name, :owner_email, :comments)
   end

@@ -120,8 +120,10 @@ Rails.application.routes.draw do
   resources :consent_protocols
   resources :protocols
   match 'select_protocol_type' => 'protocols#query_params', :as => :select_protocol_type, :via => [:get, :post]
-  resources :seq_machines
   resources :categories
+  resources :adapters
+  resources :index_tags
+  resources :seq_machines
   resources :freezer_locations
 
   # test route

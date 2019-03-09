@@ -1,0 +1,39 @@
+<h5>Adapters</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Adapter</th>
+    <th>Nr Tags</th>
+	<th>Mplex/Splex</th>
+    <th>Index Pos</th>
+    <th>2Index?</th>
+    <th>I1 Prefix</th>
+    <th>I2 Prefix</th>
+	<th colspan="2"></th>
+  </tr>
+  </thead>
+
+<% for adapter in @adapters %>
+  <% nr_tags=adapter.index_tags.size %>
+  <tr>
+    <td><% if nr_tags > 0 %><%=link_to adapter.runtype_adapter, adapter %>
+        <% else %><%=h adapter.runtype_adapter %>
+        <% end %></td>
+    <td align="center"><%=h nr_tags %></td>
+	  <td align="center"><%=h adapter.mplex_splex %></td>
+    <td><%=h adapter.index_position %></td>
+    <td align="center"><%=h adapter.multi_indices %></td>
+    <td><%=h adapter.index1_prefix %></td>
+    <td><%=h adapter.index2_prefix %></td>
+	  <td><% if can? :edit, adapter %>
+        <%= link_to 'Edit', edit_adapter_path(adapter) %></td>
+	      <% end %></td>
+	  <td><% if can? :delete, adapter %>
+        <%= link_to 'Delete', adapter, data: { confirm: 'Are you sure?' }, :method => :delete %>
+	      <% end %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'New adapter', new_adapter_path %>
