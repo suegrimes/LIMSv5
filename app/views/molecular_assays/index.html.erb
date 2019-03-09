@@ -45,7 +45,7 @@
     <% end %>
 	
 	<% if can? :delete, molecular_assay %>
-	  <td><%= link_to 'Delete', molecular_assay, :confirm => 'Are you sure?', :method => :delete %></td>	  
+	  <td><%= link_to 'Delete', molecular_assay, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
     <% else %>
       <td class="ltgrey"> Delete </td>
 	<% end %>  

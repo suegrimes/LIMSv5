@@ -83,9 +83,9 @@ Rails.application.routes.draw do
   get 'molecular_assays/main' => 'molecular_assays#main_hdr'
   resources :molecular_assays
   get 'create_molecular_assays' => 'molecular_assays#create_assays'
-  get 'populate_assays' => 'molecular_assays#populate_assays'
+  match 'populate_assays' => 'molecular_assays#populate_assays', :via => [:get, :post]
   get 'molecular_assays/list_added' => 'molecular_assays#list_added'
-  #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays
+  #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays, :via => :get
   #
   resources :molassay_queries, :only => :index
   get 'mol_assay_query' => 'molassay_queries#new_query'
@@ -122,6 +122,7 @@ Rails.application.routes.draw do
   match 'select_protocol_type' => 'protocols#query_params', :as => :select_protocol_type, :via => [:get, :post]
   resources :seq_machines
   resources :categories
+  resources :freezer_locations
 
   # test route
   get 'test' => 'test#index'

@@ -24,7 +24,7 @@ class ConsentProtocolsController < ApplicationController
 
   # POST /consent_protocols
   def create
-    @consent_protocol = ConsentProtocol.new(params[:consent_protocol])
+    @consent_protocol = ConsentProtocol.new(create_params)
 
     if @consent_protocol.save
       flash[:notice] = 'ConsentProtocol was successfully created.'
@@ -38,7 +38,7 @@ class ConsentProtocolsController < ApplicationController
   def update
     @consent_protocol = ConsentProtocol.find(params[:id])
 
-    if @consent_protocol.update_attributes(params[:consent_protocol])
+    if @consent_protocol.update_attributes(update_params)
       flash[:notice] = 'ConsentProtocol was successfully updated.'
       redirect_to(consent_protocols_url)
     else

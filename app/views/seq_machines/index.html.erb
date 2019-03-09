@@ -22,7 +22,7 @@
       <td><%= link_to 'Edit', edit_seq_machine_path(seq_machine) %></td>
 	  <% end %>
 	  <% if can? :delete, seq_machine %>
-      <td><%= link_to 'Delete', seq_machine, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Delete', seq_machine, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
 	  <% end %>
   </tr>
   <% end %>
