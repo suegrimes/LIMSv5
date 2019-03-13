@@ -33,26 +33,19 @@ protected
   
   def define_conditions(params)
     @where_select = []; @where_values = [];
-    
-    if !param_blank?(params[:molassay_query][:patient_id])
-      @where_select.push('processed_samples.patient_id = ?')
-      @where_values.push(params[:molassay_query][:patient_id])
-    end
-    
-    if !param_blank?(params[:molassay_query][:owner])
-      @where_select.push('molecular_assays.owner IN (?)')
-      @where_values.push(params[:molassay_query][:owner])
-    end
-    
-    date_fld = 'molecular_assays.preparation_date'
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:molassay_query], date_fld)
-    
+
+    @where_select, @where_values = build_sql_where(params[:molassay_query], MolassayQuery::QUERY_FLDS, @where_select, @where_values)
+
+    dt_fld = 'molecular_assays.preparation_date'
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:molassay_query], dt_fld)
+
     sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
     return sql_where_clause
+
   end
 
   def molassay_query_params
-    params.require(:molassay_query).permit(:patient_id, :owner, :from_date, :to_date)
+    params.require(:molassay_query).permit(:patient_string, :owner, :from_date, :to_date)
   end
   
  end

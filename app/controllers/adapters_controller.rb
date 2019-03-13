@@ -69,7 +69,7 @@ protected
   def create_params
     params.require(:adapter).permit(:runtype_adapter, :mplex_splex, :multi_indices, :index_position, :tag_length,
                                     :index1_prefix, :index2_prefix,
-                                    index_tags_attributes: [:index_read, :tag_nr, :tag_sequence] )
+                                    index_tags_attributes: [:id, :index_read, :tag_nr, :tag_sequence, :_destroy] )
   end
 
   def update_params

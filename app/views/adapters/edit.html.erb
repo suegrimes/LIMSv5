@@ -1,18 +1,17 @@
-<h1>Editing Adapter</h1>
+<h5>Editing adapter</h5>
 
 <%= form_for(@adapter) do |f| %>
   <%= render '/shared/errors', model: @adapter %>
-  
-  <fieldset class="form">
-  <legend>Adapter: <%=h @adapter.runtype_adapter %></legend>
 
-  <div id="idx_tag">
-    <%= render :partial => 'index_tags', :locals => {:index_tags => @adapter.index_tags, :f => f} %>
+  <div class="card">
+    <h6 class="card-header">Adapter Details:</h6>
+    <div class="card-body">
+
+      <%= render :partial => 'adapter_form', :locals => {f: f} %>
+
+      <%=f.submit "Update", class: "btn btn-primary" %>
+    </div>
   </div>
-  </fieldset>
-  
-  <%=raw break_clear(f.submit "Update" )%>
-<% end %>
 
-<%= link_to 'Show', @adapter %> |
-<%= link_to 'Back', adapters_path %>
+  <div class="links"><%= link_to 'Show', @adapter %> | <%= link_to 'List All', adapters_path %></div>
+<% end %>

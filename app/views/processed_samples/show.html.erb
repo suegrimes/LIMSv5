@@ -35,11 +35,11 @@
   </thead>
 
   <% for lib_sample in @processed_sample.lib_samples %>
-  <!-- if lib_sample.seq_lib -->
-  <% if 'a' == 'b' %>
+  <% if lib_sample.seq_lib %>
     <% seq_lib = lib_sample.seq_lib %>
     <tr>
-  	  <td><%= link_to seq_lib.lib_barcode, seq_lib %></td>
+  	  <td><%=h seq_lib.lib_barcode %></td>
+        <!--%= link_to seq_lib.lib_barcode, seq_lib %-->
       <td><%=h seq_lib.library_type %></td>
       <td><%=h seq_lib.lib_name %></td>
 	  <td><%=h seq_lib.owner_abbrev %></td>

@@ -25,7 +25,8 @@ class CategoriesController < ApplicationController
 
   # POST /categories
   def create
-    @category = Category.new(params[:category].merge!(:cgroup_id => 8))
+    params[:category].merge!(:cgroup_id => 8)
+    @category = Category.new(create_params)
     
     if @category.save
       flash[:notice] = 'Category and values were successfully created.'
@@ -39,7 +40,7 @@ class CategoriesController < ApplicationController
   def update
     
     @category = Category.find(params[:id])
-    if @category.update_attributes(params[:category])
+    if @category.update_attributes(update_params)
       
       # Delete any category value records which were removed/deleted from edit screen
       params[:category][:category_values_attributes].each do |ckey, cattrs|
@@ -65,7 +66,7 @@ class CategoriesController < ApplicationController
 protected
   def create_params
     params.require(:category).permit(:cgroup_id, :category, :category_description,
-                             category_values_attributes: [:c_position, :c_value, :_destroy])
+                             category_values_attributes: [:id, :c_position, :c_value, :_destroy])
   end
 
   def update_params

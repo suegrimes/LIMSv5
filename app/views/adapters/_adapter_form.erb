@@ -1,0 +1,51 @@
+<div class="form-group row">
+  <%= f.label(:runtype_adapter, 'Adapter', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-auto">
+    <%= f.text_field :runtype_adapter, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group row">
+  <%= f.label(:mplex_splex, 'Mplex/Splex', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.select(:mplex_splex, %w{M S}, {}, {class: "form-control"}) %>
+  </div>
+
+  <%= f.label(:index_position, 'Index Pos', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.select(:index_position, %w{I R1}, {}, {class: "form-control"}) %>
+  </div>
+</div>
+
+<div class="form-group row">
+  <%= f.label(:multi_indices, 'Multi Idx?', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.select(:multi_indices, %w{Y N}, {}, {class: "form-control"}) %>
+  </div>
+
+  <%= f.label(:index1_prefix, 'I1-prefix', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.text_field(:index1_prefix, class: "form-control") %>
+  </div>
+
+  <%= f.label(:index2_prefix, 'I2-prefix', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.text_field(:index2_prefix, class: "form-control") %>
+  </div>
+</div>
+
+<h6 class="card-header">Multiplex Indices:</h6>
+<div class="card-body">
+<%= f.fields_for :index_tags, :wrapper => 'inline' do |t| %>
+  <div class="form-group row">
+    <%= render :partial => 'index_tag_fields', :locals => {f: t} %>
+  </div>
+<% end %>
+
+<div class="form-group row">
+  <div class="col-sm-2">
+    <%= link_to_add_association 'add value', f, :index_tags %>
+  </div>
+</div>
+
+</div>
