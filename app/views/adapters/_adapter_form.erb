@@ -37,9 +37,7 @@
 <h6 class="card-header">Multiplex Indices:</h6>
 <div class="card-body">
 <%= f.fields_for :index_tags, :wrapper => 'inline' do |t| %>
-  <div class="form-group row">
-    <%= render :partial => 'index_tag_fields', :locals => {f: t} %>
-  </div>
+  <%= render :partial => 'index_tag_fields', :locals => {f: t} %>
 <% end %>
 
 <div class="form-group row">
