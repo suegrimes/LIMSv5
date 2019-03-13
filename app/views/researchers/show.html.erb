@@ -1,0 +1,27 @@
+<h5>View Researcher</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Name</th>
+    <th>Initials</th>
+    <th>Login</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @researcher.researcher_name %></td>
+    <td><%=h @researcher.researcher_initials %></td>
+    <td><%=h @researcher.user.login if @researcher.user %></td>
+  </tr>
+</table>
+
+<p>
+  <% if can? :edit, @researcher %>
+    <%= link_to 'Edit', edit_researcher_path(@researcher) %> |
+  <% end %>
+  <% if can? :delete, @researcher %>
+    <%= link_to 'Delete', @researcher, data: { confirm: 'Are you sure?' }, :method => :delete %> |
+  <% end %>
+  <%=link_to 'List All', researchers_path %>
+</p>

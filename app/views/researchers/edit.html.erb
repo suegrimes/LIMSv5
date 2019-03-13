@@ -1,0 +1,11 @@
+<h5>Editing researcher</h5>
+
+<%= form_for(@researcher) do |f| %>
+  <%= render '/shared/errors', model: @researcher %>
+
+  <%= render :partial => 'researcher_form', :locals => {:f => f} %>
+
+  <%= f.submit "Update", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'List All', researchers_path %>
+<% end %>
+
+

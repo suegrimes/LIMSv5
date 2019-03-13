@@ -125,6 +125,7 @@ Rails.application.routes.draw do
   resources :alignment_refs, :only => [:new, :create, :edit, :update, :index]
   resources :seq_machines
   resources :freezer_locations
+  resources :researchers
 
   # test route
   get 'test' => 'test#index'
