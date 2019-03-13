@@ -32,9 +32,7 @@ Rails.application.routes.draw do
 
   # Routes for H&E slides
   resources :histologies do
-    collection do
-      get :auto_complete_for_barcode_key
-    end
+    get :auto_complete_for_barcode_key, on: :collection
   end
   get 'new_histology' => 'histologies#new_params', :as => :new_he_slide
 
@@ -74,6 +72,7 @@ Rails.application.routes.draw do
   match 'add_extraction' => 'processed_samples#new', :via => [:get, :post]
   match 'edit_psamples' => 'processed_samples#edit_by_barcode', :as => :edit_psamples, :via => [:get, :post]
   match 'samples_processed' => 'processed_samples#show_by_sample', :as => :samples_processed, :via => [:get, :post]
+
   resources :psample_queries, :only => :index
   get 'processed_query' => 'psample_queries#new_query', :as => :processed_query
   match 'export_psamples' => 'psample_queries#export_samples', :as => :export_psamples, :via => [:post]
@@ -123,7 +122,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :adapters
   resources :index_tags
-  resources :alignment_refs
+  resources :alignment_refs, :only => [:new, :create, :edit, :update, :index]
   resources :seq_machines
   resources :freezer_locations
 

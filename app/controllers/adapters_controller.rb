@@ -5,14 +5,11 @@ class AdaptersController < ApplicationController
   # GET /adapters
   def index
     @adapters = Adapter.order(:runtype_adapter).includes(:index_tags).all
-    #render 'debug'
   end
 
   # GET /adapters/1
   def show
     @adapter = Adapter.includes(:index_tags).order('index_tags.index_read, index_tags.tag_nr').find(params[:id])
-    #@adapter.index_tags.sort_by! {|itag| [itag.index_read, itag.tag_nr]}
-    #render 'debug'
   end
 
   # GET /adapters/new

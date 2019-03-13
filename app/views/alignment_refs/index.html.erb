@@ -1,24 +1,26 @@
-<h1>Alignment References</h1>
+<h5>Alignment References</h5>
 
-<table class="list">
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
   <tr>
-    <th>Alignment Key</th>
-    <th>Interface Name</th>
-	<th>Genome Build</th>
+    <th>Reference Key</th>
+    <th>Reference Name</th>
+	  <th>Genome Build</th>
     <th colspan="2"></th>
   </tr>
+  </thead>
 
 <% for alignment_ref in @alignment_refs %>
   <tr>
     <td><%=h alignment_ref.alignment_key %></td>
     <td><%=h alignment_ref.interface_name %></td>
-	<td><%=h alignment_ref.genome_build %></td>
-	<% if can? :edit, alignment_ref %>
+	  <td><%=h alignment_ref.genome_build %></td>
+	  <% if can? :edit, alignment_ref %>
       <td><%= link_to 'Edit', edit_alignment_ref_path(alignment_ref) %></td>
-	<% end %>
-	<% if can? :delete, alignment_ref %>
-      <td><%= link_to 'Delete', alignment_ref, :confirm => 'Are you sure?', :method => :delete %></td>
-	<% end %>
+	  <% end %>
+	  <% if can? :delete, alignment_ref %>
+      <td><%= link_to 'Delete', alignment_ref, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
+	  <% end %>
   </tr>
 <% end %>
 </table>
