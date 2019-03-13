@@ -30,23 +30,13 @@ protected
   def dropdowns
     @owners       = Researcher.populate_dropdown('all')
   end
-  
+
   def define_conditions(params)
-    @where_select = []; @where_values = [];
-    
-    if !param_blank?(params[:molassay_query][:patient_id])
-      @where_select.push('processed_samples.patient_id = ?')
-      @where_values.push(params[:molassay_query][:patient_id])
-    end
-    
-    if !param_blank?(params[:molassay_query][:owner])
-      @where_select.push('molecular_assays.owner IN (?)')
-      @where_values.push(params[:molassay_query][:owner])
-    end
-    
-    date_fld = 'molecular_assays.preparation_date'
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:molassay_query], date_fld)
-    
+    @where_select, @where_values = build_sql_where(params[:molassay_query], MolassayQuery::QUERY_FLDS, [], [])
+
+    dt_fld = 'molecular_assays.processing_date'
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:psample_query], dt_fld)
+
     sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
     return sql_where_clause
   end

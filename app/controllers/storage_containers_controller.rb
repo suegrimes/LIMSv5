@@ -68,20 +68,14 @@ class StorageContainersController < ApplicationController
   end
 
   def define_conditions(params)
-    @where_select = []
-    @where_values = []
+    @where_select = []; @where_values = [];
+    query_params = params[:freezer_location].merge(params[:storage_type])
 
-    unless param_blank?(params[:freezer_location][:freezer_location_id])
-      @where_select.push('storage_containers.freezer_location_id = ?')
-      @where_values.push(params[:freezer_location][:freezer_location_id])
-    end
-
-    if param_blank?(params[:storage_type][:container_type])
+    if param_blank?(query_params[:container_type])
       @where_select.push('storage_containers.container_type IS NOT NULL')
-    else
-      @where_select.push('storage_containers.container_type = ?')
-      @where_values.push(params[:storage_type][:container_type])
     end
+
+    @where_select, @where_values = build_sql_where(query_params, StorageContainer::QUERY_FLDS, @where_select, @where_values)
 
     sql_where_clause = (@where_select.empty? ? [] : [@where_select.join(' AND ')].concat(@where_values))
     return sql_where_clause

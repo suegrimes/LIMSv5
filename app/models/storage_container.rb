@@ -14,6 +14,9 @@ class StorageContainer < ApplicationRecord
   belongs_to :freezer_location
   has_many :sample_storage_containers
 
+  STD_FIELDS = {'storage_containers' => %w(freezer_location_id container_type)}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => {}}
+
   def container_sort
     (container_name =~ /\A\d\Z/ ? '0' + container_name : container_name)
   end

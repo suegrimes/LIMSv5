@@ -36,7 +36,7 @@ class PsampleQuery
 
   STD_FIELDS = {'sample_characteristics' => %w(consent_protocol_id clinic_or_location pathology),
                 'samples' => %w(sample_tissue sample_type tissue_preservation tumor_normal),
-                'processed_sample' => %w(barcode_key protocol_id extraction_type updated_by)}
+                'processed_samples' => %w(barcode_key protocol_id extraction_type updated_by)}
 
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['samples.patient_id']},
                    :barcode_string => {:sql_attr => ['samples.source_barcode_key', 'samples.barcode_key', 'processed_samples.barcode_key']}}
