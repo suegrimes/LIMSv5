@@ -13,6 +13,7 @@
     <th>Remaining?</th>
     <th>Room/Freezer</th>
     <th>Storage Container</th>
+    <th></th>
   </tr>
   </thead>
 
@@ -32,6 +33,6 @@
   </tr>
 
   <% unless processed_sample.comments.blank? %>
-    <tr><td></td><td colspan="9"><%=h processed_sample.comments %></td></tr>
+    <tr><td></td><td colspan="11">Notes: <%=h processed_sample.comments %></td></tr>
   <% end %>
 </table>

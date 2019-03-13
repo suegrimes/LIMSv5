@@ -1,0 +1,34 @@
+<h5>Freezer locations</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Room</th>
+    <th>Freezer</th>
+    <th>Owner Name</th>
+    <th>Owner email</th>
+    <th>Comments</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+<% for freezer_location in @freezer_locations %>
+  <tr>
+    <td><%=h freezer_location.room_nr %></td>
+    <td><%=h freezer_location.freezer_nr %></td>
+    <td><%=h freezer_location.owner_name %></td>
+	<td><%=h freezer_location.owner_email %></td>
+	<td><%=h freezer_location.comments %></td>
+	<% if can? :edit, freezer_location %>
+      <td><%= link_to 'Edit', edit_freezer_location_path(freezer_location) %></td>
+	<% end %>
+	<% if can? :delete, freezer_location %>
+      <td><%= link_to 'Delete', freezer_location, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
+	<% end %>
+  </tr>
+<% end %>
+</table>
+
+<% if can? :new, FreezerLocation.new %>
+  <%= link_to 'New freezer location', new_freezer_location_path %>
+<% end %>

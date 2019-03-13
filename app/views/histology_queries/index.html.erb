@@ -37,7 +37,7 @@
         <% end %></td>
 	
 	<td><% if can? :delete, histology %>
-	    <%= link_to 'Delete', histology, :confirm => 'Are you sure?', :method => :delete %>
+	    <%= link_to 'Delete', histology, data: { confirm: 'Are you sure?' }, :method => :delete %>
 	<% end %></td>
   </tr>
   <% end %>

@@ -1,0 +1,25 @@
+<div class="col-sm-12 nested-fields form-group form-group-sm row">
+  <%= f.hidden_field(:id) %>
+
+  <% if f.object.adapter.multi_indices == "Y" %>
+    <%= f.label(:index_read, 'Index#', class: "col-auto col-form-label col-form-label-sm")%>
+    <div class="col-md-1">
+      <%=f.select(:index_read, %w{1 2}, {}, {class: "form-control"}) %>
+    </div>
+  <% else %>
+    <%=f.hidden_field(:index_read, :value => 1) %>
+  <% end %>
+
+  <%= f.label(:tag_nr, 'Tag#', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-2">
+    <%=f.text_field(:tag_nr, class: "form-control") %>
+  </div>
+
+  <%= f.label(:tag_sequence, 'Sequence', class: "col-auto col-form-label col-form-label-sm")%>
+  <div class="col-md-3">
+    <%=f.text_field(:tag_sequence, class: "form-control") %>
+  </div>
+
+  <div class="links col-md-2"><%= link_to_remove_association "Remove", f %></div>
+</div>
+

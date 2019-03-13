@@ -1,0 +1,32 @@
+<h6>View Freezer Location</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Room</th>
+    <th>Freezer</th>
+    <th>Owner Name</th>
+    <th>Owner Email</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @freezer_location.room_nr %></td>
+    <td><%=h @freezer_location.freezer_nr %></td>
+    <td><%=h @freezer_location.owner_name %></td>
+    <td><%=h @freezer_location.owner_email %></td>
+  </tr>
+
+  <% unless @freezer_location.comments.blank? %>
+    <tr>
+      <td></td>
+      <td colspan="3">Comments: <%=h @freezer_location.comments %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p>
+  <% if can? :edit, @freezer_location %>
+    <%= link_to 'Edit', edit_freezer_location_path(@freezer_location) %> |
+  <% end %>
+  <%=link_to 'List All', freezer_locations_path %>
+</p>

@@ -6,7 +6,7 @@
     <th>Consent #</th>
     <th>Protocol Name</th>
 	<th>Owner/Email</th>
-	<th colspan=2></th>
+	<th colspan="2"></th>
   </tr>
   </thead>
 
@@ -19,7 +19,7 @@
         <%= link_to 'Edit', edit_consent_protocol_path(consent_protocol) %>
 	    <% end %></td>
 	<td><% if can? :delete, consent_protocol %>
-        <%= link_to 'Delete', consent_protocol, :confirm => 'Are you sure?', :method => :delete %>
+        <%= link_to 'Delete', consent_protocol, data: { confirm: 'Are you sure?' }, :method => :delete %>
 	    <% end %></td>
   </tr>
 <% end %>

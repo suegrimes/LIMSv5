@@ -1,0 +1,41 @@
+<div class="card">
+  <h6 class="card-header">Freezer Location</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="room_nr" class="col-auto col-form-label col-form-label-sm">Room:</label>
+      <div class="col-auto">
+        <%= f.text_field :room_nr, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="freezer_nr" class="col-auto col-form-label col-form-label-sm">Freezer:</label>
+      <div class="col-auto">
+        <%= f.text_field :freezer_nr, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="owner_name" class="col-auto col-form-label col-form-label-sm">Owner Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :owner_name, :cols => 30, :rows => 2, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="owner_email" class="col-auto col-form-label col-form-label-sm">Owner Email:</label>
+      <div class="col-auto">
+        <%= f.text_field :owner_email, size:30, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+      <div class="col-auto">
+        <%= f.text_field :comments, size:80, class: "form-control" %>
+      </div>
+    </div>
+
+  </div>
+</div>

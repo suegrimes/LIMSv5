@@ -34,15 +34,16 @@ protected
   def define_conditions(params)
     @where_select, @where_values = build_sql_where(params[:molassay_query], MolassayQuery::QUERY_FLDS, [], [])
 
-    dt_fld = 'molecular_assays.processing_date'
+    dt_fld = 'molecular_assays.preparation_date'
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:psample_query], dt_fld)
 
     sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
     return sql_where_clause
+
   end
 
   def molassay_query_params
-    params.require(:molassay_query).permit(:patient_id, :owner, :from_date, :to_date)
+    params.require(:molassay_query).permit(:patient_string, :owner, :from_date, :to_date)
   end
   
  end

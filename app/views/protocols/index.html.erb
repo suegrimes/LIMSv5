@@ -8,7 +8,7 @@
 	<th>Code</th>
     <th>Protocol version</th>
 	<th>Reference</th>
-	<th colspan=3></th>
+	<th colspan="3"></th>
   </tr>
   </thead>
 
@@ -25,7 +25,7 @@
       <td><%= link_to 'Edit', edit_protocol_path(protocol) %></td>
 	<% end %>
 	<% if can? :delete, protocol %>
-      <td><%= link_to 'Delete', protocol, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Delete', protocol, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
 	<% end %>
 	
   </tr>

@@ -31,8 +31,8 @@ module SqlQueryBuilder
     str_prefix = (fld_dtls.has_key?(:str_prefix) ? fld_dtls[:str_prefix] : '')
     str_pad_len = (fld_dtls.has_key?(:pad_len) ? fld_dtls[:pad_len] : nil)
     fld_vals, fld_ranges, errors = compound_string_params(str_prefix, str_pad_len, param_val)
-    puts "Processing parameter for SQL fld(s): #{sql_flds}"
-    puts fld_vals.inspect, fld_ranges.inspect
+    #puts "Processing parameter for SQL fld(s): #{sql_flds}"
+    #puts fld_vals.inspect, fld_ranges.inspect
 
     if !fld_vals.empty?
       fld_in = sql_flds.map{|fld| fld + " IN (?)"}
