@@ -12,7 +12,7 @@
 #
 
 class AlignmentRef < ApplicationRecord
-  DEFAULT_REF = 'HWG_37.1'
+  DEFAULT_REF = 'GRCh38'
 
   def self.default_id
     self.where(:alignment_key => DEFAULT_REF).pluck(:id).first
@@ -27,7 +27,6 @@ class AlignmentRef < ApplicationRecord
   end
 
   def self.get_align_key(id=nil)
-    return nil if id.nil?
-    self.find(id).alignment_key
+    return (id.nil? ? nil : self.find(id).alignment_key)
   end
 end

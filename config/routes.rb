@@ -123,6 +123,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :adapters
   resources :index_tags
+  resources :alignment_refs
   resources :seq_machines
   resources :freezer_locations
 

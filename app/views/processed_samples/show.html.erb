@@ -61,8 +61,7 @@
 
 <h6>Molecular Assays 
   <% if @processed_sample.molecular_assays %> (<%= @processed_sample.molecular_assays.size %> assays) <% end %></h6>
-  <!-- if @processed_sample.molecular_assays && @processed_sample.molecular_assays.size > 0 -->
-  <% if 'a' == 'b' %>
+  <% if @processed_sample.molecular_assays && @processed_sample.molecular_assays.size > 0 %>
   <table class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
@@ -86,6 +85,4 @@
   </tr>
   <% end %>
 </table>
-<% else %>
-<%=raw break_clear %>
 <% end %>

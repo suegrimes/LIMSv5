@@ -1,15 +1,38 @@
-<p>
-  <b>Adapter:</b>
-  <%=h @adapter.runtype_adapter %>
-</p>
+<h5>Adapter</h5>
 
-<table class="list">
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Adapter</th>
+    <th>Nr Tags</th>
+    <th>Mplex/Splex</th>
+    <th>Index Pos</th>
+    <th>2Index?</th>
+    <th>I1 Prefix</th>
+    <th>I2 Prefix</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @adapter.runtype_adapter %></td>
+    <td align="center"><%=h @adapter.index_tags.size %></td>
+    <td align="center"><%=h @adapter.mplex_splex %></td>
+    <td><%=h @adapter.index_position %></td>
+    <td align="center"><%=h @adapter.multi_indices %></td>
+    <td><%=h @adapter.index1_prefix %></td>
+    <td><%=h @adapter.index2_prefix %></td>
+  </tr>
+</table>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
   <tr>
     <th>Index Read</th>
     <th>Tag#</th>
     <th>Sequence</th>
     <th colspan=2></th>
   </tr>
+  </thead>
 
   <% for index_tag in @adapter.index_tags %>
       <tr>

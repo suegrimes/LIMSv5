@@ -1,6 +1,6 @@
 class StorageQueriesController < ApplicationController
   authorize_resource :class => SampleLoc
-  before_filter :dropdowns, :only => :new_query
+  before_action :dropdowns, :only => :new_query
   
   def new_query
     @storage_query = StorageQuery.new(:to_date   => Date.today)

@@ -1,0 +1,11 @@
+<h1>Update alignment reference</h1>
+
+<%= form_for(@alignment_ref) do |f| %>
+    <%= render '/shared/errors', model: @alignment_ref %>
+
+  <%= render :partial => 'alignment_ref', :locals => {:f => f} %>
+    
+  <%=f.submit "Update" %>
+<% end %>
+
+<%= link_to 'List All', alignment_refs_path %>

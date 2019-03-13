@@ -27,7 +27,7 @@
     <td><%=h adapter.index1_prefix %></td>
     <td><%=h adapter.index2_prefix %></td>
 	  <td><% if can? :edit, adapter %>
-        <%= link_to 'Edit', edit_adapter_path(adapter) %></td>
+        <%= link_to 'Edit', edit_adapter_path(adapter) %>
 	      <% end %></td>
 	  <td><% if can? :delete, adapter %>
         <%= link_to 'Delete', adapter, data: { confirm: 'Are you sure?' }, :method => :delete %>
