@@ -102,6 +102,11 @@ Rails.application.routes.draw do
 
   resources :sample_storage_containers, :only => [:edit, :update]
 
+  # Routes for sequencing libraries
+  resources :seqlib_queries, :only => :index
+  get 'seqlib_query' => 'seqlib_queries#new_query'
+  match 'export_seqlibs' => 'seqlib_queries#export_seqlibs', :as => :export_seqlibs, :via => :post
+
   # Routes for handling file attachments
   resources :attached_files
   match 'attach_params' => 'attached_files#get_params', :as => :attach_params, :via => [:get, :post]
@@ -122,6 +127,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :adapters
   resources :index_tags
+  resources :oligo_pools, :only => :index
   resources :alignment_refs, :only => [:new, :create, :edit, :update, :index]
   resources :seq_machines
   resources :freezer_locations

@@ -1,13 +1,12 @@
 <%= form_for @molassay_query, :action => 'index', :method => :get do |f| %>
 <%= render '/shared/errors', model: @molassay_query, header_message: 'Error(s) in query parameters' %>
-<!--%= f.error_messages(:header_message => "Error(s) in query parameters") %-->
 
 <div class="card">
   <h6 class="card-header">Molecular Assay Query</h6>
   <div class="card-body">
 
   <div class="form-group row">
-    <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
+    <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
     <div class="col-auto">
       <%= f.text_field(:patient_string, class: "form-control")%>
     </div>
@@ -23,13 +22,11 @@
   <div class="form-group row">
     <label for="from_date" class="col-auto col-form-label col-form-label-sm">Assay Date From:</label>
     <div class="col-auto">
-<%#= f.datepicker 'from_date', size: 15, dateFormat: "yy-mm-dd", maxDate: '0', changeMonth: true, changeYear: true %>
       <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
     </div>
 
     <label for="to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
     <div class="col-auto">
-<%#= f.datepicker 'to_date', dateFormat: "yy-mm-dd", maxDate: '0', changeMonth: true, changeYear: true, yearRange: '-1', size: 15 %>
       <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
     </div>
   </div>
@@ -41,6 +38,5 @@
   </div>
 
 <%end%>
-
-
-
+</div>
+</div>

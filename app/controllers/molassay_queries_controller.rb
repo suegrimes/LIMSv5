@@ -1,9 +1,6 @@
 class MolassayQueriesController < ApplicationController
   include SqlQueryBuilder
-
   layout 'main/samples'
-
-  authorize_resource :class => MolecularAssay
   
   before_action :dropdowns, :only => :new_query
   

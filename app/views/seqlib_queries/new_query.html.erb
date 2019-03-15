@@ -1,0 +1,61 @@
+<h5>Sequencing Library Query</h5>
+
+<%= form_for(@seqlib_query, :action=> 'index', :method => :get) do |f| %>
+<%= render '/shared/errors', model: @seqlib_query, header_message: 'Error(s) in query parameters' %>
+  <div class="card">
+    <h6 class="card-header">Sequencing Library Query</h6>
+    <div class="card-body">
+      <div class="form-group row">
+        <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
+        <div class="col-auto">
+          <%= f.text_field(:patient_string, class: "form-control")%>
+        </div>
+        <div class="col-auto">
+          <p class="font-italic font-sm"> Enter patient ids separated by commas; enter ranges with '-'. Eg. '525-526,2575' </p>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode(s):</label>
+        <div class="col-auto">
+          <%= f.text_field(:barcode_string, class: "form-control")%>
+        </div>
+        <div class="col-auto">
+          <p class="font-italic font-sm">Enter barcodes as integers separated by commas; enter ranges with '-' Eg. '1160,1378-1400'</p>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label>
+        <div class="col-auto">
+          <%= f.select(:owner, @owners, {:include_blank => '(All)'},{:size => 3, :multiple => :multiple, class: "form-control"}) %>
+        </div>
+
+        <label for="project" class="col-auto col-form-label col-form-label-sm">Project(s):</label>
+        <div class="col-auto">
+          <%= f.collection_select(:project, @projects, :project, :project, {:include_blank => '(All)'},
+                                  {:size => 3, :multiple => :multiple, :class => "form-control"}) %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label>
+        <div class="col-auto">
+          <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
+        </div>
+
+        <label for="to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
+        <div class="col-auto">
+          <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-auto">
+          <%=submit_tag "Submit", class: "btn btn-primary" %>
+        </div>
+      </div>
+
+<%end%>
+</div>
+</div>
