@@ -160,9 +160,9 @@ logger("detaching exist_new_fields");
   });
 }
 
-// call teh apporporiate init function(s) after checking
+// call the appropriate init function(s) after checking
 // the presence of template sections
-// usefull for use after loading template with ajax calls
+// useful for use after loading template with ajax calls
 function ajax_storage_container_init() {
   if ($("div.existing-new-container-fields").length > 0 ) {
     storage_container_init();

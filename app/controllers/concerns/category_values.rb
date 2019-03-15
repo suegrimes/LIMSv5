@@ -2,7 +2,7 @@ module CategoryValues
   extend ActiveSupport::Concern
 
   # The methods in this file have names constructed from a
-  # modele.name.underscore + a suffix which is either: "_values" or "_mapped_values"  
+  # model.name.underscore + a suffix which is either: "_values" or "_mapped_values"
   #
   # values methods return a hash where the keys are attribute names and
   # values are an array of allowable values for that attribute
