@@ -21,6 +21,6 @@ STD_FIELDS = {'sample_characteristics' => %w(consent_protocol_id clinic_or_locat
               'samples' => %w(patient_id alt_identifier tumor_normal sample_tissue sample_type tissue_preservation)}
 COMBO_FIELDS = {:barcode_string => {:sql_attr => ['samples.barcode_key']}}
 
-QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS}
+QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 
 end

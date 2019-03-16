@@ -31,5 +31,5 @@ class HistologyQuery
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['samples.patient_id']},
                    :barcode_string => {:sql_attr => ['samples.barcode_key', 'histologies.he_barcode_key']}}
 
-  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

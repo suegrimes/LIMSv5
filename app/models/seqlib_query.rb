@@ -20,11 +20,11 @@ class SeqlibQuery
   validates_date :to_date, :from_date, :allow_blank => true
 
   SEARCH_FLDS = {'seq_libs' => %w(lib_name)}
-  STD_FIELDS = {'seq_libs' => %w(owner lib_name project alignment_ref), 'processed_samples' => %w(patient_id)}
+  STD_FIELDS  = {'seq_libs' => %w(owner project alignment_ref), 'processed_samples' => %w(patient_id)}
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['processed_samples.patient_id']},
                   :barcode_string => {:sql_attr => ['seq_libs.barcode_key']}}
 
   #TODO: Add lib_name search capability
-  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => SEARCH_FLDS}
 
 end

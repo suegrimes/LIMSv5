@@ -14,6 +14,18 @@ module SqlQueryBuilder
       end
     end
 
+    query_fields['search'].each do |sqltable, sql_attr|
+      sql_attr.each do |attr|
+        if params.has_key?(attr.to_sym)
+          attr_val = sql_value(params[attr.to_sym])
+          unless attr_val.blank?
+            where_select.push("#{sqltable}.#{attr} LIKE ?" )
+            where_values.push("%#{attr_val}%")
+          end
+        end
+      end
+    end
+
     query_fields['multi_range'].each do |fld, fld_dtls|
         if params.has_key?(fld.to_sym) and !params[fld.to_sym].blank?
           tmp_select, tmp_values   = sql_compound_condition(fld_dtls[:sql_attr],params[fld.to_sym], fld_dtls)

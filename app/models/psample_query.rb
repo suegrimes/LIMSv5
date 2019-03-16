@@ -41,5 +41,5 @@ class PsampleQuery
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['samples.patient_id']},
                    :barcode_string => {:sql_attr => ['samples.source_barcode_key', 'samples.barcode_key', 'processed_samples.barcode_key']}}
 
-  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

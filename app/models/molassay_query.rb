@@ -22,5 +22,5 @@ class MolassayQuery
   STD_FIELDS = {'molecular_assays' => %w(owner)}
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['processed_samples.patient_id']}}
 
-  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

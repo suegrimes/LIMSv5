@@ -5,38 +5,47 @@
   <div class="card">
     <h6 class="card-header">Sequencing Library Query</h6>
     <div class="card-body">
+      <p class="font-italic font-sm">For barcodes and patients: Enter individual codes separated by commas, enter ranges with '-'. Eg. '1160,1378-1400,1599' </br>
+        Enter library barcodes as integers (no 'L' prefix)</p>
+
       <div class="form-group row">
-        <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
-        <div class="col-auto">
+        <label for="patient_string" class="col-sm-2 col-form-label col-form-label-sm">Patient ID(s):</label>
+        <div class="col-sm-3">
           <%= f.text_field(:patient_string, class: "form-control")%>
         </div>
-        <div class="col-auto">
-          <p class="font-italic font-sm"> Enter patient ids separated by commas; enter ranges with '-'. Eg. '525-526,2575' </p>
-        </div>
       </div>
 
       <div class="form-group row">
-        <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode(s):</label>
-        <div class="col-auto">
+        <label for="barcode_string" class="col-sm-2 col-form-label col-form-label-sm">Lib Barcode(s):</label>
+        <div class="col-sm-3">
           <%= f.text_field(:barcode_string, class: "form-control")%>
         </div>
-        <div class="col-auto">
-          <p class="font-italic font-sm">Enter barcodes as integers separated by commas; enter ranges with '-' Eg. '1160,1378-1400'</p>
+        <label for="lib_name" class="col-sm-2 col-form-label col-form-label-sm">Lib Name (search):</label>
+        <div class="col-sm-3">
+          <%= f.text_field(:lib_name, class: "form-control")%>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label>
-        <div class="col-auto">
+        <label for="owner" class="col-sm-2 col-form-label col-form-label-sm">Owner(s):</label>
+        <div class="col-sm-3">
           <%= f.select(:owner, @owners, {:include_blank => '(All)'},{:size => 3, :multiple => :multiple, class: "form-control"}) %>
         </div>
 
-        <label for="project" class="col-auto col-form-label col-form-label-sm">Project(s):</label>
-        <div class="col-auto">
-          <%= f.collection_select(:project, @projects, :project, :project, {:include_blank => '(All)'},
+        <label for="project" class="col-sm-2 col-form-label col-form-label-sm">Project(s):</label>
+        <div class="col-sm-3">
+          <%= f.select(:project, @projects, {:include_blank => '(All)'},
                                   {:size => 3, :multiple => :multiple, :class => "form-control"}) %>
         </div>
       </div>
+
+      <div class="form-group row">
+        <div class="col-sm-3" style="text-align:left"><%= check_box_tag(:excl_splex, 'N', false)%>&nbsp;Include singleplex libs?</div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3" style="text-align:left"><%= check_box_tag(:incl_used, 'Y', false)%>&nbsp;Include sequenced libs?</div>
+      </div>
+      </br>
 
       <div class="form-group row">
         <label for="from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label>
@@ -49,13 +58,13 @@
           <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
         </div>
       </div>
+  </div>
+</div>
 
-      <div class="form-group row">
-        <div class="col-auto">
-          <%=submit_tag "Submit", class: "btn btn-primary" %>
-        </div>
-      </div>
+  <div class="form-group row">
+    <div class="col-auto">
+      <%=submit_tag "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
 
 <%end%>
-</div>
-</div>

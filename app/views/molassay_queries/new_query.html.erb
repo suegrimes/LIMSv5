@@ -6,21 +6,21 @@
   <div class="card-body">
 
   <div class="form-group row">
-    <label for="patient_string" class="col-auto col-form-label col-form-label-sm">Patient ID(s):</label>
-    <div class="col-auto">
-      <%= f.text_field(:patient_string, class: "form-control")%>
+    <label for="patient_string" class="col-sm-2 col-form-label col-form-label-sm">Patient ID(s):</label>
+    <div class="col-sm-4">
+      <%= f.text_field(:patient_string, :size => "50x1", class: "form-control")%>
     </div>
   </div>
 
-    <div class="form-group row">
-      <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label>
-      <div class="col-auto">
-        <%= f.select(:owner, @owners, {:include_blank => '(All)'},{:size => 3, :multiple => :multiple, class: "form-control"}) %>
-      </div>
+  <div class="form-group row">
+    <label for="owner" class="col-sm-2 col-form-label col-form-label-sm">Owner(s):</label>
+    <div class="col-sm-3">
+      <%= f.select(:owner, @owners, {:include_blank => '(All)'},{:size => 3, :multiple => :multiple, class: "form-control"}) %>
     </div>
+  </div>
 
   <div class="form-group row">
-    <label for="from_date" class="col-auto col-form-label col-form-label-sm">Assay Date From:</label>
+    <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm">Assay Date From:</label>
     <div class="col-auto">
       <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
     </div>
@@ -31,12 +31,12 @@
     </div>
   </div>
 
+  </div>
+</div>
+
   <div class="form-group row">
     <div class="col-auto">
       <%=submit_tag "Submit", class: "btn btn-primary" %>
     </div>
   </div>
-
 <%end%>
-</div>
-</div>
