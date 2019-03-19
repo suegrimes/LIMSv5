@@ -123,3 +123,17 @@ fieldset.info legend {
     color: #999;
 }
 
+/* Other general styles */
+
+.grey {color:#888;}
+.ltgrey {color:#ddd;}
+.palegrey {color:#eee;}
+.dkred {color:#990000;}
+.sagegreen {color: #e8ead0;}
+.ltsage {color: #f1f2e3;}
+.brightred {color: #FF0000;}
+
+.greyfill {background-color: #ddd;}
+
+.lft {float:left;}
+.rgt{float:right;}
