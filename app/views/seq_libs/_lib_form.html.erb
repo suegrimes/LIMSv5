@@ -1,0 +1,47 @@
+<div id="errorwarn"></div>
+<fieldset class="form">
+<legend class="form">Library defaults</legend>
+<table class="form" border="0">
+<tr>
+  <th>Prep Date:</th><td><%= datepicker_input('lib_default', 'preparation_date', dateFormat: "yy-mm-dd", maxDate: '0', changeMonth: true, changeYear: true, size: 15) %></td>
+  <%= javascript_tag "$('#default_libs').submit(function() { 
+                        if (!$('#lib_default_preparation_date').val()) { 
+                          $(this).addClass('error'); $('#errorwarn').text('Date is required'); return false; 
+                        }
+                        if ($('#lib_default_preparation_date').val()) { 
+                          $(this).addClass('error'); $('#errorwarn').hide(); return true; 
+                        }                         
+                      });" %>
+
+  <th>Owner:</th><td><%= select_tag("lib_default[owner]", options_for_select(@owners, @requester))%></td> 
+  <th>Protocol:</th><td><%= collection_select(:lib_default, :protocol_id, @protocols, :id, :protocol_name,
+                           {:include_blank => 'Select Protocol'}) %></td>
+</tr>
+<tr> 
+  <th>Adapter:</th><td><%= collection_select(:lib_default, :adapter_id, @adapters, :id, :runtype_adapter) %></td>
+  <th><%=h Pool.human_attribute_name(:pool_name)%>:</th><td><%= collection_select(:lib_default, :pool_id, @oligo_pools, :id, :pool_string_dtl,
+                           {:include_blank => 'Select Pool'}) %></td>
+  <th>Enzyme:</th><td><%= collection_select(:sample_default, :enzyme_code, @enzymes, :c_value, :c_value, 
+                           {:include_blank => 'Select Enzyme'}, {:size => 3, :multiple => :multiple}) %></td>
+</tr>
+<tr> 
+  <th>Source DNA/RNA:</th><td><%= autocomplete_field_tag 'sample_default_source_DNA', '', processed_samples_autocomplete_processed_sample_barcode_search_path, name: 'sample_default[source_DNA]' %>
+  <th>Quantitation:</th><td><%= collection_select(:lib_default, :quantitation_method, @quantitation, :c_value, :c_value, {:include_blank => 'Select Method'}) %></td>
+  <th>Size(Final PCR)</th><td><%= text_field(:lib_default, :pcr_size, :size => 12)%></td>	
+</tr>
+<tr>
+  <th>FlowCell Conc:</th><td><%= text_field(:lib_default, :lib_conc_requested, :size => 10) %>&nbsp;pM</td>
+  <th>Align Ref:</th> <td><%= collection_select(:lib_default, :alignment_ref_id, @align_refs, :id, :alignment_key) %></td> 
+  <th>Trim Bases:</th><td><%= text_field(:lib_default, :trim_bases, :size => 10) %></td>	
+</tr>
+<tr>
+  <th>Notebook Ref:</th>
+  <td colspan="5"><%= text_field(:lib_default, :notebook_ref) %></td>
+</tr>
+<tr>  
+  <th>Notes:</th>
+  <td colspan="5"><%= text_field(:lib_default, :notes, :size => 80) %></td>
+</tr>
+</table>
+</fieldset>
+

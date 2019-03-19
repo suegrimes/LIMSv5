@@ -26,7 +26,7 @@
 <% for seq_lib in @seq_libs %>
   <%= hidden_field_tag("export_id[]", seq_lib.id) %>
   <tr>
-    <td><!--%= link_to seq_lib.lib_barcode, seq_lib %--><%=h seq_lib.lib_barcode %></td>
+    <td><%= link_to seq_lib.lib_barcode, seq_lib %></td>
 	<td>
 	  <% patient_ids = [] %>
 	  <% seq_lib.lib_samples.each do |lib_sample| %>
@@ -47,14 +47,14 @@
 	<td style="text-align:center"><%=h seq_lib.seq_lane_cnt%></td>
 	
 	<% if can? :edit, seq_lib %>
-	  <td><!--%= link_to 'Edit',   edit_seq_lib_path(seq_lib) %--></td>
+	  <td><%= link_to 'Edit',   edit_seq_lib_path(seq_lib) %></td>
 	<% end %>
 	
-	<td><!--%= link_to 'Attach', new_attached_file_path(:rec_type => 'seq_lib', :obj_id => seq_lib.id) %--></td>
+	<td><%= link_to 'Attach', new_attached_file_path(:rec_type => 'seq_lib', :obj_id => seq_lib.id) %></td>
 	
 	<% if seq_lib.lib_status == 'L' %>
 	  <% if can? :delete, seq_lib %>
-	  <td><!--%= link_to 'Delete', seq_lib, :confirm => 'Are you sure?', :method => :delete %--></td>
+	  <td><%= link_to 'Delete', seq_lib, :confirm => 'Are you sure?', :method => :delete %></td>
 	  <% end %>
     <% else %>
     <td class="ltgrey"> Delete </td>

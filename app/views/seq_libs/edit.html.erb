@@ -1,0 +1,35 @@
+<h5>Editing Sequencing Library: <%=h @seq_lib.lib_name %></h5>
+
+<%= form_for(@seq_lib) do |f| %>
+  <%= render '/shared/errors', model: @seq_lib %>
+  
+  <%= render :partial => 'seq_libs/lib_edit', :locals => {:f => f}%>
+
+  <div class="card">
+    <h6 class="card-header">Library Samples</h6>
+    <div class="card-body">
+
+    <div class="row">
+      <div class="col-2 col-form-label-sm text-center">Index1</div>
+      <div class="col-2 col-form-label-sm text-center">Index2</div>
+      <div class="col-3 col-form-label-sm text-center">Sample Name</div>
+      <div class="col-2 col-form-label-sm text-center">Source DNA</div>
+      <div class="col-3 col-form-label-sm text-center">Notes</div>
+    </div>
+
+      <%= f.fields_for :lib_samples do |s| %>
+      <div class="form-group row">
+        <div class="col-2"><%=s.collection_select(:index1_tag_id, @i1_tags, :id, :index1_code, {}, class: "form-control")%></div>
+        <div class="col-2"><%=s.collection_select(:index2_tag_id, @i2_tags, :id, :index2_code, {}, class: "form-control")%></div>
+        <div class="col-3"><%=s.text_field(:sample_name, class: "form-control")%></div>
+        <div class="col-2">
+          <%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, class: "form-control" %>
+        </div>
+        <div class="col-3"><%=s.text_field(:notes, class: "form-control")%></div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%=f.submit "Update", class: "btn btn-primary"%>
+<% end %>

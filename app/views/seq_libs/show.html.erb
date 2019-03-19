@@ -1,0 +1,35 @@
+<h5>Sequencing Library</h5>
+
+<%= render :partial => 'lib_show', :locals => {:seq_lib => @seq_lib} %>
+
+<% if @seq_lib.lib_samples.size > 0 %>
+  <% if @seq_lib.library_type == 'M' %>
+    <%= render :partial => 'mplex_show', :locals => {:lib_samples => @seq_lib.lib_samples} %>
+  <% else %>
+    <%= render :partial => 'splex_show', :locals => {:lib_samples => @seq_lib.lib_samples} %>
+  <% end %>
+<% end %>
+
+<%= render :partial => 'attached_files/show_file', :locals => {:obj => @seq_lib} %>
+
+<h6>Sequencing Lanes
+  <% if @seq_lib.flow_lanes %> (<%= @seq_lib.flow_lanes.size %> lanes) <% end %></h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Sequencing Run#</th>
+    <th>Lane</th>
+	  <th>Lib Barcode</th>
+	  <th>Lib Name</th>
+  </tr>
+  </thead>
+  <% for flow_lane in @seq_lib.flow_lanes %>
+  <tr>
+  	<td><!--%= link_to flow_lane.sequencing_key, flow_lane.flow_cell %--><%=h flow_lane.sequencing_key %></td>
+    <td><%=h flow_lane.lane_nr %></td>
+	<td><%=h flow_lane.lib_barcode %></td>
+	<td><%=h flow_lane.lib_name %></td>
+  </tr>
+  <% end %>
+</table>
+

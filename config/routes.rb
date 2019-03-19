@@ -103,6 +103,17 @@ Rails.application.routes.draw do
   resources :sample_storage_containers, :only => [:edit, :update]
 
   # Routes for sequencing libraries
+  get 'sequencing/main' => 'seq_libs#main_hdr'
+  resources :seq_libs, :except => :index do
+    get :get_adapter_info, on: :collection
+   end
+  post 'populate_libs' => 'seq_libs#populate_libs'
+
+  resources :mplex_libs do
+    get :auto_complete_for_barcode_key, on: :collection
+  end
+
+  # Routes for sequencing library queries
   resources :seqlib_queries, :only => :index
   get 'seqlib_query' => 'seqlib_queries#new_query'
   match 'export_seqlibs' => 'seqlib_queries#export_seqlibs', :as => :export_seqlibs, :via => :post

@@ -1,0 +1,110 @@
+<div class="card">
+  <h6 class="card-header">Sequencing Library</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+      <div class="col-auto">
+        <% if @seq_lib.dummy_barcode == false %><%= f.text_field :barcode_key, class: "form-control" %><% else %><%=h @seq_lib.lib_barcode %><% end %>
+      </div>
+
+      <label for="lib_name" class="col-auto col-form-label col-form-label-sm">Lib Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :lib_name, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="preparation_date" class="col-auto col-form-label col-form-label-sm">Prep Date:</label>
+      <div class="col-auto">
+        <%= f.date_field :preparation_date, class: "form-control" %>
+      </div>
+
+      <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner:</label>
+      <div class="col-auto">
+        <%= f.select(:owner, @owners, {:include_blank => "Select.."}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="protocol_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:protocol_id, @protocols, :id, :protocol_name,
+                                {:include_blank => 'Select Protocol'}, class: "form-control") %>
+      </div>
+
+      <label for="adapter" class="col-auto col-form-label col-form-label-sm">Adapter:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:adapter_id, @adapters, :id, :runtype_adapter, {},
+                                {:data => {:remote => true, :url => url_for(:action => 'get_adapter_info', :nested => 'yes', :row => 0)},
+                                 class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="pcr_size" class="col-auto col-form-label col-form-label-sm">Size(Final PCR):</label>
+      <div class="col-auto">
+        <%= f.text_field :pcr_size, class: "form-control" %>
+      </div>
+
+      <label for="quantitation_method" class="col-auto col-form-label col-form-label-sm">Quantitation:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:quantitation_method, @quantitation, :c_value, :c_value,
+                                {:include_blank => 'Select Method'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="sample_conc" class="col-auto col-form-label col-form-label-sm">Library Conc:</label>
+      <div class="col-auto">
+        <%= f.text_field(:sample_conc, :value => format_conc(@seq_lib.sample_conc, nil), size: 10, class: "form-control")%>
+      </div>
+      <div class="col-auto">
+        <% if @seq_lib.dummy_barcode == false %><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control") %><% else %> nM <% end %>
+      </div>
+
+      <label for="lib_conc_requested" class="col-auto col-form-label col-form-label-sm">FlowCell Conc:</label>
+      <div class="col-auto">
+        <%= f.text_field(:lib_conc_requested, :value => format_conc(@seq_lib.lib_conc_requested, nil), size: 10, class: "form-control") %>
+      </div>
+      <div class="col-form-label-sm">pM</div>
+    </div>
+
+    <div class="form-group row">
+      <label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %>
+      </div>
+
+      <label for="trim_bases" class="col-auto col-form-label col-form-label-sm">Trim Bases:</label>
+      <div class="col-auto">
+        <%= f.text_field(:trim_bases, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="project" class="col-auto col-form-label col-form-label-sm">Project:</label>
+      <div class="col-auto">
+        <%= f.text_field :project, class: "form-control" %>
+      </div>
+
+      <label for="pool_id" class="col-auto col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:pool_id, @oligo_pools, :id, :pool_string_dtl,
+                                {:include_blank => 'Select Pool'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="notebook_ref" class="col-auto col-form-label col-form-label-sm">Notebook Ref:</label>
+      <div class="col-auto">
+        <%= f.text_field :notebook_ref, class: "form-control" %>
+      </div>
+
+      <label for="notes" class="col-auto col-form-label col-form-label-sm">Notes:</label>
+      <div class="col-auto">
+        <%= f.text_area :notes, size: "60x2", class: "form-control" %>
+      </div>
+    </div>
+  </div>
+</div>

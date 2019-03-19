@@ -1,0 +1,41 @@
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+	  <th>Source Lib</th>
+    <th>Index1</th>
+    <th>Index2</th>
+	  <th>Lib Name</th>
+	  <th>Pool</th>
+	  <th>Sample Name</th>
+	  <th>Patient ID</th>
+	  <th>Source DNA</th>
+	  <th>Notes</th>
+  </tr>
+  </thead>
+  
+  <% for lib_sample in lib_samples %>
+    <tr>
+	  <% if lib_sample.splex_lib %>
+	    <td><%=link_to lib_sample.splex_lib_barcode, lib_sample.splex_lib %></td>
+      <td title="<%= lib_sample.index1_tag_nr %>"><%=h lib_sample.index1_tag_seq %></td>
+      <td title="<%= lib_sample.index2_tag_nr %>"><%=h lib_sample.index2_tag_seq %></td>
+		  <td><%=h lib_sample.splex_lib.lib_name %></td>
+		  <td><%=h lib_sample.splex_lib.oligo_pool %></td>
+	  <% else %>
+	    <td><%=h lib_sample.splex_lib_barcode %></td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+	  <% end %>
+      <td><%=h lib_sample.sample_name %></td>
+	  <% if lib_sample.processed_sample %>
+	    <td><%=h lib_sample.processed_sample.patient_id %></td>
+	    <td><%= link_to lib_sample.source_DNA, lib_sample.processed_sample %>
+	  <% else %>
+	    <td>&nbsp;</td>
+	    <td><%=h lib_sample.source_DNA %></td>
+	  <% end %>  
+	  <td><%=h lib_sample.notes %></td>
+    </tr>
+  <% end %>
+
+</table>
