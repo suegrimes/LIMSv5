@@ -44,12 +44,13 @@ Rails.application.routes.draw do
     get :auto_complete_for_barcode_key, on: :collection
   end
 
-  resources :sample_locs, :only => [:edit, :update]
-
-  resources :sample_queries, :only => :index
-
   match 'upd_sample' => 'samples#edit_params', :as => :upd_sample, :via => [:get, :post]
   match 'edit_samples' => 'samples#edit_by_barcode', :as => :edit_samples, :via => [:get]
+
+  resources :sample_locs, :only => [:edit, :update]
+
+  # Routes for sample queries
+  resources :sample_queries, :only => :index
   match 'unprocessed_query' => 'sample_queries#new_query', :as => :unprocessed_query, :via => [:get]
   match 'samples_for_patient' => 'sample_queries#list_samples_for_patient', :as => :samples_list, :via => [:get]
   match 'samples_from_source' => 'sample_queries#list_samples_for_characteristic', :as => :samples_list1, :via => [:get]
@@ -94,7 +95,7 @@ Rails.application.routes.draw do
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
   match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
-  # routes for storage containers
+  # Routes for storage containers
   resources :storage_containers do
     get 'positions_used', on: :member
   end
@@ -117,6 +118,19 @@ Rails.application.routes.draw do
   resources :seqlib_queries, :only => :index
   get 'seqlib_query' => 'seqlib_queries#new_query'
   match 'export_seqlibs' => 'seqlib_queries#export_seqlibs', :as => :export_seqlibs, :via => :post
+
+  # Routes for flow cells/sequencing runs
+  get 'flow_cells/autocomplete_flow_cells_sequencing_key'
+  resources :flow_cells do
+    get :auto_complete_for_sequencing_key, on: :collection
+    get :show_publications, on: :member
+    post :upd_for_sequencing, on: :member
+  end
+
+  # Routes for sequencing run queries
+  resources :flowcell_queries, :only => :index
+  get 'seq_run_query' => 'flowcell_queries#new_query'
+  match 'export_seqruns' => 'flowcell_queries#export_seqruns', :as => :export_seqruns, :via => :post
 
   # Routes for handling file attachments
   resources :attached_files

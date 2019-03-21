@@ -24,7 +24,6 @@ class SeqlibQuery
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['processed_samples.patient_id']},
                   :barcode_string => {:sql_attr => ['seq_libs.barcode_key']}}
 
-  #TODO: Add lib_name search capability
   QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => SEARCH_FLDS}
 
 end

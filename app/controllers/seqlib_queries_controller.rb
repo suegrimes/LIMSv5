@@ -1,6 +1,6 @@
 class SeqlibQueriesController < ApplicationController
   include SqlQueryBuilder
-  layout 'main/samples'
+  layout 'main/sequencing'
 
   before_action :dropdowns, :only => :new_query
   
@@ -14,7 +14,7 @@ class SeqlibQueriesController < ApplicationController
   def index
     authorize! :read, SeqLib
     
-    @seqlib_query = SeqlibQuery.new(seqlib_query_params)
+    @seqlib_query = SeqlibQuery.new(query_params)
     
     if @seqlib_query.valid?
       @condition_array = define_conditions(params)
@@ -127,7 +127,7 @@ protected
     return sample_xref
   end
 
-  def seqlib_query_params
+  def query_params
     params.require(:seqlib_query).permit(:patient_string, :barcode_string, :owner, :project, :from_date, :to_date)
   end
 end 
