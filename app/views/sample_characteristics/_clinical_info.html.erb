@@ -1,24 +1,26 @@
-<% click_to_link ||= 'show' %>
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, sample_characteristic))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, sample_characteristic))%>
+<h6>Sample Acquisition:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Collection Date</th>
+    <th>Clinic</th>
+    <th>Consent Protocol</th>
+    <% if sample_characteristic.from_nccc? %>
+      <th>NCCC Tumor ID</th>
+      <th>NCCC Path No.</th>
+    <% end %>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
 
-<% last_info_box ||= 'no' %>
-
-<!-- Standard fields to be displayed -->
-<% info_flds   = [[(click_to_link == 'none'? 'Field' : 'Link'), 'Collected', sample_characteristic.collection_date,
-                                     ['sample_characteristics', click_to_link, sample_characteristic.id]],
-                  (sample_characteristic.from_nccc? ? ['Field', 'NCCC Tumor ID', sample_characteristic.nccc_tumor_id] : nil),
-                  ['Field', 'From', sample_characteristic.clinic_or_location],
-                  (sample_characteristic.from_nccc? ? ['Field', 'NCCC Path No ', sample_characteristic.nccc_pathno] : nil),
-                  ['Field', 'Consent Protocol', sample_characteristic.consent_descr]] %>
-
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if (can? :edit, sample_characteristic) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Sample Acquisition',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'sample_characteristics',
-                                                      :link_id         => sample_characteristic.id,
-                                                      :last_info_box   => last_info_box} %>
+  <tr>
+    <td><%=h link_to sample_characteristic.collection_date, sample_characteristic_path(sample_characteristic) %></td>
+    <td><%=h sample_characteristic.clinic_or_location %></td>
+    <td><%=h sample_characteristic.consent_descr %></td>
+    <% if sample_characteristic.from_nccc? %>
+      <td><%=h sample_characteristic.nccc_tumor_id %></td>
+      <td><%=h sample_characteristic.nccc_pathno %></td>
+    <% end %>
+    <% if can? :edit, sample_characteristic %> <td><%= link_to 'Edit', edit_sample_characteristic_path(sample_characteristic) %></td><% end %>
+  </tr>
+</table>

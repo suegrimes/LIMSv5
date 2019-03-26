@@ -1,0 +1,35 @@
+<h5>Protocols</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+  	<th>Type</th>
+    <th>Protocol name</th>
+	<th>Code</th>
+    <th>Protocol version</th>
+	<th>Reference</th>
+	<th colspan="3"></th>
+  </tr>
+  </thead>
+
+<% for protocol in @protocols %>
+  <tr>
+  	<td><%=h protocol.protocol_type %></td>
+    <td><%=h protocol.protocol_name %></td>
+	<td style="text-align:center"><%=h protocol.protocol_code %></td>
+    <td><%=h protocol.protocol_version %></td>
+	<td><%=h protocol.reference %></td>
+
+    <td><%= link_to 'Show', protocol %></td>
+	<% if can? :edit, protocol %>
+      <td><%= link_to 'Edit', edit_protocol_path(protocol) %></td>
+	<% end %>
+	<% if can? :delete, protocol %>
+      <td><%= link_to 'Delete', protocol, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
+	<% end %>
+	
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'New protocol', new_protocol_path(:protocol_type => 'E') %>

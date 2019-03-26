@@ -1,0 +1,33 @@
+<h6>Sample H&E:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>H&E barcode</th>
+    <th>H&E date</th>
+    <th>Pathologist</th>
+    <th>Histopathology</th>
+    <th>H&E classification</th>
+    <th>Tumor cell content</th>
+    <th>Inflammation</th>
+    <th>Infiltration</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=link_to histology.he_barcode_key, histology_path(histology) %></td>
+    <td><%=h histology.he_date %></td>
+    <td><%=h histology.pathologist %></td>
+    <td><%=h histology.histopathology %></td>
+    <td><%=h histology.he_classification %></td>
+    <td><%=h histology.tumor_cell_content %></td>
+    <td><%=h histology.inflammation_type %></td>
+    <td><%=h histology.inflammation_infiltration %></td>
+    <% if (can? :edit, histology) %> <td class="linkborder"><%= link_to 'Edit', edit_histology_path(histology) %></td><% end %>
+    <% if (can? :delete, histology) %> <td class="linkborder"><%= link_to 'Delete', histology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
+  </tr>
+  <% unless histology.comments.blank? %>
+    <tr><td></td><td colspan="7"><%=h histology.comments %></td></tr>
+  <% end %>
+</table>

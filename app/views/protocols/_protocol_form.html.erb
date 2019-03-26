@@ -1,0 +1,51 @@
+<div class="card">
+  <h6 class="card-header">Protocol Details:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="protocol_type" class="col-auto col-form-label col-form-label-sm">Protocol Type:</label>
+      <div class="col-auto">
+        <%=f.select(:protocol_type, Protocol::PROTOCOL_TYPES, {:include_blank => 'Select Type'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="protocol_name" class="col-auto col-form-label col-form-label-sm">Protocol Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :protocol_name, :size => 80, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="protocol_abbrev" class="col-auto col-form-label col-form-label-sm">Abbreviation:</label>
+      <div class="col-auto">
+        <%= f.text_field :protocol_abbrev, :size => 20, class: "form-control" %>
+      </div>
+      <label for="protocol_code" class="col-auto col-form-label col-form-label-sm">Protocol Code:</label>
+      <div class="col-auto">
+        <%= f.text_field :protocol_code, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="protocol_version" class="col-auto col-form-label col-form-label-sm">Version:</label>
+      <div class="col-auto">
+        <%= f.text_field :protocol_version, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="reference" class="col-auto col-form-label col-form-label-sm">Reference:</label>
+      <div class="col-auto">
+        <%= f.text_field :reference, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+      <div class="col-auto">
+        <%= f.text_area :comments, :cols => 60, :rows => 2, class: "form-control"  %>
+      </div>
+    </div>
+  </div>
+</div>

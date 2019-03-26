@@ -1,0 +1,12 @@
+<h5>Editing protocol</h5>
+
+<%= form_for(@protocol) do |f| %>
+  <%= render '/shared/errors', model: @protocol %>
+
+  <%= render :partial => 'protocol_form', :locals => {:f => f}%>
+  
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'Show', @protocol %> |
+<%= link_to 'List All', protocols_path %>

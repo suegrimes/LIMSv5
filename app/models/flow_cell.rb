@@ -40,7 +40,7 @@ class FlowCell < ApplicationRecord
   #scope :unsequenced, :conditions => "flowcell_status = 'F'"
   # mhayden: scope body needs to be a callable proc or lambda in Rails 5
   scope :sequenced, -> { where("flowcell_status <> 'F'") }
-  scope :sequenced, -> { where("flowcell_status = 'F'") }
+  scope :unsequenced, -> { where("flowcell_status = 'F'") }
   
   DEFAULT_MACHINE_TYPE = 'MiSeq'
   NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 2, :GAIIx => 8, :HiSeq => 8}

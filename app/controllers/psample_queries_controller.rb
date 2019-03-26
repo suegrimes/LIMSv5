@@ -1,4 +1,6 @@
 class PsampleQueriesController < ApplicationController
+  include SqlQueryBuilder
+
   layout 'main/processing'
 
   authorize_resource :class => ProcessedSample
@@ -60,118 +62,24 @@ protected
     @extraction_type    = category_filter(@category_dropdowns, 'extraction type')
     @users              = User.all
   end
-  
+
   def define_conditions(params)
-    @sql_params = setup_sql_params(params)
-    
-    @where_select = []
-    @where_values = []
-    
-    @sql_params.each do |attr, val|
-      if !param_blank?(val)
-        @where_select = add_to_select(@where_select, attr, val)
-        @where_values = add_to_values(@where_values, attr, val)
-      end
+    @where_select = []; @where_values = [];
+
+    if !params[:psample_query][:mrn].blank?
+      patient_id = Patient.find_id_using_mrn(params[:psample_query][:mrn])
+      @where_select.push("samples.patient.id = #{patient_id ||= 0}")
     end
 
-    if !param_blank?(params[:psample_query][:patient_string])
-      str_vals, str_ranges, errors = compound_string_params('', nil, params[:psample_query][:patient_string])
-#logger.debug "#{self.class}#define_conditions: str_vals: #{str_vals} str_ranges: #{str_ranges}"
-      where_select, where_values   = sql_compound_condition('processed_samples.patient_id', str_vals, str_ranges)
-#logger.debug "#{self.class}#define_conditions: where_select: #{where_select} where_values: #{where_values}"
-      #puts errors if !errors.blank?
-      @where_select.push(where_select)
-      @where_values.push(*where_values)
-    end
+    @where_select, @where_values = build_sql_where(params[:psample_query], PsampleQuery::QUERY_FLDS, @where_select, @where_values)
 
-    if !param_blank?(params[:psample_query][:barcode_string])
-      bc_flds = ['processed_samples.barcode_key', 'samples.source_barcode_key']
-      str_vals, str_ranges, errors = compound_string_params('', nil, params[:psample_query][:barcode_string])
-#logger.debug "#{self.class}#define_conditions: str_vals: #{str_vals} str_ranges: #{str_ranges}"
-      where_select, where_values   = sql_compound_condition2(bc_flds, str_vals, str_ranges)
-#logger.debug "#{self.class}#define_conditions: where_select: #{where_select} where_values: #{where_values}"
-      #puts errors if !errors.blank?
-      @where_select.push(where_select)
-      @where_values.push(*where_values)
-    end
-    
-    db_fld = 'processed_samples.processing_date'
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:psample_query], db_fld)
-    
+    dt_fld = 'processed_samples.processing_date'
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:psample_query], dt_fld)
+
     sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
     return sql_where_clause
   end
-  
-  def setup_sql_params(params)
-    sql_params = {}
-    
-    # Standard case, just put sample_query attribute/value into sql_params hash
-    params[:psample_query].each do |attr, val|
-      sql_params[attr.to_sym] = val if !val.blank? && PsampleQuery::ALL_FLDS.include?("#{attr}")
-    end
-    
-    if !params[:psample_query][:mrn].blank?
-      patient_id, found = Patient.get_patient_id(params[:psample_query][:mrn])
-      sql_params[:patient_id] = (patient_id ||= 0)
-    end
-    
-    return sql_params 
-  end
-  
-  def add_to_select(where_select, attr, val)
-    if attr.to_s == 'barcode_key'
-      where_select.push('processed_samples.barcode_key LIKE ?')
-    else
-      where_select.push("sample_characteristics.#{attr}" + sql_condition(val)) if PsampleQuery::SCHAR_FLDS.include?("#{attr}")
-      where_select.push("samples.#{attr}" + sql_condition(val))                if PsampleQuery::SAMPLE_FLDS.include?("#{attr}")
-      where_select.push("processed_samples.#{attr}" + sql_condition(val))      if PsampleQuery::PSAMPLE_FLDS.include?("#{attr}")
-    end
-    return where_select
-  end
-  
-  def add_to_values(where_values, attr, val)
-    if attr.to_s == 'barcode_key'
-      return where_values.push([val,'%'].join)
-    else
-      return where_values.push(sql_value(val))
-    end
-  end
 
-# Use a variation of the methods below if need to be more specific with barcode search #
-
-#  def conditions_for_barcode(barcode_key)
-#    rc_pattern = mask_barcode(params[:barcode_key])
-#    if rc_pattern[0] == 'pattern' && rc_pattern[2].nil?
-#      bc_select = 'processed_samples.barcode_key LIKE ?'
-#      bc_condition = [rc_pattern[1]]
-#      
-#    elsif rc_pattern[0] == 'pattern'
-#      bc_select = '(processed_samples.barcode_key LIKE ? OR processed_samples.barcode_key LIKE ?)'
-#      bc_condition = [rc_pattern[1], rc_pattern[2]]
-#      
-#    else # rc_pattern[0] = 'exact'
-#      bc_select = 'processed_samples.barcode_key = ?'
-#      bc_condition = [params[:barcode_key]]
-#    end 
-#    return bc_select, bc_condition
-#  end
-#  
-#  def mask_barcode(barcode_key)
-#    barcode_split = barcode_key.split('.')
-#    if barcode_split.length > 1 # processed sample barcode entered
-#      return ['exact', barcode_key, nil]
-#      
-#    else  # source or dissected barcode (no '.')
-#      last_char = barcode_key[-1,1] # last character of barcode
-#      dissect_flag = (last_char =~ /[A-Z]/? true : false)
-#      if dissect_flag == true
-#        return ['pattern', [barcode_key, '.%'].join, nil]
-#      else
-#        return ['pattern', [barcode_key, '.%'].join, [barcode_key, '_.%'].join]
-#      end  
-#    end
-#  end
-  
   def export_samples_csv(processed_samples)    
     hdgs, flds = export_samples_setup
     

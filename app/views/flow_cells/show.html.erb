@@ -1,0 +1,70 @@
+<h5><%= (@flow_cell.sequenced? ? 'View Sequencing Run' : 'View Flow Cell') %></h5>
+
+<%= render :partial => 'flow_cell_show', :locals => {:flow_cell => @flow_cell} %>
+
+<%= render :partial => 'attached_files/show_file', :locals => {:obj => @flow_cell} %>
+<br/>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+  	<th>Lane</th>
+	  <th>Pub?</th>
+	  <th>Lib Barcode</th>
+  	<th>Lib Name</th>
+	  <th>Runtype/Adapter</th>
+	  <th><%=h Pool.human_attribute_name(:pool_name)%>:</th>
+	  <th>Alignment Ref</th>
+	  <th>Trim Bases</th>
+	  <th>Lib Conc(pM)</th>
+  </tr>
+  </thead>
+
+  <% for flow_lane in @flow_cell.flow_lanes %>
+    <% lane_notes = !flow_lane.notes.blank? %>
+    <tr>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.lane_nr %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.for_publication? %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%= link_to flow_lane.lib_barcode, flow_lane.seq_lib %></td>
+      <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.seq_lib.lib_name %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.adapter_name %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.oligo_pool %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.alignment_ref %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.seq_lib.trim_bases %></td>
+	  <td class=<%= "dotted_border_bottom" if lane_notes %>><%=h flow_lane.lib_conc %></td>
+    </tr>
+	<% if lane_notes %>  
+	<tr>
+	  <td colspan="2"></td>
+      <td colspan="7" style="border-top:0; text-align:center;">            
+        <div style="padding: 0 10px; margin-bottom: 4px; width:95%; border: 1px solid #e5e5e5; text-align:left;">Notes:&nbsp;<%=h flow_lane.notes %></div>
+      </td>
+    </tr>
+	<% end %>
+  <% end %>
+</table>
+  
+  <div id="sequencing">
+    <% if @flow_cell.flowcell_status == 'F' %>
+      <%= link_to "Submit for Sequencing", '', :onclick => "showHideDiv('sequencing','run_params'); return false;" %>
+	<% end %>
+  </div>
+	
+  <div id="run_params" style="display:none">
+    <%= form_for(@flow_cell, :url => {:action => :upd_for_sequencing}) do |f|%>
+	  <%= f.hidden_field(:id, :value => @flow_cell.id)%>
+	  
+      <table class="list">
+      <tr>
+        <th>Sequencing Date</th>
+        <th>Machine</th>
+      </tr>
+      <tr>
+      	<% @flow_cell[:sequencing_date] ||= Date.today %>
+        <td><%= f.date_field('sequencing_date')%></td>
+        <td><%= select_tag('seq_machine[id]', grouped_options_for_select(@sequencers_by_bldg, 1)) %></td>
+      </tr>
+      </table>
+	<%= f.submit "Submit"%>
+    <% end %>
+  </div>

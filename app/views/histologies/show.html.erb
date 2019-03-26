@@ -1,0 +1,11 @@
+<h5>H&E Slide: <%=h @histology.he_barcode_key %></h5>
+
+<%= render :partial => 'sample_characteristics/clinical_summary', :locals => {:sample_characteristic => @histology.sample.sample_characteristic,
+                                                                              :patient => @histology.sample.patient } %>
+
+<%= render :partial => 'samples/sample_info', :locals => {:sample_characteristic => @histology.sample.sample_characteristic,
+                                                          :sample => @histology.sample } %>
+
+<%= render :partial => 'histology_info', :locals => {:histology => @histology, :click_to_link => 'none'} %>
+
+<%= render :partial => 'attached_files/show_file', :locals => {:obj => @histology} %>

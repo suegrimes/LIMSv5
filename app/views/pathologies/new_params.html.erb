@@ -1,14 +1,28 @@
-<h5>New Pathology Report</h5>
+<div class="card">
+  <h6 class="card-header">Add/Update Pathology Report</h6>
+  <div class="card-body">
 
-<%= bootstrap_form_tag(url: 'pathologies/new', method: :get) do |f| %>
-  <% if can? :read, Patient %>
-    <%= f.text_field :mrn_nr, label: "MRN:", placeholder: "MRN" %>
-  <% end %>
-  <%= f.text_field :patient_id, label: "Patient ID:", placeholder: "Patient ID" %>
+    <%= bootstrap_form_tag(url: 'pathologies/new', method: :get) do %>
 
-  <%= f.submit 'Submit',  class: "btn btn-primary" %>
-<%end%>
+      <div class="form-group row">
+        <% if can? :read, Patient %>
+          <label for="mrn_nr" class="col-auto col-form-label col-form-label-sm">Patient MRN:</label>
+          <div class="col-auto">
+            <%= text_field_tag :mrn_nr, nil, size: 12, placeholder: "MRN", class: "form-control" %>
+          </div>
+        <% end %>
 
-<p class="font-italic"> 
-Specify MRN or Patient ID for pathology report.
+        <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+        <div class="col-auto">
+          <%= text_field_tag :patient_id, nil, size: 12, placeholder: "Patient ID", class: "form-control" %>
+        </div>
+      </div>
+
+      <%= submit_tag 'Submit',  class: "btn btn-primary" %>
+      <% end %>
+  </div>
+</div>
+
+<p class="font-italic">
+  Specify MRN or Patient ID for pathology report.
 </p>

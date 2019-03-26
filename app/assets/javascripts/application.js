@@ -14,6 +14,7 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require rails-ujs
+//= require cocoon
 //= require turbolinks
 //= require jquery-ui/widgets/autocomplete
 //= require autocomplete-rails

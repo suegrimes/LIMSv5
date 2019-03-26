@@ -44,8 +44,10 @@ class SeqLib < ApplicationRecord
   has_many :align_qc, :through => :flow_lanes
   has_many :processed_samples, :through => :lib_samples
   has_many :attached_files, :as => :sampleproc
-  
+  has_one :sample_storage_container, :as => :stored_sample, :dependent => :destroy
+
   accepts_nested_attributes_for :lib_samples
+  accepts_nested_attributes_for :sample_storage_container
   
   validates_uniqueness_of :barcode_key, :message => 'is not unique'
   validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
@@ -150,6 +152,14 @@ class SeqLib < ApplicationRecord
       return sample_conc * (pcr_size * BASE_GRAMS_PER_MOL) / 1000000
     end
   end
+
+  def room_and_freezer
+    (sample_storage_container ? sample_storage_container.room_and_freezer : '')
+  end
+
+  def container_and_position
+    (sample_storage_container ? sample_storage_container.container_and_position : '')
+  end
   
   def set_default_values
     self.lib_status = 'L'
@@ -188,7 +198,7 @@ class SeqLib < ApplicationRecord
   
   def self.unique_projects
     # Exclude blank or NULL projects
-    self.select(:project).order(:project).where("project > ''").uniq
+    self.where("project > ''").pluck(:project).uniq.sort
   end
   
   def self.getwith_attach(id)
@@ -272,15 +282,15 @@ class SeqLib < ApplicationRecord
   def self.upd_mplex_splex(splex_lib)
     # Find all cases where supplied sequencing library is one of the 'samples' in a multiplex library
     #lib_samples = LibSample.find_all_by_splex_lib_id(splex_lib.id)
-    lib_samples = LibSample.where(splex_lib_id: splex_lib.id)
+    lib_samples = LibSample.where(splex_lib_id: splex_lib.id).all
     
     # If any cases found, collect all the multiplex libraries and their associated 'samples'(=singleplex libs)
     #if !lib_samples.nil?
     if !lib_samples.empty?
       mplex_ids  = lib_samples.collect(&:seq_lib_id)
       #mplex_libs = self.find_all_by_id(mplex_ids, :include => {:lib_samples => :splex_lib})
-#TODO: not sure about this
-      mplex_libs = self.where(id: mplex_ids).includes(:lib_samples).where(id: splex_lib.id)
+      #mplex_libs = self.where(id: mplex_ids).includes(:lib_samples).where(id: splex_lib.id)
+      mplex_libs = self.where(id: mplex_ids).includes(:lib_samples => :splex_lib)
       
       mplex_libs.each do |lib|
         self.upd_mplex_fields(lib) if lib.barcode_key[0,1] == 'L'

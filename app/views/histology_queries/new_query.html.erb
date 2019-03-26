@@ -1,0 +1,79 @@
+<%= form_for @histology_query, :action => 'index', :method => :get do |f| %>
+<%= render '/shared/errors', model: @histology_query, header_message: 'Error(s) in query parameters' %>
+
+<div class="card">
+  <h6 class="card-header">Histology Query</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <p class="font-italic font-sm">For barcodes and patients: Enter individual codes separated by commas, enter ranges with '-'. Eg. '1160,1378-1400,1500-1600'</p>
+    </div>
+
+    <div class="form-group row">
+      <label for="patient_id" class="col-sm-2 col-form-label col-form-label-sm">Patient ID(s):</label>
+      <div class="col-sm-4">
+        <%= f.text_area(:patient_string, :size => "50x1", class: "form-control")%>
+      </div>
+
+      <% if can? :read, Patient %>
+        <label for="mrn" class="col-sm-2 col-form-label col-form-label-sm">Patient MRN:</label>
+        <div class="col-sm-3">
+          <%= f.text_field(:mrn, :size => 10, class: "form-control") %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="form-group row">
+      <label for="consent_protocol_id" class="col-sm-2 col-form-label col-form-label-sm">Consent Protocol:</label>
+      <div class="col-sm-4">
+        <%= f.collection_select(:consent_protocol_id, @consent_protocols, :id, :name_ver,
+                                {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"}) %>
+      </div>
+
+      <label for="clinic_or_location" class="col-sm-2 col-form-label col-form-label-sm">Clinic:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:clinic_or_location, @clinics, :c_value, :c_value,
+                                {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"}) %>
+      </div>
+    </div>
+    <hr>
+
+    <div class="form-group row">
+      <label for="barcode_string" class="col-sm-2 col-form-label col-form-label-sm">Sample Barcode(s):</label>
+      <div class="col-sm-4">
+        <%= f.text_area(:barcode_string, :size => "50x1", class: "form-control")%>
+      </div>
+      <label for="alt_identifier" class="col-sm-2 col-form-label col-form-label-sm">Alt Identifier:</label>
+      <div class="col-sm-3">
+        <%= f.text_field(:alt_identifier, :size => 12, class: "form-control")%>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="tissue_preservation" class="col-sm-2 col-form-label col-form-label-sm">Preservation Type:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value,
+                                {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm">H&E Date From:</label>
+      <div class="col-sm-3">
+        <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
+      </div>
+
+      <label for="to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
+      <div class="col-sm-3">
+        <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-auto">
+        <%=submit_tag "Submit", class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>
+<%end%>

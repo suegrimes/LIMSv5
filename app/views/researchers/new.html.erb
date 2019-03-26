@@ -1,0 +1,11 @@
+<h1>New researcher</h1>
+
+<%= form_for(@researcher) do |f| %>
+  <%= render '/shared/errors', model: @researcher %>
+
+  <%= render :partial => 'researcher_form', :locals => {:f => f} %>
+  
+  <%=raw break_clear %>
+  <%= f.submit "Create" -%>&nbsp;&nbsp;<%= link_to 'List All', researchers_path %>
+<% end %>
+

@@ -1,7 +1,7 @@
 
 function set_bootstrap_style() {
 
-  // set all forms to have small inouts and labels
+  // set all forms to have small inputs and labels
   // this is done here so that standard Rails form builders can be used
   // without alot of customization of the markup
 
@@ -19,7 +19,7 @@ function set_bootstrap_style() {
       $(this).addClass("em-width-" + sz);
     }
 
-    // set disply: inline-block for labels before
+    // set display: inline-block for labels before
     var name = $(this).name;
     $(this).parent().find("label[for="+"'"+name+"'"+"]").addClass("d-inline");
   });

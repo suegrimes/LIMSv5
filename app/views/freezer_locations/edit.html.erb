@@ -1,0 +1,13 @@
+<h5>Update freezer location</h5>
+
+<%= form_for(@freezer_location) do |f| %>
+  <%= render '/shared/errors', model: @freezer_location %>
+
+  <%= render :partial => 'freezer_loc_form', :locals => {:f => f} %>
+
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'List All', freezer_locations_path %>
+
+

@@ -10,9 +10,9 @@
 <% if @processed_samples %> (<%= @processed_samples.size %> samples) <% end %></h6>
 
 <table class="table table-bordered table-sm table-font-sm">
-<thead class="thead-light">
+  <thead class="thead-light">
   <%= render :partial => 'processed_sample_hdr' %>
-</thead>
+  </thead>
   
   <% for processed_sample in @processed_samples %>
     <%= render :partial => 'processed_sample_row', :locals => {:processed_sample => processed_sample} %>

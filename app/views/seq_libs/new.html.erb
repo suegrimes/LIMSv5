@@ -1,0 +1,25 @@
+<% @nr_libs ||= ' ' %>
+
+<h5>New Sequencing Library - Singleplex</h5>
+
+<% unless @hide_defaults %>
+<%= form_tag url_for(:action => :populate_libs), {id: 'default_libs', remote: true} do %>
+  
+  <%= render :partial => 'lib_form' %>
+  </br>
+  
+  <div id='add_libs' class="form-group row">
+    <span class="col-sm-6"><b>Populate how many libraries with these defaults?</b></span>&nbsp;
+    <%= text_field_tag(:nr_libs, @nr_libs, {class: "col-sm-1 form-control"})-%>
+  </div>
+  <div id="add_libs_button"><%= submit_tag('Add Libraries', id: 'lib_button', class: "btn btn-primary") %></div>
+<% end %>
+<% end %>
+
+<%= form_tag url_for(:action => :create) do %>
+  <% if @lib_with_error %><%= render '/shared/errors', model: @lib_with_error %><% end %>
+
+  <div id='splex_libs'>
+    <% if @new_lib %><%= render 'sample_form', model: @new_lib %><% end %>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<h5>Specify Protocol Type to Review/Edit</h5>
+<%= form_tag do %>
+<div class="card">
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="protocol_type" class="col-auto col-form-label col-form-label-sm">Protocol Type:</label>
+      <div class="col-auto">
+        <%= select_tag(:protocol_type, options_for_select(@protocol_types), {:include_blank => 'Select Type', class: "form-control"}) %>
+      </div>
+    </div>
+  </div>
+</div>
+<%= submit_tag "Show", class: "btn btn-primary" %>
+<%end%>

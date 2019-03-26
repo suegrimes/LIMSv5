@@ -1,0 +1,36 @@
+<h6>View Protocol</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Protocol Name</th>
+    <th>Type</th>
+    <th>Abbreviation</th>
+    <th>Code</th>
+    <th>Version</th>
+    <th>Reference</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @protocol.protocol_name %></td>
+    <td><%=h @protocol.protocol_type %></td>
+    <td><%=h @protocol.protocol_abbrev %></td>
+    <td><%=h @protocol.protocol_code %></td>
+    <td><%=h @protocol.protocol_version %></td>
+    <td><%=h @protocol.reference %></td>
+  </tr>
+
+  <% unless @protocol.comments.blank? %>
+  <tr>
+    <td></td>
+    <td><%=h @protocol.comments %></td>
+  </tr>
+  <% end %>
+</table>
+
+<p>
+<% if can? :edit, @protocol %>
+  <%= link_to 'Edit', edit_protocol_path(@protocol) %> |
+<% end %>
+<%=link_to 'List All', protocols_path(:type => @protocol.protocol_type) %>
+</p>

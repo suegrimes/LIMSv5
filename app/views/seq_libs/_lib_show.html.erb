@@ -1,0 +1,45 @@
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Barcode</th>
+    <th>LibName</th>
+    <th>Owner</th>
+    <th>Prep Date</th>
+    <th>Protocol</th>
+    <th>Adapter</th>
+    <th>Lib Conc</th>
+    <th>FlowCell Conc</th>
+    <th>PCR size</th>
+    <th>Quant</th>
+    <th>Align Ref</th>
+    <th>Notebook Ref</th>
+    <th>Room/Freezer</th>
+    <th>Storage Container</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h seq_lib.lib_barcode %></td>
+    <td><%=h seq_lib.lib_name %></td>
+    <td><%=h seq_lib.owner_abbrev %></td>
+    <td><%=h seq_lib.preparation_date %></td>
+    <td><%=h (@protocol ? @protocol.protocol_name : '') %></td>
+    <td><%=h seq_lib.adapter_name %></td>
+    <td><%=h [number_with_precision(seq_lib.sample_conc, :precision => 2), seq_lib.sample_conc_uom].join(' ') %></td>
+    <td><%=h seq_lib.lib_conc_requested %></td>
+    <td><%=h seq_lib.pcr_size %></td>
+    <td><%=h seq_lib.quantitation_method %></td>
+    <td><%=h seq_lib.alignment_ref %></td>
+    <td><%=h seq_lib.notebook_ref %></td>
+    <td><%=h seq_lib.room_and_freezer %></td>
+    <td><%=h seq_lib.container_and_position %></td>
+  </tr>
+  <% if !seq_lib.notes.blank? %>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="12">Comments: <%=h seq_lib.notes %></td>
+  </tr>
+  <% end %>
+</table>

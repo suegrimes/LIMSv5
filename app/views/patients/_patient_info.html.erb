@@ -1,29 +1,28 @@
-<% last_info_box ||= 'no' %>
 <% show_mrn ||= 'yes' %>
 
-<% click_to_link ||= 'show' %>
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, patient))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, patient))%>
+<h6>Patient Details:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Patient ID</th>
+    <% if show_mrn == 'yes' && (can? :read, Patient) %><th>MRN</th> <% end %>
+    <th>Gender</th>
+    <th>Race</th>
+    <th>Ethnicity</th>
+    <% if show_mrn == 'yes' && (can? :read, Patient) %><th>PHI Notes</th><% end %>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
 
-<!-- Standard fields to be displayed -->
-<% info_flds   = [[(click_to_link == 'none'? 'Field' : 'Link'), 'Patient ID', patient.id, ['patients', click_to_link, patient.id]],
-                  ['Field', 'MRN', patient.mrn], 
-                  ['Field', 'Gender', patient.gender],
-                  ['Field', 'Race/Ethnicity', [patient.race, patient.ethnicity].join('/')],
-				  ['Field', 'PHI Notes', patient.hipaa_data]] %>
-
-<!-- Add/remove fields depending on user role/authorization -->				  
-<% info_flds.reject!{|fld| fld[1] == 'MRN'}       unless (show_mrn == 'yes' && (can? :read, Patient)) %>
-<% info_flds.reject!{|fld| fld[1] == 'PHI Notes'} unless (show_mrn == 'yes' && (can? :read, Patient) && !patient.hipaa_data.blank?) %>
-
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if (can? :edit, patient) %>
-<% info_links.push(['Delete', 'destroy']) if (can? :delete, patient && patient.sample_characteristics.size == 0) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Patient Info',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'patients',
-                                                      :link_id         => patient.id,
-                                                      :last_info_box   => last_info_box} %>
+  <tr>
+    <td><%=h patient.id %></td>
+    <% if show_mrn == 'yes' && (can? :read, Patient) %><td><%= patient.mrn %></td><% end %>
+    <td><%=h patient.gender %></td>
+    <td><%=h patient.race %></td>
+    <td><%=h patient.ethnicity %></td>
+    <% if show_mrn == 'yes' && (can? :read, Patient) %><td><%=h patient.hipaa_data %></td><% end %>
+    <% if can? :edit, patient %> <td><%= link_to 'Edit', edit_patient_path(patient) %></td><% end %>
+    <% if can? :delete, patient %> <td><%= link_to 'Delete', patient, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
+  </tr>
+</table>

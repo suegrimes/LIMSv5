@@ -30,10 +30,12 @@ class SampleQuery
 
   #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
   validates_date :to_date, :from_date, :allow_blank => true
-  
-  PATIENT_FLDS = %w(organism)
-  SCHAR_FLDS = %w{patient_id gender race ethnicity consent_protocol_id clinic_or_location}
-  SAMPLE_FLDS = %w{alt_identifier tumor_normal sample_tissue sample_type tissue_preservation updated_by}
-  ALL_FLDS    = PATIENT_FLDS | SCHAR_FLDS | SAMPLE_FLDS
 
+  STD_FIELDS = {'patients' => %w(organism),
+                'sample_characteristics' => %w(patient_id gender race ethnicity consent_protocol_id clinic_or_location),
+                'samples' => %w(alt_identifier tumor_normal sample_tissue sample_type tissue_preservation updated_by)}
+  COMBO_FIELDS = {:patient_string => {:sql_attr => ['samples.patient_id']},
+                   :barcode_string => {:sql_attr => ['samples.barcode_key', 'samples.source_barcode_key']}}
+
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

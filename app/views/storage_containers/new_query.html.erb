@@ -4,20 +4,26 @@
   <h6 class="card-header">Sample Storage Containers Query</h6>
   <div class="card-body">
 
-    <div class="form-group-row">
-      <label for="freezer_location_freezer_location_id" class="col-auto col-form-label col-form-label-sm">Freezer:</label>
+    <div class="form-group row">
+      <label for="freezer_location_freezer_location_id" class="col-sm-2 col-form-label col-form-label-sm">Freezer/Loc:</label>
       <div class="col-auto">
-        <%= collection_select(:freezer_location, :freezer_location_id, @freezers, :id, :room_and_freezer, {}, {width: "20%", class: "form-control"}) %>
+        <%= collection_select(:freezer_location, :freezer_location_id, @freezers, :id, :room_and_freezer, {}, {class: "form-control"}) %>
       </div>
+    </div>
 
-      <label for="storage_type_container_type" class="col-auto col-form-label col-form-label-sm">Container Type:</label>
+    <div class="form-group row">
+      <label for="storage_type_container_type" class="col-sm-2 col-form-label col-form-label-sm">Container Type:</label>
       <div class="col-auto">
-        <%= collection_select(:storage_type, :container_type, @storage_types, :container_type, :container_type, {:include_blank => true}, {width: "20%", class: "form-control"}) %>
+        <%= collection_select(:storage_type, :container_type, @storage_types, :container_type, :container_type, {:include_blank => true}, {class: "form-control"}) %>
       </div>
     </div>
 
   </div>
 </div>
 
-<%=raw break_clear(submit_tag "Submit") %>
+  <div class="form-group row">
+    <div class="col-auto">
+      <%=submit_tag "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
 <%end%>

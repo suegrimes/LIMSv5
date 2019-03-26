@@ -1,0 +1,18 @@
+<h5>New adapter</h5>
+
+<%= form_for(@adapter) do |f| %>
+  <%= render '/shared/errors', model: @adapter %>
+
+  <div class="card">
+    <h6 class="card-header">Adapter Details:</h6>
+    <div class="card-body">
+
+      <%= render :partial => 'adapter_form', :locals => {f: f} %>
+
+      <%=f.submit "Create", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <div class="links"><%= link_to 'List All', adapters_path %></div>
+<% end %>
+

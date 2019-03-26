@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   get '/login' => 'welcome#login', :as => :login
   get '/logout' => 'welcome#logout', :as => :logout
 
+  # Reusable routing
+  #concern :file_attachable do
+  #  resources :attached_files, only: :index
+  #end
+
   resources :users
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
   match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
@@ -17,31 +22,35 @@ Rails.application.routes.draw do
     post 'add_another_sample', on: :member
     post 'new_sample', on: :collection
   end
-  resources :pathologies
 
   post 'patient_sample' => 'sample_characteristics#new_sample', :as => :add_pt_sample
   match 'modify_sample' => 'sample_characteristics#edit_params', :as => :modify_sample, :via => [:get, :post]
-  post 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
 
-   # Routes for physical source samples
-  resources :samples do
-    collection do
-      get :auto_complete_for_barcode_key
-    end
-  end
+  # Routes for pathology
+  resources :pathologies
+  get 'new_pathology' => 'pathologies#new_params', :as => :new_path_rpt
 
-  resources :sample_locs, :only => [:edit, :update]
-
-  resources :sample_queries, :only => :index
-
+  # Routes for H&E slides
   resources :histologies do
-    collection do
-      get :auto_complete_for_barcode_key
-    end
+    get :auto_complete_for_barcode_key, on: :collection
+  end
+  get 'new_histology' => 'histologies#new_params', :as => :new_he_slide
+
+  resources :histology_queries, :only => :index
+  get 'he_query' => 'histology_queries#new_query', :as => :he_query
+
+  # Routes for physical source samples
+  resources :samples do
+    get :auto_complete_for_barcode_key, on: :collection
   end
 
   match 'upd_sample' => 'samples#edit_params', :as => :upd_sample, :via => [:get, :post]
   match 'edit_samples' => 'samples#edit_by_barcode', :as => :edit_samples, :via => [:get]
+
+  resources :sample_locs, :only => [:edit, :update]
+
+  # Routes for sample queries
+  resources :sample_queries, :only => :index
   match 'unprocessed_query' => 'sample_queries#new_query', :as => :unprocessed_query, :via => [:get]
   match 'samples_for_patient' => 'sample_queries#list_samples_for_patient', :as => :samples_list, :via => [:get]
   match 'samples_from_source' => 'sample_queries#list_samples_for_characteristic', :as => :samples_list1, :via => [:get]
@@ -59,32 +68,69 @@ Rails.application.routes.draw do
 
    # Routes for extracted samples
   get 'processed_samples/autocomplete_processed_sample_barcode_search'
-  resources :processed_samples do
-    collection do
-      #get :auto_complete_for_barcode_key
-    end
-  end
-  resources :psample_queries, :only => :index
-
+  resources :processed_samples
   match 'new_extraction' => 'processed_samples#new_params', :as => :new_extraction, :via => [:get, :post]
   match 'add_extraction' => 'processed_samples#new', :via => [:get, :post]
   match 'edit_psamples' => 'processed_samples#edit_by_barcode', :as => :edit_psamples, :via => [:get, :post]
   match 'samples_processed' => 'processed_samples#show_by_sample', :as => :samples_processed, :via => [:get, :post]
+
+  resources :psample_queries, :only => :index
   get 'processed_query' => 'psample_queries#new_query', :as => :processed_query
   match 'export_psamples' => 'psample_queries#export_samples', :as => :export_psamples, :via => [:post]
+
+  # Routes for molecular assays
+  get 'molecular_assays/autocomplete_molecular_assay_source_sample_name'
+  get 'molecular_assays/main' => 'molecular_assays#main_hdr'
+  resources :molecular_assays
+  get 'create_molecular_assays' => 'molecular_assays#create_assays'
+  match 'populate_assays' => 'molecular_assays#populate_assays', :via => [:get, :post]
+  get 'molecular_assays/list_added' => 'molecular_assays#list_added'
+  #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays, :via => :get
+  #
+  resources :molassay_queries, :only => :index
+  get 'mol_assay_query' => 'molassay_queries#new_query'
 
   # Routes for patients
   resources :patients
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
   match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
 
-  # routes for storage containers
+  # Routes for storage containers
   resources :storage_containers do
     get 'positions_used', on: :member
   end
   match 'export_container' => 'storage_containers#export_container', :as => :export_container, :via => [:post]
 
   resources :sample_storage_containers, :only => [:edit, :update]
+
+  # Routes for sequencing libraries
+  get 'sequencing/main' => 'seq_libs#main_hdr'
+  resources :seq_libs, :except => :index do
+    get :get_adapter_info, on: :collection
+   end
+  post 'populate_libs' => 'seq_libs#populate_libs'
+
+  resources :mplex_libs do
+    get :auto_complete_for_barcode_key, on: :collection
+  end
+
+  # Routes for sequencing library queries
+  resources :seqlib_queries, :only => :index
+  get 'seqlib_query' => 'seqlib_queries#new_query'
+  match 'export_seqlibs' => 'seqlib_queries#export_seqlibs', :as => :export_seqlibs, :via => :post
+
+  # Routes for flow cells/sequencing runs
+  get 'flow_cells/autocomplete_flow_cells_sequencing_key'
+  resources :flow_cells do
+    get :auto_complete_for_sequencing_key, on: :collection
+    get :show_publications, on: :member
+    post :upd_for_sequencing, on: :member
+  end
+
+  # Routes for sequencing run queries
+  resources :flowcell_queries, :only => :index
+  get 'seq_run_query' => 'flowcell_queries#new_query'
+  match 'export_seqruns' => 'flowcell_queries#export_seqruns', :as => :export_seqruns, :via => :post
 
   # Routes for handling file attachments
   resources :attached_files
@@ -98,6 +144,19 @@ Rails.application.routes.draw do
   # Bulk upload
   get 'bulk_upload' => 'bulk_upload#new'
   post 'bulk_upload' => 'bulk_upload#create'
+
+  # Tables for dropdown lists
+  resources :consent_protocols
+  resources :protocols
+  match 'select_protocol_type' => 'protocols#query_params', :as => :select_protocol_type, :via => [:get, :post]
+  resources :categories
+  resources :adapters
+  resources :index_tags
+  resources :oligo_pools, :only => :index
+  resources :alignment_refs, :only => [:new, :create, :edit, :update, :index]
+  resources :seq_machines
+  resources :freezer_locations
+  resources :researchers
 
   # test route
   get 'test' => 'test#index'

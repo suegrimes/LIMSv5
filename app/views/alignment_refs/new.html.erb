@@ -1,0 +1,11 @@
+<h5>New alignment reference</h5>
+
+<%= form_for @alignment_ref, :action => 'create' do |f| %>
+  <%= render '/shared/errors', model: @alignment_ref %>
+  
+  <%= render :partial => 'alignment_ref', :locals => {:f => f} %>
+  
+  <%=f.submit "Create", class: "btn btn-primary" %>
+<% end %>
+
+

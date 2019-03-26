@@ -1,0 +1,28 @@
+<h6>Molecular Assay:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Assay Barcode</th>
+    <th>Protocol</th>
+    <th>Owner</th>
+    <th>Prep Date</th>
+    <th>Volume</th>
+    <th>Concentration</th>
+    <th>Plate</th>
+    <th>Coord</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h molecular_assay.barcode_key %></td>
+    <td><%=h molecular_assay.protocol_name %></td>
+    <td><%=h molecular_assay.owner_abbrev %></td>
+    <td><%=h molecular_assay.preparation_date %></td>
+    <td><%=h molecular_assay.volume %></td>
+    <td><%=h molecular_assay.concentration %></td>
+    <td><%=h molecular_assay.plate_number %></td>
+    <td><%=h molecular_assay.plate_coord %></td>
+    <td><% if can? :edit, molecular_assay %><%= link_to 'Edit', edit_molecular_assay_path(molecular_assay) %><% end %></td>
+  </tr>
+</table>

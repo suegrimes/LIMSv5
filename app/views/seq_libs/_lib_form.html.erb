@@ -1,0 +1,91 @@
+<div id="errorwarn"></div>
+
+<div class="card">
+  <h6 class="card-header">Sequencing Library</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="preparation_date" class="col-auto col-form-label col-form-label-sm">Prep Date:</label>
+      <div class="col-auto">
+        <%= date_field_tag("lib_default[preparation_date]", Date.today, class: "form-control") %>
+      </div>
+
+      <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner:</label>
+      <div class="col-auto">
+        <%= select_tag("lib_default[owner]", options_for_select(@owners, @requester), class: "form-control")%>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="protocol_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label>
+      <div class="col-auto">
+        <%= collection_select(:lib_default, :protocol_id, @protocols, :id, :protocol_name,
+                              {:include_blank => 'Select Protocol'}, class: "form-control") %>
+      </div>
+
+      <label for="adapter" class="col-auto col-form-label col-form-label-sm">Adapter:</label>
+      <div class="col-auto">
+        <%= collection_select(:lib_default, :adapter_id, @adapters, :id, :runtype_adapter, {}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="pcr_size" class="col-auto col-form-label col-form-label-sm">Size(Final PCR):</label>
+      <div class="col-auto">
+        <%= text_field(:lib_default, :pcr_size, :size => 10, class: "form-control")%>
+      </div>
+
+      <label for="quantitation_method" class="col-auto col-form-label col-form-label-sm">Quantitation:</label>
+      <div class="col-auto">
+        <%= collection_select(:lib_default, :quantitation_method, @quantitation, :c_value, :c_value, {:include_blank => 'Select Method'},
+                              class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="lib_conc_requested" class="col-auto col-form-label col-form-label-sm">FlowCell Conc:</label>
+      <div class="col-auto">
+        <%= text_field(:lib_default, :lib_conc_requested, :size => 10, class: "form-control") %>
+      </div>
+      <div class="col-form-label-sm">pM</div>
+
+      <label for="pool_id" class="col-auto col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
+      <div class="col-auto">
+        <%= collection_select(:lib_default, :pool_id, @oligo_pools, :id, :pool_string_dtl,
+                              {:include_blank => 'Select Pool'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label>
+      <div class="col-auto">
+        <%= collection_select(:lib_default, :alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %>
+      </div>
+
+      <label for="trim_bases" class="col-auto col-form-label col-form-label-sm">Trim Bases:</label>
+      <div class="col-auto">
+        <%= text_field(:lib_default, :trim_bases, :size => 10, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="sample_default_source_DNA" class="col-auto col-form-label col-form-label-sm">Source DNA/RNA:</label>
+      <div class="col-auto">
+        <%= autocomplete_field_tag('sample_default_source_DNA', '', processed_samples_autocomplete_processed_sample_barcode_search_path,
+                                   name: 'sample_default[source_DNA]', class: "form-control") %>
+      </div>
+
+      <label for="notebook_ref" class="col-auto col-form-label col-form-label-sm">Notebook Ref:</label>
+      <div class="col-auto">
+        <%= text_field(:lib_default, :notebook_ref, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="notes" class="col-auto col-form-label col-form-label-sm">Notes:</label>
+      <div class="col-auto">
+        <%= text_area(:lib_default, :notes, size: "80x2", class: "form-control") %>
+      </div>
+    </div>
+  </div>
+</div>

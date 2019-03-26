@@ -1,0 +1,12 @@
+<h5>Editing Sequencing Machine</h5>
+
+<%= form_for(@seq_machine) do |f| %>
+  <%= render '/shared/errors', model: @seq_machine %>
+
+  <%= render :partial => 'seq_machine_form', :locals => {:f => f}%>
+
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'Show', @seq_machine %> |
+<%= link_to 'List All', seq_machines_path %>

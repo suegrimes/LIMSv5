@@ -1,0 +1,52 @@
+<h5>Adapter</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Adapter</th>
+    <th>Nr Tags</th>
+    <th>Mplex/Splex</th>
+    <th>Index Pos</th>
+    <th>2Index?</th>
+    <th>I1 Prefix</th>
+    <th>I2 Prefix</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @adapter.runtype_adapter %></td>
+    <td align="center"><%=h @adapter.index_tags.size %></td>
+    <td align="center"><%=h @adapter.mplex_splex %></td>
+    <td><%=h @adapter.index_position %></td>
+    <td align="center"><%=h @adapter.multi_indices %></td>
+    <td><%=h @adapter.index1_prefix %></td>
+    <td><%=h @adapter.index2_prefix %></td>
+  </tr>
+</table>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Index Read</th>
+    <th>Tag#</th>
+    <th>Sequence</th>
+    <th colspan=2></th>
+  </tr>
+  </thead>
+
+  <% for index_tag in @adapter.index_tags %>
+      <tr>
+        <td><%=h index_tag.index_read %></td>
+        <td><%=h index_tag.index_code %></td>
+        <td><%=h index_tag.tag_sequence %></td>
+        <td><% if can? :edit, index_tag %>
+              <%= link_to 'Edit', edit_index_tag_path(index_tag) %>
+          <% end %></td>
+        <td><% if can? :delete, index_tag %>
+              <%= link_to 'Delete', index_tag, :confirm => 'Are you sure?', :method => :delete %>
+          <% end %></td>
+      </tr>
+  <% end %>
+</table>
+
+<%= link_to 'List All', adapters_path %>

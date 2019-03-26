@@ -36,3 +36,104 @@
     font: inherit;
 }
 
+table.break_clear {
+    margin-bottom: 0;
+}
+
+.info01 {
+    border: 1px solid #b0aa91;
+    border-collapse: separate;
+    margin-bottom: 1em;
+}
+
+.info01 th {
+    background-color: #e8ead0;
+    font-size: .9em;
+    background-color: #f1f2e3;
+    white-space: nowrap;
+    padding: .1em .3em;
+    text-align: left;
+}
+
+.info01 td {
+    padding: .1em .3em;
+}
+
+table.info {
+    margin-bottom: 0;
+}
+
+.info th {
+    font-size: .85em;
+    font-weight: bolder;
+    text-align: right;
+    vertical-align:top;
+}
+
+.info td {
+    font-size: .85em;
+    vertical-align: top;
+    padding-right: .75em;
+}
+
+/* info fieldset styles */
+
+fieldset.info {
+    padding: .5em;
+    margin-bottom: 10px;
+    float:left;
+    /* clear:right;*/
+    background: #fafafa;
+    border: 1px solid #999;
+    width:50%;
+}
+fieldset.info legend {
+    margin-left:1em;
+    font-size: .9em;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0 4px;
+    background: #fff;
+    border: 1px solid #999;
+}
+
+/* end info fieldset styles */
+
+.linkborder {
+    border: 2px solid #dedacb;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    text-align: center;
+    padding: 0 4px;
+    line-height: 1.3em;
+    width: 3em;
+}
+
+.linkbutton {
+    border: 1px solid #888;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    text-align: center;
+    padding: 0 4px;
+    line-height: 1.3em;
+    width: 3em;
+    background-color: #dedacb;
+    color: #999;
+}
+
+/* Other general styles */
+
+.grey {color:#888;}
+.ltgrey {color:#ddd;}
+.palegrey {color:#eee;}
+.dkred {color:#990000;}
+.sagegreen {color: #e8ead0;}
+.ltsage {color: #f1f2e3;}
+.brightred {color: #FF0000;}
+
+.greyfill {background-color: #ddd;}
+
+.lft {float:left;}
+.rgt{float:right;}
