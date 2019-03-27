@@ -8,11 +8,16 @@
     <%= error_messages_for :molecular_assay, :object => @assay_with_error, 
                            :header_message => "Unable to save assay sample #{@assay_index + 1} - no assays saved" %>
   <% end %>
-  
+  <br/>
+
   <% if @new_assay.nil?%>   
-    <div id='assays'>	
-    <b>Number of samples for this assay:</b>&nbsp;<%= text_field_tag(:nr_assays, @default_nr_assays, :size => 5)-%>
-    <%= link_to 'Add Assays', populate_assays_path, {:onclick => "this.href += '?nr_assays='+$('#nr_assays').val(); return true;", :remote => true} %>
+    <div id='assays' class="form-group row">
+    <b>Number of samples for this assay:</b>&nbsp;
+      <div class="col-sm-1"><%= text_field_tag(:nr_assays, @default_nr_assays, :size => 5, class: "form-control")-%></div>
+      <div class="col-sm-3">
+      <%= link_to('Add Assays', populate_assays_path, {:onclick => "this.href += '?nr_assays='+$('#nr_assays').val(); return true;", :remote => true,
+                  class: "btn btn-primary"}) %>
+      </div>
     </div>      
   <% else %>
     <%= render :partial => 'assay_sample_form' %>

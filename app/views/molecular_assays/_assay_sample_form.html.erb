@@ -1,6 +1,5 @@
 <div id='assays_form'>
 
-<fieldset class="form">
 <legend>Assay Samples</legend>
   <%= hidden_field_tag(:nr_assays, new_assay.size) %>
   <table class="form-with-columns">
@@ -50,7 +49,7 @@
 </fieldset>
 </div>
 
-<%=raw break_clear(submit_tag "Save assays") %>
+<%= submit_tag "Save assays" %>
 <div id="default_vol"></div>
 <!-- f.text_field(:volume, :size => 8, :onchange => "$('default_vol').update($F(this));") --> 
 <!-- observe_field("molecular_assay_0_volume", :on => :onchange, :update => "default_vol",
