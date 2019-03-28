@@ -1,44 +1,43 @@
-<h1>New Multiplex Sequencing Library</h1>
+<h5>New Multiplex Sequencing Library</h5>
 
 <%= form_for @seq_lib, :url => {:controller => 'mplex_libs', :action => :create} do |f| %>
   <%= render '/shared/errors', model: @seq_lib %>
 
   <%= render :partial => 'lib_form', :locals => {:f => f} %> 
-  <%=raw break_clear %>
+  <br/>
 
 <% @checked ||= false %>  
 <span class="notes"> Check boxes below, to include libraries in new multiplex library</span><br/>
   <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAll(this);"}) %>
   <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
-  <%= f.submit 'Create Library' %><br/>
+  <%= f.submit 'Create Library', class: "btn btn-primary" %><br/>
   <br/>
 
-<div>&nbsp;</div>
 <%= render '/shared/collected_errors', collection: @lib_samples %>
 
-<fieldset class="form">
-<legend>Libraries/Samples</legend>
-<table class="form-with-columns">
+<h6>Libraries/Samples</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
   	<tr>
   	  <td>&nbsp;</td>
   	  <th>Lib Barcode</th>
-	  <th>Lib Name</th>
+	    <th>Lib Name</th>
   	  <th>Adapter</th>
       <th>Index1</th>
       <th>Index2</th>
       <th>Sample Name</th>
-	  <th>Patient ID</th>
+	    <th>Patient ID</th>
       <th>Source DNA/RNA</th>
-	  <th><%=h Pool.human_attribute_name(:pool_name)%></th>
-	  <th>Sample Notes</th>
+	    <th><%=h Pool.human_attribute_name(:pool_name)%></th>
+	    <th>Sample Notes</th>
     </tr>
+    </thead>
 
     <% @lib_samples.each_with_index do |lib_sample, i| %>
       <%= render 'sample_form', seq_lib: @singleplex_libs[i], lib_sample: lib_sample %>
 	<% end %>
   </table>
-</fieldset>  
 <% end %>
 
-<%=raw break_clear %>
+<br/>
 <%= link_to 'Back', :back %>

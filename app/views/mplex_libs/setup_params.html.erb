@@ -1,40 +1,55 @@
-<h1>Prepare Multiplex Library</h1>
+<h5>Prepare Multiplex Library</h5>
 
 <%= form_tag new_mplex_lib_path, method: :get  do %>
-<fieldset class="form">
-<legend>Singleplex Sequencing Library Parameters</legend>
-<table class="form">
-  <tr>
-  	<th>Library Barcode(s):</th>
-	<td colspan="3"><%= text_field_tag(:barcode_string, '', {:size => 40})%></td>
-  </tr>
-  <tr><td class="notes" colspan="4">Enter individual library numbers separated by commas, enter ranges with '-'.</td></tr>
-  <tr><td class="notes" colspan="4">Eg. '1160,1378-1400,1500-1600'</td></tr>
-  <tr><td>&nbsp;</td></tr>
-  <tr>
-    <th>Owner(s):</th>
-    <td><%= select(:seq_lib, :owner, @owners,
-                  {:include_blank => '(All)'}, {:size => 3, :multiple => :multiple}) %> </td>
-  </tr>
-  <tr>
-	<th>Runtype Adapter:</th>
-	<td><%= collection_select(:seq_lib, :adapter_id, @mplex_adapters, :id, :runtype_adapter) %></td>
-  </tr>  
-  <tr>
-    <th>Exclude used libraries?</th>
-    <td><%= check_box_tag(:excl_used, 'Y', true)%></td>
-  </tr> 
-  <tr>
-  <tr><td>&nbsp;</td></tr>
-  <tr>
-  	<th>Prepared from:</th>
-    <td><%= date_field('date_range', 'from_date', class: "form-control") %></td>
-  	<th>To:</th>
-	<td><%= date_field('date_range', 'to_date', class: "form-control") %></td>
-  </tr>	
-</table>
-</fieldset>
-<%=submit_tag "Submit"%>
-<%end%>
+<div class="card">
+  <h6 class="card-header">Singleplex Library Parameters</h6>
+  <div class="card-body">
+    <div class="form-group row">
+      <p class="font-italic font-sm">Enter individual library numbers as integers separated by commas, enter ranges with '-'.
+               Eg. '1160,1378-1400,1500-1600'</p>
+    </div>
 
+    <div class="form-group row">
+      <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+      <div class="col-auto">
+        <%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %>
+      </div>
+
+      <label for="seq_lib_adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label>
+      <div class="col-auto">
+        <%= collection_select(:seq_lib, :adapter_id, @mplex_adapters, :id, :runtype_adapter, {}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="seq_lib_owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label>
+      <div class="col-auto">
+        <%= select(:seq_lib, :owner, @owners, {:include_blank => '(All)'}, {size: 3, multiple: :multiple, class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-3" style="text-align:left"><%= check_box_tag(:excl_used, 'Y', true)%>&nbsp;Exclude used libraries?</div>
+    </div>
+
+    <div class="form-group row">
+      <label for="date_range_from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label>
+      <div class="col-auto">
+        <%= date_field('date_range', 'from_date', class: "form-control") %>
+      </div>
+
+      <label for="date_range_to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
+      <div class="col-auto">
+        <%= date_field('date_range', 'to_date', class: "form-control") %></td>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="form-group row">
+    <div class="col-auto">
+      <%=submit_tag "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
+<%end%>
 

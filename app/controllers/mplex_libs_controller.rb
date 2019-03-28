@@ -28,7 +28,7 @@ class MplexLibsController < ApplicationController
     # Get sequencing libraries based on parameters entered
     @condition_array = define_lib_conditions(params)
     @singleplex_libs = SeqLib.includes(:mlib_samples, {:lib_samples => :processed_sample}).where(sql_where(@condition_array))
-                             .order('barcode_key, lib_name').all
+                             .order('barcode_key, lib_name').all.to_a
     if params[:excl_used] && params[:excl_used] == 'Y'
       @singleplex_libs.reject!{|s_lib| !s_lib.mlib_samples.empty?} #Exclude if already included in a multiplex library
     end
@@ -176,7 +176,7 @@ protected
     combo_fields = {:barcode_string => {:sql_attr => ['seq_libs.barcode_key'], :str_prefix => 'L', :pad_len => 6}}
     query_flds = {'standard' => {'seq_libs' => %w(owner adapter_id)}, 'multi_range' => combo_fields, 'search' => {}}
 
-    @where_select, @where_values = build_sql_where(params[:seqlib], query_flds, ["seq_libs.library_type = 'S'"], [])
+    @where_select, @where_values = build_sql_where(params[:seq_lib], query_flds, ["seq_libs.library_type = 'S'"], [])
                                      
     if params[:excl_used] && params[:excl_used] == 'Y'
       @where_select.push("seq_libs.lib_status <> 'F'")
@@ -187,5 +187,8 @@ protected
 
     return sql_where_clause(@where_select, @where_values)
   end
+
+  #{"utf8"=>"✓", "barcode_string"=>"", "seq_lib"=>{"adapter_id"=>"1", "owner"=>[""]},
+  # "excl_used"=>"Y", "date_range"=>{"from_date"=>"2018-12-01", "to_date"=>"2019-03-28"}, "commit"=>"Submit"}
   
 end 

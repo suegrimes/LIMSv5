@@ -110,7 +110,7 @@ Rails.application.routes.draw do
    end
   post 'populate_libs' => 'seq_libs#populate_libs'
 
-  resources :mplex_libs do
+  resources :mplex_libs, :except => [:show, :index] do
     get :auto_complete_for_barcode_key, on: :collection
   end
   get 'mplex_setup' => 'mplex_libs#setup_params', :as => 'mplex_setup'

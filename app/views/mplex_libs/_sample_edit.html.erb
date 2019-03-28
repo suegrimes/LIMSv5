@@ -1,10 +1,10 @@
 <div id="lib_samples">
     <tr>
       <% if s.object.splex_lib %>
-	    <td><%= s.text_field(:singleplex_lib, :size => 10) %></td>
+	    <td><%= s.text_field(:singleplex_lib, :size => 10, class: "form-control") %></td>
 	    <td><%=h s.object.splex_lib.lib_name %></td>
 	  <% else %>
-	    <td><%= s.text_field(:singleplex_lib, :size => 10) %></td>
+	    <td><%= s.text_field(:singleplex_lib, :size => 10, class: "form-control") %></td>
 		<td>&nbsp;</td>
 	  <% end %>
 	  <td><%=h s.object.adapter_name %></td>
@@ -15,8 +15,8 @@
 	  <% if s.object.splex_lib %>
 	    <td><%=h s.object.source_sample_name %></td>
 	  <% else %>
-        <td><%= s.text_field(:source_sample_name, :size => 10) %></td> 
+        <td><%= s.text_field(:source_sample_name, :size => 10, class: "form-control") %></td>
 	  <% end %>
-	  <td><%= s.text_field(:notes, :size => 30)%></td>	               
+	  <td><%= s.text_field(:notes, :size => 30, class: "form-control")%></td>
     </tr>
 </div>
