@@ -22,7 +22,7 @@ class SeqlibQuery
   SEARCH_FLDS = {'seq_libs' => %w(lib_name)}
   STD_FIELDS  = {'seq_libs' => %w(owner project alignment_ref), 'processed_samples' => %w(patient_id)}
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['processed_samples.patient_id']},
-                  :barcode_string => {:sql_attr => ['seq_libs.barcode_key']}}
+                  :barcode_string => {:sql_attr => ['seq_libs.barcode_key'], :str_prefix => 'L', :pad_len => 6}}
 
   QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => SEARCH_FLDS}
 

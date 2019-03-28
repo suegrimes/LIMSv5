@@ -52,8 +52,7 @@ protected
     dt_fld = 'histologies.he_date'
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:histology_query], dt_fld)
 
-    sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
-    return sql_where_clause
+    return sql_where_clause(@where_select, @where_values)
   end
 
   def histology_query_params
