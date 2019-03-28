@@ -113,6 +113,7 @@ Rails.application.routes.draw do
   resources :mplex_libs do
     get :auto_complete_for_barcode_key, on: :collection
   end
+  get 'mplex_setup' => 'mplex_libs#setup_params', :as => 'mplex_setup'
 
   # Routes for sequencing library queries
   resources :seqlib_queries, :only => :index
