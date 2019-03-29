@@ -81,11 +81,11 @@ Rails.application.routes.draw do
   # Routes for molecular assays
   get 'molecular_assays/autocomplete_molecular_assay_source_sample_name'
   get 'molecular_assays/main' => 'molecular_assays#main_hdr'
-  resources :molecular_assays
-  get 'create_molecular_assays' => 'molecular_assays#create_assays'
+  resources :molecular_assays do
+    get :list_added, on: :collection
+    post :create_assays, on: :collection
+  end
   match 'populate_assays' => 'molecular_assays#populate_assays', :via => [:get, :post]
-  get 'molecular_assays/list_added' => 'molecular_assays#list_added'
-  #match 'populate_assays/:nr_assays' => 'molecular_assays#populate_assays', :as => :populate_assays, :via => :get
   #
   resources :molassay_queries, :only => :index
   get 'mol_assay_query' => 'molassay_queries#new_query'
