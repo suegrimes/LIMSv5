@@ -1,11 +1,9 @@
 <% @nr_libs = @new_lib.size %>
-$j('#add_libs').hide();
-$j('#splex_libs').html("<%= escape_javascript(render :partial => 'sample_form').html_safe %>");
-$j('#lib_button').prop('value', 'Refresh from Defaults');
-$j('#add_libs_button').css({
+jQuery('#add_libs').hide();
+jQuery('#splex_libs').html("<%= escape_javascript(render :partial => 'sample_form').html_safe %>");
+jQuery('#lib_button').prop('value', 'Refresh from Defaults');
+jQuery('#add_libs_button').css({
    position : 'relative',
    top : '22px',
    left : '105px'
 });
-
-

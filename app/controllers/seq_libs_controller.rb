@@ -61,7 +61,7 @@ class SeqLibsController < ApplicationController
     @lib_samples = []
     params[:nr_libs] ||= 4
 
-    @lib_default = SeqLib.new(params[:lib_default])
+    @lib_default = SeqLib.new(default_lib_params)
     @sample_default = LibSample.new(:source_DNA => params[:sample_default][:source_DNA],
                                     :enzyme_code => array_to_string(params[:sample_default][:enzyme_code]))
     @requester = params[:lib_default][:owner]
@@ -70,7 +70,7 @@ class SeqLibsController < ApplicationController
     @index2_tags  = (@adapter.nil? ? nil : @adapter.index2_tags)
 
     0.upto(params[:nr_libs].to_i - 1) do |i|
-      @new_lib[i]    = SeqLib.new(params[:lib_default])
+      @new_lib[i]    = SeqLib.new(default_lib_params)
       @lib_samples[i] = LibSample.new(:adapter_id => params[:sample_default][:adapter_id],
                                       :source_DNA => params[:sample_default][:source_DNA],
                                       :enzyme_code => array_to_string(params[:sample_default][:enzyme_code]))
@@ -198,6 +198,16 @@ protected
 
   def update_params
     create_params
+  end
+
+  def default_lib_params
+    params.require(:lib_default).permit(:preparation_date, :owner, :protocol_id, :adapter_id, :pcr_size,
+                                        :quantitation_method, :lib_conc_requested, :pool_id, :alignment_ref_id,
+                                        :trim_bases, :notebook_ref, :notes)
+  end
+
+  def default_sample_params
+    params.require(:sample_default).permit(:source_DNA, :adapter_id, :enzyme_code)
   end
 
   def dropdowns
