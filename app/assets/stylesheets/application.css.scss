@@ -90,7 +90,13 @@ hr.down-shadow {
 }
 
 .form-control {
-  padding: 0 0.75rem;
+  padding: 0 .50rem;
+}
+ 
+.form-control-sm, .input-group-sm > .form-control, .input-group-sm > .input-group-prepend > .input-group-text, .input-group-sm > .input-group-append > .input-group-text, .input-group-sm > .input-group-prepend > .btn, .input-group-sm > .input-group-append > .btn {
+  padding: 0 .50rem;
+  line-height: 1.75;
+  height: calc(100% - 0.25rem) !important;
 }
 
 .card {
