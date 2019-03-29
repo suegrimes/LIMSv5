@@ -12,7 +12,9 @@
     <span class="col-sm-6"><b>Populate how many libraries with these defaults?</b></span>&nbsp;
     <%= text_field_tag(:nr_libs, @nr_libs, {class: "col-sm-1 form-control"})-%>
   </div>
-  <div id="add_libs_button"><%= submit_tag('Add Libraries', id: 'lib_button', class: "btn btn-primary") %></div>
+    <div id="add_libs_button">
+    <%= submit_tag('Add Libraries', id: 'lib_button', class: "btn btn-primary") %>
+    </div>
 <% end %>
 <% end %>
 

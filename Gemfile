@@ -19,11 +19,8 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 #gem 'therubyracer', '0.11.beta1', :path => 'C:\Users\sgrimes\Software\rubygems', platforms: [:jruby, :x64_mingw]
 #gem 'therubyracer', '0.11.0beta1', platforms: [:jruby, :x64_mingw]
-# for PC
-#gem 'therubyracer', '0.11.0beta1', platforms: :ruby
-# for mac
-#gem 'therubyracer', platforms: :ruby
-gem 'mini_racer', platforms: :ruby
+gem 'therubyracer', '0.11.0beta1', platforms: :ruby
+#gem 'mini_racer', platforms: :ruby
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
