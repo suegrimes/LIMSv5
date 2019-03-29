@@ -114,7 +114,7 @@ class MolecularAssaysController < ApplicationController
     @molecular_assay = MolecularAssay.find(params[:id])
     authorize! :update, @molecular_assay
     
-    if @molecular_assay.update_attributes(params[:molecular_assay])
+    if @molecular_assay.update_attributes(update_params)
       flash[:notice] = 'Molecular assay was successfully updated.'
       redirect_to(@molecular_assay) 
     else
@@ -213,18 +213,28 @@ protected
   end
   
   def build_assay(assay_param, assay_defaults)
+    puts assay_defaults, assay_param
     if assay_param[:source_sample_name].blank?
       return nil
       
     else
-      molecular_assay = MolecularAssay.new(assay_defaults.merge!(assay_param))
+      params[:molecular_assay] = {:owner => assay_defaults[:owner],
+                                  :preparation_date => assay_defaults[:preparation_date],
+                                  :protocol_id => assay_defaults[:protocol_id],
+                                  :notes => assay_defaults[:notes] || assay_param[:notes],
+                                  :source_sample_name => assay_param[:source_sample_name],
+                                  :volume => assay_param[:volume],
+                                  :concentration => assay_param[:concentration],
+                                  :plate_number => assay_param[:plate_number],
+                                  :plate_coord => assay_param[:plate_coord]}
+      molecular_assay = MolecularAssay.new(create_params)
       return molecular_assay
     end   
   end
 
   def create_params
     params.require(:molecular_assay).permit(
-        :barcode_key, :processed_sample_id, :protocol_id, :owner, :preparation_date, :volume,
+        :barcode_key, :processed_sample_id, :source_sample_name, :protocol_id, :owner, :preparation_date, :volume,
         :concentration, :plate_number, :plate_coord, :notes)
   end
 
