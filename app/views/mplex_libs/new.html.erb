@@ -3,7 +3,7 @@
 <%= form_for @seq_lib, :url => {:controller => 'mplex_libs', :action => :create} do |f| %>
   <%= render '/shared/errors', model: @seq_lib %>
 
-  <%= render :partial => 'lib_form', :locals => {:f => f} %> 
+  <%= render :partial => 'lib_form', :locals => {:f => f} %>
   <br/>
 
 <% @checked ||= false %>  
@@ -11,10 +11,8 @@
   <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAll(this);"}) %>
   <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
   <%= f.submit 'Create Library', class: "btn btn-primary" %><br/>
-  <br/>
 
 <%= render '/shared/collected_errors', collection: @lib_samples %>
-
 <h6>Libraries/Samples</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">

@@ -57,7 +57,7 @@ class MplexLibsController < ApplicationController
 
   # POST /mplex_libs
   def create
-    @seq_lib       = SeqLib.new(params[:seq_lib])
+    @seq_lib       = SeqLib.new(create_params)
     @seq_lib[:library_type] = 'M'
     @seq_lib[:alignment_ref] = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
     
@@ -132,7 +132,7 @@ class MplexLibsController < ApplicationController
     alignment_key = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
     params[:seq_lib].merge!(:alignment_ref => alignment_key)
      
-    if @seq_lib.update_attributes(params[:seq_lib])
+    if @seq_lib.update_attributes(update_params)
       SeqLib.upd_mplex_fields(@seq_lib) if @seq_lib.barcode_key[0,1] == 'L'
       if @seq_lib.on_flow_lane?
         FlowLane.upd_lib_lanes(@seq_lib)
@@ -188,7 +188,20 @@ protected
     return sql_where_clause(@where_select, @where_values)
   end
 
-  #{"utf8"=>"✓", "barcode_string"=>"", "seq_lib"=>{"adapter_id"=>"1", "owner"=>[""]},
-  # "excl_used"=>"Y", "date_range"=>{"from_date"=>"2018-12-01", "to_date"=>"2019-03-28"}, "commit"=>"Submit"}
+  def create_params
+    params.require(:seq_lib).permit(
+        :barcode_key, :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
+        :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
+        :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
+        lib_samples_attributes: [
+            :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
+            :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
+        ]
+    )
+  end
+
+  def update_params
+    create_params
+  end
   
 end 
