@@ -1,0 +1,52 @@
+<fieldset class="form">
+  <legend>Flowcell Parameters</legend>
+  <table border="0" class="form">  		  
+	<tr>
+      <th><%=f.label :flowcell_date, 'Date:' %></th>
+	  <td><%=f.date_field(:flowcell_date) %></td>
+	  <% if f.object.new_record? %>
+        <th><%=f.label(:machine_type, 'Machine Type:') %>
+          <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'})%></th>
+		<th><%=f.label :partial_flowcell, 'Partial Flowcell?' %>
+	      <%= select_tag :partial_flowcell, options_for_select(%w{N Y}, selected_value=@partial_flowcell) %></th>
+	  
+	  <% else %>
+		<th>Seq Machine:
+		<%=h (f.object.seq_machine ? f.object.seq_machine.machine_name_and_type : ['N/A', '(', f.object.machine_type, ')'].join) %></th>
+		<th>Partial Flowcell?
+	    <%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %></th>
+	  <% end %>
+    </tr>
+	<tr>
+	  <th>Number of Reads:</th>
+	  <th><%=f.label(:nr_bases_read1, 'Read 1:') %> <%= f.text_field :nr_bases_read1, :size => 10 %></th>
+      <th><%=f.label(:nr_bases_read2, 'Read 2:') %> <%= f.text_field :nr_bases_read2, :size => 10 %></th>
+	  <% if !f.object.new_record? && (can? :new, AlignmentRef) %>
+	    <th><%=f.label(:flowcell_status, 'Status:') %></th><td><%= f.select(:flowcell_status, FlowCell::STATUS) %></td> 
+	  <% end %>
+	</tr>
+    <tr>
+      <th>Index Reads:</th>
+      <th><%=f.label(:nr_bases_index1, 'Index1:') %>  <%= f.text_field :nr_bases_index1, :size => 10 %></th>
+      <th><%=f.label(:nr_bases_index2, 'Index2:') %>  <%= f.text_field :nr_bases_index2, :size => 10 %></th>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+      <th>Kit Versions:</th>
+	  <th><%=f.label(:cluster_kit, 'Cluster Kit:') %> <%= f.collection_select(:cluster_kit, @cluster_kits, :c_value, :c_value)%></th>
+      <th><%=f.label(:sequencing_kit, 'Sequencing Kit:') %> <%= f.collection_select(:sequencing_kit, @seq_kits, :c_value, :c_value)%></th>	    	  
+	</tr>
+	<tr>
+	  <th><%=f.label(:hiseq_xref, 'Alt Run#:') %></th><td colspan="2"><%= f.text_field(:hiseq_xref, :size => 30)%></td>   
+	</tr>
+	<tr>
+	  <th style="text-align:right;text-decoration:none;"><%=f.label(:run_description, 'Run Description:')%></th>
+	  <td colspan="5"><%=f.text_field(:run_description, :size => 60)%></td>
+	</tr>
+	<tr>
+	  <th style="text-align:right;text-decoration:none;"><%=f.label(:notes, 'Notes:') %></th>
+	  <td colspan="5"><%= f.text_field(:notes, :size => 60) %></td>
+	</tr>
+  </table>
+  </fieldset>
+

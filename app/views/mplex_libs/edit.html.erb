@@ -1,0 +1,33 @@
+<h5>Editing Multiplex Sequencing Library</h5>
+
+<%= form_for @seq_lib, :url => {:controller => 'mplex_libs', :action => :update}  do |f| %>
+  <%= render '/shared/errors', model: @seq_lib %>
+  <%= render :partial => 'lib_form', :locals => {:f => f} %>
+
+  <br/>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
+  	<tr>
+  	  <th>Lib Barcode</th>
+	    <th>Lib Name</th>
+  	  <th>Adapter</th>
+      <th>Index Tag(s)</th>
+	    <th>Pool</th>
+      <th>Sample Name</th>
+	    <th>Patient ID</th>
+      <th>Source DNA/RNA</th>
+	    <th>Sample Notes</th>
+    </tr>
+    </thead>
+
+  <%= f.fields_for :lib_samples do |s| %>
+    <%= render '/shared/errors', model: s.object %>
+    <tr><%= render :partial => 'sample_edit', :locals => {:s => s} %></tr>
+  <% end %>
+  
+  </table>
+
+<%=f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+  
+<%= link_to 'Back', :back %>

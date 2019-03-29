@@ -1,0 +1,38 @@
+<h1>Prepare Flow Cell</h1>
+
+<%= form_tag new_flow_cell_path, method: :get do %>
+<fieldset class="form">
+	<legend>Sequencing Library Parameters</legend>
+<table class="form">
+  <tr>
+  <tr>
+    <th>Library Barcode(s):</th>
+    <td colspan="3"><%= text_field_tag(:barcode_string, '', {:size => 40})%></td>
+  </tr>
+  <tr><td class="notes" colspan="4">Enter individual library numbers separated by commas, enter ranges with '-'.</td></tr>
+  <tr><td class="notes" colspan="4">Eg. '1160,1378-1400,1500-1600'</td></tr>
+  <tr><td>&nbsp;</td></tr>
+  <tr>
+    <th>Owner(s):</th>
+    <td><%= select(:seq_lib, :owner, @owners,
+                  {:include_blank => '(All)'}, {:size => 3, :multiple => :multiple}) %> </td> 
+  </tr>  
+  <tr>
+    <th>Exclude used libraries?</th>
+    <td><%= check_box_tag(:excl_used, 'Y', true)%></td>
+  </tr> 
+  <tr>
+  <tr><td>&nbsp;</td></tr>
+  <tr>
+  	<th>Prepared from:</th>
+	<td><%= datepicker_input(:date_range, :from_date, dateFormat: "yy-mm-dd", changeMonth: true, changeYear: true, defaultDate: "#{@from_date}", maxDate: "0", size: 15) %></td>
+	<td>&nbsp;&nbsp;</td>
+  	<th>To:</th>
+	<td><%= datepicker_input(:date_range, :to_date, dateFormat: "yy-mm-dd", changeMonth: true, changeYear: true, defaultDate: "0", maxDate: "0", size: 15) %></td>
+  </tr>	
+</table>
+</fieldset>
+<%=raw break_clear(submit_tag "Submit")%>
+<%end%>
+
+

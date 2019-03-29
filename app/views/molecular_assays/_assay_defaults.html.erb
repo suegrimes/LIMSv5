@@ -1,16 +1,32 @@
-<fieldset class="form">
-<table class="form" border="0">
-<tr>
-  <th>Owner:</th><td><%= select_tag("assay_default[owner]", options_for_select(@owners, :selected => @requester))%></td>
-  <th>Date:</th><td><%= date_field("assay_default", "preparation_date") %></td>
-</tr>
-<tr>
-  <th>Protocol:</th><td><%= collection_select(:assay_default, :protocol_id, @protocols, :id, :protocol_name,
-                           {:include_blank => 'Select Protocol'}) %></td>
-</tr>
-<tr>  
-  <th>Notes:</th>
-  <td colspan="5"><%= text_field(:assay_default, :notes, :size => 80) %></td>
-</tr>
-</table>
-</fieldset>
+<div class="card">
+  <h6 class="card-header">Assay Defaults:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <%= label_tag(:assay_default_owner, 'Owner', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= select_tag("assay_default[owner]", options_for_select(@owners, :selected => @requester), class: "form-control") %>
+      </div>
+
+      <%= label_tag(:assay_default_preparation_date, 'Prep Date', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= date_field("assay_default", "preparation_date", class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= label_tag(:assay_default_protocol_id, 'Protocol', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= collection_select(:assay_default, :protocol_id, @protocols, :id, :protocol_name,
+                              {:include_blank => 'Select Protocol'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= label_tag(:assay_default_notes, 'Notes', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= text_field(:assay_default, :notes, :size => 80, class: "form-control") %>
+      </div>
+    </div>
+  </div>
+</div>

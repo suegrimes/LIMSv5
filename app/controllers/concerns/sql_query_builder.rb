@@ -126,4 +126,9 @@ def sql_where(condition_array)
     return *condition_array
   end
 end
+
+def sql_where_clause(where_select, where_values)
+  return (where_select.length == 0 ? [] : [where_select.join(' AND ')].concat(where_values))
+end
+
 end

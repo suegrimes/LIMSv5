@@ -1,0 +1,35 @@
+<h1>New Flow Cell</h1>
+
+<%= form_for(@flow_cell) do |f| %>
+  <%= render '/shared/errors', model: @flow_cell %>
+  <%= render :partial => 'flow_cell_form', :locals => {:f => f} %>
+  
+<%=raw break_clear('<div class="notes">Note: to assign a sequencing library to multiple lanes, separate the lane numbers with commas (eg. 1,2)</div>') %>
+<fieldset class="form">
+  <legend>Lanes</legend>
+  <table class="form-with-columns">
+    <tr>
+      <th>Lane</th>
+	  <th>Lib Conc</th>
+	  <th><%=h Pool.human_attribute_name(:pool_name)%></th>
+	  <th>Lib Barcode</th>
+      <th>Library Name</th>
+	  <th>Owner</th>
+	  <th>Prep Date</th>
+	  <th>M/S</th>
+	  <th>Adapter</th>
+	  <th>Alignment Ref</th>
+	  <th colspan=2>Sample Conc</th> 
+	  <th>Notes</th>
+    </tr>
+
+    <% (0..@flow_lanes.size-1).each do |i| %>
+      <tr><%= render :partial => 'flow_lane_form', :locals => {:seq_lib => @seq_libs[i],
+                                                               :flow_lane => @flow_lanes[i]} %></tr>
+	<% end %>
+  </table>
+</fieldset>  
+<%=raw break_clear(f.submit "Create") %>
+<% end %>
+  
+<%= link_to 'Back', :back %>

@@ -164,8 +164,7 @@ protected
     dt_fld = (params[:sample_query][:date_filter] == 'Dissection Date' ? 'samples.sample_date' : 'sample_characteristics.collection_date')
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:sample_query], dt_fld)
 
-    sql_where_clause = (@where_select.length == 0 ? [] : [@where_select.join(' AND ')].concat(@where_values))
-    return sql_where_clause
+    return sql_where_clause(@where_select, @where_values)
   end
   
   def export_samples_csv(samples, with_mrn='no')    
