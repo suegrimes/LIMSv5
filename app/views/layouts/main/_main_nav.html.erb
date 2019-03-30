@@ -1,14 +1,126 @@
-<ul id="top-nav" class="nav nav-pills">
+
+<ul id="top-nav" class="nav nav-tabs">
+  
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/samples" role="button" aria-haspopup="true" aria-expanded="false">Samples</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="/sample_characteristics/new">New Source Sample</a>
+      <a class="dropdown-item" href="/new_dissection">New Dissection</a>
+      <a class="dropdown-item" href="/new_extraction">New Extraction</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Bulk Upload</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Edit Patient</a>
+      <a class="dropdown-item" href="/modify_sample">Edit Sample Acquisition</a>
+      <a class="dropdown-item" href="/upd_sample">Edit Sample</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/pathology" role="button" aria-haspopup="true" aria-expanded="false">Pathology</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="/new_histology">H&E Slide</a>
+      <a class="dropdown-item" href="/new_pathology">Pathology Rpt</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/molecular_assays" role="button" aria-haspopup="true" aria-expanded="false">Molecular Assays</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="/seq_libs/new">New Lib-Singleplex</a>
+      <a class="dropdown-item" href="/mplex_setup">New Lib-Multiplex</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Bulk Upload</a>
+      <div class="dropdown-divider"></div>      
+      <a class="dropdown-item" href="/molecular_assays/new">New Asssy</a>
+      <a class="dropdown-item" href="#">New Asssy-Other</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sequencing</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Prepare Flowcell</a>
+      <a class="dropdown-item" href="#">Sequence Flowcell</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Orders</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">New Item</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">View Order/Item</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">List/Update Orders</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Queries</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="/unprocessed_query">Source/Dissections</a>
+      <a class="dropdown-item" href="/he_query">H&E Slides</a>
+      <a class="dropdown-item" href="/processed_query">Extracted Samples</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/mol_assay_query">Molecular Assays</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/seqlib_query">Seq Libs</a>
+      <a class="dropdown-item" href="/seq_run_query">Seq Runs</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/container_query">Storage Containers</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Lookup Tables</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="/categories">General Drop-Downs</a>
+      <a class="dropdown-item" href="/consent_protocols">Consent Protocols</a>
+      <a class="dropdown-item" href="/molecular_protocols">Molecular Protocols</a>
+      <a class="dropdown-item" href="/adaptors">Adapters</a>
+      <a class="dropdown-item" href="/alignment_refs">Alignment Refs</a>
+      <a class="dropdown-item" href="/oligo_pools">Oligo Pools</a>
+      <a class="dropdown-item" href="/seq_machines">Seq Machines</a>
+      <a class="dropdown-item" href="/freezers">Freezers</a>
+      <a class="dropdown-item" href="/researchers">Researchers</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admins</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Manage Barcodes</a>
+      <a class="dropdown-item" href="#">Manage Researchers</a>
+      <a class="dropdown-item" href="#">Manage Users</a>
+    </div>
+  </li>
+
+
+<!--<ul id="top-nav" class="nav nav-pills">
   <li class="nav-item">
     <a class="nav-link" id="samples-tab" href="/samples">Samples</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="processing-tab" href="/dissected_samples">Processing</a>
+    <a class="nav-link" id="pathology-tab" href="/pathology">Pathology</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="assays-tab" href="/molecular_assays/main">Assays</a>
+    <a class="nav-link" id="assays-tab" href="/molecular_assays/main">Molecular Assays</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="sequencing-tab" href="/sequencing/main">Sequencing</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" id="orders-tab" href="/orders">Orders</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="queries-tab" href="/queries">Queries</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="lookup-tables-tab" href="/lookup_tables">Lookup Tables</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="admin-tab" href="/orders">Admin</a>
+  </li>
 </ul>
+-->
