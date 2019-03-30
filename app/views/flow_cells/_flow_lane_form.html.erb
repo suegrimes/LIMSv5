@@ -6,7 +6,7 @@
 	<td><%= n.text_field(:lib_conc, :size => 4) %>pM</td>
 	
 	<% if Pool::USING_POOLS %>
-	  <% if flow_lane.seq_lib.oligo_pool.blank? && !flow_lane.seq_lib.control_lane? %>		
+	  <% if seq_lib.oligo_pool.blank? && !seq_lib.control_lane? %>
 	  <td><%=n.collection_select(:pool_id, @oligo_pools, :id, :pool_string, {:include_blank => 'Select..'}) %></td>
 	  <% else %>
 	  <%= n.hidden_field(:pool_id, :value => seq_lib.pool_id) %>

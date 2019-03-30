@@ -1,4 +1,5 @@
 class FlowCellsController < ApplicationController
+  include SqlQueryBuilder
   layout 'main/sequencing'
   authorize_resource class: FlowCell
   
@@ -41,7 +42,7 @@ class FlowCellsController < ApplicationController
     
     # Get sequencing libraries based on parameters entered
     @condition_array = define_lib_conditions(params)
-    @seq_libs        = SeqLib.includes(:mlib_samples).where(sql_where(@condition_array)).order('lib_status, lib_name')
+    @seq_libs        = SeqLib.includes(:mlib_samples).where(sql_where(@condition_array)).order('lib_status, lib_name').all.to_a
                                    
     # Exclude sequencing libraries which have been included in one or more multiplex libraries
     if params[:excl_used] && params[:excl_used] == 'Y'  
@@ -72,7 +73,7 @@ class FlowCellsController < ApplicationController
     # Builds flow_lanes for all lanes (even blank lane#s).  Need to include blank
     # lanes so that all sequencing libraries show with appropriate lanes (or blank)
     # when error condition is encountered
-    @flow_cell  = FlowCell.new(params[:flow_cell]) 
+    @flow_cell  = FlowCell.new(create_params)
     lane_params = params[:flow_lane]
     
     lane_nrs = non_blank_lane_nrs(non_blank_lanes(lane_params))  # Array of lane#s which are non-blank
@@ -176,6 +177,20 @@ class FlowCellsController < ApplicationController
   end
   
 protected
+  def create_params
+    params.require(:flow_cell).permit(:flowcell_date, :machine_type, :nr_bases_read1, :nr_bases_read2, :nr_bases_index1,
+                                      :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
+                                      :notes,
+                   flow_lanes_attributes: [:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key,
+                                           :seq_lib_id, :lib_barcode, :lib_name, :lib_conc_uom, :adapter_id,
+                                           :alignment_ref_id, :alignment_ref])
+  end
+
+  def flow_lane_create_params
+    params.permit(:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key, :seq_lib_id, :lib_barcode,
+                  :lib_name, :lib_conc_uom, :adapter_id, :alignment_ref_id, :alignment_ref)
+  end
+
   def dropdowns
     @category_dropdowns = Category.populate_dropdowns([Cgroup::CGROUPS['Sequencing']])
     @machine_types      = category_filter(@category_dropdowns, 'machine type')
@@ -202,7 +217,7 @@ protected
     @partial_flowcell = params[:partial_flowcell]
     
     params[:flow_lane].each do |lane|
-      @flow_lanes.push(FlowLane.new(lane))
+      @flow_lanes.push(FlowLane.new(flow_lane_create_params))
       @seq_libs.push(SeqLib.find(lane[:seq_lib_id]))
     end
   end
@@ -282,7 +297,7 @@ protected
     end
       
     date_fld = 'seq_libs.preparation_date'
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:date_range], date_fld)
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params, date_fld)
     
     # Include control libraries, irrespective of other parameters entered
     if @where_select.length > 0

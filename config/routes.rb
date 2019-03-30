@@ -121,12 +121,13 @@ Rails.application.routes.draw do
   match 'export_seqlibs' => 'seqlib_queries#export_seqlibs', :as => :export_seqlibs, :via => :post
 
   # Routes for flow cells/sequencing runs
-  get 'flow_cells/autocomplete_flow_cells_sequencing_key'
+  #get 'flow_cells/autocomplete_flow_cells_sequencing_key'
   resources :flow_cells do
     get :auto_complete_for_sequencing_key, on: :collection
     get :show_publications, on: :member
     post :upd_for_sequencing, on: :member
   end
+  match 'flow_cell_setup' => 'flow_cells#setup_params', :as => :flow_cell_setup, :via => [:get, :post]
 
   # Routes for sequencing run queries
   resources :flowcell_queries, :only => :index
