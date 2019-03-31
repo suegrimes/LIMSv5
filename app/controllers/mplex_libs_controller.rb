@@ -175,8 +175,8 @@ protected
   def define_lib_conditions(params)
     combo_fields = {:barcode_string => {:sql_attr => ['seq_libs.barcode_key'], :str_prefix => 'L', :pad_len => 6}}
     query_flds = {'standard' => {'seq_libs' => %w(owner adapter_id)}, 'multi_range' => combo_fields, 'search' => {}}
-
-    @where_select, @where_values = build_sql_where(params[:seq_lib], query_flds, ["seq_libs.library_type = 'S'"], [])
+    query_params = params[:seq_lib].merge({:barcode_string => params[:barcode_string]})
+    @where_select, @where_values = build_sql_where(query_params, query_flds, ["seq_libs.library_type = 'S'"], [])
                                      
     if params[:excl_used] && params[:excl_used] == 'Y'
       @where_select.push("seq_libs.lib_status <> 'F'")

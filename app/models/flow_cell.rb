@@ -131,7 +131,7 @@ class FlowCell < ApplicationRecord
       lane_nrs[0..(lane_nrs.size - 1)].each_with_index do |lnr, i|
         lrow[:lane_nr] = lnr
         lrow[:oligo_pool] = Pool.find(lrow[:pool_id]).tube_label if !lrow[:pool_id].blank?
-        flow_lanes.build(lrow)
+        flow_lanes.build(flow_lane_params(lrow))
       end  
     end
   end
@@ -167,6 +167,11 @@ class FlowCell < ApplicationRecord
       flow_lane.save(:validate=>false) unless flow_lane.lane_nr.nil? || flow_lane.lane_nr.blank?
     end
   end
-  
+
+protected
+  def flow_lane_params(lrow)
+    lrow.permit(:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key, :seq_lib_id, :lib_barcode,
+                                      :lib_name, :lib_conc_uom, :adapter_id, :alignment_ref_id, :alignment_ref)
+  end
   
 end

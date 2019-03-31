@@ -35,7 +35,6 @@ protected
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:molassay_query], dt_fld)
 
     return sql_where_clause(@where_select, @where_values)
-
   end
 
   def molassay_query_params

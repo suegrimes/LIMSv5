@@ -52,8 +52,7 @@ class FlowCellsController < ApplicationController
     # Populate flow lanes for each sequencing library
     @flow_lanes = []
     @seq_libs.each_with_index do |lib, i|
-      @flow_lanes[i] = FlowLane.new(:lane_nr    => lib.control_lane_nr,
-                                    :lib_conc   => lib.lib_conc_requested,
+      @flow_lanes[i] = FlowLane.new(:lib_conc   => lib.lib_conc_requested,
                                     :seq_lib_id => lib.id)
     end     
     
@@ -90,7 +89,7 @@ class FlowCellsController < ApplicationController
       render :action => 'new'
            
     elsif @flow_cell.valid?
-      @flow_cell.build_flow_lanes(lane_params)
+      @flow_cell.build_flow_lanes(params[:flow_lane])
       if @flow_cell.save
         SeqLib.upd_lib_status(@flow_cell, 'F') #Update seq_lib status for all libs on this flowcell
         flash[:notice] = 'Flow cell was successfully created'
@@ -186,8 +185,8 @@ protected
                                            :alignment_ref_id, :alignment_ref])
   end
 
-  def flow_lane_create_params
-    params.permit(:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key, :seq_lib_id, :lib_barcode,
+  def flow_lane_create_params(flow_lane)
+    flow_lane.permit(:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key, :seq_lib_id, :lib_barcode,
                   :lib_name, :lib_conc_uom, :adapter_id, :alignment_ref_id, :alignment_ref)
   end
 
@@ -217,7 +216,7 @@ protected
     @partial_flowcell = params[:partial_flowcell]
     
     params[:flow_lane].each do |lane|
-      @flow_lanes.push(FlowLane.new(flow_lane_create_params))
+      @flow_lanes.push(FlowLane.new(flow_lane_create_params(lane)))
       @seq_libs.push(SeqLib.find(lane[:seq_lib_id]))
     end
   end
@@ -278,19 +277,11 @@ protected
   end
   
   def define_lib_conditions(params)
-    @where_select = []; @where_values = []
-    
-    if params[:seq_lib] && !param_blank?(params[:seq_lib][:owner])
-      @where_select.push('seq_libs.owner IN (?)')
-      @where_values.push(params[:seq_lib][:owner])
-    end
+    combo_fields = {:barcode_string => {:sql_attr => ['seq_libs.barcode_key'], :str_prefix => 'L', :pad_len => 6}}
+    query_flds = {'standard' => {'seq_libs' => %w(owner adapter_id)}, 'multi_range' => combo_fields, 'search' => {}}
+    query_params = params[:seq_lib].merge({:barcode_string => params[:barcode_string]})
 
-    if !param_blank?(params[:barcode_string])
-      str_vals, str_ranges, errors = compound_string_params('L', 6, params[:barcode_string])
-      where_select, where_values   = sql_compound_condition('seq_libs.barcode_key', str_vals, str_ranges)
-      @where_select.push(where_select)
-      @where_values.push(*where_values)
-    end
+    @where_select, @where_values = build_sql_where(query_params, query_flds, [], [])
     
     if params[:excl_used] && params[:excl_used] == 'Y'
       @where_select.push("seq_libs.lib_status <> 'F'")
