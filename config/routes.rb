@@ -147,6 +147,11 @@ Rails.application.routes.draw do
   get 'bulk_upload' => 'bulk_upload#new'
   post 'bulk_upload' => 'bulk_upload#create'
 
+  # Routes for reserved barcodes
+  resources :assigned_barcodes
+  get 'check_barcodes/available' => 'assigned_barcodes#check_barcodes', :as => :check_available_barcodes, :rtype => 'available'
+  get 'check_barcodes/assigned' => 'assigned_barcodes#check_barcodes', :as => :list_assigned_barcodes, :rtype => 'assigned'
+
   # Tables for dropdown lists
   resources :consent_protocols
   resources :protocols
