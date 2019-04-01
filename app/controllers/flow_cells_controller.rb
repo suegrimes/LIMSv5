@@ -21,6 +21,18 @@ class FlowCellsController < ApplicationController
     @hdr = 'Flow Cells for Sequencing'
     @flow_cells = FlowCell.find_flowcells_for_sequencing
   end
+
+  # GET /flow_cells
+  def index
+    params[:rpt_type] ||= 'list'
+    if params[:rpt_type] == 'seq'
+      @hdr = 'Flow Cells for Sequencing'
+      @flow_cells = FlowCell.find_flowcells_for_sequencing
+    else
+      @hdr = 'Sequencing Runs'
+      @flow_cells = FlowCell.find_sequencing_runs(SEQ_ORDER)
+    end
+  end
   
   # GET /flow_cells/1
   def show
@@ -147,7 +159,7 @@ class FlowCellsController < ApplicationController
       flash[:error] = "ERROR - Sequencing machine selected is not same type as flow cell"
       redirect_to(@flow_cell)
       
-    elsif @flow_cell.update_attributes(fc_attrs)
+    elsif @flow_cell.update_attributes(update_params)
       FlowLane.upd_seq_key(@flow_cell)
       flash[:notice] = 'Flow cell was successfully queued for sequencing'
       redirect_to(@flow_cell) 
@@ -183,6 +195,12 @@ protected
                    flow_lanes_attributes: [:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key,
                                            :seq_lib_id, :lib_barcode, :lib_name, :lib_conc_uom, :adapter_id,
                                            :alignment_ref_id, :alignment_ref])
+  end
+
+  def update_params
+    params.require(:flow_cell).permit(:flowcell_date, :machine_type, :nr_bases_read1, :nr_bases_read2, :nr_bases_index1,
+                                      :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
+                                      :notes, :sequencing_key, :seq_machine_id, :seq_run_nr, :flowcell_status)
   end
 
   def flow_lane_create_params(flow_lane)

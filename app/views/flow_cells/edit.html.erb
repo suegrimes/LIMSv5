@@ -1,4 +1,4 @@
-<h1>Editing <%=h @flow_cell.id_name %></h1>
+<h5>Editing <%=h @flow_cell.id_name %></h5>
 <p class="notes">Note: Changes to lane number are limited to switching lanes - cannot add or delete sequencing libraries/lane
    once flow cell has been created. </p>
 
@@ -7,10 +7,10 @@
   
   <%= render :partial => 'flow_cell_form', :locals => {:f => f}%> 
   <%= hidden_field_tag(:lane_count, @flow_cell.flow_lanes.size)%>
-  <%=raw break_clear %>
+  <br/>
 
-<fieldset class="form">
-  <table class="form-with-columns">
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
     <tr>
       <th>Lane</th>
 	  <th>Lib Conc</th>
@@ -22,11 +22,12 @@
 	  <th><%=h Pool.human_attribute_name(:pool_name)%></th>
 	  <th>Notes</th>
     </tr>
+    </thead>
 
     <% @flow_cell.flow_lanes.each do |flow_lane| %>
       <tr><%= render :partial => 'flow_lane_edit', :locals => {:flow_lane => flow_lane} %></tr>
 	<% end %>
   </table>
-</fieldset> 
-<%=raw break_clear(f.submit "Update") %>
+
+<%=f.submit "Update", class: "btn btn-primary" %>
 <% end %>

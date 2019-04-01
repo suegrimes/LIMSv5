@@ -1,6 +1,7 @@
 <% fform ||= 'no' %>
 
-<table class="list">
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
   <tr>
 	<th>Sequencing Key</th>
 	<th>Pub?</th>
@@ -8,6 +9,7 @@
 	<th>Run Description/Notes</th>
     <th colspan="5"></th>
   </tr>
+  </thead>
 
   <% @flow_cells.each do |flow_cell| %>
   <tr>
@@ -47,7 +49,7 @@
 	<% end %>
 	  
 	<% if flow_cell.flowcell_status == 'Q' %>
-	  <td><%= link_to 'QC',   :controller => 'flow_cells',  :action => 'show_qc', :id => flow_cell.id %></td>
+	  <td><!--%= link_to 'QC',   :controller => 'flow_cells',  :action => 'show_qc', :id => flow_cell.id %--></td>
     <% else %>
 	  <td class="grey"><%= flow_cell.flowcell_qc %></td>
 	<% end %>

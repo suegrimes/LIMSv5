@@ -125,7 +125,7 @@ Rails.application.routes.draw do
   resources :flow_cells do
     get :auto_complete_for_sequencing_key, on: :collection
     get :show_publications, on: :member
-    post :upd_for_sequencing, on: :member
+    patch :upd_for_sequencing, on: :member
   end
   match 'flow_cell_setup' => 'flow_cells#setup_params', :as => :flow_cell_setup, :via => [:get, :post]
 
