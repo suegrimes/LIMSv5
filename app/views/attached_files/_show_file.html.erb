@@ -1,24 +1,29 @@
 <% add_file_button ||= 'yes'%>
-<fieldset class="info">
-<legend><%= name_of_klass(obj) %>&nbsp;Attached Files</legend>
-  <table class="info">
-  <% if obj.attached_files && !obj.attached_files.empty? %>
-	<% obj.attached_files.each do |att_file| %>
-	  <tr>
-        <td style="min-width:95px"><%=link_to att_file.doc_filename, att_file %></td>
-		<td><%=h att_file.notes %></td>
-        <td class="linkborder"><%=link_to 'Delete', att_file, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
-	  </tr>
+
+<div class="card">
+  <h6 class="card-header"><%= name_of_klass(obj) %>&nbsp;Attached Files:</h6>
+  <div class="card-body">
+    <% if obj.attached_files && !obj.attached_files.empty? %>
+      <% obj.attached_files.each do |att_file| %>
+        <div class="row row-bordered">
+          <div class="col-sm-3" style="min-width:95px"><%=link_to att_file.doc_filename, att_file %></div>
+          <div class="col-sm-3"><%=h att_file.notes %></div>
+          <div class="col-sm-2"><%=link_to 'Delete', att_file, data: {:confirm => 'Are you sure?'}, :method => :delete %></div>
+        </div>
       <% end %>
-  <% else %>
-      <tr><td style="width:95px">None</td></tr>
-  <% end %>
-  <% if add_file_button == 'yes' %>
-      <tr><td class="linkborder"><div id="add_new"><%= link_to "New Attachment", '', :onclick => "showHideDiv('add_new','newfile'); return false;" %></div></td></tr>
-  <% end %>	
-  </table>
-</fieldset>
-<%=raw break_clear %>
+    <% end %>
+
+    <% if add_file_button == 'yes' %>
+      <div class="row">
+        <% if obj.attached_files.empty? %><div class="col-sm-2">None</div><% end %>
+        <div id="add_new" class="offset-1 col-sm-2 linkborder"><%= link_to "New Attachment", '', :onclick => "showHideDiv('add_new','newfile'); return false;" %></div>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+<br/>
 <div id="newfile" style="display:none">
   <%= render :partial => '/attached_files/add_file', :locals => {:obj => obj} %>
 </div>

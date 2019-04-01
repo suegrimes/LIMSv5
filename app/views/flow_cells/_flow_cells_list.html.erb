@@ -42,7 +42,7 @@
 	
 	<% if flow_cell.flowcell_status == 'F' %>
 	  <% if can? :delete, flow_cell %>  
-	    <td><%= link_to 'Delete', flow_cell, :confirm => 'Are you sure?', :method => :delete %></td>
+	    <td><%= link_to 'Delete', flow_cell, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	  <% else %>
 		<td class="ltgrey">Delete</td>
 	  <% end %>

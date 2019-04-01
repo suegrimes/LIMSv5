@@ -1,5 +1,5 @@
 <% klass_name = name_of_klass(@obj) %>
-<h1><%=h klass_name %>:</h1>
+<h5><%=h klass_name %>:</h5>
 
 <% if klass_name == 'Sample' %>
   <%= render :partial => 'samples/sample_info', :locals => {:sample => @obj} %>

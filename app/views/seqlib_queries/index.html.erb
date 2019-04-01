@@ -54,7 +54,7 @@
 	
 	<% if seq_lib.lib_status == 'L' %>
 	  <% if can? :delete, seq_lib %>
-	  <td><%= link_to 'Delete', seq_lib, :confirm => 'Are you sure?', :method => :delete %></td>
+	  <td><%= link_to 'Delete', seq_lib, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	  <% end %>
     <% else %>
     <td class="ltgrey"> Delete </td>

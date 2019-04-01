@@ -51,7 +51,7 @@
       <td><%= link_to 'Edit Range', edit_assigned_barcode_path(assigned_barcode) %></td>
 	<% end %>
 	<% if can? :delete, assigned_barcode %>
-      <td><%= link_to 'Remove', assigned_barcode, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Remove', assigned_barcode, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	<% end %>
   </tr>
 <% end %>

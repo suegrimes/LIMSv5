@@ -43,7 +43,7 @@
               <%= link_to 'Edit', edit_index_tag_path(index_tag) %>
           <% end %></td>
         <td><% if can? :delete, index_tag %>
-              <%= link_to 'Delete', index_tag, :confirm => 'Are you sure?', :method => :delete %>
+              <%= link_to 'Delete', index_tag, data: {:confirm => 'Are you sure?'}, :method => :delete %>
           <% end %></td>
       </tr>
   <% end %>

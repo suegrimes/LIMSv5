@@ -1,19 +1,22 @@
-<span class="table_title">Extracted Samples
-  <% if sample.processed_samples %> (<%= sample.processed_samples.size %> samples) <% end %></span>
-  <table class="table table-bordered table-sm table-font-sm">
-  <tr>
-    <th>Extracted Sample</th>
-	<th>Type</th>
-    <th>Processing Date</th>
-    <th>Amount(ug)</th>
-    <th>Conc (ng/ul)</th>
-    <th>a260/a280</th>
-    <th>a260/a230</th>
-    <th>RIN#</th>
-    <th>Rem?</th>
-    <th>Room/Freezer</th>
-    <th>Container</th>
-  </tr>
+<% nr_extractions = (sample.processed_samples ? sample.processed_samples.size : 0) %>
+<h6>Extracted Samples (<%= nr_extractions %>):</h6>
+<% if nr_extractions > 0 %>
+<table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
+    <tr>
+      <th>Extracted Sample</th>
+	    <th>Type</th>
+      <th>Processing Date</th>
+      <th>Amount(ug)</th>
+      <th>Conc (ng/ul)</th>
+      <th>a260/a280</th>
+      <th>a260/a230</th>
+      <th>RIN#</th>
+      <th>Rem?</th>
+      <th>Room/Freezer</th>
+      <th>Container</th>
+    </tr>
+    </thead>
   <% for processed_sample in sample.processed_samples %>
     <tr>
       <td><%=link_to processed_sample.barcode_key, processed_sample_path(processed_sample)%></td>
@@ -29,4 +32,8 @@
       <td><%=h processed_sample.container_and_position %></td>
 	</tr>
   <% end %>
-  </table>
+</table>
+
+<% else %>
+<div class="row"></div>
+<% end %>
