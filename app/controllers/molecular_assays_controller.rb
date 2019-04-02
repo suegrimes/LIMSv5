@@ -1,6 +1,6 @@
 class MolecularAssaysController < ApplicationController
   #load_and_authorize_resource (# can't use because create method has array of molecular_assays instead of assay)
-  layout 'main/assays'
+  layout 'main/main'
   
   before_action :dropdowns, :only => [:new, :edit, :populate_assays]
   before_action :query_dropdowns, :only => :query_params

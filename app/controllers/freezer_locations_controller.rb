@@ -1,5 +1,5 @@
 class FreezerLocationsController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => FreezerLocation
 
   # GET /freezer_locations

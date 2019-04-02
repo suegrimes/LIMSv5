@@ -1,7 +1,7 @@
 class HistologyQueriesController < ApplicationController
   include SqlQueryBuilder
 
-  layout 'main/samples'
+  layout 'main/main'
 
   authorize_resource :class => Histology
   before_action :dropdowns, :only => :new_query

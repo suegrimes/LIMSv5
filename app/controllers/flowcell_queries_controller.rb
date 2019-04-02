@@ -1,6 +1,6 @@
 class FlowcellQueriesController < ApplicationController
   include SqlQueryBuilder, SqlQueryExport
-  layout 'main/sequencing'
+  layout 'main/main'
   
   before_action :dropdowns, :only => :new_query
   

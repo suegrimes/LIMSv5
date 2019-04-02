@@ -1,6 +1,6 @@
 class FlowCellsController < ApplicationController
   include SqlQueryBuilder
-  layout 'main/sequencing'
+  layout 'main/main'
   authorize_resource class: FlowCell
   
   before_action :dropdowns, :only => [:new, :edit]

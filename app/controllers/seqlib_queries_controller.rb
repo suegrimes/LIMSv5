@@ -1,6 +1,6 @@
 class SeqlibQueriesController < ApplicationController
   include SqlQueryBuilder
-  layout 'main/sequencing'
+  layout 'main/main'
 
   before_action :dropdowns, :only => :new_query
   

@@ -1,5 +1,5 @@
 class ConsentProtocolsController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => ConsentProtocol
 
   # GET /consent_protocols
