@@ -1,5 +1,5 @@
 class SeqMachinesController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => SeqMachine
   before_action :dropdowns, :only => [:new, :edit]
 

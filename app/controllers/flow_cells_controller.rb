@@ -1,5 +1,5 @@
 class FlowCellsController < ApplicationController
-  layout 'main/sequencing'
+  layout 'main/main'
   authorize_resource class: FlowCell
   
   before_action :dropdowns, :only => [:new, :edit]

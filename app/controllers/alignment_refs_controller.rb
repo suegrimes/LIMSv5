@@ -1,5 +1,5 @@
 class AlignmentRefsController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => AlignmentRef
 
   # GET /alignment_refs

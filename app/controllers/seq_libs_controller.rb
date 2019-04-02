@@ -1,7 +1,7 @@
 class SeqLibsController < ApplicationController
   include StorageManagement
 
-  layout 'main/sequencing'
+  layout 'main/main'
   #load_and_authorize_resource (# can't use because create method for singleplex lib has array of seq_libs instead of single lib) '
 
   before_action :dropdowns, :only => [:new, :edit, :populate_libs]

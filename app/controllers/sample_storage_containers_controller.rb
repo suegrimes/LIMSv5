@@ -1,5 +1,5 @@
 class SampleStorageContainersController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
 
   load_and_authorize_resource
 

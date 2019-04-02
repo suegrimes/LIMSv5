@@ -1,5 +1,5 @@
 class PathologiesController < ApplicationController
-  layout  'main/samples'
+  layout  'main/main'
 #load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit]

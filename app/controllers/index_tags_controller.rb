@@ -1,5 +1,5 @@
 class IndexTagsController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => IndexTag
 
   def edit

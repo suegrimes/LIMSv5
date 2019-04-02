@@ -1,7 +1,7 @@
 class SampleCharacteristicsController < ApplicationController
   include StorageManagement
 
-  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
+  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
   load_and_authorize_resource
   protect_from_forgery :except => :add_new_sample
   

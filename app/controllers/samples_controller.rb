@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
   include StorageManagement
 
-  layout Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
+  layout Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
   load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]

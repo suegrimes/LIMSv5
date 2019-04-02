@@ -1,6 +1,6 @@
 class MplexLibsController < ApplicationController
   include StorageManagement, SqlQueryBuilder
-  layout 'main/sequencing'
+  layout 'main/main'
   #load_and_authorize_resource :class => 'SeqLib'
 
   before_action :dropdowns, :only => [:new, :edit]

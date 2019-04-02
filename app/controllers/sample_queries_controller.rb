@@ -1,7 +1,7 @@
 class SampleQueriesController < ApplicationController
   include SqlQueryBuilder
 
-  layout 'main/samples'
+  layout 'main/main'
 
   authorize_resource :class => Sample
   before_action :dropdowns, :only => :new_query

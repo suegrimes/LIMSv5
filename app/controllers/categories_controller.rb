@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => Category
   
   # GET /categories
