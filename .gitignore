@@ -29,5 +29,4 @@
 # Ignore development copy of Gemfile and saved prodGemfile, and Gemfile.lock
 /devWinGemfile*
 /prodGemfile*
-/Gemfile*
-
+#/Gemfile*
