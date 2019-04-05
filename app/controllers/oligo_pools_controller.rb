@@ -1,5 +1,5 @@
 class OligoPoolsController < ApplicationController
-  layout  'main/samples'
+  layout  'main/main'
 
   # GET /oligo_pools
   def index

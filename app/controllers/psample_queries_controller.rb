@@ -1,7 +1,7 @@
 class PsampleQueriesController < ApplicationController
   include SqlQueryBuilder
 
-  layout 'main/processing'
+  layout 'main/main'
 
   authorize_resource :class => ProcessedSample
   

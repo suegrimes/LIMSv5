@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
   include StorageManagement
 
-  layout Proc.new {|controller| controller.request.xhr? ? false : 'main/samples'}
+  layout Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
   load_and_authorize_resource
   
   before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]
@@ -64,7 +64,11 @@ class SamplesController < ApplicationController
           @storage_container_id = @sample.sample_storage_container.storage_container_id
         end
         # special edit form for ajax calls
-        render :ajax_edit if request.xhr?
+        if request.xhr?
+          render :ajax_edit
+        else
+          render :action => :edit
+        end
       end
     else
       flash.now[:error] = 'No entry found for source barcode: ' + params[:barcode_key]

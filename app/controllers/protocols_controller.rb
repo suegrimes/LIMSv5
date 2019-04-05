@@ -1,5 +1,5 @@
 class ProtocolsController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => Protocol
 
   def query_params

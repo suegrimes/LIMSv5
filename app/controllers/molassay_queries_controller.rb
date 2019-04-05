@@ -1,6 +1,6 @@
 class MolassayQueriesController < ApplicationController
   include SqlQueryBuilder
-  layout 'main/samples'
+  layout 'main/main'
   
   before_action :dropdowns, :only => :new_query
   

@@ -1,7 +1,7 @@
 class DissectedSamplesController < ApplicationController
   include StorageManagement
 
-  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/processing'}
+  layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
 
   #before_action :dropdowns, :only => :edit
   before_action :dropdowns, :only => [:edit, :add_multi]

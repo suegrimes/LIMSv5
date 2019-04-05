@@ -1,7 +1,7 @@
 class ProcessedSamplesController < ApplicationController
   include StorageManagement
 
-  layout 'main/processing'
+  layout 'main/main'
 
   load_and_authorize_resource
   

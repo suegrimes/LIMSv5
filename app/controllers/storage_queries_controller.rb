@@ -1,4 +1,5 @@
 class StorageQueriesController < ApplicationController
+  layout 'main/main'
   authorize_resource :class => SampleLoc
   before_action :dropdowns, :only => :new_query
   

@@ -2,26 +2,13 @@
 <!-- layout for the samples pages -->
 
 <% content_for :top_navigation do %>
-  <!-- keep left side blank -->
-  <div class="col-2">
-  </div>
-  <div class="col-10">
+  <div class="col-12">
     <%= render "layouts/main/main_nav" %>
   </div>
 <% end %>
 
-<% content_for :panel_1 do %>
-  <div id="left-panel" class="col-2">
-    <%= render "layouts/main/list_left_nav" %> 
-  </div>
-<% end %>
-
 <% content_for :panel_2 do %>
-  <div id="main-panel" class="col-10">
-
-    <!-- render the samples navigation -->
-    <%= render "layouts/top_nav/samples_nav" %>
-
+  <div id="main-panel" class="col-12">
     <%= yield %>
   </div>
 <% end %>

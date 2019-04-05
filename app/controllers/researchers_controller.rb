@@ -1,5 +1,5 @@
 class ResearchersController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
   authorize_resource :class => Researcher
   
   before_action :dropdowns, :only => [:new, :edit]
