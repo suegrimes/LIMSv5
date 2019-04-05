@@ -4,7 +4,6 @@
   <%= render '/shared/errors', model: @patient %>
 
   <%= render :partial => 'patient_form',      :locals => {:f => f, :patient_id => @patient.id} %>
-  
-  <%=raw break_clear %>
+
   <%= f.submit "Update", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'Cancel', :back %>
 <% end %>

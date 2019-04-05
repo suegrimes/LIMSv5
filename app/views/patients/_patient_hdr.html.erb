@@ -1,0 +1,15 @@
+<% sample_cts ||= 'n' %>
+<% links_cols ||= 0 %>
+
+<tr>
+  <th> ID# </th>
+  <% if user_role_is?("clin_admin") %>
+    <th>MRN</th>
+  <% end %>
+  <th> Organism </th>
+  <th> Gender </th>
+  <th> Race </th>
+  <th> Ethnicity </th>
+  <% if sample_cts == 'y' %><th>Samples?</th><% end %>
+  <% if links_cols > 0 %><th colspan=<%= links_cols %>></th><% end %>
+</tr>

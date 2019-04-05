@@ -1,0 +1,29 @@
+<% sample_cts ||= 'n' %>
+<% links ||= 'n' %>
+
+<% sc_array = patient.sample_characteristics.map{|sc| sc.samples.size } %>
+<% nr_samples = sc_array.sum %>
+
+<tr>
+  <td><%=link_to patient.id, patient_path(patient)%></td>
+  <% if can? :edit, patient %>
+    <td><%=h patient.mrn%></td>
+  <% end %>
+  <td><%=h patient.organism %></td>
+  <td><%=h patient.gender %></td>
+  <td><%=h patient.race %></td>
+  <td><%=h patient.ethnicity %></td>
+
+  <% if sample_cts == 'y' %><td><%=h nr_samples %></td><% end %>
+
+  <% if links == 'y' && (can? :new, SampleCharacteristic.new) %>
+      <td><%= link_to 'Add Sample',   :controller => 'sample_characteristics', :action => 'new',
+                      :patient_id => patient.id %></td>
+  <% end %>
+
+  <% if links == 'y' && (can? :delete, patient) && patient.sample_characteristics.count == 0 %>
+      <td><%= link_to 'Delete Patient', patient, :confirm => 'Are you sure?', :method => :delete %></td>
+  <% elsif links == 'y' && (can? :delete, patient) %>
+      <td class="ltgrey"> Delete Patient </td>
+  <% end %>
+</tr>

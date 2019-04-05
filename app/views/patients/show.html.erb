@@ -1,13 +1,10 @@
 <h5>Details for patient: <%= @patient.id %></h5>
 
-<%= render :partial => 'patient_info', :locals => {:patient => @patient, :click_to_link => 'none'} %>
-<%=raw break_clear %>
+<%= render :partial => 'patient_info', :locals => {:patient => @patient} %>
 
-<table class="table table-bordered">
-<thead class="thead-light">
-<tr>
-<th colspan="7">Samples Collected:</th>	
-</tr>
+<h6>Samples Collected:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+<thead class="thead-light thead-font-sm">
 <tr>
   <th>Collect Date</th>
   <th>Clinic</th>

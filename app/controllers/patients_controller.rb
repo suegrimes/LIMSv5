@@ -6,7 +6,8 @@ class PatientsController < ApplicationController
   
   # GET /patients
   def index
-    @patients = Patient.select('id, organism, gender, race, ethnicity, clinical_id_encrypted').includes(:samples).all
+    @patients = Patient.includes(:sample_characteristics => :samples).references(:samples)
+                    .where('samples.source_sample_id is NULL').order('patients.id DESC').limit(100)
   end
 
   # GET /patients/1
