@@ -27,6 +27,6 @@
 /config/system/emails.txt
 
 # Ignore development copy of Gemfile and saved prodGemfile, and Gemfile.lock
-/devWinGemfile*
+/devGemfile*
 /prodGemfile*
-#/Gemfile*
+Gemfile.lock
