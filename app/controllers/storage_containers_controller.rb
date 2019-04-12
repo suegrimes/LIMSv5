@@ -60,6 +60,10 @@ class StorageContainersController < ApplicationController
   end
 
   protected
+  def container_params
+    params.require(:freezer_location).permit(:freezer_location_id, :container_type)
+  end
+
   def dropdowns
     @freezers = FreezerLocation.populate_dropdown
     @storage_types = StorageType.populate_dropdown
@@ -69,7 +73,8 @@ class StorageContainersController < ApplicationController
 
   def define_conditions(params)
     @where_select = []; @where_values = [];
-    query_params = params[:freezer_location].merge(params[:storage_type])
+    query_params = {:freezer_location_id => params[:freezer_location][:freezer_location_id],
+                    :container_type => params[:storage_type][:container_type]}
 
     if param_blank?(query_params[:container_type])
       @where_select.push('storage_containers.container_type IS NOT NULL')
