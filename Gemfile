@@ -61,6 +61,7 @@ gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
 
 # boostrap CSS framework
+gem 'autoprefixer-rails', '~> 7.2.3'
 gem 'bootstrap', '~> 4.0.0.beta2'
 
 # boostrap form builder
