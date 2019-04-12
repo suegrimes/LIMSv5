@@ -23,7 +23,7 @@
         <td><%=h ssc.position_in_container %></td>
         <td><%=h ssc.type_of_sample %></td>
         <td><% if ssc.user %><%=h ssc.user.login %><% end %></td>
-        <td><% if can? :edit, SampleStorageContainer %>
+        <td><% if can? :edit, ssc.stored_sample %>
               <%=link_to 'Edit', edit_path_by_type(ssc) %>
           <% end %>
         </td>

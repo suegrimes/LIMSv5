@@ -46,8 +46,8 @@ class Ability
       # Researchers can enter/update processed samples, seq libs, flow cells
       if user.has_role?("researcher")  || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
-                      FlowLane, SampleStorageContainer, Publication]
-        cannot [:edit, :update, :delete], Sample
+                      FlowLane, SampleStorageContainer, StorageContainer, Publication]
+        cannot [:delete], Sample
       end
 
       if user.has_role?("lab_admin")
@@ -57,7 +57,7 @@ class Ability
       # Clinical users can enter/update patient and clinical samples
       if user.has_role?("clinical") || user.has_role?("clin_admin")
         can :manage, [Patient, SampleCharacteristic, Pathology, Sample, Histology, ProcessedSample, MolecularAssay,
-                      SampleStorageContainer, Publication]
+                      SampleStorageContainer, StorageContainer, Publication]
         cannot :delete, [Patient, SampleCharacteristic, Sample]
       end
       
