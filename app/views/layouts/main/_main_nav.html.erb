@@ -1,3 +1,4 @@
+<% user_roles = (logged_in? ? current_user.roles.collect(&:name) : nil) %>
 
 <ul id="top-nav" class="nav nav-tabs">
 
@@ -20,18 +21,27 @@
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/samples" role="button" aria-haspopup="true" aria-expanded="false">Samples</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="/sample_characteristics/new">New Source Sample</a>
-      <a class="dropdown-item" href="/new_dissection">New Dissection</a>
-      <a class="dropdown-item" href="/new_extraction">New Extraction</a>
-      <div class="dropdown-divider"></div>
+      <% if user_has_access?(user_roles, ["clinical", "clin_admin"]) %>
+        <a class="dropdown-item" href="/sample_characteristics/new">New Source Sample</a>
+      <% end %>
+      <% if user_has_access?(user_roles, ["clinical", "clin_admin", "researcher", "lab_admin"]) %>
+        <a class="dropdown-item" href="/new_dissection">New Dissection</a>
+        <a class="dropdown-item" href="/new_extraction">New Extraction</a>
+        <div class="dropdown-divider"></div>
+      <% end %>
       <a class="dropdown-item" href="/bulk_upload">Bulk Upload</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Edit Patient</a>
-      <a class="dropdown-item" href="/modify_sample">Edit Sample Acquisition</a>
-      <a class="dropdown-item" href="/upd_sample">Edit Sample</a>
+      <% if user_has_access?(user_roles, ["clinical", "clin_admin"]) %>
+        <a class="dropdown-item" href="#">Edit Patient</a>
+        <a class="dropdown-item" href="/modify_sample">Edit Sample Acquisition</a>
+      <% end %>
+      <% if user_has_access?(user_roles, ["clinical", "clin_admin", "researcher", "lab_admin"]) %>
+        <a class="dropdown-item" href="/upd_sample">Edit Sample</a>
+      <% end %>
     </div>
   </li>
 
+  <% if user_has_access?(user_roles, ["clinical", "clin_admin"]) %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/pathology" role="button" aria-haspopup="true" aria-expanded="false">Pathology</a>
     <div class="dropdown-menu">
@@ -39,36 +49,41 @@
       <a class="dropdown-item" href="/new_pathology">Pathology Rpt</a>
     </div>
   </li>
+  <% end %>
 
+  <% if user_has_access?(user_roles, ["clinical", "clin_admin", "researcher", "lab_admin"]) %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/molecular_assays" role="button" aria-haspopup="true" aria-expanded="false">Molecular Assays</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="/seq_libs/new">New Lib-Singleplex</a>
-      <a class="dropdown-item" href="/mplex_setup">New Lib-Multiplex</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="bulk_upload">Bulk Upload</a>
-      <div class="dropdown-divider"></div>      
       <a class="dropdown-item" href="/molecular_assays/new">New Assay</a>
       <a class="dropdown-item" href="#">New Assay-Other</a>
     </div>
   </li>
+  <% end %>
 
+  <% if user_has_access?(user_roles, ["researcher", "lab_admin", "alignment"]) %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sequencing</a>
     <div class="dropdown-menu">
+      <a class="dropdown-item" href="/seq_libs/new">New Lib-Singleplex</a>
+      <a class="dropdown-item" href="/mplex_setup">New Lib-Multiplex</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="not-yet">Bulk Upload</a>
+      <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="#">Prepare Flowcell</a>
       <a class="dropdown-item" href="#">Sequence Flowcell</a>
     </div>
   </li>
+  <% end %>
 
+  <% view_items_label = (user_has_access?(user_roles, ["orders"]) ? 'View/Order items' : 'View Items') %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Orders</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">New Item</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">View Order/Item</a>
+      <a class="dropdown-item" href="not-yet">New Item</a>
+      <a class="dropdown-item" href="not-yet"><%= view_items_label %></a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">List/Update Orders</a>
+      <a class="dropdown-item" href="not-yet">List/Update Orders</a>
     </div>
   </li>
 
@@ -86,12 +101,19 @@
     </div>
   </li>
 
+  <% if user_has_access?(user_roles, ["admin", "barcodes"]) %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">Manage Barcodes</a>
-      <a class="dropdown-item" href="/researchers">Manage Researchers</a>
-      <a class="dropdown-item" href="#">Manage Users</a>
+      <% if user_has_access?(user_roles, ["barcodes"]) %>
+        <a class="dropdown-item" href="#">Manage Barcodes</a>
+      <% end %>
+      <% if user_has_access?(user_roles, ["admin"]) %>
+        <a class="dropdown-item" href="/researchers">Manage Researchers</a>
+        <a class="dropdown-item" href="#">Manage Users</a>
+      <% end %>
     </div>
   </li>
+  <% end %>
 
+</ul>
