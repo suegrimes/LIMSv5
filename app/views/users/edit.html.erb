@@ -4,10 +4,6 @@
 
   <h6>User Details</h6>
 
-  <% if DEMO_APP && current_user.login != @user.login %>
-    Login:&nbsp;&nbsp;<%=h @user.login %>&nbsp;&nbsp;<strong>Email:</strong>&nbsp;&nbsp;<%=h @user.email %>
-  <% else %>
-
     <%= f.text_field :login %>
     <%= f.email_field :email %>
 
@@ -19,7 +15,6 @@
 
     <%= f.password_field :password, label: "New Password", placeholder: "New password" %>
     <%= f.password_field :password_confirmation, label: "Confirm Password", placeholder: "Current password" %>
-  <% end %>
 
   <% if can? :update, Role %>
     <%= f.label "Roles:" %><br>

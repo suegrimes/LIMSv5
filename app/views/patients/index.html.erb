@@ -1,0 +1,12 @@
+<h5>Listing patients</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+<thead class="thead-light">
+  <%= render :partial => 'patient_hdr', :locals => {:sample_cts => 'y', :links_cols => 2} %>
+</thead>
+
+<% for patient in @patients %>
+  <%= render :partial => 'patient_row', :locals => {:patient => patient, :sample_cts => 'y', :links => 'y'} %>
+<% end %>
+</table>
+

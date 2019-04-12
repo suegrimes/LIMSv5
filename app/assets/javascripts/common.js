@@ -19,7 +19,7 @@ function common_init() {
   reset_styling()
 
   // alert when clicking a not implemented link
-  alert_not_implmented()
+  alert_not_implemented()
 }
 
 // Get the controller and action names from the body tag
@@ -63,7 +63,7 @@ function my_alert(msg) {
   }
 }
 
-function alert_not_implmented() {
+function alert_not_implemented() {
   $("a[href='not-yet']").click(function(evt) {
     evt.preventDefault();
     my_alert("Not implemented yet");

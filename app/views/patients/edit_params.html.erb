@@ -1,0 +1,23 @@
+<%= form_tag do %>
+
+<div class="card">
+  <h6 class="card-header">Specify patient to edit</h6>
+  <div class="card-body">
+        <div class="form-group row">
+          <% if can? :edit, Patient %>
+          <label for="mrn" class="col-auto col-form-label col-form-label-sm">MRN:</label>
+          <div class="col-auto">
+            <%= text_field_tag(:mrn, params[:mrn], class: "form-control")%>
+          </div>
+          <% end %>
+
+          <label for="patient_id" class="col-auto col-form-label col-form-label-sm">Patient ID:</label>
+          <div class="col-auto">
+            <%= text_field_tag(:patient_id, params[:patient_id], class: "form-control")%>
+          </div>
+        </div>
+  </div>
+</div>
+
+<%= submit_tag "Submit", class: "btn btn-primary" %>
+<%end%>
