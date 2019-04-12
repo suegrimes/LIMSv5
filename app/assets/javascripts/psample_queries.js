@@ -2,12 +2,12 @@
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 
-// samples controller init function
+// psample_queries controller init function
 function psample_queries_init() {
   samples_tab_active();
 }
 
-// samples controller#index init function
+// psample_queries controller#index init function
 function psample_queries_index_init() {
 
   var dt = $("table.data-table").DataTable();
