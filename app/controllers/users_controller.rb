@@ -18,7 +18,20 @@ class UsersController < ApplicationController
 
   # render index.rhtml
   def index
-    @users = User.find_all_with_authorization
+    if current_user.has_role?("admin")
+      users = User.find_all_with_authorization
+      @users = users.group_by {|user| user.active_inactive}
+      render :action => 'index'
+    else
+      @user = current_user
+      render :action => 'show'
+    end
+  end
+
+  # GET /users/1
+  def show
+    @user = User.find(params[:id])
+    @user = current_user if (cannot? :read, @user)
   end
 
   # render new.rhtml
@@ -53,6 +66,12 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user = current_user if (cannot? :edit, @user)
     @roles = Role.all
+
+    if DEMO_APP && current_user.login != @user.login
+      render :action => 'show'
+    else
+      render :action => 'edit'
+    end
   end
   
   def update

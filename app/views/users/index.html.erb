@@ -1,6 +1,8 @@
-<h4>User Listing</h4>
+<% @users.sort.each do |active_inactive, users| %>
+<% active_inactive_text = (active_inactive == 'A'? 'Active' : 'Inactive') %>
 
-<table class="table table-bordered">
+<h5><%= active_inactive_text %> users</h5>
+<table class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">
     <tr>
       <th scope="col">Login</th>
@@ -12,7 +14,7 @@
     </tr>
   </thead>
 
-  <% for user in @users do %>
+  <% for user in users do %>
   <tr>
   	<% if can? :edit, user %>
   	  <td><%= link_to user.login, edit_user_path(user) %> </td>
@@ -33,7 +35,9 @@
   <% end %>
 </table>
 
-<% if can? :delete, User %>
-  <%= link_to 'Add new user', :action => 'new' %>
+<% if active_inactive == 'A' and (can? :delete, User) %>
+  <%= link_to 'Add new user', :action => 'new', class: "btn btn-primary" %>
+  <br/><br/>
 <% end %>
 
+<% end %>
