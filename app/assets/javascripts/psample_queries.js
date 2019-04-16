@@ -10,7 +10,10 @@ function psample_queries_init() {
 // psample_queries controller#index init function
 function psample_queries_index_init() {
 
-  var dt = $("table.data-table").DataTable();
+  var dt = $("table.data-table").DataTable({
+      // Columns with links should not be sortable or searchable
+      columnDefs: [ { targets: [ 'action', 'link-col'], sortable: false, searchable: false } ]
+  });
 
   // fix for back button, destroy DataTables before caching the page
   document.addEventListener("turbolinks:before-cache", function() {
