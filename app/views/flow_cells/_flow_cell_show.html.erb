@@ -1,32 +1,32 @@
-<% last_info_box ||= 'no' %>
-<% link_to_edit ||= 'yes' %>
+<h6><%= flow_cell.id_name %></h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Date</th>
+    <th>Alt Run#</th>
+    <th>Reads</th>
+    <th>Seq Type</th>
+    <th>Cluster Kit</th>
+    <th>Seq Kit</th>
+    <th>Pub?</th>
+    <th>Run Description</th>
+    <th></th>
+  </tr>
+  </thead>
 
-<% click_to_link ||= 'none' %>
-<% click_to_link = 'none' if (click_to_link == 'edit' && (cannot? :edit, flow_cell))%>
-<% click_to_link = 'none' if (click_to_link == 'show' && (cannot? :read, flow_cell))%>
+  <tr>
+    <td><%=h flow_cell.flowcell_date %></td>
+    <td><%=h flow_cell.hiseq_xref %></td>
+    <td><%=h [flow_cell.nr_bases_read1, flow_cell.nr_bases_index1, flow_cell.nr_bases_index2, flow_cell.nr_bases_read2].join(',') %></td>
+    <td><%=h flow_cell.machine_type %></td>
+    <td><%=h flow_cell.cluster_kit %></td>
+    <td><%=h flow_cell.sequencing_kit %></td>
+    <td><%=h flow_cell.for_publication? %></td>
+    <td><%=h flow_cell.run_description %></td>
+    <% if can? :edit, flow_cell %> <td><%= link_to 'Edit', edit_flow_cell_path(flow_cell) %></td><% end %>
+  </tr>
 
-<!-- Standard fields to be displayed -->
-<% info_flds   = [['Field', 'Date', flow_cell.flowcell_date],              
-                  ['Field', '# Reads(R1,I1,I2,R2)', [flow_cell.nr_bases_read1, flow_cell.nr_bases_index1, flow_cell.nr_bases_index2, flow_cell.nr_bases_read2].join(',')],
-                  ['Field', 'Machine Type', flow_cell.machine_type],
-                  ['Field', 'Status Code', flow_cell.flowcell_status],
-                  ['Field', 'Cluster Kit', flow_cell.cluster_kit],
-                  ['Field', 'Sequencing Kit', flow_cell.sequencing_kit],
-                  ['Field', 'For Publication?', flow_cell.for_publication?], nil]%>
-				  
-<!-- Only include comments if non-blank -->
-<% info_flds.push(['Field', 'Alt Run#', flow_cell.hiseq_xref], nil) if !flow_cell.hiseq_xref.blank? %>
-<% info_flds.push(['Field', 'Description', flow_cell.run_description, {:colspan => 3}], nil) %>
-<% info_flds.push(['Field', 'Comments', flow_cell.notes, {:colspan => 3}], nil) if !flow_cell.notes.blank? %>
-
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if link_to_edit == 'yes' && (can? :edit, flow_cell) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => flow_cell.id_name,
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'flow_cells',
-                                                      :link_id         => flow_cell.id,
-                                                      :last_info_box   => last_info_box} %>
-
+  <% unless flow_cell.notes.blank? %>
+    <tr><td></td><td colspan="9"><%=h flow_cell.notes %></td></tr>
+  <% end %>
+</table>

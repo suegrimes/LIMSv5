@@ -2,15 +2,15 @@
   <% prefix = "flow_lane[]" %>
   <%= fields_for prefix, flow_lane do |n| %>
 	
-    <td><%= n.text_field(:lane_nr, :size => 4) %></td>
-	<td><%= n.text_field(:lib_conc, :size => 4) %>pM</td>
+    <td><%= n.text_field(:lane_nr, class: "form-control") %></td>
+	  <td><%= n.text_field(:lib_conc, class: "form-control") %></td>
 	
 	<% if Pool::USING_POOLS %>
-	  <% if flow_lane.seq_lib.oligo_pool.blank? && !flow_lane.seq_lib.control_lane? %>		
+	  <% if seq_lib.oligo_pool.blank? && !seq_lib.control_lane? %>
 	  <td><%=n.collection_select(:pool_id, @oligo_pools, :id, :pool_string, {:include_blank => 'Select..'}) %></td>
 	  <% else %>
 	  <%= n.hidden_field(:pool_id, :value => seq_lib.pool_id) %>
-	  <td class="ltgrey"><%=n.text_field(:oligo_pool, {:value => seq_lib.oligo_pool, :size => 10, :readonly => true, :style => "background-color:#ddd"}) %>  
+	  <td class="ltgrey"><%=n.text_field(:oligo_pool, {:value => seq_lib.oligo_pool, size: 10, readonly: true, style: "background-color:#ddd"}) %>
 	  <% end %>
 	
 	<% else %>
@@ -18,7 +18,7 @@
 	<% end %>
 	
     <td><%=h seq_lib.lib_barcode %></td>
-	<td><%=h seq_lib.lib_name %></td>
+	<td class="text-truncate" style="max-width: 200px;"><%=h seq_lib.lib_name %></td>
 	<td><%=h seq_lib.owner_abbrev %></td>
 	<td><%=h seq_lib.preparation_date %></td>
 	<td style="text-align:center"><%=h seq_lib.library_type %></td>

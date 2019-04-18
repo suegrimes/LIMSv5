@@ -1,0 +1,24 @@
+<h5>User Details</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Login</th>
+    <th>Email</th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @user.login %></td>
+    <td><%=h @user.email %></td>
+  </tr>
+</table>
+
+<p>
+  <% if can? :edit, @user %>
+    <%= link_to 'Edit', edit_user_path(@user) %>
+  <% end %>
+  <% if can? :delete, @user %>
+    | <%= link_to 'Delete', @user, data: { confirm: 'Are you sure?' }, :method => :delete %>
+  <% end %>
+</p>

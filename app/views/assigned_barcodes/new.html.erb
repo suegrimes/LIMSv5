@@ -1,0 +1,11 @@
+<h5>New assigned barcode range</h5>
+
+<%= form_for @assigned_barcode, :action => 'create' do |f| %>
+  <%= render '/shared/errors.html.erb', model: @assigned_barcode %>
+  
+  <%= render :partial => 'assigned_barcode', :locals => {:f => f} %>
+  
+  <%= f.submit "Create", class: "btn btn-primary" %>
+<% end %>
+
+

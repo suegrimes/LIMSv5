@@ -190,14 +190,19 @@ protected
         :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
         :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
         lib_samples_attributes: [
-            :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
-            :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
+            :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :source_sample_name,
+            :runtype_adapter, :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
         ]
     )
   end
 
   def update_params
     create_params
+  end
+
+  def lib_sample_create_params
+    params.permit(:splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
+                  :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
   end
 
   def default_lib_params
@@ -208,6 +213,17 @@ protected
 
   def default_sample_params
     params.require(:sample_default).permit(:source_DNA, :adapter_id, :enzyme_code)
+  end
+
+  def multi_lib_params
+    params.permit(:owner, :preparation_date, :protocol_id, :barcode_key, :lib_name, :sample_conc, :sample_conc_uom,
+                  :adapter_id, :quantitation_method, :pcr_size, :lib_conc_requested, :alignment_ref_id, :pool_id,
+                  :notes, :notebook_ref)
+  end
+
+  def multi_sample_params
+    params.permit(:splex_lib_id, :splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
+                  :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
   end
 
   def dropdowns
@@ -234,7 +250,10 @@ protected
     
     0.upto(nr_libs.to_i - 1) do |i|
       @new_lib[i] ||= SeqLib.new(params['seq_lib_' + i.to_s])
-      @lib_samples[i] = LibSample.new(params['lib_sample_' + i.to_s])
+      params[:lib_sample] = {:source_sample_name => params['lib_sample_' + i.to_s][:source_sample_name],
+                             :index1_tag_id => params['lib_sample_' + i.to_s][:index1_tag_id],
+                             :index2_tag_id => params['lib_sample_' + i.to_s][:index2_tag_id]}
+      @lib_samples[i] = LibSample.new(lib_sample_create_params)
     end
     @nr_libs = nr_libs
   end
@@ -244,7 +263,7 @@ protected
                       :alignment_ref => AlignmentRef.get_align_key(lib_param[:alignment_ref_id]))
      lib_param.merge!(:oligo_pool => Pool.get_pool_label(lib_param[:pool_id])) if !param_blank?(lib_param[:pool_id])
      lib_param[:barcode_key] = SeqLib.next_lib_barcode if param_blank?(lib_param[:barcode_key])
-     seq_lib = SeqLib.new(lib_param)
+     seq_lib = SeqLib.new(multi_lib_params)
 
      sample_param.merge!(:sample_name     => lib_param[:lib_name],
                          :adapter_id      => lib_param[:adapter_id],
@@ -255,7 +274,7 @@ protected
        sample_param[:index2_tag_id] = IndexTag.i2id_for_i1tag(sample_param[:index1_tag_id].to_i)
      end
 
-     seq_lib.lib_samples.build(sample_param)
+     seq_lib.lib_samples.build(multi_sample_params)
      return seq_lib
   end
  

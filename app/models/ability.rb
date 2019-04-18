@@ -44,20 +44,24 @@ class Ability
     
     else
       # Researchers can enter/update processed samples, seq libs, flow cells
-      if user.has_role?("researcher") || user.has_role?("lab_admin")
+      if user.has_role?("researcher")  || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
-                      FlowLane, Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
-        cannot [:edit, :update, :delete], Sample
+                      FlowLane, SampleStorageContainer, StorageContainer, Publication]
+        cannot [:delete], Sample
       end
-    
+
+      if user.has_role?("lab_admin")
+        can :manage, [Protocol, FreezerLocation, Researcher]
+      end
+
       # Clinical users can enter/update patient and clinical samples
       if user.has_role?("clinical") || user.has_role?("clin_admin")
         can :manage, [Patient, SampleCharacteristic, Pathology, Sample, Histology, ProcessedSample, MolecularAssay,
-                      Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
+                      SampleStorageContainer, StorageContainer, Publication]
         cannot :delete, [Patient, SampleCharacteristic, Sample]
       end
       
-      # Additional capabilities for clin_admin (update users, consent_protocols, locations)
+      # Additional capabilities for clin_admin (consent_protocols)
       if user.has_role?("clin_admin")
 #        can :read, User
 #        can [:edit, :update], User do |usr| 
@@ -65,7 +69,7 @@ class Ability
 #          @_roles.include?("clinical") || usr == user
 #        end
         
-        can :manage, [ConsentProtocol, Protocol, FreezerLocation]
+        can :manage, [ConsentProtocol, Protocol, Freezer_Location, Researcher]
         cannot :delete, ConsentProtocol            
       end
       

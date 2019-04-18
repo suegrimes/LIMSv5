@@ -1,4 +1,4 @@
-<h5>Listing <%= @type_of_sample.camelize %> Samples - <%=h @heading_string %></h5>
+<h5>Listing <%= @type_of_sample.camelize %>&nbsp;Samples - <%=h @heading_string %></h5>
 <h6><%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients)</h6>
 
 <%= form_tag :action => :export_samples do %>

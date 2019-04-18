@@ -1,4 +1,4 @@
-<h5><%= (@flow_cell.sequenced? ? 'View Sequencing Run' : 'View Flow Cell') %></h5>
+<h5><%= (@flow_cell.sequenced? ? 'Sequencing Run' : 'Flow Cell') %></h5>
 
 <%= render :partial => 'flow_cell_show', :locals => {:flow_cell => @flow_cell} %>
 
@@ -37,7 +37,7 @@
 	<tr>
 	  <td colspan="2"></td>
       <td colspan="7" style="border-top:0; text-align:center;">            
-        <div style="padding: 0 10px; margin-bottom: 4px; width:95%; border: 1px solid #e5e5e5; text-align:left;">Notes:&nbsp;<%=h flow_lane.notes %></div>
+        <div style="padding: 0 10px; margin-bottom: 4px; width:95%; text-align:left;">Notes:&nbsp;<%=h flow_lane.notes %></div>
       </td>
     </tr>
 	<% end %>
@@ -52,19 +52,25 @@
 	
   <div id="run_params" style="display:none">
     <%= form_for(@flow_cell, :url => {:action => :upd_for_sequencing}) do |f|%>
-	  <%= f.hidden_field(:id, :value => @flow_cell.id)%>
-	  
-      <table class="list">
-      <tr>
-        <th>Sequencing Date</th>
-        <th>Machine</th>
-      </tr>
-      <tr>
-      	<% @flow_cell[:sequencing_date] ||= Date.today %>
-        <td><%= f.date_field('sequencing_date')%></td>
-        <td><%= select_tag('seq_machine[id]', grouped_options_for_select(@sequencers_by_bldg, 1)) %></td>
-      </tr>
-      </table>
-	<%= f.submit "Submit"%>
+	    <%= f.hidden_field(:id, :value => @flow_cell.id)%>
+      <% @flow_cell[:sequencing_date] ||= Date.today %>
+
+      <div class="card">
+        <div class="card-body">
+
+          <div class="form-group row">
+            <label for="seq_machine_id" class="col-auto col-form-label col-form-label-sm">Machine:</label>
+            <div class="col-auto">
+              <%= select_tag('seq_machine[id]', grouped_options_for_select(@sequencers_by_bldg, 1), class: "form-control") %>
+            </div>
+
+            <label for="sequencing_date" class="col-auto col-form-label col-form-label-sm">Sequencing Date:</label>
+            <div class="col-auto">
+              <%= f.date_field :sequencing_date, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      </div>
+	  <%= f.submit "Submit", class: "btn btn-primary"%>
     <% end %>
   </div>

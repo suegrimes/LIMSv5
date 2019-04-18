@@ -1,9 +1,6 @@
 <h5>Listing Extracted Samples</h5>
 <% if @sample %>
-  <%= render :partial => 'samples/sample_info', :locals => {:source => 'Source',
-                                                             :sample => @sample, 
-                                                             :sample_characteristic => @sample.sample_characteristic,
-                                                             :last_info_box => 'yes'} %>
+  <%= render :partial => 'samples/sample_info', :locals => {:sample => @sample} %>
 <% end %>
 
 <h6>Extracted Samples

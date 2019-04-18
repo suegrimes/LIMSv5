@@ -1,6 +1,6 @@
 class UserStamper < ActionController::Caching::Sweeper
   observe SampleCharacteristic, Sample, ProcessedSample, MolecularAssay, LibSample, SeqLib, SampleStorageContainer,
-          Histology, Pathology, StorageDevice, AlignmentRef, RunDir, MachineIncident, AttachedFile, AssignedBarcode,
+          Histology, Pathology, AlignmentRef, AttachedFile, AssignedBarcode,
           Item, Order
 
   def before_validation(model_obj)

@@ -1,21 +1,18 @@
 <tr>
-  <th>Patient ID</td>
+  <th>Patient ID</th>
   <th>Extracted Sample</th>
   <th>From Sample</th>
   <th>Processing Date</th>
   <th>Amount(ug)</th>
   <th>Conc (ng/ul)</th>
-  <th>a260/a280</th>
-  <th>a260/a230</th>
-  <th>RIN#</th>
   <th>Rem?</th>
   <th>Room/Freezer</th>
   <th>Container</th>
   <th>Upd By</th>
   <% if can? :edit, ProcessedSample %>
-  <th/>
+    <th class="link-col"></th>
   <% end %>
   <% if can? :delete, ProcessedSample %>
-  <th/>
+    <th class="link-col"></th>
   <% end %>
 </tr>

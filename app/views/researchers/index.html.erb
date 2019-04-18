@@ -16,8 +16,12 @@
     <td><%=h researcher.researcher_name %></td>
 	  <td><%=h researcher.researcher_initials %></td>
 	  <td><%=h researcher.user.login if researcher.user %></td>
-    <td><%= link_to 'Edit', edit_researcher_path(researcher) %></td>
-    <td><%= link_to 'Delete', researcher, data: {confirm: 'Are you sure?'}, :method => :delete %></td>
+    <% if can? :edit, researcher %>
+      <td><%= link_to 'Edit', edit_researcher_path(researcher) %></td>
+    <% end %>
+    <% if can? :delete, researcher %>
+      <td><%= link_to 'Delete', researcher, data: {confirm: 'Are you sure?'}, :method => :delete %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>

@@ -1,8 +1,12 @@
-<h1><%=h @hdr %></h1>
-<%= form_tag url_for(:controller => :flowcell_queries, :action => :export_seqruns) do %>
-    <%= submit_tag "Export Seq Runs" -%>
+<h5><%=h @hdr %></h5>
+
+<% if @hdr == 'Sequencing Runs' %>
+  <%= form_tag url_for(:controller => :flowcell_queries, :action => :export_seqruns) do %>
+    <%= submit_tag "Export Seq Runs", class: "btn btn-primary" -%>
     <br/><br/>
+    <%= render :partial => 'flow_cells_list', :locals => {:fform => 'yes'} %>
+  <% end %>
 
-<%= render :partial => 'flow_cells_list', :locals => {:fform => 'yes'} %>
-
+<% else %>
+  <%= render :partial => 'flow_cells_list', :locals => {:fform => 'yes'} %>
 <% end %>
