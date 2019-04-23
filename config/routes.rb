@@ -100,8 +100,16 @@ Rails.application.routes.draw do
     get 'positions_used', on: :member
   end
   match 'export_container' => 'storage_containers#export_container', :as => :export_container, :via => [:post]
+  get 'container_query' => 'storage_containers#new_query', :as => :container_query
+  get 'container_contents' => 'storage_containers#list_contents', :as => :container_contents
 
   resources :sample_storage_containers, :only => [:edit, :update]
+
+  # Routes for sample storage locations
+  resources :sample_locs, :only => [:edit, :update]
+  get 'sample_loc_query' => 'sample_loc_queries#new_query', :as => :sample_loc_query
+  post 'export_sample_locs' => 'sample_loc_queries#export_samples', :as => :export_sample_locs
+  resources :sample_loc_queries, :only => :index
 
   # Routes for sequencing libraries
   get 'sequencing/main' => 'seq_libs#main_hdr'
@@ -139,9 +147,6 @@ Rails.application.routes.draw do
   match 'attach_params' => 'attached_files#get_params', :as => :attach_params, :via => [:get, :post]
   match 'display_file/:id' => 'attached_files#show', :as => :display_file, :via => [:get]
   match 'attach_file' => 'attached_files#create', :via => [:get, :post]
-
-  get 'container_query' => 'storage_containers#new_query', :as => :container_query
-  get 'container_contents' => 'storage_containers#list_contents', :as => :container_contents
 
   # Bulk upload
   get 'bulk_upload' => 'bulk_upload#new'
