@@ -14,8 +14,6 @@ class ApplicationController < ActionController::Base
   # for ajax, set flash message into the headers
   after_action :flash_to_headers
 
-  cache_sweeper :user_stamper
-
   rescue_from CanCan::AccessDenied do |exception|
     user_login = (current_user.nil? ? nil : current_user.login)
     Rails.logger.debug "Access denied for user #{user_login} on #{exception.action} #{exception.subject.inspect}"
