@@ -44,6 +44,8 @@ GEM
     autoprefixer-rails (7.2.6)
       execjs
     bindex (0.6.0)
+    blamer (4.1.0)
+      activerecord
     bootstrap (4.0.0)
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
@@ -214,6 +216,7 @@ PLATFORMS
 
 DEPENDENCIES
   autoprefixer-rails (~> 7.2.3)
+  blamer (~> 4.1.0)
   bootstrap (~> 4.0.0.beta2)
   bootstrap_form
   byebug
