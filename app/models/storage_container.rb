@@ -29,7 +29,7 @@ class StorageContainer < ApplicationRecord
   end
 
   def self.find_for_contents_query(id)
-    self.joins(:freezer_location, :sample_storage_containers => :user)
+    self.joins(:freezer_location, :sample_storage_containers)
         .find(id)
   end
 

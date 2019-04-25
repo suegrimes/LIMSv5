@@ -102,6 +102,8 @@ class ProcessedSamplesController < ApplicationController
     #@processed_sample = ProcessedSample.new(params[:processed_sample])
     @processed_sample = ProcessedSample.new(create_params)
     @sample = Sample.find(params[:processed_sample][:sample_id])
+
+    #this_is_a_deliberate_error
     
     Sample.transaction do
       @processed_sample.save!
@@ -174,9 +176,9 @@ protected
 
   def create_params
     params.require(:processed_sample).permit(
-      :sample_id, :patient_id, :input_uom, :extraction_type, :processing_date, :protocol_id, :vial,
+      :sample_id, :barcode_key, :patient_id, :input_uom, :extraction_type, :processing_date, :protocol_id, :vial,
       :support, :elution_buffer, :final_vol, :final_conc, :psample_remaining, :final_a260_a280, :final_a260_a230,
-      :final_rin_nr, :comments,
+      :final_rin_nr, :comments, :updated_by,
       {sample_storage_container_attributes: [
             :sample_name_or_barcode, :container_type, :container_name,
             :position_in_container, :freezer_location_id
@@ -189,7 +191,7 @@ protected
   end
 
   def update_sample_params
-    params.require(:sample).permit(:amount_rem)
+    params.require(:sample).permit(:amount_rem, :sample_remaining)
   end
 
  end
