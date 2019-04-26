@@ -3,7 +3,7 @@
 <%= form_for @sample_characteristic do |f| %>
   <%= render '/shared/errors', model: @sample_characteristic %>
 
-  <%= render :partial => 'patient_info', :locals => {:sample_characteristic => @sample_characteristic,
+  <%= render :partial => '/patients/patient_info', :locals => {:sample_characteristic => @sample_characteristic,
                                                      :patient => @sample_characteristic.patient } %>  
   <%= render :partial => 'clinical_form',    :locals => {:f => f} %>
   
