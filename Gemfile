@@ -12,6 +12,9 @@ gem 'rails', '~> 5.1.4'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 
+# Automatically update updated_by or created_by fields with current user.id
+gem 'blamer', '~> 4.1.0'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 

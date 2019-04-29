@@ -8,16 +8,16 @@ class SeqLibsController < ApplicationController
   before_action :query_dropdowns, :only => :query_params
 
   # GET /seq_libs
-  # If this method is needed, use seqlib_queries controller??
-  #def index
-  #  authorize! :read, SeqLib
-  #  if params[:lib_id]
-  #   @seq_libs = SeqLib.find_all_by_id(params[:lib_id].to_a, :order => 'seq_libs.preparation_date DESC')
-  #  else
-  #    @seq_libs = SeqLib.order('seq_libs.preparation_date DESC').all
-  #  end
-  #  render :action => 'index'
-  #end
+  # This method is used to show all libs just added (via params[:lib_id] array)
+  def index
+    authorize! :read, SeqLib
+    if params[:lib_id]
+      @seq_libs = SeqLib.where(id: params[:lib_id].to_a).order('seq_libs.preparation_date DESC')
+    else
+      @seq_libs = SeqLib.order('seq_libs.preparation_date DESC').all
+    end
+    render :action => 'index'
+  end
   
   # GET /seq_libs/1
   def show
@@ -138,7 +138,7 @@ class SeqLibsController < ApplicationController
       params[:seq_lib][:lib_samples_attributes]["0"].merge!(:index2_tag_id => nil)
     end
     
-    if @seq_lib.update_attributes(params[:seq_lib])
+    if @seq_lib.update_attributes(update_params)
       if @seq_lib.in_multiplex_lib?
         LibSample.upd_mplex_sample_fields(@seq_lib)
         SeqLib.upd_mplex_splex(@seq_lib) 
@@ -190,7 +190,7 @@ protected
         :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
         :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
         lib_samples_attributes: [
-            :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :source_sample_name,
+            :id, :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :source_sample_name,
             :runtype_adapter, :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
         ]
     )
@@ -198,11 +198,6 @@ protected
 
   def update_params
     create_params
-  end
-
-  def lib_sample_create_params
-    params.permit(:splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
-                  :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
   end
 
   def default_lib_params
@@ -215,16 +210,21 @@ protected
     params.require(:sample_default).permit(:source_DNA, :adapter_id, :enzyme_code)
   end
 
-  def multi_lib_params
-    params.permit(:owner, :preparation_date, :protocol_id, :barcode_key, :lib_name, :sample_conc, :sample_conc_uom,
-                  :adapter_id, :quantitation_method, :pcr_size, :lib_conc_requested, :alignment_ref_id, :pool_id,
-                  :notes, :notebook_ref)
-  end
-
-  def multi_sample_params
-    params.permit(:splex_lib_id, :splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
-                  :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
-  end
+  #def lib_sample_create_params
+  #  params.permit(:splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
+  #                :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
+  #end
+  #
+  #def multi_lib_params
+  #  params.permit(:owner, :preparation_date, :protocol_id, :barcode_key, :lib_name, :sample_conc, :sample_conc_uom,
+  #                :adapter_id, :quantitation_method, :pcr_size, :lib_conc_requested, :alignment_ref_id, :pool_id,
+  #                :notes, :notebook_ref)
+  #end
+  #
+  #def multi_sample_params
+  #  params.permit(:splex_lib_id, :splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
+  #                :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
+  #end
 
   def dropdowns
     @adapters     = Adapter.populate_dropdown
@@ -250,31 +250,49 @@ protected
     
     0.upto(nr_libs.to_i - 1) do |i|
       @new_lib[i] ||= SeqLib.new(params['seq_lib_' + i.to_s])
-      params[:lib_sample] = {:source_sample_name => params['lib_sample_' + i.to_s][:source_sample_name],
-                             :index1_tag_id => params['lib_sample_' + i.to_s][:index1_tag_id],
-                             :index2_tag_id => params['lib_sample_' + i.to_s][:index2_tag_id]}
-      @lib_samples[i] = LibSample.new(lib_sample_create_params)
+      @lib_samples[i] = LibSample.new(:source_sample_name => params['lib_sample_' + i.to_s][:source_sample_name],
+                                      :index1_tag_id => params['lib_sample_' + i.to_s][:index1_tag_id],
+                                      :index2_tag_id => params['lib_sample_' + i.to_s][:index2_tag_id])
     end
     @nr_libs = nr_libs
   end
   
   def build_simplex_lib(lib_param, sample_param)
-     lib_param.merge!(:library_type => 'S',
-                      :alignment_ref => AlignmentRef.get_align_key(lib_param[:alignment_ref_id]))
-     lib_param.merge!(:oligo_pool => Pool.get_pool_label(lib_param[:pool_id])) if !param_blank?(lib_param[:pool_id])
-     lib_param[:barcode_key] = SeqLib.next_lib_barcode if param_blank?(lib_param[:barcode_key])
-     seq_lib = SeqLib.new(multi_lib_params)
-
-     sample_param.merge!(:sample_name     => lib_param[:lib_name],
-                         :adapter_id      => lib_param[:adapter_id],
-                         :notes           => lib_param[:notes])
+     seq_lib = SeqLib.new(:library_type => 'S',
+	                      :owner => lib_param[:owner],
+	                      :preparation_date => lib_param[:preparation_date],
+						  :protocol_id => lib_param[:protocol_id],
+						  :barcode_key => (param_blank?(lib_param[:barcode_key]) ? SeqLib.next_lib_barcode : lib_param[:barcode_key]),
+						  :lib_name => lib_param[:lib_name],
+						  :sample_conc => lib_param[:sample_conc],
+						  :sample_conc_uom => lib_param[:sample_conc_uom],
+						  :quantitation_method => lib_param[:quantitation_method],
+						  :pcr_size => lib_param[:pcr_size],
+						  :lib_conc_requested => lib_param[:lib_conc_requested],
+						  :adapter_id => lib_param[:adapter_id],
+						  :runtype_adapter => lib_param[:runtype_adapter],
+						  :alignment_ref_id => lib_param[:alignment_ref_id],
+						  :alignment_ref => AlignmentRef.get_align_key(lib_param[:alignment_ref_id]),
+						  :pool_id => lib_param[:pool_id],
+						  :oligo_pool => (param_blank?(lib_param[:pool_id]) ? nil : Pool.get_pool_label(lib_param[:pool_id])),
+						  :notes => lib_param[:notes],
+						  :notebook_ref => lib_param[:notebook_ref])
 
      # For some adapters, we want to force the pairing of index1/index2, by matching the tag numbers
      if Adapter::IDS_FORCEI2.include?(sample_param[:adapter_id].to_i)
        sample_param[:index2_tag_id] = IndexTag.i2id_for_i1tag(sample_param[:index1_tag_id].to_i)
      end
 
-     seq_lib.lib_samples.build(multi_sample_params)
+     seq_lib.lib_samples.build(:sample_name => lib_param[:lib_name],
+	                           :runtype_adapter => lib_param[:runtype_adapter],
+	                           :adapter_id => lib_param[:adapter_id],
+							   :processed_sample_id => sample_param[:processed_sample_id],
+							   :source_sample_name => sample_param[:source_sample_name],
+							   :index1_tag_id => sample_param[:index1_tag_id],
+							   :index2_tag_id => sample_param[:index2_tag_id],
+							   :enzyme_code => sample_param[:enzyme_code],
+							   :notes => lib_param[:notes],
+							   :updated_by => sample_param[:updated_by])
      return seq_lib
   end
  

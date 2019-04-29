@@ -113,7 +113,7 @@ Rails.application.routes.draw do
 
   # Routes for sequencing libraries
   get 'sequencing/main' => 'seq_libs#main_hdr'
-  resources :seq_libs, :except => :index do
+  resources :seq_libs do
     get :get_adapter_info, on: :collection
    end
   post 'populate_libs' => 'seq_libs#populate_libs'
