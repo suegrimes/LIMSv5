@@ -43,7 +43,7 @@ class ProcessedSample < ApplicationRecord
   accepts_nested_attributes_for :sample_storage_container
   
   validates_date :processing_date
-  before_create :derive_barcode
+  before_validation :derive_barcode, on: :create
 
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'

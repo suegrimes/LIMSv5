@@ -130,8 +130,11 @@ logger("edit_storage_container_init()");
   exist_new_fields.find(".container-name").val("");
   exist_new_fields.find(".container-notes").val("");
   exist_new_fields.find(".position-in-container input").val("");
-logger("detaching exist_new_fields");
-  window.existing_new_container_fields = exist_new_fields.detach();
+
+  //SG 4/25/19:  Note sure why this is here, when editing sample with no existing container, the new sample_storage_container
+  //             which is built is detached here and then cannot be edited
+  //logger("detaching exist_new_fields");
+  //window.existing_new_container_fields = exist_new_fields.detach();
 
   // save state for current position in container
   // used for grid display with a currently existing position
