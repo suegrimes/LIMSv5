@@ -26,6 +26,7 @@ function sample_characteristics_init() {
 
 // sample_characteristics new_sample init
 function sample_characteristics_new_sample_init() {
+  logger("HELLO FROM sample_characteristics_new_sample_init")
   // new storage management init
   storage_container_init();
 }
@@ -38,6 +39,7 @@ function sample_characteristics_create_init() {
 
 // sample_characteristics new_sample init
 function sample_characteristics_edit_init() {
+  logger("HELLO FROM sample_characteristics_edit_init")
   // new storage management init
   storage_container_init();
 
