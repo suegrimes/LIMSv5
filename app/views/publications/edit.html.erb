@@ -1,0 +1,22 @@
+<h5>Editing publication</h5>
+
+<%= form_for(@publication) do |f| %>
+  <%= render '/shared/errors', model: @publication %>
+
+  <%= render :partial => 'publication_form', :locals => {:f => f} %>
+  
+  <%= render :partial => 'publication_lanes', :locals => {:f => f, :flow_lanes => @publication.flow_lanes} %>
+
+  <div id='lane_entry' class="form-group row">
+    <label for="run_numbers" class="col-auto col-form-label">Associate lanes from run number:</label>
+    <div class="col-auto">
+      <%= text_field_tag(:run_numbers, '', :size => 5, class: "form-control")-%>
+    </div>
+    <div class="btn">
+      <%= link_to 'Select Lanes', pub_lanes_path, {:onclick => "this.href += '?run_numbers='+$('#run_numbers').val(); return true;", :remote => true} %>
+    </div>
+  </div>
+
+  <div id="run_error"></div>
+  <%= f.submit "Update", class: "btn btn-primary"%>
+<% end %>
