@@ -17,10 +17,11 @@ else
 end
 
 # Automatic updating of updated_by or created_by model fields
-gem 'blamer', '4.1.0'
+gem 'blamer', '~> 4.1.0'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
