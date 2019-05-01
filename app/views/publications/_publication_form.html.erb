@@ -1,0 +1,43 @@
+<div class="card">
+  <h6 class="card-header">Publication Details</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="title_abbrev" class="col-auto col-form-label col-form-label-sm">Title Abbrev:</label>
+      <div class="col-auto">
+        <%= f.text_field :title_abbrev, class: "form-control" %>
+      </div>
+      <label for="title_full" class="col-auto col-form-label col-form-label-sm">Title:</label>
+      <div class="col-auto">
+        <%= f.text_field :title_full, size: 80, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="publication_name" class="col-auto col-form-label col-form-label-sm">Journal Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :publication_name, class: "form-control" %>
+      </div>
+      <label for="publication_name" class="col-auto col-form-label col-form-label-sm">Pub Date:</label>
+      <div class="col-auto">
+        <%= f.date_field :date_published, size: 80, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+      <div class="col-auto">
+        <%= f.text_field :comments, size: 100, class: "form-control" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+<h5>Lab Authors</h5>
+  <div class="form-group row">
+    <div class="col-auto">
+      <%= f.collection_select(:researcher_ids, @researchers, :id, :researcher_name, {:include_blank => 'Select ..'},
+                              {:size => 5, :multiple => :multiple, :label => 'Author(s)', class: "form-control"}) %>
+    </div>
+  </div>

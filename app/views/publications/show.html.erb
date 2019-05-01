@@ -1,0 +1,51 @@
+<h5>View Publication</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Journal</th>
+    <th>Publication Title/Authors</th>
+    <th>Abbrev Title</th>
+    <th>Date Pub</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+  <tr>
+    <td><%=h @publication.publication_name %></td>
+    <td><%=h @publication.title_full %></td>
+    <td><%=h @publication.title_abbrev %></td>
+    <td><%=h @publication.date_published %></td>
+    <td><% if can? :edit, @publication %><%=link_to 'Edit', edit_publication_path(@publication) %><% end %></td>
+    <td><% if can? :delete, @publication %><%=link_to 'Delete', @publication, data: {confirm: 'Are you sure?'}, :method => :delete %><% end %></td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td>By: <%=h @publication.researchers.collect{|r| r.researcher_name }.join(', ') %></td>
+    <td colspan="4"></td>
+  </tr>
+</table>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+  	<th>Sequencing Run</th>
+	  <th>Lane</th>
+	  <th>Lib Barcode</th>
+	  <th>Lib Name</th>
+  </tr>
+  </thead>
+
+  <% @publication.flow_lanes.each do |flow_lane| %>
+  <tr>
+  	<td><%=h flow_lane.sequencing_key %></td>
+	  <td><%=h flow_lane.lane_nr %></td>
+	  <td><%=h flow_lane.lib_barcode %></td>
+	  <td><%=h flow_lane.lib_name %></td>
+  </tr>
+  <% end %>
+</table>
+
+<%= link_to 'List All Publications', publications_path %>
+													  

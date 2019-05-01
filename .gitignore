@@ -29,7 +29,4 @@
 # Ignore development copy of Gemfile and saved prodGemfile
 /dev*Gemfile*
 /prodGemfile*
-**Gemfile.lock
-
-# Ignore on mac
-**.DS_Store
+Gemfile.lock

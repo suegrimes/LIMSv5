@@ -152,6 +152,10 @@ Rails.application.routes.draw do
   get 'bulk_upload' => 'bulk_upload#new'
   post 'bulk_upload' => 'bulk_upload#create'
 
+  # Routes for sequencing-related publications
+  resources :publications
+  get 'pub_lanes' => 'publications#populate_lanes', as: :pub_lanes
+
   # Routes for reserved barcodes
   resources :assigned_barcodes
   get 'check_barcodes/available' => 'assigned_barcodes#check_barcodes', :as => :check_available_barcodes, :rtype => 'available'
