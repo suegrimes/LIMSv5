@@ -10,7 +10,6 @@ gem 'rails', '~> 5.1.4'
 
 # Use mysql as the database for Active Record (use specific version for Windows since have to match up with C-connector version)
 if RUBY_PLATFORM =~ /mingw/
-   gem 'wdm', '>= 0.1.0'
    gem 'mysql2', '0.3.21'
 else
    gem 'mysql2', '>= 0.3.18', '< 0.5'
