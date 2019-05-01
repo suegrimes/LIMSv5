@@ -1,5 +1,5 @@
 class SampleLocsController < ApplicationController
-
+  layout 'main/main'
   before_action :dropdowns, :only => [:edit]
 
   # GET /sample_locs/1/edit
