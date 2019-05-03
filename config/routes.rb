@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   # Routes for clinical samples/sample characteristics
   resources :sample_characteristics do
-    get 'add_new_sample', on: :member
+    post 'add_new_sample', on: :member
     post 'add_another_sample', on: :member
     post 'new_sample', on: :collection
   end
