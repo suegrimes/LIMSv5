@@ -28,15 +28,6 @@
     <%= link_to 'Add another sample for this patient/collection date', add_another_sample_sample_characteristic_path(@sample_characteristic.id),
               :id => "add_more", :remote => true, :"data-method" => 'post' %>
     </div>
-    <%= javascript_tag do %>
-        $('#add_more').bind("ajax:success", function(event){
-           var detail = event.detail;
-           var response_data = detail[0], status = detail[1], xhr = detail[2];
-          $('#sample_link').toggle();
-          $('#load_more').html(xhr.responseText); // insert content
-          reset_styling();
-        });
-    <% end %>
 
     <div id='load_more'>
       <% if @sample_with_error %>
