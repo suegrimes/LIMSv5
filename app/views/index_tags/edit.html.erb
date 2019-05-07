@@ -1,0 +1,43 @@
+<h5>Edit Multiplex Index Tag</h5>
+
+<%= form_for(@index_tag) do |f| %>
+  <%= render '/shared/errors', model: @index_tag %>
+
+<div class="card">
+  <h6 class="card-header">Multiplex Index Tag: <%= @index_tag.adapter_name %></h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="index_read" class="col-sm-2 col-form-label col-form-label-sm">Index Read:</label>
+      <div class="col-auto">
+        <%= f.text_field :index_read, class: "form-control", disabled: true %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="tag_nr" class="col-sm-2 col-form-label col-form-label-sm">Tag#:</label>
+      <div class="col-auto">
+        <%= f.text_field :tag_nr, class: "form-control", disabled: true %>
+      </div>
+
+    </div>
+
+    <div class="form-group row">
+      <label for="index_code" class="col-sm-2 col-form-label col-form-label-sm">Index:</label>
+      <div class="col-auto">
+        <%= text_field_tag :index_code, f.object.index_code, class: "form-control", disabled: true %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="tag_sequence" class="col-sm-2 col-form-label col-form-label-sm">Sequence:</label>
+      <div class="col-auto">
+        <%= f.text_field :tag_sequence, class: "form-control" %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%=f.submit "Update", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'Back', adapter_path(@index_tag.adapter_id) %>
+<% end %>
