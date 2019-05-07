@@ -1,0 +1,30 @@
+<%= render :partial => 'shared/page_print' %>
+<h1>Order Item Details</h1>
+
+<!-- Item Details -->
+<!-- Standard fields to be displayed -->
+<% info_flds   = [['Field', 'Date', format_datetime(@item.created_at)],
+                  ['Field', 'Requestor', @item.requester_abbrev], 
+                  ['Field', 'Site', @item.deliver_site],
+                  ['Field', 'Grant#', @item.grant_nr],
+                  ['Field', 'Company', @item.company_name],
+                  ['Field', 'Catalog#', @item.catalog_nr],
+                  ['Field', 'Chemical?', @item.chemical_flag],
+                  ['Field', 'Item Description', @item.item_description],
+				  ['Field', 'Size', @item.item_size],
+				  ['Field', 'Unit Price', number_to_currency(@item.item_price)],
+				  ['Field', 'Qty', @item.item_quantity],
+                  ['Field', 'Total', number_to_currency(@item.item_ext_price)],
+				  ['Field', 'Recvd?', @item.item_received],
+                  ['Field', 'Notes', @item.notes]] %>
+
+<!-- Links to be displayed with borders, in bottom row of info box -->
+<% info_links = [] %>
+<% info_links = [['Edit', 'edit']] if (can? :edit, @item) %>
+
+<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Item Details',
+                                                      :info_flds       => info_flds,
+                                                      :info_links      => info_links,
+                                                      :link_id         => @item.id,
+                                                      :link_controller => 'items',
+                                                      :last_info_box   => 'yes'} %>

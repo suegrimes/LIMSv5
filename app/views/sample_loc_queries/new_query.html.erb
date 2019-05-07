@@ -76,7 +76,7 @@
         <div class="form-group row">
           <label for="date_filter" class="col-sm-2 col-form-label col-form-label-sm">Date Filter:</label>
           <div class="col-sm-3">
-            <%= f.select(:date_filter, options_for_select(@date_options.collect{|dt| [dt[:datetxt], dt[:datefld]]}), class: "form-control") %>
+            <%= f.select(:date_filter, options_for_select(@date_options.collect{|dt| [dt[:datetxt], dt[:datefld]]}), {}, class: "form-control") %>
           </div>
 
           <span class="col-form-label-sm">From:</span>

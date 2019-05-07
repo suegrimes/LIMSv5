@@ -1,0 +1,46 @@
+<h1>View Order Items</h1>
+
+<%= form_for(@item_query, :url => {:controller => 'items', :action => 'list_selected'}) do |f| %>
+<%= render '/shared/errors', model: @item_query, header_message: "Error(s) in query parameters" %>
+
+<fieldset class="form">
+<legend>Specify parameters</legend>
+<div class="query_grid">
+  <%= f.label(:requester_name, 'Requestor:') %>
+  <%= f.select(:requester_name, @requestors, {:include_blank => 'All'}, {:size => 3, :multiple => :multiple})%>
+  <%= f.label(:company_name, 'Company:') %>
+  <div class="wide_select"><%= f.select(:company_name, @companies, {:include_blank => 'All'}, :size => 3, :multiple => :multiple)%></div>
+
+  <div class="new_line">&nbsp;</div>
+  &nbsp;
+  <%= f.label(:item_description, 'Item search:') %>
+  <div class="wide_select"><%=f.text_field(:item_description) %></div>
+
+  <div class="new_line"><%= f.label(:deliver_site, 'Deliver Site:') %></div>
+  <%= f.select(:deliver_site, Item::DELIVER_SITES, {:include_blank => 'All'})%>
+  <%= f.label(:ordered_status, 'Order Status:') %>
+  <%= f.select(:ordered_status, %w{All NotOrdered Ordered})%>
+
+  <div class="new_line"><%= f.label(:order_received_flag, 'Order Recvd:') %></div>
+  <%= f.select(:order_received_flag, %w{Y N P}, {:include_blank => 'All'}) %>
+  <%= f.label(:item_received_flag, 'Item Recvd:') %>
+  <%= f.select(:item_received_flag, %w{Y N}, {:include_blank => 'All'})%>
+
+  <div class="new_line"><%= f.label(:from_date, 'Entered From:') %></div>
+  <%= f.datepicker 'from_date', dateFormat: "yy-mm-dd", maxDate: Time.current.to_date, changeMonth: true, changeYear: true, size: 15 %>
+  <%= f.label(:to_date, 'To:') %>
+  <%= f.datepicker 'to_date', dateFormat: "yy-mm-dd", maxDate: Time.current.to_date, changeMonth: true, changeYear: true, size: 15 %>
+
+  <div class="new_line"></div>
+</div>
+</fieldset>
+
+<%=raw break_clear %>
+<p><%=f.submit "View Items", :name => 'view' %> &nbsp;&nbsp;&nbsp;&nbsp;
+  <% if can? :new, Order %>
+    <%=f.submit "Receive Items", :name => 'receive' %> &nbsp;&nbsp;&nbsp;
+    <%=f.submit "Order Items", :name => 'order' %>
+  <% end %>
+</p>
+
+<%end%>
