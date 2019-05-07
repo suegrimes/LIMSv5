@@ -29,6 +29,7 @@
   <tr>
     <th>Index Read</th>
     <th>Tag#</th>
+    <th>Index</th>
     <th>Sequence</th>
     <th colspan=2></th>
   </tr>
@@ -37,6 +38,7 @@
   <% for index_tag in @adapter.index_tags %>
       <tr>
         <td><%=h index_tag.index_read %></td>
+        <td><%=h index_tag.tag_nr %></td>
         <td><%=h index_tag.index_code %></td>
         <td><%=h index_tag.tag_sequence %></td>
         <td><% if can? :edit, index_tag %>
