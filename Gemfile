@@ -18,9 +18,6 @@ end
 # Automatic updating of updated_by or created_by model fields
 gem 'blamer', '~> 4.1.0'
 
-# Use Puma as the app server
-gem 'puma', '~> 3.7'
-
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -65,6 +62,7 @@ gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
 
 # boostrap CSS framework
+gem 'autoprefixer-rails', '~> 7.2.3'
 gem 'bootstrap', '~> 4.0.0.beta2'
 
 # boostrap form builder
@@ -78,9 +76,6 @@ gem "roo", "~> 2.7.0"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
-# Gems for javascript interpreter (Windows)
-gem 'therubyracer', '0.11.0beta1', :path => 'C:\Users\sgrimes\Software\rubygems', platforms: [:x64_mingw, :mingw]
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -99,6 +94,12 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+group :development, :staging do
+  gem 'puma', '~> 3.7'  #Use puma as the app server
+end
+
+# Gems for javascript interpreter (Windows)
+#gem 'therubyracer', '0.11.0beta1', :path => 'C:\Users\sgrimes\Software\rubygems', platforms: [:x64_mingw, :mingw]
 #gem 'therubyracer', '0.11.0beta1', platforms: [:jruby, :x64_mingw]
 #gem 'mini_racer', platforms: :ruby
 
