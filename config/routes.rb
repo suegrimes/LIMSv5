@@ -179,9 +179,9 @@ Rails.application.routes.draw do
     get :edit_order_items, on: :member
     get :new_query, as: :view_orders, on: :collection
   end
-  match 'edit_items' => 'orders#edit_order_items', :as => :edit_order_items
-  match 'view_orders' => 'orders#new_query', :as => :view_orders
-  match 'list_selected' => 'orders#list_selected', :as => :list_selected
+  get 'edit_items' => 'orders#edit_order_items', :as => :edit_order_items
+  get 'view_orders' => 'orders#new_query', :as => :view_orders
+  get 'list_selected' => 'orders#list_selected', :as => :list_selected
 
   #get 'items/autocomplete_item_company_name'
   #get 'items/autocomplete_item_item_description'
@@ -195,11 +195,11 @@ Rails.application.routes.draw do
     end
   end
 
-  match 'view_items' => 'items#new_query', :as => :view_items
-  match 'list_items' => 'items#list_selected', :as => :list_items
-  match 'unordered_items' => 'items#list_unordered_items', :as => :notordered
-  match 'export_items' => 'items#export_items', :as => :export_items
-  match 'receive_items' => 'items#receive_items', :as => :receive_items
+  get 'view_items' => 'items#new_query', :as => :view_items
+  match 'list_items' => 'items#list_selected', :as => :list_items, :via => [:get, :post]
+  get 'unordered_items' => 'items#list_unordered_items', :as => :notordered
+  post 'export_items' => 'items#export_items', :as => :export_items
+  get 'receive_items' => 'items#receive_items', :as => :receive_items
   #match 'populate_items' => 'items#populate_items'
 
   # test route

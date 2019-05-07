@@ -69,7 +69,7 @@ class Ability
 #          @_roles.include?("clinical") || usr == user
 #        end
         
-        can :manage, [ConsentProtocol, Protocol, Freezer_Location, Researcher]
+        can :manage, [ConsentProtocol, Protocol, FreezerLocation, Researcher]
         cannot :delete, ConsentProtocol            
       end
       

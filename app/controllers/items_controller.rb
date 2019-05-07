@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   #rescue_from ActionController::RedirectBackError, with: :redirect_to_default
   include SqlQueryBuilder
+  layout 'main/main'
 
   before_action :dropdowns, :only => [:new_query, :new, :edit]
   protect_from_forgery :except => :populate_items
@@ -15,7 +16,7 @@ class ItemsController < ApplicationController
   end
   
   def list_selected
-    @item_query = ItemQuery.new(params[:item_query])
+    @item_query = ItemQuery.new(query_params)
     
     if @item_query.valid?
       condition_array = define_conditions(params)
@@ -140,7 +141,7 @@ class ItemsController < ApplicationController
     params[:item][:company_name] ||= params[:other_company]
     @item = Item.find(params[:id])
 
-    if @item.update_attributes(params[:item])
+    if @item.update_attributes(update_params)
       flash[:notice] = 'Item was successfully updated.'
       #redirect_to(@item)
       redirect_to items_path
@@ -183,19 +184,19 @@ class ItemsController < ApplicationController
     end
   end
 
-  def autocomplete_items_catalog_nr
+  def autocomplete_for_catalog_nr
     @items = Item.find_all_unique(["catalog_nr LIKE ?", params[:term] + '%'])
     list = @items.map {|i| Hash[ id: i.id, label: i.catalog_nr, name: i.catalog_nr, company_name: i.company_name, desc: i.item_description, price: i.item_price ]}
     render json: list
   end
   
-  def autocomplete_items_item_description
+  def autocomplete_for_item_description
     @items = Item.find_all_unique(["item_description LIKE ?", params[:term] + '%'])
     list = @items.map {|i| Hash[ id: i.id, label: i.item_description, name: i.item_description, cat_nr: i.catalog_nr, company_name: i.company_name, price: i.item_price]}
     render json: list
   end
   
-  def autocomplete_items_company_name
+  def autocomplete_for_company_name
     @items = Item.find_all_unique(["company_name LIKE ?", params[:term] + '%'])
     @items = @items.uniq { |h| h[:company_name] }
     list = @items.map {|i| Hash[ id: i.id, label: i.company_name, name: i.company_name]}
@@ -243,8 +244,8 @@ protected
     return ["CWA"] | companies_from_items | ["Other"]
   end
   
-   def define_conditions(params)
-     @where_select, @where_values = build_sql_where(params[:item_query], ItemQuery::QUERY_FLDS, [], [])
+  def define_conditions(params)
+    @where_select, @where_values = build_sql_where(params[:item_query], ItemQuery::QUERY_FLDS, [], [])
 
     if !param_blank?(params[:item_query][:order_received_flag])
       # Filtering for order received='N' should also return records where order received is blank or partial
@@ -324,6 +325,21 @@ protected
     item_xref = {:od => item.order,
                  :im => item}
     return item_xref
+  end
+
+  def create_params
+    params.require(:item).permit(:company_name, :requester_name, :deliver_site, :item_description, :ordered_status,
+                                 :item_received_flag)
+  end
+
+  def update_params
+    create_params
+  end
+
+  def query_params
+    params.require(:item_query).permit(:company_name, :requester_name, :deliver_site, :item_description, :ordered_status,
+                                       :order_received_flag, :item_received_flag, :from_date, :to_date)
+    #params.permit(:order, :view, :receive)
   end
 
 end

@@ -17,9 +17,8 @@ class ItemQuery
 
   validates_date :to_date, :from_date, :allow_blank => true
 
-  STD_FIELDS = {'items' => %w(company_name requester_name deliver_site),
-                'orders' => %w(deliver_site)}
+  STD_FIELDS = {'items' => %w(company_name requester_name deliver_site)}
   SEARCH_FLDS = {'items' => %w(item_description)}
 
-  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => {}, 'search' => SEARCH_FIELDS}
+  QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => {}, 'search' => SEARCH_FLDS}
 end

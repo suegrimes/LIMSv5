@@ -58,7 +58,7 @@ class Item < ApplicationRecord
   end
   
   def self.find_all_by_date(condition_array=[])
-    self.includes(:order).where(sql_where(condition_array)).order('DATE(items.created_at) DESC, orders.po_number').all
+    self.includes(:order).references(:order).where(sql_where(condition_array)).order('DATE(items.created_at) DESC, orders.po_number').all
     #self.find(:all, :include => :order,
     #                :order => 'DATE(items.created_at) DESC, orders.po_number',
     #                :conditions => condition_array)
