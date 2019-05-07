@@ -74,11 +74,12 @@ class PublicationsController < ApplicationController
   def populate_lanes
     if params[:run_numbers]
       @runnr_list = params[:run_numbers]
-      @flow_cells = FlowCell.includes(:flow_lanes).where("flow_cells.seq_run_nr IN (?)", @runnr_list.split(','))
+      @flow_cells = FlowCell.includes(:flow_lanes).references(:flow_lanes)
+                            .where("flow_cells.seq_run_nr IN (?)", @runnr_list.split(','))
                             .order("flow_cells.seq_run_nr, flow_lanes.lane_nr")
     end
 
-    respond_to {|format| format.js }
+    respond_to {|format| format.js}
   end
 
 protected

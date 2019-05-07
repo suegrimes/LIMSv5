@@ -38,11 +38,17 @@ function sample_characteristics_create_init() {
 
 // sample_characteristics new_sample init
 function sample_characteristics_edit_init() {
+  edit_add_another_sample();
   // new storage management init
   storage_container_init();
 
   // storage containers edit init
   edit_storage_container_init();
+}
+
+// sample_characteristics show init
+function sample_characteristics_show_init() {
+   show_sample();
 }
 
 //--------------------------------------------------------
@@ -66,6 +72,26 @@ logger("append_form()");
 //logger("xhr.responseText: "+ xhr.responseText);
 
   $('#sample-container').empty().append(xhr.responseText);
+}
+
+function edit_add_another_sample() {
+  $('#add_more').bind("ajax:success", function(event){
+     var detail = event.detail;
+     var response_data = detail[0], status = detail[1], xhr = detail[2];
+    $('#sample_link').toggle();
+    $('#load_more').html(xhr.responseText); // insert content
+    reset_styling();
+  });
+}
+
+function show_sample() { 
+  $('#add_more').bind("ajax:success", function(event, data){
+    var detail = event.detail;
+    var response_data = detail[0], status = detail[1], xhr = detail[2];
+    $('#sample_link').toggle();
+    $('#load_more').html(xhr.responseText); // insert content
+    reset_styling();
+  });   
 }
 
 // handle error
