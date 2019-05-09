@@ -186,7 +186,7 @@ Rails.application.routes.draw do
   #get 'items/autocomplete_item_company_name'
   #get 'items/autocomplete_item_item_description'
   #get 'items/autocomplete_item_catalog_nr'
-  post 'items/populate_items'
+  #post 'items/populate_items'
   resources :items do
     collection do
       get :autocomplete_for_item_description
@@ -200,7 +200,7 @@ Rails.application.routes.draw do
   get 'unordered_items' => 'items#list_unordered_items', :as => :notordered
   post 'export_items' => 'items#export_items', :as => :export_items
   get 'receive_items' => 'items#receive_items', :as => :receive_items
-  #match 'populate_items' => 'items#populate_items'
+  match 'add_items' => 'items#populate_items', :as => :populate_items, :via => [:get, :post]
 
   # test route
   get 'test' => 'test#index'

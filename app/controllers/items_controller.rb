@@ -80,7 +80,7 @@ class ItemsController < ApplicationController
     params[:nr_items] ||= 3
     
     0.upto(params[:nr_items].to_i - 1) do |i|
-      @items[i] = Item.new(params[:item_default])
+      @items[i] = Item.new(default_params)
     end
 
     respond_to do |format|
@@ -329,11 +329,16 @@ protected
 
   def create_params
     params.require(:item).permit(:company_name, :requester_name, :deliver_site, :item_description, :ordered_status,
-                                 :item_received_flag)
+                                 :item_received_flag, :catalog_nr, :chemical_flag, :item_size, :item_quantity,
+                                 :grant_nr, :notes)
   end
 
   def update_params
     create_params
+  end
+
+  def default_params
+    params.require(:item_default).permit(:requester_name, :deliver_site, :grant_nr)
   end
 
   def query_params
