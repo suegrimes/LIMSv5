@@ -7,7 +7,7 @@ function set_bootstrap_style() {
 
   // use small form controls
   $('.form-group .form-control').addClass('form-control-sm');
-  $('.form-group .control-label').addClass('col-form-label-sm');
+  $('.form-group .col-form-label').addClass('col-form-label-sm');
 
   // set width to over-ride 100% if an explicit input size if set
   // uses em-width classes defined for every 10em up to 100em

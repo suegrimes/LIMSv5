@@ -33,7 +33,7 @@
       <a class="dropdown-item" href="/bulk_upload">Bulk Upload</a>
       <div class="dropdown-divider"></div>
       <% if user_has_access?(user_roles, ["clinical", "clin_admin"]) %>
-        <a class="dropdown-item" href="#">Edit Patient</a>
+        <a class="dropdown-item" href="/modify_patient">Edit Patient</a>
         <a class="dropdown-item" href="/modify_sample">Edit Sample Acquisition</a>
       <% end %>
       <% if user_has_access?(user_roles, ["clinical", "clin_admin", "researcher", "lab_admin"]) %>
@@ -108,11 +108,11 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
     <div class="dropdown-menu">
       <% if user_has_access?(user_roles, ["barcodes"]) %>
-        <a class="dropdown-item" href="#">Manage Barcodes</a>
+        <a class="dropdown-item" href="/assigned_barcodes">Manage Barcodes</a>
       <% end %>
       <% if user_has_access?(user_roles, ["admin"]) %>
         <a class="dropdown-item" href="/researchers">Manage Researchers</a>
-        <a class="dropdown-item" href="#">Manage Users</a>
+        <a class="dropdown-item" href="/users">Manage Users</a>
       <% end %>
     </div>
   </li>
