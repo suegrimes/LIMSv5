@@ -1,30 +1,54 @@
-<%= render :partial => 'shared/page_print' %>
-<h1>Order Item Details</h1>
+<%= render 'shared/page_print' %>
+<h5>View Item</h5>
+<table class="table table-bordered list table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Order?</th>
+    <th>Requestor</th>
+    <th>Date</th>
+    <th>Site</th>
+    <th>Chem</th>
+    <th>Company</th>
+    <th>Catalog#/Item</th>
+    <th>Qty</th>
+    <th>Unit Price</th>
+    <th>Total</th>
+    <th>Grant</th>
+    <th>Recv'd?</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
 
-<!-- Item Details -->
-<!-- Standard fields to be displayed -->
-<% info_flds   = [['Field', 'Date', format_datetime(@item.created_at)],
-                  ['Field', 'Requestor', @item.requester_abbrev], 
-                  ['Field', 'Site', @item.deliver_site],
-                  ['Field', 'Grant#', @item.grant_nr],
-                  ['Field', 'Company', @item.company_name],
-                  ['Field', 'Catalog#', @item.catalog_nr],
-                  ['Field', 'Chemical?', @item.chemical_flag],
-                  ['Field', 'Item Description', @item.item_description],
-				  ['Field', 'Size', @item.item_size],
-				  ['Field', 'Unit Price', number_to_currency(@item.item_price)],
-				  ['Field', 'Qty', @item.item_quantity],
-                  ['Field', 'Total', number_to_currency(@item.item_ext_price)],
-				  ['Field', 'Recvd?', @item.item_received],
-                  ['Field', 'Notes', @item.notes]] %>
+  <tr>
+    <% if @item.ordered? %>
+        <td class="dotted_border_bottom"><%=h @item.order.po_number %></td>
+    <% else %>
+        <td class="dotted_border_bottom">n/a</td>
+    <% end %>
+    <td class="dotted_border_bottom"><%=h @item.requester_abbrev %></td>
+    <td class="dotted_border_bottom" style="white-space:nowrap"><%=h format_date(@item.created_at) %></td>
+    <td class="dotted_border_bottom"><%=h @item.deliver_site %></td>
+    <td class="dotted_border_bottom" align="center"><%=h @item.chemical_flag%></td>
+    <td class="dotted_border_bottom"><%=h @item.company_name %></td>
+    <td class="dotted_border_bottom"><%=h @item.catalog_nr %></td>
+    <td class="dotted_border_bottom">&nbsp;&nbsp;<%=h @item.item_quantity %></td>
+    <td class="dotted_border_bottom"><%=h number_to_currency(@item.item_price) %></td>
+    <td class="dotted_border_bottom"><%=h number_to_currency(@item.item_ext_price) %></td>
+    <td class="dotted_border_bottom"><%=h @item.grant_nr %></td>
+    <td class="dotted_border_bottom" align="center"><%=h @item.item_received %></td>
 
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if (can? :edit, @item) %>
+    <% if can? :edit, @item %>
+        <td rowspan=2><%= link_to 'Edit', edit_item_path(@item) %></td>
+    <% end %>
 
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Item Details',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_id         => @item.id,
-                                                      :link_controller => 'items',
-                                                      :last_info_box   => 'yes'} %>
+    <% if can? :delete, @item %>
+        <td rowspan=2><%= link_to 'Delete', @item, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td colspan="5" class="border_bottom_only">&nbsp;</td>
+    <td class="border_bottom_only" colspan="3"><%=h @item.item_description %></td>
+    <td colspan="2" class="border_bottom_only">&nbsp;</td>
+    <td class="border_bottom_only" colspan="2"><%=h @item.notes %></td>
+  </tr>
+</table>

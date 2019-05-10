@@ -199,7 +199,7 @@ Rails.application.routes.draw do
   match 'list_items' => 'items#list_selected', :as => :list_items, :via => [:get, :post]
   get 'unordered_items' => 'items#list_unordered_items', :as => :notordered
   post 'export_items' => 'items#export_items', :as => :export_items
-  get 'receive_items' => 'items#receive_items', :as => :receive_items
+  post 'receive_items' => 'items#receive_items', :as => :receive_items
   match 'add_items' => 'items#populate_items', :as => :populate_items, :via => [:get, :post]
 
   # test route

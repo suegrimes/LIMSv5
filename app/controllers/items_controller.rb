@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
         render :action => :order_item_list
       elsif params[:receive]
         render :action => :receive_item_list
-      else
+      else  #params[:view]
         render :action => :index
       end
       
@@ -160,7 +160,7 @@ class ItemsController < ApplicationController
 
   def receive_items
     Item.where("id in (?)",params[:item_id]).update_all(:item_received => 'Y')
-    #flash[:notice] = 'Items were successfully received'
+    flash[:notice] = 'Items were successfully received'
     redirect_to :action => 'new_query'
   end
 
