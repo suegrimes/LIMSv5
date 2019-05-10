@@ -1,8 +1,8 @@
-<h5>New item</h5>
+<h5>New order items(s)</h5>
 
 <%= form_tag url_for(:action => :populate_items), {id: 'default_items', remote: true} do %>
   <div class="card">
-  <h6 class="card-header">Order Items:</h6>
+  <h6 class="card-header">Items for:</h6>
   <div class="card-body">
 
     <div class="form-group row">
@@ -33,11 +33,13 @@
  
   <div id="item_error" style="display:none; color:red"></div>
 
-  <div id='add_items' class="form-group row">
-    <span class="col-sm-6"><b>Number of different items to order?</b>&nbsp;
-    <%= text_field_tag(:nr_libs, @nr_libs, {class: "col-sm-1 form-control"})-%></span>
-    <%= submit_tag('Add Items', id: 'add_button', class: "btn btn-primary") %>
+  <br/>
+  <div id='add_items' class="row">
+    <div class="offset-sm-1 col-sm-3 justify-content-center"><b>Number of item rows?</b>
+    <%= text_field_tag(:nr_items, '', {class: "form-control offset-sm-2 col-sm-2"})-%></div>
+    <%= submit_tag('Add item rows', id: 'add_button', class: "btn btn-primary align-self-center") %>
   </div>
+  <br/>
 <% end %>
 
 <%= form_tag url_for(:action => :create) do %>

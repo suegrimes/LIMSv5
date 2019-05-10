@@ -9,14 +9,19 @@ class ItemsController < ApplicationController
   autocomplete :items, :catalog_nr
   autocomplete :items, :company_name
   autocomplete :items, :item_description
-  
+
+  # Turn off strong parameters for this controller (due to dynamic naming of items array)
+  def params
+    request.parameters
+  end
+
   def new_query
     @item_query = ItemQuery.new(:from_date => (Date.today - 30).beginning_of_month,
                                 :to_date   =>  Date.today)
   end
   
   def list_selected
-    @item_query = ItemQuery.new(query_params)
+    @item_query = ItemQuery.new(params[:item_query])
     
     if @item_query.valid?
       condition_array = define_conditions(params)
@@ -80,13 +85,15 @@ class ItemsController < ApplicationController
     params[:nr_items] ||= 3
     
     0.upto(params[:nr_items].to_i - 1) do |i|
-      @items[i] = Item.new(default_params)
+      @items[i] = Item.new(:requester_name => params[:item_default][:requester_name],
+                           :deliver_site => params[:item_default][:deliver_site],
+                           :grant_nr => params[:item_default][:grant_nr])
     end
 
     respond_to do |format|
       format.js
     end
-
+    #render :action => 'debug'
   end
 
   # GET /items/1/edit
@@ -105,7 +112,7 @@ class ItemsController < ApplicationController
       this_item = params['items_' + i.to_s]
       break if this_item.nil?
       next  if (param_blank?(this_item[:item_description]) && param_blank?(this_item[:catalog_nr]))
-      @items.push(Item.new(params[:item_default].merge(this_item))) # merge in this direction so that company name is not overridden by default value
+      @items.push(Item.new(this_item))
     end
     
     #@email_create_orders = email_value(EMAIL_CREATE, 'orders', @items[0].deliver_site.downcase)
@@ -144,7 +151,7 @@ class ItemsController < ApplicationController
     if @item.update_attributes(update_params)
       flash[:notice] = 'Item was successfully updated.'
       #redirect_to(@item)
-      redirect_to items_path
+      redirect_to :action => 'new_query'
     else
       dropdowns
       render :action => "edit", :other_company => params[:other_company]
@@ -325,26 +332,6 @@ protected
     item_xref = {:od => item.order,
                  :im => item}
     return item_xref
-  end
-
-  def create_params
-    params.require(:item).permit(:company_name, :requester_name, :deliver_site, :item_description, :ordered_status,
-                                 :item_received_flag, :catalog_nr, :chemical_flag, :item_size, :item_quantity,
-                                 :grant_nr, :notes)
-  end
-
-  def update_params
-    create_params
-  end
-
-  def default_params
-    params.require(:item_default).permit(:requester_name, :deliver_site, :grant_nr)
-  end
-
-  def query_params
-    params.require(:item_query).permit(:company_name, :requester_name, :deliver_site, :item_description, :ordered_status,
-                                       :order_received_flag, :item_received_flag, :from_date, :to_date)
-    #params.permit(:order, :view, :receive)
   end
 
 end

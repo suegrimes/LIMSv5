@@ -1,0 +1,44 @@
+<table class="list">
+  	<tr>
+	  <th>Requestor</th>
+	  <th>Deliver Site</th> 
+	  <th>Grant</th> 
+	  <th>Entered by</th>
+	  <th>Timestamp</th>
+  	</tr>
+	<tr>	
+	  <td><%=h @items[0].requester_abbrev %></td>
+	  <td><%=h @items[0].deliver_site %></td>
+	  <td><%=h @items[0].grant_nr %></td>
+	  <td><%=h @user.login %></td>
+	  <td><%=h @items[0].created_at.strftime("%m/%d/%Y %I:%M%p") %></td>
+	</tr>
+</table>
+	
+<table class="list">
+  <tr>
+  	<th>Description</th>
+	<th>Chemical?</th>
+	<th>Vendor</th>
+  	<th>Catalog#</th>
+	<th>Size</th>
+	<th>Quantity</th>
+	<th>Price</th>
+	<th>Ext Price</th>
+	<th>Notes</th>
+  </tr>
+  
+  <% for item in @items %>
+    <tr>
+	  <td><%=h item.item_description %></td>
+	  <td style="text-align:center"><%=h item.chemical_flag %></td>
+	  <td><%=h item.company_name %></td>
+	  <td><%=h item.catalog_nr %></td>
+	  <td><%=h item.item_size %></td>
+	  <td style="text-align:center"><%=h item.item_quantity %></td>
+	  <td style="text-align:right"><%=h number_to_currency(item.item_price) %></td>
+	  <td style="text-align:right"><%=h number_to_currency(item.item_ext_price) %></td>
+	  <td><%=h item.notes %></td>
+	</tr>
+  <% end %>
+</table>
