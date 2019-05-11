@@ -1,4 +1,4 @@
-<h1>Listing Items</h1>
+<h5>Listing Items</h5>
 
 <% if @items_to_order && @items_to_order > 0 %>
   <div id="order">
@@ -11,9 +11,10 @@
 	<%= fields_for Order.new(:date_ordered => Date.today) do |f|%>
       <%= render :partial => 'orders/order_form', :locals => {:f => f, :have_company_list => 'yes'} %>
 	<% end %> 
-  <%=raw break_clear(submit_tag("Submit"))%><br />
+  <%=submit_tag("Submit", class: "btn btn-primary")%><br />
  </div>
-    <table class="list">
+  <table class="table table-bordered list table-sm table-font-sm">
+    <thead class="thead-light">
       <tr>
         <th>Order?</th>
         <th>Requestor</th>
@@ -29,6 +30,7 @@
         <th>Recv'd?</th>
         <th colspan="3"></th>
       </tr>
+    </thead>
 
       <% for item in @items %>
           <tr>
