@@ -1,7 +1,7 @@
 <h5>Sequencing Libraries (Filtered) </h5>
 
 <%= form_tag :action => :export_seqlibs do %>
-  <%= submit_tag "Export Seq Libs", class: "btn btn-primary" -%>
+  <%= submit_tag "Export Seq Libs", class: "btn btn-secondary", data: {disable_with: false} -%>
   <br/><br/>
 
   <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
@@ -26,6 +26,8 @@
       <th class="link-col"></th>
     </tr>
     </thead>
+
+    <%= hidden_field_tag("export_ids_all", @seq_libs.pluck(:id).uniq) %>
 
 <% for seq_lib in @seq_libs %>
   <tr>
@@ -60,7 +62,7 @@
     <% else %>
       <td class="ltgrey"> Delete </td>
 	  <% end %>
-    <%= hidden_field_tag("export_id[]", seq_lib.id) %>
+    <%= hidden_field_tag("export_id_page[]", seq_lib.id) %>
   </tr>
   <% end %>
 </table>

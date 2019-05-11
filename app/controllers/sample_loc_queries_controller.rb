@@ -27,8 +27,11 @@ class SampleLocQueriesController < ApplicationController
 
   def export_samples
     export_type = 'T'
-    @sample_locs = SampleLoc.find_for_export(params[:export_id])
     file_basename = ['LIMS_Sample_Locs', Date.today.to_s].join("_")
+
+    #id_array = params[:export_ids_all].split(' ')
+    #@sample_locs = SampleLoc.find_for_export(id_array)
+    @sample_locs = SampleLoc.find_for_export(params[:export_id])
 
     case export_type
       when 'T'  # Export to tab-delimited text using csv_string
