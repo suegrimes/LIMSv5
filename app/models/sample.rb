@@ -220,6 +220,7 @@ class Sample < ApplicationRecord
 
   def self.find_for_export(sample_ids)
     self.includes(:patient, [:sample_characteristic => [:pathology, :consent_protocol]], :histology, :sample_storage_container, :processed_samples)
+        .references(:patient, [:sample_characteristic => [:pathology, :consent_protocol]], :histology, :sample_storage_container)
         .where("samples.id IN (?)", sample_ids).order("samples.patient_id, samples.barcode_key").all
   end
   

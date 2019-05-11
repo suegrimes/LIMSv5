@@ -1,8 +1,11 @@
 <h5>Sample Storage Locations (Filtered) </h5>
 
 <%= form_tag :action => :export_samples do %>
-    <b>Samples:</b> <% if @sample_locs %> (<%=h @sample_locs.size %> samples) <% end %> <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+    <b>Samples:</b> <% if @sample_locs %> (<%=h @sample_locs.size %> samples) <% end %>
+      <%= submit_tag "Export Samples", class: "btn btn-secondary", data: {disable_with: false}-%>
     <br/><br/>
+
+    <%= hidden_field_tag("export_ids_all", @sample_locs.pluck(:id).uniq) %>
 
 <table class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">

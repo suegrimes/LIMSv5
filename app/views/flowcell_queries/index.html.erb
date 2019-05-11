@@ -1,8 +1,10 @@
 <h5>Sequencing Runs (filtered)</h5>
 
 <%= form_tag :action => :export_seqruns do %>
-    <%= submit_tag "Export Seq Runs", class: "btn btn-primary" -%>
+    <%= submit_tag "Export Seq Runs", class: "btn btn-secondary", data: {disable_with: false}-%>
     <br/><br/>
+
+    <%= hidden_field_tag("export_ids_all", @flow_cells.pluck(:id).uniq) %>
 
     <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
       <thead class="thead-light">
@@ -21,7 +23,7 @@
 
       <% @flow_cells.each do |flow_cell| %>
           <tr>
-            <%= hidden_field_tag("export_id[]", flow_cell.id) %>
+            <%= hidden_field_tag("export_ids_page[]", flow_cell.id) %>
 
             <td><%=link_to flow_cell.seq_run_key, flow_cell %></td>
             <td><%=h flow_cell.hiseq_xref %></td>
