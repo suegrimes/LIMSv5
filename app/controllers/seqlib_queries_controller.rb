@@ -40,8 +40,11 @@ class SeqlibQueriesController < ApplicationController
 
   def export_seqlibs
     export_type = 'T'
-    @seq_libs = SeqLib.find_all_for_export(params[:export_id])
     file_basename = ['LIMS_SeqLibs', Date.today.to_s].join("_")
+
+    #@seq_libs = SeqLib.find_for_export(params[:export_id_page])
+    id_array = params[:export_ids_all].split(' ')
+    @seq_libs = SeqLib.find_all_for_export(id_array)
 
     case export_type
       when 'T'  # Export to tab-delimited text using csv_string
