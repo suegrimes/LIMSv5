@@ -4,6 +4,8 @@
   <%= submit_tag "Export Seq Libs", class: "btn btn-secondary", data: {disable_with: false} -%>
   <br/><br/>
 
+  <%= hidden_field_tag("export_ids_all", @seq_libs.pluck(:id).uniq) %>
+
   <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
     <thead class="thead-light">
     <tr>
@@ -26,8 +28,6 @@
       <th class="link-col"></th>
     </tr>
     </thead>
-
-    <%= hidden_field_tag("export_ids_all", @seq_libs.pluck(:id).uniq) %>
 
 <% for seq_lib in @seq_libs %>
   <tr>
