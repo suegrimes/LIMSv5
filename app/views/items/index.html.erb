@@ -2,7 +2,7 @@
 <h5>Listing Items</h5>
 
 <%= form_tag :action => :export_items do %>
-    <%= submit_tag "Export Items", class: "btn btn-primary" -%>
+    <%= submit_tag "Export Items", class: "btn btn-secondary", data: {disable_with: false} -%>
     <br/><br/>
 
   <table class="table table-bordered list table-sm table-font-sm">
