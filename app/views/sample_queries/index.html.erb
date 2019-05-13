@@ -2,7 +2,8 @@
 
 <%= form_tag :action => :export_samples do %>
 
-<%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+<%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients)
+    <%= submit_tag "Export Samples", class: "btn btn-secondary", data: {disable_with: false} -%>
 <br/><br/>
 
 <table class="table table-bordered table-sm table-font-sm">

@@ -1,4 +1,5 @@
 class AttachedFilesController < ApplicationController
+  layout 'main/main'
   
   # GET /attached_files/1
   def show

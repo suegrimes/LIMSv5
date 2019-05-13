@@ -112,9 +112,11 @@ class SampleQueriesController < ApplicationController
   
   def export_samples
     export_type = 'T'
-    @samples = Sample.find_for_export(params[:export_id])
     file_basename = ['LIMS_Samples', Date.today.to_s].join("_")
-    
+
+    id_array = params[:export_id_tree] ||= params[:export_ids_all].split(' ')
+    @samples = Sample.find_for_export(id_array)
+
     with_mrn = ((can? :read, Patient)? 'yes' : 'no')
     
     case export_type

@@ -3,7 +3,8 @@
 <% if @samples_by_patient && @nr_samples[1] > 0 %>
 
 <%= form_tag :action => :export_samples do %>
-  <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients) <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
+  <%=h @nr_samples[0] %> source samples, (for <%=h @samples_by_patient.size -%> patients)
+        <%= submit_tag "Export Samples", class: "btn btn-secondary", data: {disable_with: false} -%>
   <br/><br/>
 
   <table class="table table-bordered table-sm table-font-sm">  
@@ -67,7 +68,7 @@
           <% end %>
         <% end %>
 
-        <%= hidden_field_tag("export_id[]", sample.id)  %>
+        <%= hidden_field_tag("export_id_tree[]", sample.id)  %>
       </tr>
 	  
 	  <% if nonblank_comments %>   
