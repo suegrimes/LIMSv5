@@ -65,10 +65,10 @@
 </div>
 
 <div class="form-group row">
-  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", :name => 'view', class: "btn btn-primary" %></div>
+  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", :name => 'view', class: "btn btn-secondary", data: {disable_with: false} %></div>
   <% if can? :new, Order %>
-    <div class="offset-sm-2 col-sm-2"><%=f.submit "Receive Items", :name => 'receive', class: "btn btn-primary" %></div>
-    <div class="offset-sm-2 col-sm-2"><%=f.submit "Order Items", :name => 'order', class: "btn btn-primary" %></div>
+    <div class="offset-sm-2 col-sm-2"><%=f.submit "Receive Items", :name => 'receive', class: "btn btn-secondary", data: {disable_with: false} %></div>
+    <div class="offset-sm-2 col-sm-2"><%=f.submit "Order Items", :name => 'order', class: "btn btn-secondary", data: {disable_with: false} %></div>
   <% end %>
 </div>
 

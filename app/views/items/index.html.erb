@@ -2,7 +2,7 @@
 <h5>Listing Items</h5>
 
 <%= form_tag :action => :export_items do %>
-    <%= submit_tag "Export Items", class: "btn btn-primary" -%>
+    <%= submit_tag "Export Items", class: "btn btn-secondary", data: {disable_with: false} -%>
     <br/><br/>
 
   <table class="table table-bordered list table-sm table-font-sm">
@@ -50,7 +50,7 @@
             <% end %>
 
             <% if can? :delete, item %>
-                <td rowspan=2><%= link_to 'Delete', item, :confirm => 'Are you sure?', :method => :delete %></td>
+                <td rowspan=2><%= link_to 'Delete', item, data: {confirm: 'Are you sure?'}, method: :delete %></td>
             <% end %>
           </tr>
           <tr>
