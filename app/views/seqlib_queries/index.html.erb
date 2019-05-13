@@ -10,6 +10,7 @@
   	  <th>Lib Barcode</th>
 	    <th>Patient ID</th>
       <th>Library Name</th>
+      <th>Source DNA</th>
 	    <th>Owner</th>
 	    <th>Prep Date</th>
 	    <th>M/S</th>
@@ -38,6 +39,7 @@
 	    <%=h patient_ids.uniq.join(', ') if patient_ids.size > 0 %>
 	  </td>
     <td><%=h seq_lib.lib_name %></td>
+    <td><% if seq_lib.library_type == 'S' %><%=h seq_lib.lib_samples[0].source_DNA %><% end %></td>
 	  <td><%=h seq_lib.owner_abbrev %></td>
 	  <td><%=h seq_lib.preparation_date %></td>
 	  <td style="text-align:center"><%=h seq_lib.library_type %></td>
