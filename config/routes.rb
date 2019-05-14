@@ -174,6 +174,34 @@ Rails.application.routes.draw do
   resources :freezer_locations
   resources :researchers
 
+  # Routes for ordering chemicals & supplies
+  resources :orders do
+    get :edit_order_items, on: :member
+    get :new_query, as: :view_orders, on: :collection
+  end
+  get 'edit_items' => 'orders#edit_order_items', :as => :edit_order_items
+  get 'view_orders' => 'orders#new_query', :as => :view_orders
+  get 'list_selected' => 'orders#list_selected', :as => :list_selected
+
+  #get 'items/autocomplete_item_company_name'
+  #get 'items/autocomplete_item_item_description'
+  #get 'items/autocomplete_item_catalog_nr'
+  #post 'items/populate_items'
+  resources :items do
+    collection do
+      get :autocomplete_for_item_description
+      get :autocomplete_for_company_name
+      get :autocomplete_for_catalog_nr
+    end
+  end
+
+  get 'view_items' => 'items#new_query', :as => :view_items
+  match 'list_items' => 'items#list_selected', :as => :list_items, :via => [:get, :post]
+  get 'unordered_items' => 'items#list_unordered_items', :as => :notordered
+  post 'export_items' => 'items#export_items', :as => :export_items
+  post 'receive_items' => 'items#receive_items', :as => :receive_items
+  match 'add_items' => 'items#populate_items', :as => :populate_items, :via => [:get, :post]
+
   # test route
   get 'test' => 'test#index'
 

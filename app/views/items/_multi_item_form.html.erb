@@ -1,0 +1,90 @@
+<div class="card">
+  <h6 class="card-header">Item List:</h6>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-1"><label for="items_0_nr">Item</label></div>
+      <div class="col-1"><label for="items_0_catalog_nr">Catalog#</label></div>
+      <div class="col-2"><label for="items_0_company_name">Company Name</label></div>
+      <div class="col-1"><label for="items_0_chemical_flag">Chem?</label></div>
+      <div class="col-4 min-margins"><label for="items_0_item_description">Description</label></div>
+      <div class="col-1 min-margins"><label for="items_0_item_quantity">Qty</label></div>
+      <div class="col min-margins"><label for="items_0_item_size">Unit:Size</label></div>
+      <div class="col min-margins"><label for="items_0_item_price">Price</label></div>
+    </div>
+
+    <% @items.each_with_index do |itm, i| %>
+      <%= fields_for 'items_' + i.to_s, itm do |f| %>
+
+        <%= render '/shared/errors', model: itm %>
+
+      <div class="form-group row">
+        <%=f.hidden_field(:requester_name) %>
+        <%=f.hidden_field(:deliver_site) %>
+        <%=f.hidden_field(:grant_nr) %>
+
+        <div id="<% 'item_' + i.to_s + '_nr' %>" class="col min-margins"><%= i+1 %></div>
+        <div class="col-auto min-margins">
+          <%= f.autocomplete_field :catalog_nr, autocomplete_for_catalog_nr_items_path, size: '8', class: "form-control" %>
+        </div>
+        <!-- Update elements on selection of catalog# -->
+        <%= javascript_tag do %>
+          $('#items_' +  <%= i %> + '_catalog_nr').bind('railsAutocomplete.select', function(event, data){
+          $('#items_' + <%= i %> + '_company_name' ).val(data.item.company_name);
+          $('#items_' + <%= i %> + '_item_description').val(data.item.desc);
+          $('#items_' + <%= i %> + '_item_price').val(data.item.price);
+          });
+        <% end %>
+
+        <div class="col-auto min-margins">
+          <%= f.autocomplete_field :company_name, autocomplete_for_company_name_items_path, class: "form-control" %>
+        </div>
+        <div class="col-auto min-margins">
+          <%=f.select(:chemical_flag, %w{Y N}, {:include_blank => true}, class: "form-control") %>
+        </div>
+
+        <div class="col-auto min-margins">
+          <%= f.autocomplete_field :item_description, autocomplete_for_item_description_items_path, size: '45', class: "form-control" %>
+        </div>
+        <!-- Update elements on selection of item description -->
+        <%= javascript_tag do %>
+          $('#items_' +  <%= i %> + '_item_description').bind('railsAutocomplete.select', function(event, data){
+          $('#items_' + <%= i %> + '_catalog_nr').val(data.item.cat_nr);
+          $('#items_' + <%= i %> + '_company_name' ).val(data.item.company_name);
+          $('#items_' + <%= i %> + '_item_price').val(data.item.price);
+          });
+        <% end %>
+
+        <% item_total_tag = 'item_' + i.to_s + '_total' %>
+        <% item_price_tag = 'items_' + i.to_s + '_item_price' %>
+        <% item_qty_tag   = 'items_' + i.to_s + '_item_quantity' %>
+
+        <div class="col-sm-1 min-margins"><%=f.text_field(:item_quantity, class: "form-control") %></div>
+        <div class="col-sm-1 min-margins"><%=f.text_field(:item_size, class: "form-control") %></div>
+        <div class="col-sm-1 min-margins"><%=f.text_field(:item_price, class: "form-control") %></div>
+
+        <div class="w-100"></div>
+
+        <div class="col-1 offset-sm-1">Notes:</div>
+        <div class="col-8 mr-auto"><%=f.text_field(:notes, class: "form-control")%></div>
+
+        <div id="<%= item_total_tag %>" class="col-auto" style="font-size:1em">&nbsp;</div>
+        <!-- Update total price if unit price or item quantity changed -->
+        <%= javascript_tag do %>
+          $('#<%= item_qty_tag %>').change(function(){
+          var total_price = ($('#<%= item_qty_tag %>').val() * $('#<%= item_price_tag %>').val()).toFixed(2);
+          $('#<%= item_total_tag %>').text("$" + total_price );
+          });
+          $('#<%= item_price_tag %>').change(function(){
+          var total_price = ($('#<%= item_qty_tag %>').val() * $('#<%= item_price_tag %>').val()).toFixed(2);
+          $('#<%= item_total_tag %>').text("$" + total_price );
+          });
+        <% end %>
+      </div>
+      <hr>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%=submit_tag("Save Items", class: "btn btn-primary") %>
