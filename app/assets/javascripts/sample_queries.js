@@ -11,6 +11,8 @@ function sample_queries_init() {
 function sample_queries_index_init() {
 
   var dt = $("table.data-table").DataTable( {
+      iDisplayLength: 50,
+      aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
     // define column 0 as hidden but searchable
     // used for distinguishing source from dissection sample
     columnDefs: [ { targets: [0], visible: false, searchable: true } ]
