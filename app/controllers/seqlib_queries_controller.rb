@@ -91,7 +91,8 @@ protected
 
         flds.each do |obj_code, fld|
           obj = seq_lib_xref[obj_code.to_sym]
-          if obj
+          # Only export lib_sample fields if singleplex sequencing library (otherwise multiple lib_sample records)
+          if obj && (obj_code == 'sl' || seq_lib.library_type == 'S')
             fld_array << obj.send(fld)
           else
             fld_array << nil
@@ -104,12 +105,13 @@ protected
   end
 
   def export_seqlibs_setup
-    hdgs  = %w{Download_Dt Barcode PatientID LibName Owner PrepDt LibType Adapter SampleConc(ng/ul) SampleConc(nM)
+    hdgs  = %w{Download_Dt Barcode PatientID LibName SourceDNA Owner PrepDt LibType Adapter SampleConc(ng/ul) SampleConc(nM)
                Project OligoPool AlignRef SeqLaneCt}
 
     flds  = [['sl', 'lib_barcode'],
              ['sl', 'patient_ids'],
              ['sl', 'lib_name'],
+             ['ls', 'source_DNA'],
              ['sl', 'owner_abbrev'],
              ['sl', 'preparation_date'],
              ['sl', 'library_type'],
@@ -125,7 +127,8 @@ protected
   end
 
   def model_xref(seq_lib)
-    sample_xref = {:sl => seq_lib}
+    sample_xref = {:sl => seq_lib,
+                   :ls => seq_lib.lib_samples[0]}
     return sample_xref
   end
 

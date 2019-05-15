@@ -30,6 +30,10 @@ class Protocol < ApplicationRecord
   def name_ver
     [protocol_name, protocol_version].join('/')
   end
+
+  def short_name
+    (protocol_abbrev.blank? ? protocol_name : protocol_abbrev)
+  end
   
   def molecule_type
     if protocol_type != 'M'

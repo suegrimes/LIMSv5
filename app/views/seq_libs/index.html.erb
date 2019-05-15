@@ -5,11 +5,12 @@
   <tr>
   	<th>Lib Barcode</th>
     <th>Library Name</th>
+    <th>Source DNA</th>
 	<th>Owner</th>
 	<th>Prep Date</th>
 	<th>Adapter</th>
 	<th colspan="2">Library Conc</th>
-	<th>Project</th>
+  <th>Project</th>
 	<th>Pool</th>
 	<th>Alignment Ref</th>
     <th colspan="3"></th>
@@ -20,6 +21,7 @@
   <tr>
   	<td><%= link_to seq_lib.lib_barcode, seq_lib %></td>
     <td><%=h seq_lib.lib_name %></td>
+    <td><%=h seq_lib.source_DNA %></td>
 	<td><%=h seq_lib.owner_abbrev %></td>
 	<td><%=h seq_lib.preparation_date %></td>
 	<td><%=h seq_lib.adapter_name %></td>

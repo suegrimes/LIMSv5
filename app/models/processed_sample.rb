@@ -34,6 +34,7 @@ class ProcessedSample < ApplicationRecord
   belongs_to :sample, optional: true
   belongs_to :patient, optional: true
   belongs_to :user, optional: true, foreign_key: 'updated_by'
+  belongs_to :protocol, optional: true
   has_many :molecular_assays
   has_many :lib_samples
   has_many :seq_libs, :through => :lib_samples
@@ -110,7 +111,7 @@ class ProcessedSample < ApplicationRecord
     #self.find(:all, :include => [{:sample => :sample_characteristic}, :sample_storage_container],
     #                :order => "samples.patient_id, samples.barcode_key, processed_samples.barcode_key",
     #                :conditions => condition_array)
-    self.includes({:sample => :sample_characteristic}, :sample_storage_container).where(sql_where(condition_array))
+    self.includes({:sample => :sample_characteristic}, :protocol, :sample_storage_container).where(sql_where(condition_array))
         .order('samples.patient_id, samples.barcode_key, processed_samples.barcode_key').all
   end
   
