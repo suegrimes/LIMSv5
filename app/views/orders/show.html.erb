@@ -1,57 +1,64 @@
 <%= render :partial => 'shared/page_print' %>
-<h1>Order Listing</h1>
+<h5>Order Listing</h5>
 
-<!-- Order Details -->
-<!-- Standard fields to be displayed -->
-<% info_flds   = [['Field', 'Order Date', @order.date_ordered],
-                  ['Field', 'Company Name', @order.company_name], 
-                  ['Field', 'Chemicals?', @order.incl_chemicals],
-                  ['Field', 'RPO/CWA', @order.rpo_or_cwa],
-                  ['Field', 'Requisition No', @order.po_number],
-                  ['Field', 'Order Number', @order.order_number],
-                  ['Field', 'Received?', @order.order_received]] %>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Order Date</th>
+    <th>Company Name</th>
+    <th>Chemicals?</th>
+    <th>RPO/CWA</th>
+    <th>Requisition#</th>
+    <th>Order#</th>
+    <th>Recv'd</th>
+    <th></th>
+  </tr>
+  </thead>
 
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if (can? :edit, @order) %>
+  <tr>
+    <td><%=h @order.date_ordered %></td>
+    <td><%=h @order.company_name %></td>
+    <td><%=h @order.incl_chemicals %></td>
+    <td><%=h @order.rpo_or_cwa %></td>
+    <td><%=h @order.po_number %></td>
+    <td><%=h @order.order_number %></td>
+    <td><%=h @order.order_received %></td>
+    <td><% if can? :edit, @order %><%=link_to 'Edit', edit_order_path(@order) %><% end %></td>
+  </tr>
+</table>
 
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Order Details',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_id         => @order.id,
-                                                      :link_controller => 'orders',
-                                                      :last_info_box   => 'yes'} %>
-
-<table class="list">
+<table class="table table-bordered list table-sm table-font-sm">
+  <thead class="thead-light">
   <tr>
   	<th>Requester</th>
-	<th>Date</th>
-	<th>Description</th>
-	<th>Company</th>
+	  <th>Date</th>
+	  <th>Description</th>
+	  <th>Company</th>
     <th>Catalog nr</th>
-	<th>Chemicals?</th>
-	<th>Size</th>
-	<th>Qty</th>
+	  <th>Chemicals?</th>
+	  <th>Size</th>
+	  <th>Qty</th>
     <th>Price</th>
     <th>Ext Price</th>
-	<th>Recv'd?</th>
-	<th></th>
+	  <th>Recv'd?</th>
+	  <th></th>
   </tr>
+  </thead>
 
-<% for item in @order.items do %>
-  <tr>
-  	<td><%=h item.requester_abbrev %></td>
-	<td><%=h format_date(item.created_at) %></td>
-  	<td><%=h item.item_description %></td>
-	<td><%=h item.company_name %></td>
-    <td><%=h item.catalog_nr %></td>
-	<td><%=h item.chemical_flag %></td>
-	<td><%=h item.item_size %></td>
-    <td><%=h item.item_quantity %></td>
-	<td style="text-align:right"><%=h number_to_currency(item.item_price)%></td>
-	<td style="text-align:right"><%=h number_to_currency(item.item_ext_price) %></td>
-	<td><%=h item.item_received %></td>
-	<td><%= link_to 'Edit', edit_item_path(item), :class => 'no-print' %></td>
-  </tr>
-<% end %>
+  <% for item in @order.items do %>
+    <tr>
+  	  <td><%=h item.requester_abbrev %></td>
+	    <td><%=h format_date(item.created_at) %></td>
+  	  <td><%=h item.item_description %></td>
+	    <td><%=h item.company_name %></td>
+      <td><%=h item.catalog_nr %></td>
+	    <td><%=h item.chemical_flag %></td>
+	    <td><%=h item.item_size %></td>
+      <td><%=h item.item_quantity %></td>
+	    <td style="text-align:right"><%=h number_to_currency(item.item_price)%></td>
+	    <td style="text-align:right"><%=h number_to_currency(item.item_ext_price) %></td>
+	    <td><%=h item.item_received %></td>
+	    <td><%= link_to 'Edit', edit_item_path(item), :class => 'no-print' %></td>
+    </tr>
+  <% end %>
 </table>

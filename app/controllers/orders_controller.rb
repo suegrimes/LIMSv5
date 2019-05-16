@@ -1,5 +1,13 @@
 class OrdersController < ApplicationController
+  layout 'main/main'
+  include SqlQueryBuilder
+
   load_and_authorize_resource
+
+  # Temporarily turn off strong parameters for this controller; make sure to add back in for creating/editing orders
+  def params
+    request.parameters
+  end
   
   def new_query
     @item_query = ItemQuery.new(:from_date => (Date.today - 1.month).beginning_of_month,
@@ -97,7 +105,7 @@ class OrdersController < ApplicationController
 
   protected
   def set_chemical_flag(item_id_list)
-    items = Item.find_all_by_id(item_id_list)
+    items = Item.where('id IN (?)', item_id_list).all
     @_list ||= items.collect(&:chemical_flag)
     return (@_list.include?('Y')? 'Y' : 'N' )
   end

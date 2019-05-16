@@ -7,19 +7,22 @@
       <div class="col-auto">
         <%= f.text_field :researcher_name, class: "form-control" %>
       </div>
-    </div>
 
-    <div class="form-group row">
       <label for="researcher_initials" class="col-auto col-form-label col-form-label-sm">Initials:</label>
       <div class="col-auto">
         <%= f.text_field :researcher_initials, class: "form-control" %>
       </div>
-    </div>
 
-    <div class="form-group row">
       <label for="user_id" class="col-auto col-form-label col-form-label-sm">User login:</label>
       <div class="col-auto">
         <%= f.collection_select(:user_id, @users, :id, :login, {:include_blank => 'Select..'}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="active_inactive" class="col-auto col-form-label col-form-label-sm">Active/Inactive:</label>
+      <div class="col-auto">
+        <%= f.select(:active_inactive, %w(A I), {}, class: "form-control") %>
       </div>
     </div>
 

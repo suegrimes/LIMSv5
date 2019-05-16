@@ -1,34 +1,56 @@
 <% have_company_list ||= 'no' %>
-<fieldset class="form">
- <legend>Order Details</legend>
-    <table class="form">
-      <tr>
-      	<th>RPO/CWA:</th>
-		<td><%= f.select(:rpo_or_cwa, %w{RPO CWA Other}, {:include_blank => true}) %></td>
-      	<th>Company Name:</th>
-		<% if have_company_list == 'yes' %>
-      	<td><%= f.select(:company_name, @companies, {:include_blank => 'Select Company'}) %></td>
-		<% else %>
-		<td><%= f.text_field(:company_name, :size => 30) %></td>
-		<% end %>
-	  </tr>
-	  <tr>
-        <th>Order Date:</th>
-        <td><%=f.datepicker 'date_ordered', dateFormat: "yy-mm-dd", maxDate: Time.current.to_date, changeMonth: true, changeYear: true, yearRange: "-1", size: 15 %></td>
-		<th>Chemicals?</th>
-		<td><%= f.select(:incl_chemicals, %w{Y N}, {:include_blank => true}) %></td>
-	  </tr>
-	  <tr>		
-		<th>Requisition Number:</th>
-		<td><%= f.text_field(:po_number, :size => 15) %></td>
-		<th>Order Number:</th>
-		<td><%= f.text_field(:order_number, :size => 15) %></td>
-		<th>Recv'd?</th>
-		<td><%= f.select(:order_received, %w{Y N P}, {:include_blank => true}) %></td>
-	  </tr>
-	  <tr>	
-		<th>Notes:</th>
-		<td colspan="5"><%= f.text_field(:notes, :size => 80) %></td>	
-      </tr>	  
-	</table>
-  </fieldset> 
+<div class="card">
+  <h6 class="card-header">Order Details</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <%= f.label(:date_ordered, 'Order Date:', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%=f.date_field(:date_ordered, class: "form-control") %>
+      </div>
+
+      <%= f.label(:rpo_or_cwa, 'RPO/CWA:', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%=f.select(:rpo_or_cwa, %w{RPO CWA Other}, {:include_blank => true}, class: "form-control") %>
+      </div>
+
+      <%= f.label(:company_name, 'Company Name:', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <% if have_company_list == 'yes' %>
+          <%= f.select(:company_name, @companies, {:include_blank => 'Select Company'}, class: "form-control") %>
+        <% else %>
+          <%= f.text_field(:company_name, :size => 30, class: "form-control") %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label(:po_number, 'Requisition Number:', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.text_field(:po_number, class: "form-control") %>
+      </div>
+
+      <%= f.label(:order_number, 'Order Number', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.text_field(:order_number, class: "form-control") %>
+      </div>
+
+      <%= f.label(:incl_chemicals, 'Chemicals?', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.select(:incl_chemicals, %w{Y N}, {:include_blank => true}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <%= f.label(:notes, 'Notes:', class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.text_field(:notes, size: 80, class: "form-control") %>
+      </div>
+
+      <%= f.label(:order_received, "Recv'd", class:"col-auto col-form-label col-form-label-sm") %>
+      <div class="col-auto">
+        <%= f.select(:order_received, %w{Y N P}, {:include_blank => true}, class: "form-control") %>
+      </div>
+    </div>
+  </div>
+</div>

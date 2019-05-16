@@ -148,7 +148,7 @@ class ItemsController < ApplicationController
     params[:item][:company_name] ||= params[:other_company]
     @item = Item.find(params[:id])
 
-    if @item.update_attributes(update_params)
+    if @item.update_attributes(params[:item])
       flash[:notice] = 'Item was successfully updated.'
       #redirect_to(@item)
       redirect_to :action => 'new_query'

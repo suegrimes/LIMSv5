@@ -21,6 +21,7 @@ class UsersController < ApplicationController
     if current_user.has_role?("admin")
       users = User.find_all_with_authorization
       @users = users.group_by {|user| user.active_inactive}
+      #render :action => 'debug'
       render :action => 'index'
     else
       @user = current_user
@@ -155,7 +156,7 @@ class UsersController < ApplicationController
   def update_params_allowed
     # mhayden: note that simply listing :role_id does not work since it is on an association
     # needs to be role_ids: []
-    params.require(:user).permit(:login, :email, :password, :password_confirmation, role_ids: [])
+    params.require(:user).permit(:login, :active_inactive, :email, :password, :password_confirmation, role_ids: [])
   end
     
 end

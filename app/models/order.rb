@@ -35,6 +35,10 @@ class Order < ApplicationRecord
   def requisition_nr
     return po_number
   end
+
+  def has_comments?
+    (notes.blank? ? false : true)
+  end
   
   def enter_or_upd_by
     user = User.find_by_id(updated_by)
@@ -68,6 +72,10 @@ class Order < ApplicationRecord
     if (order_received == 'Y' || order_received == 'N')
       Item.upd_items_recvd_for_order(id, order_received)
     end
+  end
+
+  def self.find_for_query(condition_array)
+    self.includes(:items).where(sql_where(condition_array)).order('date_ordered DESC').all
   end
  
 end
