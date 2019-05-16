@@ -65,7 +65,7 @@ class User < ApplicationRecord
   # Admin can see all users
   def self.find_all_with_authorization(user=current_user)
     if user.has_role?("admin") && !DEMO_APP
-      users = self.includes(:roles).order(:active_inactive).all
+      users = self.includes(:roles).order(:active_inactive, :lab_name).all
     else
       users = self.includes(:roles).where("users.login = ?", user.login).all
     end
