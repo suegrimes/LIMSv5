@@ -3,11 +3,12 @@
   <thead class="thead-light thead-font-sm">
   <tr>
     <th>Barcode</th>
+    <th>Alt ID</th>
     <th>Date</th>
     <th>Sample Type</th>
     <th>Container Type</th>
     <th>Sample Amt</th>
-    <th>Remaining?</th>
+    <th>Rem?</th>
     <th>Room/Freezer</th>
     <th>Storage Container</th>
     <th></th>
@@ -16,6 +17,7 @@
 
   <tr>
     <td><%=h link_to sample.barcode_key, sample_path(sample) %></td>
+    <td><%=h sample.alt_identifier %></td>
     <td><%=h sample.sample_date %></td>
     <td><%=h [sample.sample_tissue, sample.sample_type].join('/') %></td>
     <td><%=h sample.container_type %></td>
@@ -23,10 +25,14 @@
     <td><%=h sample.sample_remaining %></td>
     <td><%=h sample.room_and_freezer %></td>
     <td><%=h  sample.container_and_position %></td>
-    <% if can? :edit, sample %> <td><%= link_to 'Edit', edit_sample_path(sample) %></td><% end %>
+    <td><% if can? :edit, sample %><%= link_to 'Edit', edit_sample_path(sample) %><% end %></td>
   </tr>
 
   <% unless sample.comments.blank? %>
-    <tr><td></td><td colspan="7"><%=h sample.comments %></td></tr>
+    <tr>
+      <td></td>
+      <td colspan="8"><%=h sample.comments %></td>
+      <td></td>
+    </tr>
   <% end %>
 </table>

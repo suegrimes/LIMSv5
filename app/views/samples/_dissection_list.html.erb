@@ -4,11 +4,12 @@
   <thead class="thead-light thead-font-sm">
   <tr>
     <th>Barcode</th>
+    <th>Alt ID</th>
     <th>Sample Date</th>
     <th>Sample Type</th>
     <th>Container Type</th>
     <th>Amount(Initial)</th>
-    <th>Remaining?</th>
+    <th>Rem?</th>
     <th>Room/Freezer</th>
     <th>Container</th>
   </tr>
@@ -17,6 +18,7 @@
   <% for sample in source_sample.samples %>
     <tr>
       <td><%=link_to sample.barcode_key, sample_path(sample)%></td>
+      <td><%=h sample.alt_identifier %></td>
       <td><%=h sample.sample_date %></td>
       <td><%=h sample.sample_category %></td>
       <td><%=h sample.container_type %></td>

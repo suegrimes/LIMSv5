@@ -38,6 +38,7 @@ class User < ApplicationRecord
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
   before_save :encrypt_password
+  before_create :set_as_active
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -129,6 +130,10 @@ class User < ApplicationRecord
   def delete_reset_code
     self.reset_code = nil
     save(:validate=>false)
+  end
+
+  def set_as_active
+    active_inactive = 'A'
   end
   
   protected

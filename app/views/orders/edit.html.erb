@@ -1,27 +1,29 @@
-<h1>Editing order</h1>
+<h5>Editing order</h5>
 
 <%= form_for(@order) do |f| %>
   <%= render '/shared/errors', model: @order %>
 
   <%= render :partial => 'orders/order_form', :locals => {:f => f} %>
-  <%=raw break_clear %>
+  <br/>
   
   <b>Items:</b>
-  <table class="list">
-  	<tr>
-  	  <th>#</th>
-  	  <th>Requester</th>
-	  <th>Date entered</th>
-	  <th>Site</th>
-	  <th>Item description</th>
-	  <th>Chem</th>
-	  <th>Company</th>
-	  <th>Catalog #</th>
-	  <th>Item size</th>
-	  <th>Item qty</th>
-	  <th>Item price</th>
-	  <th>Recv'd?</th>
-	</tr>
+    <table class="table list table-sm table-font-sm">
+      <thead class="thead-light">
+  	  <tr>
+  	    <th>#</th>
+  	    <th>Requester</th>
+	      <th>Date entered</th>
+	      <th>Site</th>
+	      <th>Item description</th>
+	      <th>Chem</th>
+	      <th>Company</th>
+	      <th>Catalog #</th>
+	      <th>Item size</th>
+	      <th>Item qty</th>
+	      <th>Item price</th>
+	      <th>Recv'd?</th>
+	    </tr>
+      </thead>
 
     <% @order.items.each_with_index do |item, item_nr|  %>
     <tr>
@@ -41,6 +43,6 @@
   <% end %>
   </table>
   
-  <%= f.submit "Update" %>
+  <%= f.submit "Update", class: "btn btn-primary" %>
 
 <% end %>

@@ -8,6 +8,7 @@
     <th style="text-align:center">Chemical?</th>
     <th>Recv'd?</th>
   </tr>
+
   <%= f.fields_for :items, :wrapper => :false do |t| %>
   <tr class="fields">
 	  <td><%=h format_date(t.object.created_at) %></td>

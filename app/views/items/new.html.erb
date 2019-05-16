@@ -10,11 +10,6 @@
       <div class="col-auto">
         <%=select(:item_default, :requester_name, @researchers, {:include_blank => 'Select requestor'}, class: "form-control") %>
       </div>
-
-      <label for="dt_entered" class="col-sm-2 col-form-label col-form-label-sm">Date Entered:</label>
-      <div id="dt_entered" class="col-auto">
-        <%= format_datetime(Time.now) %>
-      </div>
     </div>
 
     <div class="form-group row">
