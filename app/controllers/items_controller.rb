@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
         render :action => :order_item_list
       elsif params[:receive]
         render :action => :receive_item_list
-      else  #params[:view]
+      else  #params[:submit]
         render :action => :index
       end
       
