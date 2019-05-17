@@ -181,6 +181,83 @@ table.list {
   padding: 0 .5em;
 }
 
+table.border {
+  border: 1px solid #999;
+}
+
+table.form {
+  background-color: #e9e9e9;
+  border-collapse: collapse;
+}
+
+.form th {
+  font-size: .85em;
+  font-weight: bolder;
+  text-align: right;
+  vertical-align:top;
+}
+
+.form th.top-heading-row {
+  text-align: left;
+  vertical-align:middle;
+}
+
+.form td {
+  font-size: .85em;
+  vertical-align: top;
+  padding-right: .75em;
+  white-space:nowrap;
+}
+
+table.form-with-columns {
+  background-color: #e9e9e9;
+  border-collapse: collapse;
+  //border-spacing:0 15px;
+}
+
+.form-with-columns th {
+  font-size: .85em;
+  font-weight: bolder;
+  text-align: left;
+  vertical-align:top;
+  text-decoration: underline;
+  padding-bottom: .3em;
+}
+
+.form-with-columns td {
+  font-size: .85em;
+  vertical-align: top;
+  padding-right: .75em;
+  padding-bottom: .5em
+}
+
+table.form-with-columns-no-th-underline {
+  background-color: #fefefe;
+  border-collapse: collapse;
+  margin: 0 .2em .8em .2em;
+  width: 99%;
+}
+
+.form-with-columns-no-th-underline th {
+  font-size: .85em;
+  font-weight: bolder;
+  text-align: left;
+  vertical-align:top;
+  padding-top: .3em;
+  padding-left: 2px;
+}
+
+.form-with-columns-no-th-underline th.right {
+  text-align: right;
+}
+
+.form-with-columns-no-th-underline td {
+  font-size: .85em;
+  vertical-align: top;
+  padding: .25em .5em .25em 0;
+}
+
+
 /* Other general styles */
 
 .grey {color:#888;}
