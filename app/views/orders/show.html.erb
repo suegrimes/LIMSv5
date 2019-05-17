@@ -25,6 +25,14 @@
     <td><%=h @order.order_received %></td>
     <td><% if can? :edit, @order %><%=link_to 'Edit', edit_order_path(@order) %><% end %></td>
   </tr>
+
+  <% if !@order.notes.blank? %>
+  <tr>
+    <td></td>
+    <td colspan="6">Notes:&nbsp;&nbsp;<%=h @order.notes %></td>
+    <td></td>
+  </tr>
+  <% end %>
 </table>
 
 <table class="table table-sm table-font-sm">
