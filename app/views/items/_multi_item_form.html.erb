@@ -1,4 +1,4 @@
-    <table class="form-with-columns">
+    <table class="table table-hover table-sm">
       <thead>
       <tr>
         <th><label for="items_0_nr">Item</label></th>
@@ -22,7 +22,7 @@
         <%=f.hidden_field(:deliver_site) %>
         <%=f.hidden_field(:grant_nr) %>
 
-        <td id="<% 'item_' + i.to_s + '_nr' %>"><%= i+1 %></td>
+        <td id="<% 'item_' + i.to_s + '_nr' %>">&nbsp;&nbsp;<%= i+1 %></td>
         <td><%= f.autocomplete_field :catalog_nr, autocomplete_for_catalog_nr_items_path, size: '8', class: "form-control" %></td>
         <!-- Update elements on selection of catalog# -->
         <%= javascript_tag do %>
@@ -52,14 +52,11 @@
 
         <td><%=f.text_field(:item_quantity, class: "form-control") %></td>
         <td><%=f.text_field(:item_size, class: "form-control") %></td>
-        <td><%=f.text_field(:item_price, class: "form-control") %></td>
-      </tr>
-
-      <tr>
-        <td></td>
-        <td style="text-align: right"><%=f.label(:notes) %></td>
-        <td colspan="5"><%=f.text_field(:notes, class: "form-control")%></td>
-
+        <td><%=f.text_field(:item_price, class: "form-control") %><br />
+            <div style="margin-left:-733px">
+              <%=f.label(:notes) %>
+              <%=f.text_field(:notes, :size => 70, class: "form-control")%></div>
+        </td>
         <td id="<%= item_total_tag %>" style="font-size:1em">&nbsp;</td>
         <!-- Update total price if unit price or item quantity changed -->
         <%= javascript_tag do %>
@@ -73,11 +70,10 @@
           });
         <% end %>
       </tr>
-      <tr>
-        <td colspan="8"><hr></td>
-      </tr>
+
       <% end %>
     <% end %>
     </table>
 
 <%=submit_tag("Save Items", class: "btn btn-primary") %>
+<p></p>
