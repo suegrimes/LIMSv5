@@ -7,6 +7,7 @@
     <tr>
       <th scope="col">Login</th>
       <th scope="col">Email</th>
+      <th scope="col">Lab</th>
       <th scope="col">Roles</th>
       <% if can? :delete, User %>
         <th scope="col"></th>
@@ -23,6 +24,7 @@
 	<% end %>
 	
 	<td><%=h user.email %> </td>
+  <td><%=h user.lab_name %></td>
 	<td>
 	  <% for role in user.roles do %>
 	    <%=h role.name %>&nbsp;

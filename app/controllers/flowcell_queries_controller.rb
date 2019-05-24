@@ -31,7 +31,10 @@ class FlowcellQueriesController < ApplicationController
 
   def export_seqruns
     export_type = 'T'
-    @flow_cells = FlowCell.find_for_export(params[:export_id])
+
+    #@flow_cells = FlowCell.find_for_export(params[:export_id_page])
+    id_array = params[:export_ids_all].split(' ')
+    @flow_cells = FlowCell.find_for_export(id_array)
     csv_string = export_results_to_csv(FlowcellQuery,@flow_cells)
 
     case export_type
@@ -42,7 +45,8 @@ class FlowcellQueriesController < ApplicationController
                   :filename => file_basename + '.txt', :disposition => 'attachment')
 
       else # Use for debugging
-        render :text => csv_string
+        #render :text => id_array.inspect
+        #render :text => csv_string
     end
   end
 

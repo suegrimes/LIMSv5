@@ -2,7 +2,8 @@
 
 <%= form_tag(:action => 'receive_items') do %>
 
-  <%=submit_tag("Receive Checked Items", class: "btn btn-primary")%><br />
+  <%=submit_tag("Receive Checked Items", class: "btn btn-primary")%>
+    <br/><br/>
 
     <table class="table table-bordered list table-sm table-font-sm">
       <thead class="thead-light">
@@ -54,7 +55,7 @@
             <% end %>
 
             <% if can? :delete, item %>
-                <td rowspan=2><%= link_to 'Delete', item, :confirm => 'Are you sure?', :method => :delete %></td>
+                <td rowspan=2><%= link_to 'Delete', item, data: {confirm: 'Are you sure?'}, method: :delete %></td>
             <% end %>
           </tr>
           <tr>

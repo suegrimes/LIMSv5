@@ -11,6 +11,8 @@ function psample_queries_init() {
 function psample_queries_index_init() {
 
   var dt = $("table.data-table").DataTable({
+      iDisplayLength: 50,
+      aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
       // Columns with links should not be sortable or searchable
       columnDefs: [ { targets: [ 'action', 'link-col'], sortable: false, searchable: false } ]
   });

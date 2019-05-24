@@ -3,9 +3,13 @@
 
 <%= form_tag :action => :export_samples do %>
 
+  <% sample_ids = [] %>
+  <% @samples_by_patient.each do |pt, samples| sample_ids.push(samples.pluck(:id)); end %>
+  <%= hidden_field_tag(:export_ids_all, sample_ids.flatten) %>
+
   <div class="row form-group source-select">
     <div class="col-auto">
-      <%= submit_tag "Export Samples", class: "btn btn-secondary" -%>
+      <%= submit_tag "Export Samples", class: "btn btn-secondary", data: {disable_with: false} -%>
     </div>
 
     <label class="col-auto col-form-label">Sample Type:</label>
@@ -52,8 +56,9 @@
     <% @samples_by_patient.sort.each do | patient_id, samples| %>
 
     <% for sample in samples %>
-      <tr>
+      <%= hidden_field_tag("export_id[]", sample.id)  %>
 
+      <tr>
       <!-- hidden column used for filtering -->
       <% if sample.source_sample_id.nil? %>
         <td class="source-tag">is-source</td>
@@ -71,9 +76,6 @@
         <td><%=h sample.room_and_freezer %></td>
         <td><%=h sample.container_and_position %></td>
         <td><%=h sample.user.login if sample.user %></td>
-
-        <%= hidden_field_tag("export_id[]", sample.id)  %>
-
       </tr>
     <% end %>
 	

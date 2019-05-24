@@ -41,6 +41,8 @@ class FlowCell < ApplicationRecord
   # mhayden: scope body needs to be a callable proc or lambda in Rails 5
   scope :sequenced, -> { where("flowcell_status <> 'F'") }
   scope :unsequenced, -> { where("flowcell_status = 'F'") }
+  scope :desc_by_run, -> { order("flow_cells.seq_run_nr DESC")}
+  scope :desc_by_date, -> { order("flow_cells.flowcell_date DESC")}
   
   DEFAULT_MACHINE_TYPE = 'MiSeq'
   NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 2, :GAIIx => 8, :HiSeq => 8}
@@ -99,11 +101,11 @@ class FlowCell < ApplicationRecord
   end
 
   def self.find_for_export(flowcell_ids)
-    self.includes(:flow_lanes => :publications).where("flow_cells.id IN (?)", flowcell_ids).all
+    self.includes(:flow_lanes => :publications).where("flow_cells.id IN (?)", flowcell_ids).desc_by_run.all
   end
   
   def self.find_flowcells_for_sequencing
-    self.unsequenced.includes(:flow_lanes => :publications).order("flow_cells.flowcell_date DESC").all
+    self.unsequenced.includes(:flow_lanes => :publications).desc_by_date.all
     #self.unsequenced.find(:all, :include => {:flow_lanes => :publications}, :order => 'flow_cells.flowcell_date DESC')
   end
   

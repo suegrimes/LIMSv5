@@ -175,13 +175,10 @@ Rails.application.routes.draw do
   resources :researchers
 
   # Routes for ordering chemicals & supplies
-  resources :orders do
-    get :edit_order_items, on: :member
-    get :new_query, as: :view_orders, on: :collection
-  end
+  resources :orders
   get 'edit_items' => 'orders#edit_order_items', :as => :edit_order_items
   get 'view_orders' => 'orders#new_query', :as => :view_orders
-  get 'list_selected' => 'orders#list_selected', :as => :list_selected
+  match 'list_orders' => 'orders#list_selected', :as => :list_orders, :via => [:get, :post]
 
   #get 'items/autocomplete_item_company_name'
   #get 'items/autocomplete_item_item_description'

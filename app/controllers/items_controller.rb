@@ -83,17 +83,15 @@ class ItemsController < ApplicationController
   def populate_items
     @items = []
     params[:nr_items] ||= 3
-    
+
     0.upto(params[:nr_items].to_i - 1) do |i|
-      @items[i] = Item.new(:requester_name => params[:item_default][:requester_name],
+        @items[i] = Item.new(:requester_name => params[:item_default][:requester_name],
                            :deliver_site => params[:item_default][:deliver_site],
                            :grant_nr => params[:item_default][:grant_nr])
     end
-
     respond_to do |format|
       format.js
     end
-    #render :action => 'debug'
   end
 
   # GET /items/1/edit
@@ -148,7 +146,7 @@ class ItemsController < ApplicationController
     params[:item][:company_name] ||= params[:other_company]
     @item = Item.find(params[:id])
 
-    if @item.update_attributes(update_params)
+    if @item.update_attributes(params[:item])
       flash[:notice] = 'Item was successfully updated.'
       #redirect_to(@item)
       redirect_to :action => 'new_query'
