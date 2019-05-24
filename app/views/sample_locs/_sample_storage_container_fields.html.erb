@@ -1,0 +1,19 @@
+<div class="col-sm-12 nested-fields form-group form-group-sm row">
+  <%= f.hidden_field(:id) %>
+
+  <div class="col-sm-2">
+    <%= f.text_field(:container_type, class: "form-control") %>
+  </div>
+  <div class="col-sm-3">
+    <%= f.text_field(:container_name, class: "form-control") %>
+  </div>
+  <div class="col-sm-2">
+    <%= f.text_field(:position_in_container, class: "form-control") %>
+  </div>
+  <div class="col-sm-3">
+    <%= f.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {}, class: "form-control") %>
+  </div>
+  <div class="links col-sm-2">
+    <%= link_to_remove_association "Remove", f %>
+  </div>
+</div>

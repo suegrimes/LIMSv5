@@ -33,7 +33,7 @@
       <a class="dropdown-item" href="/bulk_upload">Bulk Upload</a>
       <div class="dropdown-divider"></div>
       <% if user_has_access?(user_roles, ["clinical", "clin_admin"]) %>
-        <a class="dropdown-item" href="#">Edit Patient</a>
+        <a class="dropdown-item" href="/modify_patient">Edit Patient</a>
         <a class="dropdown-item" href="/modify_sample">Edit Sample Acquisition</a>
       <% end %>
       <% if user_has_access?(user_roles, ["clinical", "clin_admin", "researcher", "lab_admin"]) %>
@@ -82,10 +82,10 @@
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Orders</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="not-yet">New Item</a>
-      <a class="dropdown-item" href="not-yet"><%= view_items_label %></a>
+      <a class="dropdown-item" href="/items/new">New Item</a>
+      <a class="dropdown-item" href="/view_items"><%= view_items_label %></a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="not-yet">List/Update Orders</a>
+      <a class="dropdown-item" href="view_orders">List/Update Orders</a>
     </div>
   </li>
 
@@ -108,11 +108,11 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
     <div class="dropdown-menu">
       <% if user_has_access?(user_roles, ["barcodes"]) %>
-        <a class="dropdown-item" href="#">Manage Barcodes</a>
+        <a class="dropdown-item" href="/assigned_barcodes">Manage Barcodes</a>
       <% end %>
       <% if user_has_access?(user_roles, ["admin"]) %>
         <a class="dropdown-item" href="/researchers">Manage Researchers</a>
-        <a class="dropdown-item" href="#">Manage Users</a>
+        <a class="dropdown-item" href="/users">Manage Users</a>
       <% end %>
     </div>
   </li>

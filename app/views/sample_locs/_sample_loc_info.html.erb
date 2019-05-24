@@ -1,30 +1,32 @@
-<% last_info_box ||= 'yes' %>
+<h6>Sample Details:</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Barcode</th>
+    <th>Date</th>
+    <th>Patient Dx</th>
+    <th>Sample Type</th>
+    <th>Preservation</th>
+    <th>OR Designation</th>
+    <th>Histopath</th>
+    <th>Rem?</th>
+    <th></th>
+  </tr>
+  </thead>
 
-<!-- Standard fields to be displayed -->
-<% info_flds   = [['Field', 'Barcode', sample.barcode_key],
-                  ['Field', 'Collected/Created On', sample.sample_date],
-                  ['Field', 'Patient DX', (sample.sample_characteristic.pathology ? sample.sample_characteristic.pathology.pathology_classification : nil)],
-                  ['Field', 'Sample Type', [sample.sample_tissue, sample.sample_type].join('/')],
-                  ['Field', 'Preservation', sample.tissue_preservation],
-                  ['Field', 'OR Designation', sample.tumor_normal],
-                  ['Field', 'Sample Histopath', (sample.histology ? sample.histology.histopathology : nil)],
-                  ['Field', 'Remaining?', sample.sample_remaining]
-                  ] %>
-				  
-<!-- Include alternate sample identifier if non-blank -->
-<% info_flds.insert(2, ['Field', 'Alt Identifier', sample.alt_identifier]) if !sample.alt_identifier.blank? %>
-<% info_flds.insert(3, nil) if !sample.alt_identifier.blank? %>
-				  
-<!-- Only include comments if non-blank -->
-<% info_flds.push(['Field', 'Comments', sample.comments, {:colspan => 3}]) if !sample.comments.blank? %>
+  <tr>
+    <td><%=h link_to sample.barcode_key, sample_path(sample) %></td>
+    <td><%=h sample.sample_date %></td>
+    <td><%=h (sample.sample_characteristic.pathology ? sample.sample_characteristic.pathology.pathology_classification : nil) %></td>
+    <td><%=h [sample.sample_tissue, sample.sample_type].join('/') %></td>
+    <td><%=h sample.tissue_preservation %></td>
+    <td><%=h sample.tumor_normal %></td>
+    <td><%=h (sample.histology ? sample.histology.histopathology : nil) %></td>
+    <td><%=h sample.sample_remaining %></td>
+    <% if can? :edit, sample %> <td><%= link_to 'Edit', edit_sample_path(sample) %></td><% end %>
+  </tr>
 
-<!-- Links to be displayed with borders, in bottom row of info box -->
-<% info_links = [] %>
-<% info_links = [['Edit', 'edit']] if (can? :edit, sample) %>
-
-<%= render :partial => 'shared/info_box', :locals => {:info_legend     => 'Sample Details',
-                                                      :info_flds       => info_flds,
-                                                      :info_links      => info_links,
-                                                      :link_controller => 'samples',
-                                                      :link_id         => sample.id,
-                                                      :last_info_box   => last_info_box} %>
+  <% unless sample.comments.blank? %>
+      <tr><td></td><td colspan="9"><%=h sample.comments %></td></tr>
+  <% end %>
+</table>

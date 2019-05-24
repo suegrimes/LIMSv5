@@ -6,8 +6,6 @@ class PathologiesController < ApplicationController
   
   def new_params
     authorize! :create, Pathology
-    
-    @to_date = Date.today
     render :action => 'new_params'
   end
   
@@ -33,7 +31,6 @@ class PathologiesController < ApplicationController
     end
     
     if error_found
-      @to_date = Date.today
       render :action => 'new_params'
       #render :action => :debug
       
@@ -44,7 +41,7 @@ class PathologiesController < ApplicationController
       if @existing_pathology && params[:add_new] == 'no'
         redirect_to :action => :index, :patient_id => @patient_id
       else
-        @pathology = Pathology.new
+        @pathology = Pathology.new(:pathology_date => Date.today)
         # Sample characteristics not already associated with a pathology report, will be available to be associated with a new pathology report
         @sample_characteristics.reject! {|schar| !schar.pathology_id.nil? }  #Remove sample characteristic records where pathology foreign key is not nil
         render :action => :new
@@ -55,13 +52,13 @@ class PathologiesController < ApplicationController
   def create
     @pathology = Pathology.new(create_params)
     
-    if params[:sample_characteristic_id].nil?
+    if param_blank?(params[:sample_characteristic_id])
       flash[:error] = 'At least one sample characteristic record must be checked for a new pathology report'
       redirect_to :action => :new, :patient_id => params[:pathology][:patient_id]
       
     elsif @pathology.save
-      SampleCharacteristic.update_all(["pathology_id = ?", @pathology.id],
-                                      ["sample_characteristics.id IN (?)", params[:sample_characteristic_id]])
+      SampleCharacteristic.where("sample_characteristics.id IN (?)", params[:sample_characteristic_id])
+                          .update_all(pathology_id: @pathology.id)
       redirect_to pathologies_url(:patient_id => @pathology.patient_id)
       
     else

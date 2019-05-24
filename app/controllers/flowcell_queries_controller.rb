@@ -52,10 +52,16 @@ protected
   end
   
   def define_conditions(params)
-    @where_select, @where_values = build_sql_where(params[:flowcell_query], FlowcellQuery::QUERY_FLDS, [], [])
-
-    dt_fld = 'flow_cells.sequencing_date'
-    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:flowcell_query], dt_fld)
+    #If run number provided, specific run is requested, so only use that parameter in query
+    if !params[:flowcell_query][:seq_run_nr].blank?
+      run_nr_i = params[:flowcell_query][:seq_run_nr].to_i
+      @where_select = ["flow_cells.seq_run_nr = ?"]
+      @where_values = [run_nr_i]
+    else
+      @where_select, @where_values = build_sql_where(params[:flowcell_query], FlowcellQuery::QUERY_FLDS, [], [])
+      dt_fld = 'flow_cells.sequencing_date'
+      @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:flowcell_query], dt_fld)
+    end
 
     return sql_where_clause(@where_select, @where_values)
   end

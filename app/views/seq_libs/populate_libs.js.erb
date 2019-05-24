@@ -1,9 +1,9 @@
 <% @nr_libs = @new_lib.size %>
 jQuery('#add_libs').hide();
 jQuery('#splex_libs').html("<%= escape_javascript(render :partial => 'sample_form').html_safe %>");
-jQuery('#lib_button').prop('value', 'Refresh from Defaults');
 jQuery('#add_libs_button').css({
    position : 'relative',
-   top : '30px',
+   top : '42px',
    left : '125px'
 });
+jQuery('#lib_button').prop('value', 'Refresh from Defaults');

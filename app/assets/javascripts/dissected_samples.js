@@ -17,6 +17,15 @@ function dissected_samples_edit_init() {
     edit_storage_container_init();
 }
 
+// dissected_samples edit init
+function dissected_samples_new_init() {
+    // new storage management init
+    storage_container_init();
+
+    // storage containers edit init
+    edit_storage_container_init();
+}
+
 //--------------------------------------------------------
 
 // dissected_samples add_multi page init function

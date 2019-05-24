@@ -1,0 +1,40 @@
+<h1>Listing orders</h1>
+
+<table class="list">
+  <tr>
+    <th>Order Date</th>
+	<th>Enter/Upd by</th>
+    <th>Company name</th>
+    <th>Requisition#</th>
+	<th># Items</th>
+	<th>Recv'd?</th>
+	<th colspan="3"></th>
+  </tr>
+
+<% for order in @orders %>
+  <tr>
+    <td><%=h order.date_ordered %></td>
+	<td><%=h order.enter_or_upd_by %></td>
+    <td><%=h order.company_name %></td>
+    <td><%=h order.po_number %></td>
+	<td><%=h order.items.size %></td>
+	<td><%=h order.order_received %></td>
+    <td><%= link_to 'Show', order %></td>
+	
+	<% if can? :edit, order %>
+      <td><%= link_to 'Edit', edit_order_path(order) %></td>
+	<% end %>
+	
+	<% if can? :delete, order %>
+      <td><%= link_to 'Delete', order, :confirm => 'Are you sure?', :method => :delete %></td> 
+	<% end %>
+  </tr>
+  <% if order.has_comments? %>
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="5">Notes: <%=h order.notes %></td>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+  <% end %>
+<% end %>
+</table>

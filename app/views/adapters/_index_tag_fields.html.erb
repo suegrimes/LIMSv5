@@ -11,8 +11,9 @@
   <% end %>
 
   <%= f.label(:tag_nr, 'Tag#', class: "col-auto col-form-label col-form-label-sm")%>
-  <div class="col-md-2">
-    <%=f.text_field(:tag_nr, class: "form-control") %>
+  <div class="col-md-3">
+    <%=f.text_field(:tag_nr, class: "form-control") %>&nbsp;&nbsp;
+    <%=h f.object.index_code %>
   </div>
 
   <%= f.label(:tag_sequence, 'Sequence', class: "col-auto col-form-label col-form-label-sm")%>

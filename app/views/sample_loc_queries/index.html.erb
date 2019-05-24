@@ -1,10 +1,11 @@
 <h5>Sample Storage Locations (Filtered) </h5>
 
 <%= form_tag :action => :export_samples do %>
-    <b>Samples:</b> <% if @sample_locs %> (<%=h @sample_locs.size %> samples) <% end %> <%= submit_tag "Export Samples" -%>
+    <b>Samples:</b> <% if @sample_locs %> (<%=h @sample_locs.size %> samples) <% end %> <%= submit_tag "Export Samples", class: "btn btn-primary" -%>
     <br/><br/>
 
-<table class="list">
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
   <tr>
     <th>Patient ID</th>
     <th>Sample Barcode</th>
@@ -17,6 +18,7 @@
     <th>Room/Freezer</th>
     <th>Container/Position</th>
   </tr>
+  </thead>
 
   <% for sample_loc in @sample_locs %>
     <tr>
@@ -44,7 +46,12 @@
     </tr>
     <% for psample in sample_loc.processed_samples %>
       <tr>
-        <td><%=h sample_loc.patient_id %></td>
+        <td><% if can? :read, Patient %>
+              <%=link_to sample_loc.patient_id, patient_path(sample_loc.patient_id) %>
+          <% else %>
+              <%=h sample_loc.patient_id %>
+          <% end %>
+        </td>
         <td><%=link_to psample.barcode_key, processed_sample_path(psample.id) %></td>
         <td>&nbsp;</td>
         <td><%=h psample.processing_date %></td>
@@ -53,7 +60,12 @@
         <td><%=h sample_loc.tissue_preservation %></td>
         <td><%=h sample_loc.tumor_normal %></td>
         <td><%=h psample.room_and_freezer %></td>
-        <td><%=h psample.container_and_position %></td>
+        <td><% if can? :edit, sample_loc %>
+              <%=link_to psample.container_and_position, edit_sample_loc_path(psample) %>
+          <% else %>
+              <%=h psample.container_and_position %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   <% end %>
