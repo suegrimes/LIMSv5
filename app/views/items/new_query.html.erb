@@ -1,6 +1,6 @@
 <h5>View Order Items</h5>
 
-<%= form_for(@item_query, :url => {:controller => 'items', :action => 'list_selected'}) do |f| %>
+<%= form_for(@item_query, :url => {:controller => 'items', :action => 'list_selected', :method => :get}) do |f| %>
   <%= render '/shared/errors', model: @item_query, header_message: "Error(s) in query parameters" %>
 
 
@@ -64,11 +64,11 @@
 
 </div>
 
-<div class="form-group row">
-  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", :name => 'view', class: "btn btn-secondary", data: {disable_with: false} %></div>
+<div class="row">
+  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", class: "btn btn-secondary" %></div>
   <% if can? :new, Order %>
-    <div class="offset-sm-2 col-sm-2"><%=f.submit "Receive Items", :name => 'receive', class: "btn btn-secondary", data: {disable_with: false} %></div>
-    <div class="offset-sm-2 col-sm-2"><%=f.submit "Order Items", :name => 'order', class: "btn btn-secondary", data: {disable_with: false} %></div>
+    <div class="offset-sm-2 col-sm-2"><%=f.submit "Receive Items", :name => 'receive', class: "btn btn-secondary" %></div>
+    <div class="offset-sm-2 col-sm-2"><%=f.submit "Order Items", :name => 'order', class: "btn btn-secondary" %></div>
   <% end %>
 </div>
 

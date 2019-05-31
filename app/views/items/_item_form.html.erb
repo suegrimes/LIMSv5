@@ -10,8 +10,8 @@
 
       <label for="dt_entered" class="col-sm-2 col-form-label col-form-label-sm">Date Entered:</label>
       <div id="dt_entered" class="col-auto">
-        <% if @item.new_record? %><%= format_datetime(Time.now) %>
-        <% else %><%=h format_datetime(@item.created_at) %><% end %>
+        <% dtime_entered = (@item.new_record? ? Time.now : @item.created_at) %>
+        <%= text_field_tag(:dtime_entered, format_datetime(dtime_entered), class: "form-control", disabled: true) %>
       </div>
     </div>
 
