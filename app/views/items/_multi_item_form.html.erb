@@ -52,10 +52,11 @@
 
         <td><%=f.text_field(:item_quantity, class: "form-control") %></td>
         <td><%=f.text_field(:item_size, class: "form-control") %></td>
-        <td><%=f.text_field(:item_price, class: "form-control") %><br />
-            <div style="margin-left:-733px">
-              <%=f.label(:notes) %>
-              <%=f.text_field(:notes, :size => 70, class: "form-control")%></div>
+        <td><%=f.text_field(:item_price, class: "form-control") %>
+            <div id="notes-flexbox">
+              <div class="notes-label"><%=f.label(:notes) %></div>
+              <div class="notes-input"><%=f.text_field(:notes, :size => 70, class: "form-control")%></div>
+            </div>
         </td>
         <td id="<%= item_total_tag %>" style="font-size:1em">&nbsp;</td>
         <!-- Update total price if unit price or item quantity changed -->
