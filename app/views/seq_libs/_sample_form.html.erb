@@ -9,7 +9,7 @@
     <div class="card-body">
       <%= hidden_field_tag(:nr_libs, @new_lib.size) %>
 
-      <div class="form-group row">
+      <div class="form-group row" style="border:2px dashed red">
         <div class="col col-form-label-sm"><label for="seq_lib_0_barcode_key">Barcode</label></div>
         <div class="col-sm-2 col-form-label-sm"><label for="seq_lib_0_lib_name">Lib Name</label></div>
         <div class="col col-form-label-sm"><label for="seq_lib_0_sample_conc">Lib Conc</label></div>
@@ -32,7 +32,7 @@
             <%= f.hidden_field(:protocol_id) %>
             <%= f.hidden_field(:pool_id) %>
 
-            <div class="form-group row">
+            <div class="form-group row" style="border:2px dashed blue">
               <div class="col min-margins"><%= f.text_field(:barcode_key, class: "form-control") %></div>
               <div class="col-sm-2 min-margins"><%= f.text_field(:lib_name, class: "form-control") %></div>
 
@@ -64,7 +64,7 @@
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="border:2px dashed orange">
               <div class="col-sm-2 min-margins">Source DNA/RNA:</div>
               <div class="col">
                 <%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, {size: 15, value: @lib_samples[i][:source_DNA], class: "form-control"} %>

@@ -158,6 +158,15 @@ select#rpt_type {
   display: inline-block;
 }
 
+/* labels */
+.label {
+  text-align:right;
+}
+
+.set-field-width {
+  width:33%;
+}
+
 /* utility classes */
 .hidden {
   display: none;
