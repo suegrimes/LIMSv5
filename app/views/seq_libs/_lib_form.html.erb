@@ -1,6 +1,6 @@
 <div id="errorwarn"></div>
 <h6 class="card-header">Sequencing Library Defaults</h6>
-<table class="table table-hover table-sm">
+<table class="table table-sm">
 
   <tr>
     <td class="label"><label for="preparation_date" class="col-auto col-form-label col-form-label-sm">Prep Date:</label></td>
@@ -50,9 +50,7 @@
 
   <tr>
     <td class="label"><label for="notes" class="col-auto col-form-label col-form-label-sm">Notes:</label></td>
-    <td><%= text_area(:lib_default, :notes, size: "80x2", class: "form-control") %></td>
-    <td></td>
-    <td></td>
+    <td colspan="3"><%= text_field(:lib_default, :notes, :size => 75, class: "form-control") %></td>
   </tr>
 
 </table>
