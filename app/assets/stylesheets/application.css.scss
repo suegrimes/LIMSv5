@@ -140,6 +140,33 @@ select#rpt_type {
    margin-top: .25rem;
 }
 
+/* Notes */
+#notes-flexbox {
+  display: flex;
+  justify-content: space-between;
+  margin-left: -755px;
+  padding-top: 5px;
+}
+
+#notes-flexbox .notes-label {
+  width: 50px;
+  display: inline-block;
+}
+
+#notes-flexbox .notes-input {
+  flex: 1;
+  display: inline-block;
+}
+
+/* labels */
+.label {
+  text-align:right;
+}
+
+.set-field-width {
+  width:33%;
+}
+
 /* utility classes */
 .hidden {
   display: none;
