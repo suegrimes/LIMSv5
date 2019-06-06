@@ -1,0 +1,21 @@
+<h6>View Storage Container</h6>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light thead-font-sm">
+  <tr>
+    <th>Container Type</th>
+    <th>Container Name</th>
+    <th>Freezer</th>
+    <th>Notes</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr>
+    <td><%=h @storage_container.container_type %></td>
+    <td><%=h @storage_container.container_name %></td>
+    <td><%=h @storage_container.freezer_location.room_and_freezer %></td>
+    <td><%=h @storage_container.notes %></td>
+  </tr>
+  </tbody>
+
+</table>
