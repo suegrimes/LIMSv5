@@ -2,11 +2,6 @@
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 
-// samples controller init function
-function sample_queries_init() {
-  samples_tab_active();
-}
-
 // samples controller#index init function
 function sample_queries_index_init() {
 
