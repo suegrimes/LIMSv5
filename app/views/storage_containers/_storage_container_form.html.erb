@@ -1,0 +1,34 @@
+<div class="card">
+  <h6 class="card-header">Storage Container</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="freezer_location_id" class="col-sm-2 col-form-label col-form-label-sm">Freezer/Loc:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:freezer_location_id, @freezers, :id, :room_and_freezer, {}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="container_type" class="col-sm-2 col-form-label col-form-label-sm">Container Type:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:container_type, @storage_types, :container_type, :container_type, {:include_blank => true}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="container_name" class="col-auto col-form-label col-form-label-sm">Container Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :container_name, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="notes" class="col-auto col-form-label col-form-label-sm">Notes:</label>
+      <div class="col-auto">
+        <%= f.text_field :notes, size:80, class: "form-control" %>
+      </div>
+    </div>
+
+  </div>
+</div>

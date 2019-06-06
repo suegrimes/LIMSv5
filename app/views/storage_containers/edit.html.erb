@@ -1,0 +1,12 @@
+<h5>Update storage container</h5>
+
+<%= form_for(@storage_container) do |f| %>
+  <%= render '/shared/errors', model: @storage_container %>
+
+  <%= render :partial => 'storage_container_form', :locals => {:f => f} %>
+
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+
+

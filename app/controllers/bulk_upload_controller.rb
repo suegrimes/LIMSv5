@@ -104,7 +104,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     # keys are the normalized expected sheet names
     # values have the model name(s) and dropdown method prefix
     # only 2 models may be listed for a sheet and it implies
-    # the first mocel accepts_nested_attributes_for the second
+    # the first model accepts_nested_attributes_for the second
     @sheet_info = {
       patients: { models: [Patient] },
       samples: { models: [SampleCharacteristic, Sample] },
@@ -200,7 +200,7 @@ logger.debug "raw header: #{header}"
       models_columns << h
     end
 
-    resolve_amgiguous_headers(models_columns, header)
+    resolve_ambiguous_headers(models_columns, header)
 #logger.debug "models_columns[0][:dups]: #{models_columns[0][:dups]}"
 #logger.debug "models_columns[1][:dups]: #{models_columns[1][:dups]}"
 
@@ -720,7 +720,7 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
   # if it's position in the header is after any non-dup header
   # belonging to the 2nd model it is assigned to the 2nd model
   # else to the first model
-  def resolve_amgiguous_headers(models_columns, raw_header)
+  def resolve_ambiguous_headers(models_columns, raw_header)
     return if models_columns.size < 2
     m0_cols = models_columns[0][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
     m1_cols = models_columns[1][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
@@ -732,12 +732,12 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
         end
       end
     end
-#logger.debug "resolve_amgiguous_headers found dup_names: #{dup_names}"
+#logger.debug "resolve_ambiguous_headers found dup_names: #{dup_names}"
     return if dup_names.empty?
     # normalize all headers
     header = raw_header.map {|h| normalize_header(h) }
     dup_names.each do |dn|
-#logger.debug "resolve_amgiguous_headers handle dup_name: #{dn}"
+#logger.debug "resolve_ambiguous_headers handle dup_name: #{dn}"
       fi = li = nil
       # find first instance of the dup name in header
       header.each_with_index do |h, i|
@@ -746,7 +746,7 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
           break
         end
       end
-#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} first index: #{fi}"
+#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} first index: #{fi}"
       # next if the dup name is not used in the sheet
       next if fi.nil?
       # find last instance of the dup name in header
@@ -756,7 +756,7 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
           break
         end
       end
-#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} last index: #{li}"
+#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} last index: #{li}"
       if fi == li
         # one instance of dup name
         m1_no_dups = models_columns[1][:allowed_cols] - dup_names
@@ -770,17 +770,17 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
         end
         if first_m1_index.nil? || fi < first_m1_index
           # assign to the 1st model
-#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} assign to first"
+#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} assign to first"
           models_columns[0][:dups][dn] = fi
           models_columns[1][:dups][dn] = nil
         else
           # assign to the 2nd model
-#logger.debug "resolve_amgiguous_headers  dup_name: #{dn} assign to second"
+#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} assign to second"
           models_columns[0][:dups][dn] = nil
           models_columns[1][:dups][dn] = fi
         end
       else
-#logger.debug "resolve_amgiguous_headers assign dup_name: #{dn} first index: #{fi} last index: #{li}"
+#logger.debug "resolve_ambiguous_headers assign dup_name: #{dn} first index: #{fi} last index: #{li}"
         # two instances of dup name
         models_columns[0][:dups][dn] = fi
         models_columns[1][:dups][dn] = li

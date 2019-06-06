@@ -3,13 +3,51 @@ class StorageContainersController < ApplicationController
 
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
 
-  before_action :dropdowns, :only => :new_query
+  before_action :dropdowns, :only => [:new, :new_query]
+
+  # GET /storage_containers/new
+  def new
+    @storage_container = StorageContainer.new
+  end
+
+  # GET /storage_containers/1/edit
+  def edit
+    @storage_container = StorageContainer.find(params[:id])
+  end
+
+  def show
+    @storage_container = StorageContainer.find(params[:id])
+  end
+
+  # POST /storage_containers
+  def create
+    @storage_container = StorageContainer.new(create_params)
+
+    if @storage_container.save
+      flash[:notice] = 'StorageContainer was successfully created.'
+      redirect_to(@storage_container)
+    else
+      render :action => "new"
+    end
+  end
+
+  # PUT /storage_containers/1
+  def update
+    @storage_container = StorageContainer.find(params[:id])
+
+    if @storage_container.update_attributes(update_params)
+      flash[:notice] = 'StorageContainer was successfully updated.'
+      redirect_to(@storage_container)
+    else
+      render :action => "edit"
+    end
+  end
 
   def new_query
   end
 
   def index
-    @freezer = FreezerLocation.find(params[:freezer_location][:freezer_location_id])
+    @freezer = StorageContainer.find(params[:freezer_location][:freezer_location_id])
     condition_array = define_conditions(params)
     @storage_containers = StorageContainer.find_for_summary_query(condition_array)
     render :action => :index
@@ -60,6 +98,14 @@ class StorageContainersController < ApplicationController
   end
 
   protected
+  def create_params
+    params.require(:storage_container).permit(:container_type, :container_name, :freezer_location_id, :notes)
+  end
+
+  def update_params
+    create_params
+  end
+
   def container_params
     params.require(:freezer_location).permit(:freezer_location_id, :container_type)
   end
