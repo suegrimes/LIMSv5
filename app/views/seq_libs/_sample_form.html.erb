@@ -7,18 +7,18 @@
   <div class="card">
     <h6 class="card-header">Libraries</h6>
     <div class="card-body">
-      <table class="table table-sm">
+      <table class="table table-borderless table-sm">
         <%= hidden_field_tag(:nr_libs, @new_lib.size) %>
         <thead>
           <tr>            
             <th><label for="seq_lib_0_barcode_key">Barcode</label></th>
             <th><label for="seq_lib_0_lib_name">Lib Name</label></th>
-            <th><label for="seq_lib_0_sample_conc">Lib Conc</label></th>
-            <th style="width:20%"><label for="seq_lib_0_adapter_id">Adapter</label></th>
-            <th><label for="lib_sample_0_index1_tag_id">Index1</label></th>
-            <th><label for="lib_sample_0_index1_tag_id">Index2</label></th>
-            <th style="width:20%"><label for="seq_lib_0_quantitation_method">Quant</label></th>
+            <th colspan="2"><label for="seq_lib_0_sample_conc">Lib Conc</label></th>
             <th><label for="seq_lib_0_pcr_size">PCR size</label></th>
+            <th><label for="seq_lib_0_quantitation_method">Quant</label></th>
+            <th><label for="seq_lib_0_adapter_id">Adapter</label></th>
+            <th><label for="lib_sample_0_index1_tag_id">Index1</label></th>
+            <th><label for="lib_sample_0_index1_tag_id">Index2</label></th>            
             <th><label for="seq_lib_0_lib_conc_requested">Seq Conc</label></th>
           </tr>
         </thead>
@@ -36,24 +36,25 @@
           <tr>
             <td><%= f.text_field(:barcode_key, class: "form-control") %></td>
             <td><%= f.text_field(:lib_name, class: "form-control") %></td>
-            <td><%= f.text_field(:sample_conc, class: "form-control") %><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control") %></td>
+            <td><%= f.text_field(:sample_conc, class: "form-control") %></td>
+            <td><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control", style: "width:80px") %></td>
+            <td><%= f.text_field(:pcr_size, class: "form-control") %></td>
+            <td><%= f.collection_select(:quantitation_method, @quantitation, :c_value, :c_value,
+                                      {:include_blank => 'Method'}, class: "form-control", style: "width:100px") %></td>
             <td><%= f.collection_select(:adapter_id, @adapters, :id, :runtype_adapter, {},
                                       {:data => {:remote => true, :url => url_for(:action => 'get_adapter_info', :row => i)}, class: "form-control"}) %></td>
             <td><%= s.collection_select(:index1_tag_id, @index1_tags, :id, :index1_code, {}, class: "form-control") %></td>
             <td><%= s.collection_select(:index2_tag_id, @index2_tags, :id, :index2_code, {}, class: "form-control") %></td>
-            <td><%= f.collection_select(:quantitation_method, @quantitation, :c_value, :c_value,
-                                      {:include_blank => 'Select Method'}, class: "form-control") %></td>
-            <td><%= f.text_field(:pcr_size, class: "form-control") %></td>
             <td><%= f.text_field(:lib_conc_requested, class: "form-control") %></td>
           </tr>
 
           <tr>
-            <td colspan="2">Align Ref <%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %></td>
-            <td colspan="2">Source DNA/RNA <%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, {size: 15, value: @lib_samples[i][:source_DNA], class: "form-control"} %></td>
-            <td colspan="2">Notebook Ref <%= f.text_field(:notebook_ref, size: 20, class: "form-control")%></td>
-            <td colspan="3">Notes <%= f.text_field(:notes, size: 75, class: "form-control")%></td>
+            <td colspan="2"><%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, {value: @lib_samples[i][:source_DNA], placeholder:"-- Source DNA/RNA --", class: "form-control"} %></td>
+            <td><%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {:include_blank => 'Align Ref'}, class: "form-control", style: "width:102px") %></td>
+            <td colspan="3"><%= f.text_field(:notebook_ref, size: 20, placeholder:"-- Notebook Ref --", class: "form-control")%></td>
+            <td colspan="4"><%= f.text_field(:notes, size: 75, placeholder:"-- Notes --", class: "form-control")%></td>
           </tr>
-          <tr><td colspan="9" style="border-top:2px solid darkgrey"></td></tr>
+          <tr><td colspan="10" style="border-top:2px solid darkgrey"></td></tr>
         </tbody>
         <% end %>
       <% end %>
