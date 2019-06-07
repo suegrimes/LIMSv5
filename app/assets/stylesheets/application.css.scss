@@ -117,6 +117,14 @@ hr.down-shadow {
   height: calc(100% - 0.25rem) !important;
 }
 
+select.form-control:not([size]):not([multiple]) {
+  height: calc(100% - 0.25rem) !important;
+}
+
+#libs_form {
+  width:110%;
+}
+
 .card {
   margin-top: .5rem;
 }
@@ -164,7 +172,16 @@ select#rpt_type {
 }
 
 .set-field-width {
-  width:33%;
+  /*width:33%;*/
+}
+
+.table-borderless td {
+  border:none;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #a4a4a4 !important;
+  opacity: 1; /* Firefox */
 }
 
 /* utility classes */
