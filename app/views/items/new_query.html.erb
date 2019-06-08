@@ -9,63 +9,62 @@
     <div class="card-body">
 
       <div class="form-group row">
-        <label for="requester_name" class="col-sm-2 col-form-label col-form-label-sm">Requestor:</label>
+        <label for="requester_name" class="col-sm-2 col-form-label col-form-label-sm label">Requestor:</label>
         <div class="col-sm-3">
           <%= f.select(:requester_name, @requestors, {:include_blank => 'All'}, {:size => 3, :multiple => :multiple, class: "form-control"})%>
         </div>
 
-        <label for="company_name" class="col-sm-2 col-form-label col-form-label-sm">Company:</label>
+        <label for="company_name" class="col-sm-2 col-form-label col-form-label-sm label">Company:</label>
         <div class="col-sm-4">
-          <%= f.select(:company_name, @companies, {:include_blank => 'All'}, :size => 3, :multiple => :multiple, class: "form-control")%>
+          <%= f.select(:company_name, @companies, {:include_blank => 'All'}, :size => 4, :multiple => :multiple, class: "form-control")%>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="item_description" class="col-sm-2 col-form-label col-form-label-sm">Item search:</label>
+        <label for="item_description" class="col-sm-2 col-form-label col-form-label-sm label">Item search:</label>
         <div class="col-sm-4">
           <%=f.text_field(:item_description, class: "form-control") %>
         </div>
       </div>
   &nbsp;
       <div class="form-group row">
-        <label for="deliver_site" class="col-sm-2 col-form-label col-form-label-sm">Deliver Site:</label>
+        <label for="deliver_site" class="col-sm-2 col-form-label col-form-label-sm label">Deliver Site:</label>
         <div class="col-sm-2">
           <%= f.select(:deliver_site, Item::DELIVER_SITES, {:include_blank => 'All'}, class: "form-control")%>
         </div>
-        <label for="ordered_status" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm">Order Status:</label>
+        <label for="ordered_status" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm label">Order Status:</label>
         <div class="col-sm-2">
           <%= f.select(:ordered_status, %w{All NotOrdered Ordered}, {}, class: "form-control")%>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="order_received_flag" class="col-sm-2 col-form-label col-form-label-sm">Order Recvd:</label>
+        <label for="order_received_flag" class="col-sm-2 col-form-label col-form-label-sm label">Order Recvd:</label>
         <div class="col-sm-2">
           <%= f.select(:order_received_flag, %w{Y N P}, {:include_blank => 'All'}, class: "form-control")%>
         </div>
-        <label for="item_received_flag" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm">Item Recvd:</label>
+        <label for="item_received_flag" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm label">Item Recvd:</label>
         <div class="col-sm-2">
           <%= f.select(:item_received_flag, %w{Y N}, {:include_blank => 'All'}, class: "form-control")%>
         </div>
       </div>
 
       <div class="form-group row">
-        <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm">Entered From:</label>
+        <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm label">Entered From:</label>
         <div class="col-sm-3">
           <%= f.date_field 'from_date', class: "form-control" %>
         </div>
-        <label for="to_date" class="col-sm-2 col-form-label col-form-label-sm">To:</label>
+        <label for="to_date" class="col-sm-2 col-form-label col-form-label-sm label">To:</label>
         <div class="col-sm-3">
           <%= f.date_field 'to_date', class: "form-control" %>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
-<div class="row">
-  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", class: "btn btn-secondary" %></div>
+<div class="form-group row" style="padding-top:10px; !important">
+  <div class="offset-sm-2 col-sm-2"><%=f.submit "View Items", :name => 'view', class: "btn btn-secondary", data: {disable_with: false} %></div>
   <% if can? :new, Order %>
     <div class="offset-sm-2 col-sm-2"><%=f.submit "Receive Items", :name => 'receive', class: "btn btn-secondary" %></div>
     <div class="offset-sm-2 col-sm-2"><%=f.submit "Order Items", :name => 'order', class: "btn btn-secondary" %></div>

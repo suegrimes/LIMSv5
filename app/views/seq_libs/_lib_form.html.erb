@@ -1,12 +1,12 @@
 <div id="errorwarn"></div>
 <h6 class="card-header">Sequencing Library Defaults</h6>
-<table class="table table-sm">
+<table class="table table-borderless table-sm">
 
   <tr>
     <td class="label"><label for="preparation_date" class="col-auto col-form-label col-form-label-sm">Prep Date:</label></td>
-    <td class="set-field-width"><%= date_field_tag("lib_default[preparation_date]", Date.today, class: "form-control") %></td>
+    <td><%= date_field_tag("lib_default[preparation_date]", Date.today, class: "form-control") %></td>
     <td class="label"><label for="owner" class="col-auto col-form-label col-form-label-sm">Owner:</label></td>
-    <td class="set-field-width"><%= select_tag("lib_default[owner]", options_for_select(@owners, @requester), class: "form-control")%></td>
+    <td><%= select_tag("lib_default[owner]", options_for_select(@owners, @requester), class: "form-control")%></td>
   </tr>
 
   <tr>
@@ -19,7 +19,7 @@
 
   <tr>
     <td class="label"><label for="pcr_size" class="col-auto col-form-label col-form-label-sm">Size(Final PCR):</label></td>
-    <td><%= text_field(:lib_default, :pcr_size, :size => 10, class: "form-control")%></td>
+    <td><%= text_field(:lib_default, :pcr_size, class: "form-control")%></td>
     <td class="label"><label for="quantitation_method" class="col-auto col-form-label col-form-label-sm">Quantitation:</label></td>
     <td><%= collection_select(:lib_default, :quantitation_method, @quantitation, :c_value, :c_value, {:include_blank => 'Select Method'},
                               class: "form-control") %></td>
@@ -27,7 +27,7 @@
 
   <tr>
     <td class="label"><label for="lib_conc_requested" class="col-auto col-form-label col-form-label-sm">FlowCell Conc:</label></td>
-    <td><%= text_field(:lib_default, :lib_conc_requested, :size => 10, class: "form-control") %></td>
+    <td><%= text_field(:lib_default, :lib_conc_requested, class: "form-control") %></td>
     <td class="label"><label for="pool_id" class="col-auto col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label></td>
     <td><%= collection_select(:lib_default, :pool_id, @oligo_pools, :id, :pool_string_dtl,
                               {:include_blank => 'Select Pool'}, class: "form-control") %></td>
@@ -37,7 +37,7 @@
     <td class="label"><label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label></td>
     <td><%= collection_select(:lib_default, :alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %></td>
     <td class="label"><label for="trim_bases" class="col-auto col-form-label col-form-label-sm">Trim Bases:</label></td>
-    <td><%= text_field(:lib_default, :trim_bases, :size => 10, class: "form-control") %></td>
+    <td><%= text_field(:lib_default, :trim_bases, class: "form-control") %></td>
   </tr>
 
   <tr>
