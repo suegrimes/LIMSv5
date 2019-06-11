@@ -31,7 +31,7 @@ class Ability
     # Everyone can enter order items
     can :manage, Item
     cannot :delete, Item
-    can [:edit, :edit_order_items, :update], Order
+    can [:edit, :edit_order_items, :export_order, :update], Order
     
     # No-one can read patient data unless authorization overridden based on role below
     cannot :read, Patient
@@ -44,24 +44,20 @@ class Ability
     
     else
       # Researchers can enter/update processed samples, seq libs, flow cells
-      if user.has_role?("researcher")  || user.has_role?("lab_admin")
+      if user.has_role?("researcher") || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
-                      FlowLane, SampleStorageContainer, StorageContainer, Publication]
-        cannot [:delete], Sample
+                      FlowLane, Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
+        cannot [:edit, :update, :delete], Sample
       end
-
-      if user.has_role?("lab_admin")
-        can :manage, [Protocol, FreezerLocation, Researcher]
-      end
-
+    
       # Clinical users can enter/update patient and clinical samples
       if user.has_role?("clinical") || user.has_role?("clin_admin")
         can :manage, [Patient, SampleCharacteristic, Pathology, Sample, Histology, ProcessedSample, MolecularAssay,
-                      SampleStorageContainer, StorageContainer, Publication]
+                      Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
         cannot :delete, [Patient, SampleCharacteristic, Sample]
       end
       
-      # Additional capabilities for clin_admin (consent_protocols)
+      # Additional capabilities for clin_admin (update users, consent_protocols, locations)
       if user.has_role?("clin_admin")
 #        can :read, User
 #        can [:edit, :update], User do |usr| 
@@ -69,7 +65,7 @@ class Ability
 #          @_roles.include?("clinical") || usr == user
 #        end
         
-        can :manage, [ConsentProtocol, Protocol, FreezerLocation, Researcher]
+        can :manage, [ConsentProtocol, Protocol, FreezerLocation]
         cannot :delete, ConsentProtocol            
       end
       
@@ -95,6 +91,15 @@ class Ability
         end
       end
 
+      if user.has_role?("barcodes")
+        can :manage, AssignedBarcode
+      end
+      
+      # Orders users can create orders
+      if user.has_role?("orders")
+        can [:read, :new, :create, :edit, :update], Order
+      end
+      
     end
   end
   

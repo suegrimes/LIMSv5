@@ -56,8 +56,6 @@
     <% @samples_by_patient.sort.each do | patient_id, samples| %>
 
     <% for sample in samples %>
-      <%= hidden_field_tag("export_id[]", sample.id)  %>
-
       <tr>
       <!-- hidden column used for filtering -->
       <% if sample.source_sample_id.nil? %>
@@ -76,6 +74,8 @@
         <td><%=h sample.room_and_freezer %></td>
         <td><%=h sample.container_and_position %></td>
         <td><%=h sample.user.login if sample.user %></td>
+
+        <%= hidden_field_tag("export_id[]", sample.id)  %> <!-- This has to be within <tr> tag for lightbox functionality -->
       </tr>
     <% end %>
 	

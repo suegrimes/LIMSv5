@@ -1,0 +1,9 @@
+<h5>New storage container</h5>
+
+<%= form_for @storage_container, :action => 'create' do |f| %>
+  <%= render '/shared/errors', model: @storage_container %>
+
+  <%= render :partial => 'storage_container_form', :locals => {:f => f} %>
+
+  <%=f.submit "Create", class: "btn btn-primary" %>
+<% end %>

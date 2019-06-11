@@ -3,11 +3,6 @@
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 
-// dissected_samples controller init function
-function dissected_samples_init() {
-  processing_tab_active();
-}
-
 // dissected_samples edit init
 function dissected_samples_edit_init() {
     // new storage management init
@@ -335,11 +330,4 @@ function new_row_index() {
 
 function get_row_index() {
   return window.row_index;
-}
-
-function processing_tab_active() {
-  // remove any currently active
-  $('#top-nav .nav-link').removeClass('active');
-  // add active to processing tab
-  $('#top-nav #processing-tab').addClass('active');
 }

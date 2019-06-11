@@ -5,11 +5,6 @@
 //
 // currently handling both samples and sample_characteristics in this file
 
-// samples controller init function
-function samples_init() {
-  samples_tab_active();
-}
-
 // samples edit init
 function samples_edit_init() {
   // new storage management init
@@ -17,11 +12,6 @@ function samples_edit_init() {
 
   // storage containers edit init
   edit_storage_container_init();
-}
-
-// sample_characteristics controller init function
-function sample_characteristics_init() {
-  samples_tab_active();
 }
 
 // sample_characteristics new_sample init
@@ -97,11 +87,4 @@ function show_sample() {
 // handle error
 function fetch_error(evt_elem, evt, xhr, status, error) {
   logger("Error loading form");
-}
-
-function samples_tab_active() {
-  // remove any currently active
-  $('#top-nav .nav-link').removeClass('active');
-  // add active to samples tab
-  $('#top-nav #samples-tab').addClass('active');
 }

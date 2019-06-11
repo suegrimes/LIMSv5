@@ -6,7 +6,7 @@
     <th>Login</th>
     <th>Email</th>
     <th>Lab</th>
-    <th>Active/Inactive</th>
+    <th>Role(s)</th>
   </tr>
   </thead>
 
@@ -14,7 +14,7 @@
     <td><%=h @user.login %></td>
     <td><%=h @user.email %></td>
     <td><%=h @user.lab_name %></td>
-    <td><%=h @user.active_inactive %></td>
+    <td><%=h @user.roles.collect(&:name).join(', ')%></td>
   </tr>
 </table>
 
