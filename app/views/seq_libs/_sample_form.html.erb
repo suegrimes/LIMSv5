@@ -6,7 +6,6 @@
 
   <div class="card">
     <h6 class="card-header">Libraries</h6>
-    <div class="card-body">
       <table class="table table-borderless table-sm">
         <%= hidden_field_tag(:nr_libs, @new_lib.size) %>
         <thead>
@@ -23,7 +22,7 @@
           </tr>
         </thead>
 
-        <tbody>
+        
         <% @new_lib.each_with_index do |lib, i| %>
           <%= fields_for 'seq_lib_' + i.to_s, lib do |f| %>
             <%= fields_for 'lib_sample_' + i.to_s, @lib_samples[i] do |s| %>
@@ -33,6 +32,7 @@
               <%= f.hidden_field(:preparation_date) %>
               <%= f.hidden_field(:protocol_id) %>
               <%= f.hidden_field(:pool_id) %>
+          <tbody>
           <tr>
             <td><%= f.text_field(:barcode_key, class: "form-control") %></td>
             <td><%= f.text_field(:lib_name, class: "form-control") %></td>
@@ -54,12 +54,11 @@
             <td colspan="3"><%= f.text_field(:notebook_ref, size: 20, placeholder:"-- Notebook Ref --", class: "form-control")%></td>
             <td colspan="4"><%= f.text_field(:notes, size: 75, placeholder:"-- Notes --", class: "form-control")%></td>
           </tr>
-          <tr><td colspan="10" style="border-top:2px solid darkgrey"></td></tr>
+          <tr><td colspan="10" class="grey-row-divider"></td></tr>
         </tbody>
         <% end %>
       <% end %>
     <% end %>
       </table><!--/main table-->
-    </div><!--/card-body-->
   </div><!--/card-->
 </div><!--/libs-form-->
