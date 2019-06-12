@@ -22,7 +22,7 @@ class SampleStorageContainer < ApplicationRecord
   #belongs_to :freezer_location
   #belongs_to :stored_sample, :polymorphic => true
   # Rails 5 defaults to required: true, so make it explicitly optional
-  belongs_to :freezer_location, optional: true
+  #belongs_to :freezer_location, optional: true
   belongs_to :stored_sample, optional: true, polymorphic: true
   belongs_to :storage_container, optional: true
   belongs_to :user, :foreign_key => :updated_by, optional: true
@@ -49,7 +49,7 @@ class SampleStorageContainer < ApplicationRecord
   end
   
   def container_desc
-    [container_type, container_name].join(': ')
+    (storage_container ? [storage_container.container_type, storage_container.container_name].join(': ') : 'NA: Unknown')
   end
 
   def container_sort
@@ -72,18 +72,20 @@ class SampleStorageContainer < ApplicationRecord
   end
   
   def room_and_freezer
-    (freezer_location ? freezer_location.room_and_freezer : '')
+    (storage_container ? storage_container.freezer_location.room_and_freezer : '')
   end
 
   def self.find_for_query(condition_array)
-    self.includes(:freezer_location).where(sql_where(condition_array))
-        .order('freezer_locations.freezer_nr, freezer_locations.room_nr, container_type, container_name').all
-  end
-  
-  def self.populate_dropdown
-    self.where('container_type > ""').order(:container_type).uniq.pluck(:container_type)
+    self.includes(:storage_container => :freezer_location).where(sql_where(condition_array))
+        .order('freezer_locations.freezer_nr, freezer_locations.room_nr, storage_containers.container_type, storage_containers.container_name').all
   end
 
+  # This dropdown should now be populated from StorageType
+  #def self.populate_dropdown
+  #  self.where('container_type > ""').order(:container_type).uniq.pluck(:container_type)
+  #end
+
+  # Delete these redundant fields unless need to keep here for query efficiency
   # keep redundant fields in sync with the storage container it belongs to
   def upd_storage_container_fields
     if self.storage_container

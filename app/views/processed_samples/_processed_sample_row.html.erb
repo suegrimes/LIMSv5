@@ -10,7 +10,7 @@
 <% end %>
 </td>
 
-<td><%=h processed_sample.protocol.short_name %></td>
+<td><%=h processed_sample.protocol_abbrev %></td>
 
 <td><%=link_to processed_sample.sample.barcode_key, 
                                 sample_path(processed_sample.sample.id) %> /

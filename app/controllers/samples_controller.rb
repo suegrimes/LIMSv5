@@ -83,7 +83,7 @@ class SamplesController < ApplicationController
       ok, emsg = create_storage_container(sample_storage_container_attributes)
       unless ok
         dropdowns
-        flash[:error] = 'Error - New storage container could not be created: #{emsg}, Sample not updated'
+        flash[:error] = "Error creating storage container: #{emsg}"
         render :action => 'edit'
         return
       end
