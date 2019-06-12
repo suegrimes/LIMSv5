@@ -82,7 +82,7 @@ class SampleCharacteristicsController < ApplicationController
       unless ok
         dropdowns
         sample_dropdowns
-        flash[:error] = 'Error - New storage container could not be created: #{emsg}, Clinical sample/characteristics not saved'
+        flash[:error] = "Error creating storage container: #{emsg}"
         render :action => 'new_sample'
         return
       end

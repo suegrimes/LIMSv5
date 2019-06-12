@@ -14,6 +14,8 @@ class StorageContainer < ApplicationRecord
   belongs_to :freezer_location
   has_many :sample_storage_containers
 
+  validates_uniqueness_of :container_name, scope: [:freezer_location_id, :container_type]
+
   STD_FIELDS = {'storage_containers' => %w(freezer_location_id container_type)}
   QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => {}, 'search' => {}}
 

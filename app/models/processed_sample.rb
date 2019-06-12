@@ -71,6 +71,10 @@ class ProcessedSample < ApplicationRecord
     end
     return echar
   end
+
+  def protocol_abbrev
+    (protocol ? protocol.short_name : 'N/A')
+  end
   
   def room_and_freezer
     (sample_storage_container ? sample_storage_container.room_and_freezer : '')
