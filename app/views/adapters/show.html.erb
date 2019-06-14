@@ -1,5 +1,5 @@
 <h5>Adapter</h5>
-
+<div class="offset-sm-1 col-md-6">
 <table class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
@@ -31,6 +31,7 @@
     <th>Tag#</th>
     <th>Index</th>
     <th>Sequence</th>
+    <th>RevCompl(I2)</th>
     <th colspan=2></th>
   </tr>
   </thead>
@@ -41,6 +42,7 @@
         <td><%=h index_tag.tag_nr %></td>
         <td><%=h index_tag.index_code %></td>
         <td><%=h index_tag.tag_sequence %></td>
+        <td><% if index_tag.index_read == 2 %><%= index_tag.rev_compl_seq %><% end %></td>
         <td><% if can? :edit, index_tag %>
               <%= link_to 'Edit', edit_index_tag_path(index_tag) %>
           <% end %></td>
@@ -50,5 +52,6 @@
       </tr>
   <% end %>
 </table>
+</div>
 
 <%= link_to 'List All', adapters_path %>

@@ -1,6 +1,7 @@
 <h5>Category: <%= @category.category %></h5>
-<div>Description: <%= @category.category_description %></div></br>
+<span>Description: <%= @category.category_description %></span></br>
 
+<div class="offset-sm-1 col-md-6">
 <table class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
@@ -16,6 +17,7 @@
     </tr>
   <% end %>
 </table>
+</div>
 
 <% if can? :edit, @category %>
 <%= link_to 'Edit', edit_category_path(@category) %> |
