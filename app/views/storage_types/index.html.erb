@@ -1,0 +1,42 @@
+<h5>Storage Types</h5>
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Container Type</th>
+    <th>Display Format</th>
+    <th>Nr Cols</th>
+    <th>Nr Rows</th>
+    <th>First Col</th>
+    <th>First Row</th>
+    <th>Freezer Type</th>
+    <th>Notes</th>
+    <% if can? :edit, StorageType %><th>&nbsp;</th><% end %>
+    <% if can? :delete, StorageType %><th>&nbsp;</th><% end %>
+  </tr>
+  </thead>
+
+  <tbody>
+    <% @storage_types.each do |storage_type| %>
+      <tr>
+        <td><%=h storage_type.container_type %></td>
+        <td><%=h storage_type.display_format %></td>
+        <td><%=h storage_type.nr_cols %></td>
+        <td><%=h storage_type.nr_rows %></td>
+        <td><%=h storage_type.first_row %></td>
+        <td><%=h storage_type.first_col %></td>
+        <td><%=h storage_type.freezer_type %></td>
+        <td><%=h storage_type.notes %></td>
+        <% if can? :edit, storage_type %>
+          <td><%= link_to 'Edit', edit_storage_type_path(storage_type) %></td>
+        <% end %>
+        <% if can? :delete, storage_type %>
+          <td><%= link_to 'Delete', storage_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Storage Type', new_storage_type_path %>
