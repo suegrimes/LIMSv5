@@ -3,53 +3,63 @@
 <%= form_tag new_mplex_lib_path, method: :get  do %>
 <div class="card">
   <h6 class="card-header">Singleplex Library Parameters</h6>
-  <div class="card-body">
-    <div class="form-group row">
-      <p class="font-italic font-sm">Enter individual library numbers as integers separated by commas, enter ranges with '-'.
-               Eg. '1160,1378-1400,1500-1600'</p>
-    </div>
+  <p class="font-italic font-sm" style="text-align:center; margin-bottom:0; margin-top:0.75rem">Enter individual library numbers as integers separated by commas, enter ranges with '-'. Eg. '1160,1378-1400,1500-1600'</p>
 
-    <div class="form-group row">
-      <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
-      <div class="col-auto">
-        <%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %>
-      </div>
+  <table class="table table-borderless table-sm">
+  <tbody>
 
-      <label for="seq_lib_adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label>
-      <div class="col-auto">
-        <%= collection_select(:seq_lib, :adapter_id, @mplex_adapters, :id, :runtype_adapter, {}, class: "form-control") %>
-      </div>
-    </div>
+    <tr><!-- row to control col widths -->
+      <td style="width:15%"></td>
+      <td style="width:15%"></td>
+      <td style="width:15%"></td>
+      <td style="width:15%"></td>
+      <td style="width:30%"></td>
+    </tr>
 
-    <div class="form-group row">
-      <label for="seq_lib_owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label>
-      <div class="col-auto">
-        <%= select(:seq_lib, :owner, @owners, {:include_blank => '(All)'}, {size: 3, multiple: :multiple, class: "form-control"}) %>
-      </div>
-    </div>
+    <tr>
+      <td class="label"><label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode:</label></td>
+      <td><%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %></td>
+      <td class="label"><label for="seq_lib_adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label></td>
+      <td><%= collection_select(:seq_lib, :adapter_id, @mplex_adapters, :id, :runtype_adapter, {}, class: "form-control") %></td>
+      <td></td>
+    </tr>
 
-    <div class="form-group row">
-      <div class="col-sm-3" style="text-align:left"><%= check_box_tag(:excl_used, 'Y', true)%>&nbsp;Exclude used libraries?</div>
-    </div>
+    <tr>
+      <td class="label"><label for="seq_lib_owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label></td>
+      <td>
+        <%= select(
+              :seq_lib, 
+              :owner, 
+              @owners, 
+              {:include_blank => '(All)'}, 
+              {size: 3, multiple: :multiple, class: "form-control"}) %>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
 
-    <div class="form-group row">
-      <label for="date_range_from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label>
-      <div class="col-auto">
-        <%= date_field('date_range', 'from_date', class: "form-control") %>
-      </div>
+    <tr>
+      <td></td>
+      <td colspan="3"><%= check_box_tag(:excl_used, 'Y', true)%>&nbsp;Exclude used libraries?</td>
+      <td></td>
+    </tr>
 
-      <label for="date_range_to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
-      <div class="col-auto">
-        <%= date_field('date_range', 'to_date', class: "form-control") %></td>
-      </div>
-    </div>
-  </div>
-</div>
+    <tr>
+      <td class="label"><label for="date_range_from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label></td>
+      <td><%= date_field('date_range', 'from_date', class: "form-control") %></td>
+      <td class="label"><label for="date_range_to_date" class="col-auto col-form-label col-form-label-sm">To:</label></td>
+      <td><%= date_field('date_range', 'to_date', class: "form-control") %></td>
+      <td></td>
+    </tr>
 
-  <div class="form-group row">
-    <div class="col-auto">
-      <%=submit_tag "Submit", class: "btn btn-primary" %>
-    </div>
-  </div>
+    <tr>
+      <td></td>
+      <td colspan="4"><%=submit_tag "Submit", class: "btn btn-primary" %></td>
+    </tr>
+
+    </tbody>
+  </table>
+</div><!-- /card -->
 <%end%>
 

@@ -21,6 +21,10 @@ class IndexTag < ActiveRecord::Base
     return self.adapter.runtype_adapter
   end
 
+  def rev_compl_seq
+    return tag_sequence.tr('ACGT', 'TGCA').reverse
+  end
+
   def index1_code
     return (self.adapter.index1_prefix.blank? ? format_tag(tag_nr) : format_index(self.adapter.index1_prefix, tag_nr))
   end
