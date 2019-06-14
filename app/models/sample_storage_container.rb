@@ -91,7 +91,7 @@ class SampleStorageContainer < ApplicationRecord
     if self.storage_container
       self.container_type = self.storage_container.container_type
       self.container_name = self.storage_container.container_name
-      self.freezer_location = self.storage_container.freezer_location
+      self.freezer_location_id = self.storage_container.freezer_location_id
     end
   end
 end
