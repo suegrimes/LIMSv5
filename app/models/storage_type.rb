@@ -23,11 +23,12 @@ class StorageType < ApplicationRecord
 
   def self.populate_dropdown
     self.all
+    #self.pluck(:container_type)
   end
 
   def max_row
     if display_format == '2D'
-      return (first_row == '1' ? nr_rows : ('A'.ord + nr_rows - 1).chr )
+      return (first_row == '1' ? nr_rows.to_s : ('A'.ord + nr_rows - 1).chr )
     else
       return nil
     end
@@ -35,18 +36,18 @@ class StorageType < ApplicationRecord
 
   def max_col
     if display_format == '2D'
-      return (first_col == '1' ? nr_rows : ('A'.ord + nr_rows - 1).chr )
+      return (first_col == '1' ? nr_cols.to_s : ('A'.ord + nr_cols - 1).chr )
     else
       return nil
     end
   end
 
   def valid_positions
-    return nil if display_format == '2D'
+    return nil if display_format != '2D'
     grid_positions = []
     (first_col..max_col).each do |col|
       (first_row..max_row).each do |row|
-        grid_positions.push([first_col.to_s, first_row.to_s].join())
+        grid_positions.push([col, row].join())
       end
     end
     return grid_positions

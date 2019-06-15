@@ -1,8 +1,9 @@
+<p>Current container, storage_container_id <%= @storage_container_id %>; <%= f.object.storage_container_id %></p>
 <div class="current-container-fields">
   <div class="form-group row">
     <%=f.hidden_field(:sample_name_or_barcode, value: barcode) %>
     <!-- make storage container id available on save and to javascript -->
-    <%=f.hidden_field(:storage_container_id, value: @storage_container_id, class: "storage-container-id") %>
+    <%=f.hidden_field(:storage_container_id, value: f.object.storage_container_id, class: "storage-container-id") %>
 
     <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
     <div class="col-auto">
