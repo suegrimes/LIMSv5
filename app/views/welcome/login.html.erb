@@ -1,7 +1,7 @@
 
 <%= bootstrap_form_for(:user, url: {action: "user_login"}) do |f| %>
-  <%= f.text_field :login %>
-  <%= f.password_field :password %>
+  <%= f.text_field :login, {style: "height:2rem !important"}%>
+  <%= f.password_field :password, {style: "height:2rem !important"}%>
   <%= f.submit "Log in", class: "btn btn-primary" %>
 <% end %>
 
