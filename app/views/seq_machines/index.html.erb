@@ -11,6 +11,7 @@
   </tr>
   </thead>
 
+  <tbody>
   <% for seq_machine in @seq_machines %>
   <tr>
     <td><%=link_to seq_machine.machine_name, seq_machine %></td>
@@ -26,6 +27,7 @@
 	  <% end %>
   </tr>
   <% end %>
+  </tbody>
 </table>
 
 <% if can? :new, SeqMachine.new %>

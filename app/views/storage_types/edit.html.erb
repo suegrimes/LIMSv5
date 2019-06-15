@@ -1,0 +1,11 @@
+<h5>Editing Storage Type</h5>
+
+<%= form_for(@storage_type) do |f| %>
+  <%= render '/shared/errors', model: @storage_type %>
+
+  <%= render :partial => 'storage_type_form', :locals => {:f => f}%>
+
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'List All', storage_types_path %>

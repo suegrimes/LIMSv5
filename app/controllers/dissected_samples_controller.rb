@@ -198,7 +198,7 @@ protected
       :vial_type, :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments,
       {sample_storage_container_attributes: [
         :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :freezer_location_id
+        :position_in_container, :storage_container_id, :freezer_location_id
       ]}
     )
   end
@@ -207,7 +207,7 @@ protected
     [:source_sample_id, :barcode_key, :sample_date, :tumor_normal, :sample_container,
     :vial_type, :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments,
     sample_storage_container_attributes: [
-      :container_type, :container_name, :position_in_container, :freezer_location_id
+      :container_type, :container_name, :position_in_container, :storage_container_id, :freezer_location_id
       ]
     ]
   end

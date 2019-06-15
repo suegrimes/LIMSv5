@@ -172,6 +172,7 @@ Rails.application.routes.draw do
   resources :alignment_refs, :only => [:new, :create, :edit, :update, :index]
   resources :seq_machines
   resources :freezer_locations
+  resources :storage_types
   resources :researchers
 
   # Routes for ordering chemicals & supplies

@@ -1,0 +1,56 @@
+<div class="card">
+  <h6 class="card-header">Storage Type Details:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="container_type" class="col-auto col-form-label">Container Type:</label>
+      <div class="col-auto">
+        <%=f.text_field(:container_type, class: "form-control") %>
+      </div>
+
+      <label for="display_format" class="col-auto col-form-label">Display Format:</label>
+      <div class="col-auto">
+        <%= f.select(:display_format, %w(NA 2D), {}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="nr_cols" class="col-auto col-form-label">Nr Cols:</label>
+      <div class="col-sm-1">
+        <%=f.text_field(:nr_cols, class: "form-control") %>
+      </div>
+
+      <label for="first_col" class="col-auto col-form-label">First Col:</label>
+      <div class="col-auto">
+        <%= f.select(:first_col, %w(A 1), {}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="nr_rows" class="col-auto col-form-label">Nr Rows:</label>
+      <div class="col-sm-1">
+        <%=f.text_field(:nr_rows, class: "form-control") %>
+      </div>
+
+      <label for="first_row" class="col-auto col-form-label">First Row:</label>
+      <div class="col-auto">
+        <%= f.select(:first_row, %w(A 1), {selected: '1'}, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="freezer_type" class="col-auto col-form-label">Freezer Type:</label>
+      <div class="col-sm-3">
+        <%=f.text_field(:freezer_type, class: "form-control") %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="notes" class="col-auto col-form-label">Notes:</label>
+      <div class="col-sm-6">
+        <%= f.text_field(:notes, class: "form-control") %>
+      </div>
+    </div>
+
+  </div>
+</div>
