@@ -24,7 +24,8 @@ logger("got freezer change: "+freezer);
       }
     }
     // move container types in this freezer to the top of list of options
-    arrange_container_types($("select.container-type"), freezer);
+    // SG 6/15/2019: commenting this out since can end up with duplicate container-types when re-arranging
+    //arrange_container_types($("select.container-type"), freezer);
   });
 
   // handle container type selection or de-selection
