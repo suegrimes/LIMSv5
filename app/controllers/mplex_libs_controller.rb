@@ -53,6 +53,14 @@ class MplexLibsController < ApplicationController
   # GET /mplex_libs/1/edit
   def edit
     @seq_lib = SeqLib.includes(:lib_samples).find(params[:id])
+    if @seq_lib.sample_storage_container.nil?
+      @seq_lib.build_sample_storage_container
+      @edit_lib_storage = false
+    else
+      @edit_lib_storage = true
+      @storage_container_id = @seq_lib.sample_storage_container.storage_container_id
+    end
+
   end
 
   # POST /mplex_libs
@@ -128,6 +136,8 @@ class MplexLibsController < ApplicationController
 
   # PUT /mplex_libs/1
   def update
+    #deliberate_error_here
+
     @seq_lib = SeqLib.find(params[:id])
     alignment_key = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
     params[:seq_lib].merge!(:alignment_ref => alignment_key)
@@ -164,7 +174,8 @@ protected
     @protocols    = Protocol.find_for_protocol_type('L')
     @quantitation= Category.populate_dropdown_for_category('quantitation')
     @freezer_locations  = FreezerLocation.list_all_by_room
-    @containers   = Category.populate_dropdown_for_category('container')
+    # following for new Storage Management UI
+    storage_container_ui_data
   end
   
   def setup_dropdowns
@@ -201,7 +212,15 @@ protected
   end
 
   def update_params
-    create_params
+    params.require(:seq_lib).permit(
+        :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
+        :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
+        :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
+        sample_storage_container_attributes: [
+            :sample_name_or_barcode, :container_type, :container_name,
+            :position_in_container, :freezer_location_id, :storage_container_id, :notes
+        ]
+    )
   end
   
 end 

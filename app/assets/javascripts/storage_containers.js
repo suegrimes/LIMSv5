@@ -138,6 +138,9 @@ logger("edit_storage_container_init()");
 
   //SG 6/15/2019: Only detach existing-new fields if there is a current container div
   if ($("div.current-container-fields").length > 0 ) {
+      var container_type = $("input.container-type").val()
+      logger("got container type"+container_type)
+      display_position_ui(container_type)
       logger("detaching exist_new_fields");
       window.existing_new_container_fields = exist_new_fields.detach();
   }
