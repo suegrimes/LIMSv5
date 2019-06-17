@@ -24,7 +24,8 @@ logger("got freezer change: "+freezer);
       }
     }
     // move container types in this freezer to the top of list of options
-    arrange_container_types($("select.container-type"), freezer);
+    // SG 6/15/2019: commenting this out since can end up with duplicate container-types when re-arranging
+    //arrange_container_types($("select.container-type"), freezer);
   });
 
   // handle container type selection or de-selection
@@ -95,8 +96,12 @@ logger("got container change: "+container);
   });
 
   // handle button to show container grid locations
+  // SG 6/15/2019: modify for current container now in text box not select
   $(".select-position-btn button").on("click", function() {
     var container_type = $("select.container-type").val();
+    if (container_type == null) {
+      var container_type = $("input.container-type").val();
+    }
 
     // check for and handle a new container
     if ($("input#new-container-check").prop("checked")) {
@@ -131,10 +136,14 @@ logger("edit_storage_container_init()");
   exist_new_fields.find(".container-notes").val("");
   exist_new_fields.find(".position-in-container input").val("");
 
-  //SG 4/25/19:  Note sure why this is here, when editing sample with no existing container, the new sample_storage_container
-  //             which is built is detached here and then cannot be edited
-  //logger("detaching exist_new_fields");
-  //window.existing_new_container_fields = exist_new_fields.detach();
+  //SG 6/15/2019: Only detach existing-new fields if there is a current container div
+  if ($("div.current-container-fields").length > 0 ) {
+      var container_type = $("input.container-type").val()
+      logger("got container type"+container_type)
+      display_position_ui(container_type)
+      logger("detaching exist_new_fields");
+      window.existing_new_container_fields = exist_new_fields.detach();
+  }
 
   // save state for current position in container
   // used for grid display with a currently existing position
@@ -433,7 +442,7 @@ logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first
 
           if (positions_used.includes(col_row)) {
             // check if we are editing a current position,
-            // and if the value matches this cel, set it and don't show as filled
+            // and if the value matches this cell, set it and don't show as filled
             if (window.edit_current_container == true &&
                 window.current_position_in_container == col_row) {
               td = build_clickable_td(col_row);
