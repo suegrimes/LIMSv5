@@ -5,13 +5,14 @@
   <div class="form-group row">
 
     <!--label for="which_container" class="col-auto col-form-label col-form-label-sm">Which Container:</label-->
-    <div class="col-auto btn-group btn-group-toggle" data-toggle="buttons">
-<!--
-      <label class="btn btn-secondary active">
-        <input type="radio" name="which_container" value="current" autocomplete="off" checked> Current
+    <div class="col-auto btn-group-toggle" data-toggle="buttons">
+
+      <!-- default is initially hide the current button - is used on the change container panel -->
+      <label style="display: none" class="btn btn-secondary current-button">
+        <input type="radio" name="which_container" value="current" autocomplete="off" checked> Current Container
       </label>
--->
-      <label class="btn btn-secondary">
+
+      <label class="btn btn-secondary change-button">
         <input type="radio" name="which_container" value="other" autocomplete="off" checked> Change Container
       </label>
     </div>

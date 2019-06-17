@@ -155,6 +155,9 @@ logger("edit_storage_container_init()");
   $("input[name='which_container']").on("change", function() {
     var which = $("input[name='which_container']:checked").val();
     if (which == "other") {
+      // deal with buttons- JP 6/17
+      $(".current-button").show()
+      $(".change-button").hide()
       // save the current container form
       window.current_container_fields = $("div.current-container-fields").detach();
       // attach and show the fields for existing or new container 
@@ -163,6 +166,9 @@ logger("edit_storage_container_init()");
       handle_freezer_cont_type();
       window.edit_current_container = false;
     } else if (which == "current") {
+      // deal with buttons - JP 6/17
+      $(".change-button").show()
+      $(".current-button").hide()
       window.existing_new_container_fields = $("div.existing-new-container-fields").detach();
       $("div.current-container").append(window.current_container_fields);
       window.edit_current_container = true;
