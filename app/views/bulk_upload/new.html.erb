@@ -7,20 +7,22 @@
 <%= form_tag({action: 'create'}, multipart: true) do %>
 
   <div class="form-group row">
-    <label for="file" class="col-sm-2 col-form-label">File to upload:</label>
+    <label for="file" class="col-sm-2 col-form-label-md">File to upload:</label>
     <div class="col-auto">
       <%= file_field_tag :file, accept: @accept_suffixes, class: "btn btn-light", style: "width: 40rem" %>
     </div>
   </div>
 
+  <div class="row-height-20"></div>
+
   <div class="form-group row">
-    <div class="offset-sm-2 col-auto upload-type">
-
+    <div class="offset-sm-2 col-auto form-check">
       <div>
-        <input type="radio" name="options" id="dry_run" value="dry_run" autocomplete="off" checked> Validate Only &nbsp;&nbsp;
-        <input type="radio" name="options" id="save_all" value="save" autocomplete="off"> Validate and Save
+        <input type="radio" class="form-check-input" name="options" id="dry_run" value="dry_run" autocomplete="off" checked>
+        <label for="dry_run" class="form-check-label">Validate Only &nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input type="radio" class="form-check-input" name="options" id="save_all" value="save" autocomplete="off">
+        <label for="save_all" class="form-check-label">Validate and Save</label>
       </div>
-
     </div>
   </div>
 
