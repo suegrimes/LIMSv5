@@ -56,6 +56,8 @@ logger("got container type change: "+container_type);
     var container_name = $(".container-name");
     var container_notes = $(".container-notes");
     if ($(this).prop("checked")) {
+      // hide existing - JP 6/17/19
+      $(".existing-container-row").hide();
       // disable existing container select
       container.prop("disabled", true);
       // enable and display new storage container fields
@@ -158,6 +160,7 @@ logger("edit_storage_container_init()");
       // deal with buttons- JP 6/17
       $(".current-button").show()
       $(".change-button").hide()
+      $(".new-container-button").show()
       // save the current container form
       window.current_container_fields = $("div.current-container-fields").detach();
       // attach and show the fields for existing or new container 
@@ -169,6 +172,7 @@ logger("edit_storage_container_init()");
       // deal with buttons - JP 6/17
       $(".change-button").show()
       $(".current-button").hide()
+      $(".new-container-button").hide()
       window.existing_new_container_fields = $("div.existing-new-container-fields").detach();
       $("div.current-container").append(window.current_container_fields);
       window.edit_current_container = true;
