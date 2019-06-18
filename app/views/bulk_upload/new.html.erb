@@ -2,38 +2,34 @@
 
 <div class="card">
   <h6 class="card-header">Patients, Samples, Dissections and/or Extractions</h6>
-  <div class="card-body">
+  <div class="card-body col-8">
 
 <%= form_tag({action: 'create'}, multipart: true) do %>
 
   <div class="form-group row">
-      <p class="font-italic font-sm">It is recommended to upload in Validate Only mode until all validations succeed.</p>
+    <label for="file" class="col-sm-2 col-form-label">File to upload:</label>
+    <div class="col-auto">
+      <%= file_field_tag :file, accept: @accept_suffixes, class: "btn btn-light", style: "width: 40rem" %>
+    </div>
   </div>
 
   <div class="form-group row">
-    <label for="dry_run" class="col-auto col-form-label col-form-label-sm">Processing Options:</label>
-    <div class="col-auto">
+    <div class="offset-sm-2 col-auto upload-type">
 
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary active">
-          <input type="radio" name="options" id="dry_run" value="dry_run" autocomplete="off" checked> Validate Only
-        </label>
-        <label class="btn btn-secondary">
-          <input type="radio" name="options" id="save_all" value="save" autocomplete="off"> Validate and Save
-        </label>
+      <div>
+        <input type="radio" name="options" id="dry_run" value="dry_run" autocomplete="off" checked> Validate Only &nbsp;&nbsp;
+        <input type="radio" name="options" id="save_all" value="save" autocomplete="off"> Validate and Save
       </div>
 
     </div>
   </div>
 
   <div class="form-group row">
-    <label for="file" class="col-auto col-form-label col-form-label-sm">File to upload:</label>
-    <div class="col-auto">
-      <%= file_field_tag :file, accept: @accept_suffixes, class: "btn btn-secondary", style: "width: 40rem" %>
-    </div>
+    <p class="offset-sm-2 col-auto font-italic font-sm">It is recommended to upload in Validate Only mode until all validations succeed.</p>
   </div>
 
-  <%= submit_tag "Submit", class: "btn btn-primary" %>
+
+  <%= submit_tag "Submit", class: "offset-sm-1 btn btn-primary" %>
 
 <%end%>
 
