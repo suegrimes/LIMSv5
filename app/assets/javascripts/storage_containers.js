@@ -56,8 +56,6 @@ logger("got container type change: "+container_type);
     var container_name = $(".container-name");
     var container_notes = $(".container-notes");
     if ($(this).prop("checked")) {
-      // hide existing - JP 6/17/19
-      $(".existing-container-row").hide();
       // disable existing container select
       container.prop("disabled", true);
       // enable and display new storage container fields
