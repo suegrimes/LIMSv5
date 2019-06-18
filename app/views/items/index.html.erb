@@ -20,10 +20,13 @@
         <th>Total</th>
         <th>Grant</th>
         <th>Recv'd?</th>
-        <th colspan="3"></th>
+        <th class="link-col"></th>
+        <% if can? :edit, Item %><th class="link-col"></th><% end %>
+        <% if can? :delete, Item %><th class="link-col"></th><% end %>
       </tr>
     </thead>
 
+    <tbody>
       <% for item in @items %>
           <%= hidden_field_tag("export_id[]", item.id)  %>
           <tr>
@@ -60,5 +63,6 @@
             <td class="border_bottom_only" colspan="2"><%=h item.notes %></td>
           </tr>
       <% end %> <!-- end of item loop -->
+    </tbody>
     </table>
 <% end %> <!-- end of form -->

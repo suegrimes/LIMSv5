@@ -76,7 +76,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     end
 
     if @rollback_forced
-      flash[:notice] =  "Upload processing successfull, but: ROLLBACK FORCED!"
+      flash[:notice] =  "Upload processing successful, but: ROLLBACK FORCED!"
       render :success
       return
     end
@@ -88,7 +88,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     end
 
     if @dry_run
-      flash[:notice] = "Dry run validations for file: #{@file.original_filename} were successfully"
+      flash[:notice] = "Dry run validations for file: #{@file.original_filename} were successful"
       render :new
     else
       flash[:notice] = "Upload has been processed successfully"
