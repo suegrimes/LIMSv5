@@ -5,6 +5,7 @@ class BulkUploadController < ApplicationController
   layout 'main/main'
 
   def new
+    @upload_ok = params[:upload_ok]
     @accept_suffixes = ".ods,.xlsx,.csv"
   end
 
@@ -14,6 +15,7 @@ class BulkUploadController < ApplicationController
     @validation_passed = 'no'
     # permit file
     @file = params.permit(:file)[:file]
+
 logger.debug "#{self.class}#create file.class: #{@file.class}"
     unless @file
       flash[:error] =  "No file specified"
@@ -86,17 +88,17 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
 
     if !@errors.empty?
       processing_text = (@dry_run ? 'Validation' : 'Upload')
-      flash[:error] =  "#{processing_text} processing failed"
+      flash[:error] =  "#{processing_text} processing failed for file: #{@file.original_filename}"
       render :errors 
       return
     end
 
     if @dry_run
       @validation_passed = 'yes'
-      flash[:notice] = "Dry run validations for file: #{@file.original_filename} were successful"
+      flash[:notice] = "Validation successful for file: #{@file.original_filename}"
       render :new
     else
-      flash[:notice] = "Upload has been processed successfully"
+      flash[:notice] = "Upload successful for file: #{@file.original_filename}"
       render :success
     end
   end
@@ -622,10 +624,10 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
     return ss
   end
 
-  # make everything lower case and replace spaces with underbar
+  # make everything lower case and replace spaces with underbar, remove last char '?' if exists
   def normalize_header(header)
     return nil if header.nil?
-    header.downcase.split.join("_")
+    header.downcase.split.join("_").chomp('?')
   end
 
   # return strign with model names from models_columns structure for error report 

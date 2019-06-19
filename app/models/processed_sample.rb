@@ -31,7 +31,7 @@
 #
 
 class ProcessedSample < ApplicationRecord
-  belongs_to :sample, optional: true
+  belongs_to :sample, optional: false
   belongs_to :patient, optional: true
   belongs_to :user, optional: true, foreign_key: 'updated_by'
   belongs_to :protocol, optional: true
@@ -50,7 +50,9 @@ class ProcessedSample < ApplicationRecord
   validates_uniqueness_of :barcode_key, message: 'is not unique'
   
   def derive_barcode
-    self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
+    if self.barcode_key.blank?
+      self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
+    end
   end
   
   def initial_amt_ug

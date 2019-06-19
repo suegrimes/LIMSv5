@@ -49,8 +49,8 @@ FinderKeys = {
     return (consent_protocol.nil? ? nil : consent_protocol.id)
   end
 
-  def fk_find_protocol_protocol(protocol)
-    Protocol.find_by_protocol_name(protocol)
+  def fk_find_protocol_protocol(protocol_name)
+    protocol = Protocol.find_by_protocol_name(protocol_name)
     return (protocol.nil? ? nil : protocol.id)
   end
 
