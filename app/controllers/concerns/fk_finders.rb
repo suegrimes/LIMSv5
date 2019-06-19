@@ -16,7 +16,8 @@ ForeignKeyFieldToModels = {
   'patient_id' => 'Patient',
   'sample_id' => 'Sample',
   'source_sample_id' => 'Sample',
-  'consent_protocol_id' => 'ConsentProtocol'
+  'consent_protocol_id' => 'ConsentProtocol',
+  'protocol_id' => 'Protocol'
 }
 
 # these should match the keys used in the finder methods defined below

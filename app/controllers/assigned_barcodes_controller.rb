@@ -1,5 +1,5 @@
 class AssignedBarcodesController < ApplicationController
-  layout 'main/samples'
+  layout 'main/main'
  
   # GET /assigned_barcodes
   def index
