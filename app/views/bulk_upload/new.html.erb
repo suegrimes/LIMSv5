@@ -1,4 +1,5 @@
 <h5>Bulk Upload</h5>
+<% @validation_passed ||= 'no' %>
 
 <div class="card">
   <h6 class="card-header">Patients, Samples, Dissections and/or Extractions</h6>
@@ -7,7 +8,7 @@
 <%= form_tag({action: 'create'}, multipart: true) do %>
 
   <div class="form-group row">
-    <label for="file" class="col-sm-2 col-form-label-md">File to upload:</label>
+    <label for="file" class="col-auto col-form-label-md">File to upload:</label>
     <div class="col-auto">
       <%= file_field_tag :file, accept: @accept_suffixes, class: "btn btn-light", style: "width: 40rem" %>
     </div>
@@ -15,24 +16,13 @@
 
   <div class="row-height-20"></div>
 
-  <div class="form-group row">
-    <div class="offset-sm-2 col-auto form-check">
-      <div>
-        <input type="radio" class="form-check-input" name="options" id="dry_run" value="dry_run" autocomplete="off" checked>
-        <label for="dry_run" class="form-check-label">Validate Only &nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input type="radio" class="form-check-input" name="options" id="save_all" value="save" autocomplete="off">
-        <label for="save_all" class="form-check-label">Validate and Save</label>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <p class="offset-sm-2 col-auto font-italic font-sm">It is recommended to upload in Validate Only mode until all validations succeed.</p>
-  </div>
-
-
-  <%= submit_tag "Submit", class: "offset-sm-1 btn btn-primary" %>
-
+  <% if @validation_passed == 'no' %>
+    <%= submit_tag "Validate", name: 'action_type[dry_run]', class: "offset-sm-1 btn btn-primary" %>
+    <%= submit_tag "Upload",  class: "btn btn-secondary", style: "margin-top: .25rem", disabled: true %>
+  <% else %>
+    <%= submit_tag "Validate", class: "offset-sm-1 btn btn-secondary",  style: "margin-top: .25rem", disabled: true %>
+    <%= submit_tag "Upload", name: 'action_type[upload]', class: "btn btn-primary" %>
+  <% end %>
 <%end%>
 
   </div>

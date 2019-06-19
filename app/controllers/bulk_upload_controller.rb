@@ -9,6 +9,9 @@ class BulkUploadController < ApplicationController
   end
 
   def create
+    #deliberate_error_here
+
+    @validation_passed = 'no'
     # permit file
     @file = params.permit(:file)[:file]
 logger.debug "#{self.class}#create file.class: #{@file.class}"
@@ -19,10 +22,10 @@ logger.debug "#{self.class}#create file.class: #{@file.class}"
     end
 
     # dry run option
-    @options = params.permit(:options)[:options]
-logger.debug "@options: #{@options}"
+    @action_type = params[:action_type]
+logger.debug "@action_type: #{@action_type}"
     @dry_run = false
-    if @options == "dry_run" 
+    if @action_type[:dry_run]
       @dry_run = true
     end
 logger.debug "@dry_run: #{@dry_run}"
@@ -82,12 +85,14 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     end
 
     if !@errors.empty?
-      flash[:error] =  "Upload processing failed"
+      processing_text = (@dry_run ? 'Validation' : 'Upload')
+      flash[:error] =  "#{processing_text} processing failed"
       render :errors 
       return
     end
 
     if @dry_run
+      @validation_passed = 'yes'
       flash[:notice] = "Dry run validations for file: #{@file.original_filename} were successful"
       render :new
     else
