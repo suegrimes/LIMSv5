@@ -9,12 +9,17 @@
 
       <!-- default is initially hide the current button - is used on the change container panel -->
       <label style="display: none" class="btn btn-secondary current-button">
-        <input type="radio" name="which_container" value="current" autocomplete="off" checked> Current Container
+        <input type="radio" name="which_container" value="current" autocomplete="off" checked> Back to Current Container
       </label>
 
       <label class="btn btn-secondary change-button">
         <input type="radio" name="which_container" value="other" autocomplete="off" checked> Change Container
       </label>
+
+      <label style="display: none" for="new_storage_container" class="btn btn-secondary new-container-button">New Container
+        <input type="checkbox" style="display:none" autocomplete="off" name="new_storage_container" id="new-container-check">
+      </label>
+
     </div>
   </div>
 
