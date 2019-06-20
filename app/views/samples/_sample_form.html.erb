@@ -1,86 +1,104 @@
 <div class="card">
   <h6 class="card-header">Physical Sample</h6>
-  <div class="card-body">
-
-  <div class="form-group row">
-    <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
-    <div class="col-auto">
-      <%=f.object.barcode_key %>
-    </div>
-
-    <label for="alt_identifier" class="col-auto col-form-label col-form-label-sm">Alt Label:</label>
-    <div class="col-auto">
-      <%=f.text_field(:alt_identifier, size: 12, class: "form-control")%>
-    </div>
-
-    <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">OR Designation:</label>
-    <div class="col-auto">
-      <%=f.collection_select(:tumor_normal, @tumor_normal, :c_value, :c_value, {}, {class: "form-control"}) %>
-    </div>
-  </div>
-	
-  <div class="form-group row">
-    <label for="sample_tissue" class="col-auto col-form-label col-form-label-sm">Sample Site:</label>
-    <div class="col-auto">
-      <%=f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value, {:wraptags => 'none'}, {class: "form-control"})%>
-    </div>
-
-    <label for="left_right" class="col-auto col-form-label col-form-label-sm">Left or Right:</label>
-    <div class="col-auto">
-      <%=f.select(:left_right, [['NA',nil],['L','L'],['R','R']], {:wraptags => 'none'}, {class: "form-control"}) %>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="sample_type" class="col-auto col-form-label col-form-label-sm">Sample Type:</label>
-    <div class="col-auto">
-      <%=f.collection_select(:sample_type, @sample_type, :c_value, :c_value, {}, {class: "form-control"})%>
-    </div>
-
-    <label for="tissue_preservation" class="col-auto col-form-label col-form-label-sm">Preservation:</label>
-    <div class="col-auto">
-      <%=f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value,
+  <table class="table table-borderless table-sm">
+    <tr>
+      <thead></thead>
+      <tbody>
+        <tr>
+          <td class="label">
+            <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
+          </td>
+          <td><%=f.object.barcode_key %></td>          
+          <td class="label">
+            <label for="alt_identifier" class="col-auto col-form-label col-form-label-sm">Alt Label:</label>
+          </td>
+          <td><%=f.text_field(:alt_identifier, size: 12, class: "form-control", style: "width:12rem;")%></td>
+          <td class="label text-nowrap">
+            <label for="tumor_normal" class="col-auto col-form-label col-form-label-sm">OR Designation:</label>            
+          </td>
+          <td>
+            <%=f.collection_select(:tumor_normal, @tumor_normal, :c_value, :c_value, {style: "width:12rem;"}, {class: "form-control"}) %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            <label for="sample_tissue" class="col-auto col-form-label col-form-label-sm">Sample Site:</label>
+          </td>
+          <td>
+            <%=f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value, {:wraptags => 'none'}, {class: "form-control"})%>
+          </td>
+          <td class="label">
+            <label for="left_right" class="col-auto col-form-label col-form-label-sm">Left or Right:</label>    <div class="col-auto">
+          </td>
+          <td>      
+            <%=f.select(:left_right, [['NA',nil],['L','L'],['R','R']], {:wraptags => 'none'}, {class: "form-control"}) %>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label text-nowrap">
+            <label for="sample_type" class="col-auto col-form-label col-form-label-sm">Sample Type:</label>
+          </td>
+          <td>      
+            <%=f.collection_select(:sample_type, @sample_type, :c_value, :c_value, {}, {class: "form-control"})%>
+          </td>
+          <td class="label">
+            <label for="tissue_preservation" class="col-auto col-form-label col-form-label-sm">Preservation:</label>
+          </td>
+          <td> 
+            <%=f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value,
                             {:include_blank => true}, {class: "form-control"})%>
-    </div>
-  </div>
-	
-  <div class="form-group row">
-    <label for="sample_container" class="col-auto col-form-label col-form-label-sm">Container:</label>
-    <div class="col-auto">
-	  <%=f.collection_select(:sample_container, @sample_units, :c_value, :c_value, {}, {class: "form-control"})%>
-    </div>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label">
+            <label for="sample_container" class="col-auto col-form-label col-form-label-sm">Container:</label>
+          </td>
+          <td>
+            <%=f.collection_select(:sample_container, @sample_units, :c_value, :c_value, {}, {class: "form-control"})%>
+          </td>
+          <td class="label">
+            <label for="vial_type" class="col-auto col-form-label col-form-label-sm">Vial Type:</label>
+          </td>
+          <td>
+            <%=f.collection_select(:vial_type, @vial_types, :c_value, :c_value, {:include_blank => true}, {class: "form-control"})%>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+         <tr>
+          <td class="label">           
+            <label for="amount_uom" class="col-auto col-form-label col-form-label-sm">Amt Unit:</label>
+          </td>
+          <td>
+            <%=f.collection_select(:amount_uom, @amount_uom, :c_value, :c_value, {}, {class: "form-control"})%>
+          </td>
+          <td class="label">
+            <label for="amount_initial" class="col-auto col-form-label col-form-label-sm">Initial Amt:</label>
+          </td>
+          <td>      
+            <%=f.text_field :amount_initial, size: 10, class: "form-control" %>
+          </td>
+          <td class="label">            
+            <label for="sample_remaining" class="col-auto col-form-label col-form-label-sm">Rem?:</label>
+          </td>
+          <td><%=f.select(:sample_remaining, %w[Y N], {}, {class: "form-control"})%></td>
+        </tr>
+         <tr>
+          <td>
+            <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
+          </td>
+          <td colspan="5">      
+            <%=f.text_field :comments, cols: 50, class: "form-control" %>
+          </td>
+        </tr>
+      </tbody>
+    </tr>
+  </table>
 
-    <label for="vial_type" class="col-auto col-form-label col-form-label-sm">Vial Type:</label>
-    <div class="col-auto">
-	  <%=f.collection_select(:vial_type, @vial_types, :c_value, :c_value, {:include_blank => true}, {class: "form-control"})%>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="amount_uom" class="col-auto col-form-label col-form-label-sm">Amt Unit:</label>
-    <div class="col-auto">
-      <%=f.collection_select(:amount_uom, @amount_uom, :c_value, :c_value, {}, {class: "form-control"})%>
-    </div>
-
-    <label for="amount_initial" class="col-auto col-form-label col-form-label-sm">Initial Amt:</label>
-    <div class="col-auto">
-      <%=f.text_field :amount_initial, size: 10, class: "form-control" %>
-    </div>
-
-    <label for="sample_remaining" class="col-auto col-form-label col-form-label-sm">Rem?:</label>
-    <div class="col-auto">
-	  <%=f.select(:sample_remaining, %w[Y N], {}, {class: "form-control"})%>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>
-    <div class="col-auto">
-      <%=f.text_area :comments, cols: 80, rows: 2, class: "form-control" %>
-    </div>
-  </div>
-
-  </div> <!-- card body -->
 </div>  <!-- card -->
 
   <%= f.fields_for :sample_storage_container do |c| %>
