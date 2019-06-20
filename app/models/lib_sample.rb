@@ -50,7 +50,7 @@ class LibSample < ApplicationRecord
   before_update :set_index2
 
   def set_index2
-    if self.adapter && self.adapter.runtype_adapter == 'M_10nt_Illumina_UDI'
+    if self.adapter && Adapter::IDS_FORCEI2.include?(self.adapter.id)
       i2tag_id = IndexTag.i2id_for_i1tag(self.index1_tag_id)
       self.index2_tag = IndexTag.find(i2tag_id)
     end
@@ -65,11 +65,11 @@ class LibSample < ApplicationRecord
   end
 
   def index1_tag_nr
-    return (index1_tag.nil? ? '' : index1_tag.index1_code)
+    return (index1_tag.nil? ? '' : index1_tag.index_code)
   end
 
   def index2_tag_nr
-    return (index2_tag.nil? ? '' : index2_tag.index2_code)
+    return (index2_tag.nil? ? '' : index2_tag.index_code)
   end
 
   def index1_tag_seq
@@ -81,11 +81,11 @@ class LibSample < ApplicationRecord
   end
 
   def tag1_nr_seq
-    return (index1_tag.nil? ? '' : [index1_tag.index1_code, '(', index1_tag.tag_sequence, ')'].join)
+    return (index1_tag.nil? ? '' : [index1_tag.index_code, '(', index1_tag.tag_sequence, ')'].join)
   end
 
   def tag2_nr_seq
-    return (index2_tag.nil? ? '' : [index2_tag.index2_code, '(', index2_tag.tag_sequence, ')'].join)
+    return (index2_tag.nil? ? '' : [index2_tag.index_code, '(', index2_tag.tag_sequence, ')'].join)
   end
 
   def tag_sequence

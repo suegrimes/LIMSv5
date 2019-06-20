@@ -38,9 +38,7 @@ class WelcomeController < ApplicationController
         self.current_user.remember_me
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
-      #render :action => 'index'
-      # mhayden: don't really want browser url to be /user_login anymore
-      flash[:notice] = "Login successful"
+      #flash[:notice] = "Login successful"
       redirect_to :root
     else
       @invalid_login_flag = 1;
@@ -51,8 +49,6 @@ class WelcomeController < ApplicationController
 
   def signup
     @user = User.new()
-    # mhayden: no need to specify the default
-    #render :action => 'signup'
   end
   
   def add_user
@@ -64,9 +60,6 @@ class WelcomeController < ApplicationController
 
     self.current_user = @user
     log_entry("Login")
-    # mhayden: don't really want browser url to be /add_user anymore
-    #flash.now[:notice] = "Thanks for signing up!"
-    #render :action => 'index'
     flash[:notice] = "Thanks for signing up!"
     redirect_to :root
 

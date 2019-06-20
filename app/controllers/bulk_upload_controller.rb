@@ -5,12 +5,17 @@ class BulkUploadController < ApplicationController
   layout 'main/main'
 
   def new
+    @upload_ok = params[:upload_ok]
     @accept_suffixes = ".ods,.xlsx,.csv"
   end
 
   def create
+    #deliberate_error_here
+
+    @validation_passed = 'no'
     # permit file
     @file = params.permit(:file)[:file]
+
 logger.debug "#{self.class}#create file.class: #{@file.class}"
     unless @file
       flash[:error] =  "No file specified"
@@ -19,10 +24,10 @@ logger.debug "#{self.class}#create file.class: #{@file.class}"
     end
 
     # dry run option
-    @options = params.permit(:options)[:options]
-logger.debug "@options: #{@options}"
+    @action_type = params[:action_type]
+logger.debug "@action_type: #{@action_type}"
     @dry_run = false
-    if @options == "dry_run" 
+    if @action_type[:dry_run]
       @dry_run = true
     end
 logger.debug "@dry_run: #{@dry_run}"
@@ -82,16 +87,18 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     end
 
     if !@errors.empty?
-      flash[:error] =  "Upload processing failed"
+      processing_text = (@dry_run ? 'Validation' : 'Upload')
+      flash[:error] =  "#{processing_text} processing failed for file: #{@file.original_filename}"
       render :errors 
       return
     end
 
     if @dry_run
-      flash[:notice] = "Dry run validations for file: #{@file.original_filename} were successful"
+      @validation_passed = 'yes'
+      flash[:notice] = "Validation successful for file: #{@file.original_filename}"
       render :new
     else
-      flash[:notice] = "Upload has been processed successfully"
+      flash[:notice] = "Upload successful for file: #{@file.original_filename}"
       render :success
     end
   end
@@ -617,10 +624,10 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
     return ss
   end
 
-  # make everything lower case and replace spaces with underbar
+  # make everything lower case and replace spaces with underbar, remove last char '?' if exists
   def normalize_header(header)
     return nil if header.nil?
-    header.downcase.split.join("_")
+    header.downcase.split.join("_").chomp('?')
   end
 
   # return strign with model names from models_columns structure for error report 

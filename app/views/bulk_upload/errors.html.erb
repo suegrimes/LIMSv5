@@ -1,4 +1,4 @@
-<h5><%="Bulk Upload Errors - File: #{@file.original_filename}"%><h5>
+<h5><%="Bulk Upload Errors - File: #{@file.original_filename}"%></h5>
 
 <table class="table table-bordered table-sm table-font-sm">
 <thead class="thead-light thead-font-sm">
@@ -9,7 +9,9 @@
   </tr>
 </thead>
 
+<% @true_errors = 0 %>
 <% @errors.each do |error| %>
+  <% unless error[2].end_with?('must exist') %><% @true_errors += 1 %><% end %>
   <tr>
     <td><%=error[0]%></td>
     <td><%=error[1]%></td>
@@ -18,3 +20,11 @@
 <% end %>
 
 </table>
+
+<% if @true_errors == 0 %>
+<p class="font-italic font-sm">If only errors are due to having multiple sheets to upload (eg patients, samples) and patients for the
+  samples sheet do not exist yet, or samples for dissections do not exist yet etc, then click <%= link_to 'Ok to Upload', bulk_upload_path(:upload_ok => 'yes') %>
+</p>
+<% end %>
+
+<%= link_to 'Back', 'javascript:history.back()' %>

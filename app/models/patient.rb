@@ -19,6 +19,8 @@ class Patient < ApplicationRecord
   has_many :sample_characteristics
   has_many :samples
 
+  validate :unique_mrn, on: :create
+
   after_save :upd_sample_characteristics
   after_create :upd_na_mrn
 
@@ -66,10 +68,6 @@ class Patient < ApplicationRecord
     return (patients.empty? ? nil : patients[0].id)
   end
 
-  #def self.find_id_from_mrn(mrn)
-  #  return self.find_by_clinical_id_encrypted(key.encrypt(mrn)).id
-  #end
-
   def mrn
     key.decrypt(clinical_id_encrypted)
   end
@@ -110,5 +108,9 @@ class Patient < ApplicationRecord
   protected
   def validate
     errors.add(:clinical_id_encrypted, "mrn must be non-blank") if mrn.blank?
+  end
+
+  def unique_mrn
+    errors.add(:clinical_id_encrypted, "mrn must be unique") unless Patient.find_id_using_mrn(mrn).nil?
   end
 end

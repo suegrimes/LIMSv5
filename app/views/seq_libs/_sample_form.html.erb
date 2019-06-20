@@ -5,12 +5,12 @@
       :update => 'libs_form' %-->
 
   <div class="card">
-    <h6 class="card-header">Libraries</h6>
+    <h6 class="card-header">Sequencing Libraries</h6>
       <table class="table table-borderless table-sm">
         <%= hidden_field_tag(:nr_libs, @new_lib.size) %>
         <thead>
           <tr>            
-            <th><label for="seq_lib_0_barcode_key">Barcode</label></th>
+            <th><label for="seq_lib_0_barcode_key">Lib Barcode</label></th>
             <th><label for="seq_lib_0_lib_name">Lib Name</label></th>
             <th colspan="2"><label for="seq_lib_0_sample_conc">Lib Conc</label></th>
             <th><label for="seq_lib_0_pcr_size">PCR size</label></th>
@@ -43,13 +43,14 @@
                                       {:include_blank => 'Method'}, class: "form-control", style: "width:100px") %></td>
             <td><%= f.collection_select(:adapter_id, @adapters, :id, :runtype_adapter, {},
                                       {:data => {:remote => true, :url => url_for(:action => 'get_adapter_info', :row => i)}, class: "form-control"}) %></td>
-            <td><%= s.collection_select(:index1_tag_id, @index1_tags, :id, :index1_code, {}, class: "form-control") %></td>
-            <td><%= s.collection_select(:index2_tag_id, @index2_tags, :id, :index2_code, {}, class: "form-control") %></td>
-            <td><%= f.text_field(:lib_conc_requested, class: "form-control") %></td>
+            <td><%= s.collection_select(:index1_tag_id, @index1_tags, :id, :index_code, {}, class: "form-control") %></td>
+            <td><%= s.collection_select(:index2_tag_id, @index2_tags, :id, :index_code, {}, class: "form-control") %></td>
+            <td><%= f.text_field(:lib_conc_requested, size: 8, class: "form-control") %></td>
           </tr>
 
           <tr>
-            <td colspan="2"><%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, {value: @lib_samples[i][:source_DNA], placeholder:"-- Source DNA/RNA --", class: "form-control"} %></td>
+            <td></td>
+            <td><%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, {value: @lib_samples[i][:source_DNA], placeholder:"-- Source Sample --", class: "form-control"} %></td>
             <td><%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {:include_blank => 'Align Ref'}, class: "form-control", style: "width:102px") %></td>
             <td colspan="3"><%= f.text_field(:notebook_ref, size: 20, placeholder:"-- Notebook Ref --", class: "form-control")%></td>
             <td colspan="4"><%= f.text_field(:notes, size: 75, placeholder:"-- Notes --", class: "form-control")%></td>

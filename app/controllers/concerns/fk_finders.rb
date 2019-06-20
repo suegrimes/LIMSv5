@@ -1,7 +1,7 @@
 module FkFinders
   extend ActiveSupport::Concern
 
-# map model names to forign key fields that reference them
+# map model names to foreign key fields that reference them
 # this could be done with reflections, but for simplicity
 # and efficiency we specify the ones we care about here
 =begin
@@ -15,7 +15,9 @@ ModelToForeignKeyFields = {
 ForeignKeyFieldToModels = {
   'patient_id' => 'Patient',
   'sample_id' => 'Sample',
-  'source_sample_id' => 'Sample'
+  'source_sample_id' => 'Sample',
+  'consent_protocol_id' => 'ConsentProtocol',
+  'protocol_id' => 'Protocol'
 }
 
 # these should match the keys used in the finder methods defined below
@@ -38,8 +40,18 @@ FinderKeys = {
 
   def fk_find_sample_barcode(barcode)
     sample = Sample.find_by_barcode_key(barcode)
-    return nil if sample.nil?
-    return sample.id
+    return (sample.nil? ? nil : sample.id)
+  end
+
+  def fk_find_consent_protocol_consent_nr(consent_nr)
+    number_only = consent_nr.split('/')[0]
+    consent_protocol = ConsentProtocol.find_by_consent_nr(number_only)
+    return (consent_protocol.nil? ? nil : consent_protocol.id)
+  end
+
+  def fk_find_protocol_protocol(protocol_name)
+    protocol = Protocol.find_by_protocol_name(protocol_name)
+    return (protocol.nil? ? nil : protocol.id)
   end
 
 =begin
