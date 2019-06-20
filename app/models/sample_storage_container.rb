@@ -92,6 +92,11 @@ class SampleStorageContainer < ApplicationRecord
       self.container_type = self.storage_container.container_type
       self.container_name = self.storage_container.container_name
       self.freezer_location_id = self.storage_container.freezer_location_id
+    else
+      # This is needed for bulk upload where StorageContainer model is not accessed directly
+      storage_container = StorageContainer.where("container_type = ? and container_name = ? and freezer_location_id = ?",
+                                                 self.container_type, self.container_name, self.freezer_location_id).first
+      self.storage_container_id = (storage_container.nil? ? nil : storage_container.id)
     end
   end
 end
