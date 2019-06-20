@@ -19,8 +19,8 @@
 
       <%= f.fields_for :lib_samples do |s| %>
       <div class="form-group row">
-        <div class="col-2"><%=s.collection_select(:index1_tag_id, @i1_tags, :id, :index1_code, {}, class: "form-control")%></div>
-        <div class="col-2"><%=s.collection_select(:index2_tag_id, @i2_tags, :id, :index2_code, {}, class: "form-control")%></div>
+        <div class="col-2"><%=s.collection_select(:index1_tag_id, @i1_tags, :id, :index_code, {}, class: "form-control")%></div>
+        <div class="col-2"><%=s.collection_select(:index2_tag_id, @i2_tags, :id, :index_code, {}, class: "form-control")%></div>
         <div class="col-3"><%=s.text_field(:sample_name, class: "form-control")%></div>
         <div class="col-2">
           <%=s.autocomplete_field :source_sample_name, processed_samples_autocomplete_processed_sample_barcode_search_path, class: "form-control" %>
