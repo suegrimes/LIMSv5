@@ -46,7 +46,8 @@ module CategoryValues
   end
 
   def sample_storage_container_values
-    category_values_for([['container', 'container_type']])
+    #category_values_for([['container', 'container_type']])
+    return {:container_type => StorageType.pluck(:container_type)}
   end
 
   def sample_storage_container_mapped_values
