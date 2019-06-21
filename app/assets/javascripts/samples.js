@@ -7,11 +7,14 @@
 
 // samples edit init
 function samples_edit_init() {
-  // new storage management init
   storage_container_init();
-
-  // storage containers edit init
   edit_storage_container_init();
+}
+
+// need update to have access to same functions as edit since renders :edit after validation error
+function samples_update_init() {
+    storage_container_init();
+    edit_storage_container_init();
 }
 
 // sample_characteristics new_sample init
@@ -29,10 +32,8 @@ function sample_characteristics_create_init() {
 // sample_characteristics new_sample init
 function sample_characteristics_edit_init() {
   edit_add_another_sample();
-  // new storage management init
-  storage_container_init();
 
-  // storage containers edit init
+  storage_container_init();
   edit_storage_container_init();
 }
 

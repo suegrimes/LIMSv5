@@ -104,6 +104,7 @@ class SamplesController < ApplicationController
     else
       flash[:error] = 'Error updating sample'
       dropdowns
+      @edit_sample_storage = (@sample.sample_storage_container ? true : false)
       render :action => 'edit'
     end
   end
