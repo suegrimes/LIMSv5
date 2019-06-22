@@ -32,3 +32,6 @@
 Gemfile.lock
 
 **.DS_Store
+
+# Ignore bulk uploaded files
+/public/uploads/bulk/*
