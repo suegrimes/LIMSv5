@@ -22,7 +22,7 @@
   <% end %>
 
   <% if links == 'y' && (can? :delete, patient) && patient.sample_characteristics.count == 0 %>
-      <td><%= link_to 'Delete Patient', patient, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Delete Patient', patient, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
   <% elsif links == 'y' && (can? :delete, patient) %>
       <td class="ltgrey"> Delete Patient </td>
   <% end %>

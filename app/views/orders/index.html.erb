@@ -28,7 +28,7 @@
 	<% end %>
 	
 	<% if can? :delete, order %>
-      <td><%= link_to 'Delete', order, :confirm => 'Are you sure?', :method => :delete %></td> 
+      <td><%= link_to 'Delete', order, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
 	<% end %>
   </tr>
   <% if order.has_comments? %>
