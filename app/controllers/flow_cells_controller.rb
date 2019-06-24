@@ -50,25 +50,35 @@ class FlowCellsController < ApplicationController
   end
   
   def new
-    @flow_cell       = FlowCell.new(:flowcell_date => Date.today)
+    if params[:barcode_string].count("a-zA-Z") > 0
+      flash[:error] = "ERROR: Please enter only digits, '-', ',' - do not enter 'L00' prefix for library"
+      setup_dropdowns
+      @to_date = params[:to_date]
+      @from_date = params[:from_date]
+      render :action => 'setup_params'
+
+    else
+      @flow_cell       = FlowCell.new(:flowcell_date => Date.today)
     
-    # Get sequencing libraries based on parameters entered
-    @condition_array = define_lib_conditions(params)
-    @seq_libs        = SeqLib.includes(:mlib_samples).where(sql_where(@condition_array)).order('lib_status, lib_name').all.to_a
+      # Get sequencing libraries based on parameters entered
+      @condition_array = define_lib_conditions(params)
+      @sql_where = sql_where(@condition_array)
+      @seq_libs  = SeqLib.includes(:mlib_samples).where(sql_where(@condition_array)).order('lib_status, lib_name').all.to_a
                                    
-    # Exclude sequencing libraries which have been included in one or more multiplex libraries
-    if params[:excl_used] && params[:excl_used] == 'Y'  
-      @seq_libs.reject!{|seq_lib| !seq_lib.mlib_samples.empty?}
+      # Exclude sequencing libraries which have been included in one or more multiplex libraries
+      if params[:excl_used] && params[:excl_used] == 'Y'
+        @seq_libs.reject!{|seq_lib| !seq_lib.mlib_samples.empty?}
+      end
+    
+      # Populate flow lanes for each sequencing library
+      @flow_lanes = []
+      @seq_libs.each_with_index do |lib, i|
+        @flow_lanes[i] = FlowLane.new(:lib_conc   => lib.lib_conc_requested,
+                                      :seq_lib_id => lib.id)
+      end
+
+      render :action => 'new'
     end
-    
-    # Populate flow lanes for each sequencing library
-    @flow_lanes = []
-    @seq_libs.each_with_index do |lib, i|
-      @flow_lanes[i] = FlowLane.new(:lib_conc   => lib.lib_conc_requested,
-                                    :seq_lib_id => lib.id)
-    end     
-    
-    render :action => 'new'
   end
   
   # GET /flow_cells/1/edit

@@ -2,19 +2,19 @@
   <% prefix = "flow_lane[]" %>
   <%= fields_for prefix, flow_lane do |n| %>
 	
-    <td><%= n.text_field(:lane_nr, class: "form-control") %></td>
-	  <td><%= n.text_field(:lib_conc, class: "form-control") %></td>
+    <td><%= n.text_field(:lane_nr, size: 4, class: "form-control") %></td>
+	  <td><%= n.text_field(:lib_conc, size: 8, class: "form-control") %></td>
 	
 	<% if Pool::USING_POOLS %>
 	  <% if seq_lib.oligo_pool.blank? && !seq_lib.control_lane? %>
-	  <td><%=n.collection_select(:pool_id, @oligo_pools, :id, :pool_string, {:include_blank => 'Select..'}) %></td>
+	  <td><%=n.collection_select(:pool_id, @oligo_pools, :id, :pool_string, {:include_blank => 'Select..'}, class: "form-control") %></td>
 	  <% else %>
 	  <%= n.hidden_field(:pool_id, :value => seq_lib.pool_id) %>
 	  <td class="ltgrey"><%=n.text_field(:oligo_pool, {:value => seq_lib.oligo_pool, size: 10, readonly: true, style: "background-color:#ddd"}) %>
 	  <% end %>
 	
 	<% else %>
-	  <td><%=n.collection_select(:oligo_pool, @projects, :c_value, :c_value, {:include_blank => 'Select..'})%></td>
+	  <td><%=n.collection_select(:oligo_pool, @projects, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%></td>
 	<% end %>
 	
     <td><%=h seq_lib.lib_barcode %></td>
@@ -26,7 +26,7 @@
 	<td><%=h seq_lib.alignment_ref %></td>
 	<td><%=h format_conc(seq_lib.sample_conc_ngul)%> ng/ul</td>
     <td><%=h format_conc(seq_lib.sample_conc_nm)%> nM</td>	
-	<td><%=n.text_field(:notes) %></td>
+	<td><%=n.text_field(:notes, class: "form-control") %></td>
 	
     <%= n.hidden_field(:sequencing_key, :value => @flow_cell.sequencing_key) %>
     <%= n.hidden_field(:seq_lib_id,   :value => seq_lib.id) %>

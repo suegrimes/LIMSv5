@@ -163,8 +163,10 @@ class SeqLibsController < ApplicationController
     # make this an admin only function in production
     @seq_lib = SeqLib.find(params[:id])
     authorize! :destroy, @seq_lib
-    
+
+    lib_barcode = @seq_lib.barcode_key
     @seq_lib.destroy
+    flash[:notice] = "Sequencing library #{lib_barcode} was successfully deleted"
     redirect_to(seq_libs_url) 
   end
 
