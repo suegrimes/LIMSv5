@@ -27,8 +27,18 @@ class SampleStorageContainer < ApplicationRecord
   belongs_to :storage_container, optional: true
   belongs_to :user, :foreign_key => :updated_by, optional: true
 
+  validate :position_must_be_valid_for_container_type
+
   before_create :upd_sample_name, :upd_storage_container_fields
   before_update :upd_storage_container_fields
+
+  def position_must_be_valid_for_container_type
+    storage_type = StorageType.where('container_type = ?', self.container_type).first
+    valid_positions = storage_type.valid_positions
+    if valid_positions and !valid_positions.include?(self.position_in_container)
+      errors.add(:position_in_container, "is not valid for this container type")
+    end
+  end
 
   def upd_sample_name
     self.sample_name_or_barcode = self.stored_sample.barcode_key
@@ -94,9 +104,9 @@ class SampleStorageContainer < ApplicationRecord
       self.freezer_location_id = self.storage_container.freezer_location_id
     else
       # This is needed for bulk upload where StorageContainer model is not accessed directly
-      storage_container = StorageContainer.where("container_type = ? and container_name = ? and freezer_location_id = ?",
+      new_container = StorageContainer.where("container_type = ? and container_name = ? and freezer_location_id = ?",
                                                  self.container_type, self.container_name, self.freezer_location_id).first
-      self.storage_container_id = (storage_container.nil? ? nil : storage_container.id)
+      self.storage_container_id = (new_container ? new_container.id : self.storage_container_id)
     end
   end
 end

@@ -16,7 +16,7 @@
 	  <td><%=h publication.date_published %></td>
 	  <td><%= link_to 'Show', publication %></td>
     <td><%= link_to 'Edit', edit_publication_path(publication) %></td>
-    <td><%= link_to 'Delete', publication, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Delete', publication, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -42,7 +42,7 @@
     <% end %>
 
     <% if can? :delete, @item %>
-        <td rowspan=2><%= link_to 'Delete', @item, :confirm => 'Are you sure?', :method => :delete %></td>
+        <td rowspan=2><%= link_to 'Delete', @item, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
     <% end %>
   </tr>
   <tr>

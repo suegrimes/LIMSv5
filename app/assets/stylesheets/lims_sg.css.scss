@@ -1,0 +1,16 @@
+/* styles for Rails error messages */
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
+  }
+}
+
+.field_with_errors {
+  .form-control {
+    color: darkred;
+    border-color: darkred;
+  }
+}
+

@@ -84,7 +84,8 @@ class SamplesController < ApplicationController
       unless ok
         dropdowns
         flash[:error] = "Error creating storage container: #{emsg}"
-        render :action => 'edit'
+        redirect_to :action => 'edit'
+        #render :action => 'edit'
         return
       end
     end
@@ -103,6 +104,7 @@ class SamplesController < ApplicationController
     else
       flash[:error] = 'Error updating sample'
       dropdowns
+      @edit_sample_storage = (@sample.sample_storage_container ? true : false)
       render :action => 'edit'
     end
   end

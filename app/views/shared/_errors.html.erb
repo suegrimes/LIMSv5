@@ -1,11 +1,12 @@
 <% if model.errors.any? %>
-<div id="error_explanation">
-  <h6><%= pluralize(model.errors.count, 'error') %> prohibited this <%= model.class.to_s.underscore.humanize.downcase %> from being saved </h6>
-  <p>There were problems with the following fields:</p>
-  <ul>
-      <% model.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-      <% end %>
-  </ul>
-</div>
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        The form contains <%= pluralize(model.errors.count, "error") %>.
+      </div>
+      <ul>
+        <% model.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
 <% end %>
