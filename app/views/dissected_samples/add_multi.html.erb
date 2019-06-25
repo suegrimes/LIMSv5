@@ -69,10 +69,14 @@
   <%= f.fields_for :sample_storage_container do |c| %>
   <div class="form-group row">
     <%#=f.hidden_field(:sample_name_or_barcode, :value => barcode) %>
+    <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
+    <div class="col-auto">
+      <%=c.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {:include_blank => 'Select..'}, {class: "form-control"}) %>
+    </div>
 
     <label for="container_type" class="col-auto col-form-label col-form-label-sm">Container Type:</label>
     <div class="col-auto">
-      <%=c.collection_select(:container_type, @containers, :c_value, :c_value, {include_blank: 'Select..'}, {class: "form-control"}) %>
+      <%=c.collection_select(:container_type, @container_types, :container_type, :container_type, {include_blank: 'Select..'}, {class: "container-type form-control"}) %>
     </div>
 
     <label for="container_name" class="col-auto col-form-label col-form-label-sm">Name/#:</label>
@@ -82,11 +86,6 @@
 
     <!-- make this hidden here, but visible in edit grid -->
     <%=c.text_field(:position_in_container, hidden: true, size: 10, class: "form-control" )  %>
-
-    <label for="freezer_location_id" class="col-auto col-form-label col-form-label-sm">Room/Freezer:</label>
-    <div class="col-auto">
-      <%=c.collection_select(:freezer_location_id, @freezer_locations, :id, :room_and_freezer, {:include_blank => 'Select..'}, {class: "form-control"}) %>
-    </div>
   </div>
   <% end %>
 

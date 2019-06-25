@@ -40,6 +40,7 @@ function sample_characteristics_edit_init() {
 // sample_characteristics show init
 function sample_characteristics_show_init() {
    show_sample();
+   storage_container_init();
 }
 
 //--------------------------------------------------------
