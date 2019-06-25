@@ -139,7 +139,7 @@ protected
     @sample_units       = category_filter(@category_dropdowns, 'sample unit')
     @vial_types         = category_filter(@category_dropdowns, 'vial type')
     @amount_uom         = category_filter(@category_dropdowns, 'unit of measure') 
-    @containers         = category_filter(@category_dropdowns, 'container')
+    #@containers         = category_filter(@category_dropdowns, 'container')
     @freezer_locations  = FreezerLocation.list_all_by_room
     # following for new Storage Management UI
     storage_container_ui_data

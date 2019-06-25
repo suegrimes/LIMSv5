@@ -159,7 +159,7 @@ logger.debug "condition_array: #{condition_array.inspect}"
     @sample = Sample.new(@sample_params)
     @sample.build_sample_storage_container
     sample_dropdowns
-    render :partial => 'samples_form1', :locals => {:sample => @sample, :edit_sample_storage => nil}
+    render :partial => 'samples_form1', :locals => {:sample => @sample, :edit_sample_storage => false}
   end
   
   # PUT /sample_characteristics/1
