@@ -14,7 +14,7 @@ class SampleLocQueriesController < ApplicationController
     
     if @sample_loc_query.valid?
       @condition_array = define_conditions(params)
-      @sample_locs = SampleLoc.find_for_storage_query(@condition_array)
+      @sample_locs = SampleLoc.find_for_storage_query(@condition_array).to_a
     
       flash.now[:notice] = 'No samples found for parameters entered' if @sample_locs.nil?
       render :action => 'index'
