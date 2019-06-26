@@ -43,8 +43,9 @@ class SampleLoc < Sample
   end
 
   def self.find_for_storage_query(condition_array)
-    self.joins(:patient, :sample_characteristic, :sample_storage_containers, {:processed_samples => :sample_storage_container})
-    .where(sql_where(condition_array)).order('samples.patient_id, samples.barcode_key, processed_samples.barcode_key').all
+    self.joins(:patient, :sample_characteristic)
+        .left_joins(:sample_storage_containers, {:processed_samples => :sample_storage_container})
+        .where(sql_where(condition_array)).order('samples.patient_id, samples.barcode_key, processed_samples.barcode_key').all
   end
 
   def self.find_for_export(sample_ids)
