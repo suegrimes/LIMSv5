@@ -71,7 +71,7 @@ class Sample < ApplicationRecord
   #end
   
   before_create :upd_from_source_sample
-  before_save :upd_parent_ids
+  before_save :upd_parent_ids, :del_blank_storage
   after_update :upd_dissections
 
   def upd_from_source_sample
@@ -98,11 +98,15 @@ class Sample < ApplicationRecord
     end
   end
 
+  def del_blank_storage
+    if self.sample_storage_container and self.sample_storage_container.storage_container_id.nil?
+      self.sample_storage_container = nil
+    end
+  end
+
   # After save, look for any dissections from the source sample updated, and update those as well
   def upd_dissections
-    source_sample_id = self.id 
-    #dissected_samples = Sample.find_all_by_source_sample_id(source_sample_id)
-    # find_all_by is depracated, use where
+    source_sample_id = self.id
     # where returns a relation which may respond to empty?
     dissected_samples = Sample.where(source_sample_id: source_sample_id)
     if !dissected_samples.empty?
