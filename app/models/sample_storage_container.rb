@@ -33,10 +33,12 @@ class SampleStorageContainer < ApplicationRecord
   before_update :upd_storage_container_fields
 
   def position_must_be_valid_for_container_type
-    storage_type = StorageType.where('container_type = ?', self.container_type).first
-    valid_positions = storage_type.valid_positions
-    if valid_positions and !valid_positions.include?(self.position_in_container)
-      errors.add(:position_in_container, "is not valid for this container type")
+    unless self.container_type.nil?
+      storage_type = StorageType.where('container_type = ?', self.container_type).first
+      valid_positions = (storage_type.nil? ? nil : storage_type.valid_positions)
+      if valid_positions and !valid_positions.include?(self.position_in_container)
+        errors.add(:position_in_container, "is not valid for this container type")
+      end
     end
   end
 

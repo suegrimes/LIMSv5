@@ -167,7 +167,6 @@ logger.debug "condition_array: #{condition_array.inspect}"
     @sample_characteristic = SampleCharacteristic.find(params[:id])
     if params[:sample]
       params[:sample].merge!(:sample_characteristic_id  => @sample_characteristic.id)
-      #@sample = Sample.new(params[:sample])
       @sample = Sample.new(sample_params)
     end
 
