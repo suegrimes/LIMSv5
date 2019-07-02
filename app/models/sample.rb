@@ -239,7 +239,7 @@ class Sample < ApplicationRecord
   end
   
   def self.count_samples_in_range(rstart, rend)
-    return self.count(:conditions => ["source_sample_id IS NULL AND CAST(barcode_key AS UNSIGNED) BETWEEN ? AND ?", rstart, rend])
+    return self.where("source_sample_id IS NULL AND CAST(barcode_key AS UNSIGNED) BETWEEN ? AND ?", rstart, rend).count
   end
  
 end
