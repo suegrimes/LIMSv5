@@ -354,8 +354,8 @@ private
   end
 
   def samples_attributes
-    [:patient_id, :barcode_key, :tumor_normal, :sample_tissue, :left_right, :sample_type,
-     :tissue_preservation, :sample_container, :vial_type, :amount_uom, :amount_initial,
+    [:patient_id, :barcode_key, :alt_identifier, :tumor_normal, :sample_tissue, :left_right,
+     :sample_type, :tissue_preservation, :sample_container, :vial_type, :amount_uom, :amount_initial,
      :sample_remaining, :comments,
      sample_storage_container_attributes: [
        :sample_name_or_barcode, :container_type, :container_name,

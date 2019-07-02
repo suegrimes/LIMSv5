@@ -28,7 +28,7 @@
             <%=f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value, {:wraptags => 'none'}, {class: "form-control"})%>
           </td>
           <td class="label">
-            <label for="left_right" class="col-auto col-form-label col-form-label-sm">Left or Right:</label>    <div class="col-auto">
+            <label for="left_right" class="col-auto col-form-label col-form-label-sm">Left or Right:</label>
           </td>
           <td>      
             <%=f.select(:left_right, [['NA',nil],['L','L'],['R','R']], {:wraptags => 'none'}, {class: "form-control"}) %>
