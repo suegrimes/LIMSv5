@@ -201,7 +201,7 @@ protected
   def create_params
     params.require(:flow_cell).permit(:flowcell_date, :machine_type, :nr_bases_read1, :nr_bases_read2, :nr_bases_index1,
                                       :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
-                                      :notes,
+                                      :notes, :sequencing_date,
                    flow_lanes_attributes: [:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key,
                                            :seq_lib_id, :lib_barcode, :lib_name, :lib_conc_uom, :adapter_id,
                                            :alignment_ref_id, :alignment_ref])
@@ -210,7 +210,7 @@ protected
   def update_params
     params.require(:flow_cell).permit(:flowcell_date, :machine_type, :nr_bases_read1, :nr_bases_read2, :nr_bases_index1,
                                       :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
-                                      :notes, :sequencing_key, :seq_machine_id, :seq_run_nr, :flowcell_status)
+                                      :notes, :sequencing_date, :sequencing_key, :seq_machine_id, :seq_run_nr, :flowcell_status)
   end
 
   def flow_lane_create_params(flow_lane)

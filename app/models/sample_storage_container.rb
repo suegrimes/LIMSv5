@@ -19,8 +19,6 @@
 #
 
 class SampleStorageContainer < ApplicationRecord
-  #belongs_to :freezer_location
-  #belongs_to :stored_sample, :polymorphic => true
   # Rails 5 defaults to required: true, so make it explicitly optional
   #belongs_to :freezer_location, optional: true
   belongs_to :stored_sample, optional: true, polymorphic: true
@@ -33,10 +31,12 @@ class SampleStorageContainer < ApplicationRecord
   before_update :upd_storage_container_fields
 
   def position_must_be_valid_for_container_type
-    storage_type = StorageType.where('container_type = ?', self.container_type).first
-    valid_positions = storage_type.valid_positions
-    if valid_positions and !valid_positions.include?(self.position_in_container)
-      errors.add(:position_in_container, "is not valid for this container type")
+    unless self.container_type.nil?
+      storage_type = StorageType.where('container_type = ?', self.container_type).first
+      valid_positions = (storage_type.nil? ? nil : storage_type.valid_positions)
+      if valid_positions and !valid_positions.include?(self.position_in_container)
+        errors.add(:position_in_container, "is not valid for this container type")
+      end
     end
   end
 
@@ -95,7 +95,7 @@ class SampleStorageContainer < ApplicationRecord
   #  self.where('container_type > ""').order(:container_type).uniq.pluck(:container_type)
   #end
 
-  # Delete these redundant fields unless need to keep here for query efficiency
+  # Delete these redundant fields unless need to keep here for query efficiency (or may need for bulk upload?)
   # keep redundant fields in sync with the storage container it belongs to
   def upd_storage_container_fields
     if self.storage_container

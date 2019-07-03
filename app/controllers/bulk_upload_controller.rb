@@ -115,7 +115,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     @sheet_info = {
       patients: { models: [Patient] },
       samples: { models: [SampleCharacteristic, Sample] },
-      samplelocs: { models: [SampleStorageContainer] },
+      sample_locs: { models: [SampleStorageContainer] },
       dissections: { models: [Sample, SampleStorageContainer] },
       extractions: { models: [ProcessedSample, SampleStorageContainer] }
     }
@@ -127,7 +127,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     @sheet_results = {
       patients: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       samples: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
-      samplelocs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
+      sample_locs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       dissections: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       extractions: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
     }

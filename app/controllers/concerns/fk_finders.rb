@@ -16,6 +16,7 @@ ForeignKeyFieldToModels = {
   'patient_id' => 'Patient',
   'sample_id' => 'Sample',
   'source_sample_id' => 'Sample',
+  'stored_sample_id' => 'Sample',
   'consent_protocol_id' => 'ConsentProtocol',
   'protocol_id' => 'Protocol'
 }
@@ -41,6 +42,10 @@ FinderKeys = {
   def fk_find_sample_barcode(barcode)
     sample = Sample.find_by_barcode_key(barcode)
     return (sample.nil? ? nil : sample.id)
+  end
+
+  def fk_find_sample_storage_container_barcode(barcode)
+    return fk_find_sample_barcode(barcode)
   end
 
   def fk_find_consent_protocol_consent_nr(consent_nr)
