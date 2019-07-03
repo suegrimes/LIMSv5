@@ -181,7 +181,7 @@ protected
       :final_rin_nr, :comments, :updated_by,
       {sample_storage_container_attributes: [
             :sample_name_or_barcode, :container_type, :container_name,
-            :position_in_container, :freezer_location_id
+            :position_in_container, :storage_container_id, :freezer_location_id, :notes
       ]}
     )
   end
