@@ -118,7 +118,7 @@ hr.down-shadow {
 }
 
 select.form-control:not([size]):not([multiple]) {
-  height: calc(100% - 0.25rem) !important;
+  height: 1.65rem !important;  
 }
 
 #libs_form {
@@ -169,18 +169,24 @@ select#rpt_type {
 /* labels */
 .label {
   text-align:right;
+  white-space: nowrap;
 }
 
 .set-field-width {
   /*width:33%;*/
 }
 
+/* Tables */
 .table-borderless td {
   border:0;
 }
 
 td.grey-row-divider {
   border-top:2px solid #dee2e6 !important;
+}
+
+.nested-table td {
+  padding:0;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
