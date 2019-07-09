@@ -51,10 +51,10 @@
       </td>
       <td>
         <label for="trim_bases" class="col-form-label col-form-label-sm">Trim Bases:</label>
-        <%= f.text_field(:trim_bases, :size => 6, class: "form-control", style: "width:4rem" )%>
+        <%= f.text_field(:trim_bases, :size => 6, class: "form-control", style: "width:6rem" )%>
       <td>
         <label for="oligo_pool" class="col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
-        <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control", style: "width:4rem" ) %>
+        <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control", style: "width:6rem" ) %>
       </td>
     </tr>
     <tr>
