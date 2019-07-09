@@ -2,97 +2,103 @@
 
 <div class="card">
   <h6 class="card-header">FlowCell Details</h6>
-  <div class="card-body">
-    <div class="form-group row">
-      <label for="flowcell_date" class="col-auto col-form-label">Date:</label>
-      <div class="col-auto">
-        <%= f.date_field(:flowcell_date, class: "form-control") %>
-      </div>
+  <table class="table table-sm table-borderless">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="label"><label for="flowcell_date" class="col-form-label">Date:</label></td>
+      <td><%= f.date_field(:flowcell_date, class: "form-control") %></td>
 
       <% if f.object.new_record? %>
-        <label for="machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
-        <div class="col-auto">
-          <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
-        </div>
+      <td class="label"><label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label></td>
+      <td>
+        <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+      </td>
       <% else %>
-        <label for="machine_name_and_type" class="col-auto col-form-label col-form-label-sm">Seq Machine:</label>
-        <div class="col-auto">
-          <%=h (f.object.seq_machine ? f.object.seq_machine.machine_name_and_type : ['N/A', '(', f.object.machine_type, ')'].join) %>
-        </div>
+      <td class="label"><label for="machine_name_and_type" class="col-form-label col-form-label-sm">Seq Machine:</label></td>
+      <td>
+        <%=h (f.object.seq_machine ? f.object.seq_machine.machine_name_and_type : ['N/A', '(', f.object.machine_type, ')'].join) %>
+      </td> 
       <% end %>
-
-      <label for="partial_flowcell" class="col-auto col-form-label col-form-label-sm">Partial FlowCell?</label>
-      <div class="col-auto">
+ 
       <% if f.object.new_record? %>
-        <%= select_tag :partial_flowcell, options_for_select(%w{N Y}, selected_value=@partial_flowcell), class: "form-control" %>
+      <td class="label"><label for="partial_flowcell" class="col-form-label col-form-label-sm">Partial FlowCell?</label></td>
+      <td><%= select_tag :partial_flowcell, options_for_select(%w{N Y}, selected_value=@partial_flowcell), class: "form-control" %></td>
       <% else %>
-        <%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %>
+      <td class="label"><label for="partial_flowcell" class="col-form-label col-form-label-sm">Partial FlowCell?</label></td>
+      <td><%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %></td>
       <% end %>
-      </div>
+    </tr>
 
-      <% if !f.object.new_record? && (can? :new, AlignmentRef) %>
-        <label for="flowcell_status" class="col-auto col-form-label col-form-label-sm">Status:</label>
-        <div class="col-auto">
-          <%= f.select(:flowcell_status, FlowCell::STATUS, class: "form-control") %>
-        </div>
-      <% end %>
-    </div>
+    <% if !f.object.new_record? && (can? :new, AlignmentRef) %>
+    <tr>
+      <td class="label"><label for="flowcell_status" class="col-form-label col-form-label-sm">Status:</label></td>
+      <td><%= f.select(:flowcell_status, FlowCell::STATUS, class: "form-control") %></td>
+      <td colspan="4"></td>
+    </tr>
+    <% end %>
 
-    <div class="form-group row">
-      <div class="col-sm-2"><strong>Read Lengths</strong></div>
-      <label for="nr_bases_read1" class="col-form-label col-form-label-sm">Read1:</label>
-      <div class="col-sm-1">
-        <%= f.text_field :nr_bases_read1, class: "form-control" %>
-      </div>
-
-      <label for="nr_bases_read1" class="col-form-label col-form-label-sm">Read2:</label>
-      <div class="col-sm-1">
-        <%= f.text_field :nr_bases_read2, class: "form-control" %>
-      </div>
-
-      <label for="nr_bases_index1" class="col-form-label col-form-label-sm">Index1:</label>
-      <div class="col-sm-1">
-        <%= f.text_field :nr_bases_index1, class: "form-control" %>
-      </div>
-
-      <label for="nr_bases_index2" class="col-form-label col-form-label-sm">Index2:</label>
-      <div class="col-sm-1">
-        <%= f.text_field :nr_bases_index2, class: "form-control" %>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <div class="col-sm-2"><strong>Kit Versions</strong></div>
-      <label for="cluster_kit" class="col-form-label col-form-label-sm">Cluster Kit:</label>
-      <div class="col-sm-2">
-        <%= f.collection_select(:cluster_kit, @cluster_kits, :c_value, :c_value, {}, class: "form-control") %>
-      </div>
-
-      <label for="sequencing_kit" class="col-form-label col-form-label-sm">Sequencing Kit:</label>
-      <div class="col-sm-2">
-        <%= f.collection_select(:sequencing_kit, @seq_kits, :c_value, :c_value, {}, class: "form-control") %>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for="hiseq_xref" class="col-auto col-form-label col-form-label-sm">Alt Run#:</label>
-      <div class="col-auto">
-        <%= f.text_field(:hiseq_xref, size: 30, class: "form-control") %>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for=run_description" class="col-auto col-form-label col-form-label-sm">Run Description:</label>
-      <div class="col-auto">
-        <%=f.text_field(:run_description, :size => 60, class: "form-control") %>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for=notes" class="col-auto col-form-label col-form-label-sm">Notes:</label>
-      <div class="col-auto">
-        <%=f.text_field(:notes, :size => 60, class: "form-control") %>
-      </div>
-    </div>
-  </div>
-</div>
+    <tr>
+      <th colspan="2" class="label">Read Lengths:&nbsp;&nbsp;</th>
+      <td>
+        <table class="nested-table table-borderless">
+          <td><label for="nr_bases_read1" class="col-form-label col-form-label-sm">Read1:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.text_field :nr_bases_read1, class: "form-control", style: "width:6rem" %></td>
+        </table>
+      </td>
+      <td>
+        <table class="nested-table table-borderless">
+          <td><label for="nr_bases_read2" class="col-form-label col-form-label-sm">Read2:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.text_field :nr_bases_read2, class: "form-control", style: "width:6rem"%></td>
+        </table>     
+      </td>
+      <td>
+        <table class="nested-table table-borderless">
+          <td><label for="nr_bases_index1" class="col-form-label col-form-label-sm">Index1:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.text_field :nr_bases_index1, class: "form-control", style: "width:6rem" %></td>
+        </table>         
+      </td>
+      <td> 
+        <table class="nested-table table-borderless">
+          <td><label for="nr_bases_index2" class="col-form-label col-form-label-sm">Index2:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.text_field :nr_bases_index2, class: "form-control", style: "width:6rem" %></td>
+        </table>      
+      </td>
+    </tr>
+    <tr>
+      <th colspan="2" class="label">Kit Versions:&nbsp;&nbsp;</th>
+      <td colspan="2">
+        <table class="nested-table table-borderless">
+          <td><label for="cluster_kit" class="col-form-label col-form-label-sm">Cluster Kit:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.collection_select(:cluster_kit, @cluster_kits, :c_value, :c_value, {}, class: "form-control") %></td>
+        </table>
+      </td>
+      <td colspan="2">
+        <table class="nested-table table-borderless">
+          <td><label for="sequencing_kit" class="col-form-label col-form-label-sm">Sequencing Kit:</label></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.collection_select(:sequencing_kit, @seq_kits, :c_value, :c_value, {}, class: "form-control") %></td>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td class="label"><label for="hiseq_xref" class="col-form-label col-form-label-sm">Alt Run#:</label></td>
+      <td colspan="2"><%= f.text_field(:hiseq_xref, size: 30, class: "form-control") %></td>
+      <td class="label"><label for=run_description" class="col-form-label col-form-label-sm">Run Description:</label></td>
+      <td colspan="2"><%=f.text_field(:run_description, :size => 60, class: "form-control") %></td>
+    </tr>
+    <tr>
+      <td class="label"><label for=notes" class="col-form-label col-form-label-sm">Notes:</label></td>
+      <td colspan="3"><%=f.text_field(:notes, :size => 60, class: "form-control") %></td>
+      <td colspan="2"></td>
+    </tr>
+  </tbody>
+  </table>
+  
+</div><!--/card -->
