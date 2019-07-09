@@ -177,7 +177,7 @@ select#rpt_type {
 }
 
 /* Tables */
-.table-borderless td {
+.table-borderless td, .table-borderless th {
   border:0;
 }
 
