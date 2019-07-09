@@ -7,7 +7,7 @@
 
     <%= hidden_field_tag("export_ids_all", @sample_locs.pluck(:id).uniq) %>
 
-<table class="table table-bordered table-sm table-font-sm">
+  <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
     <th>Patient ID</th>
@@ -18,6 +18,7 @@
     <th>Sample Site</th>
     <th>Preservation</th>
     <th>Tumor/Normal</th>
+    <th>Rem?</th>
     <th>Room/Freezer</th>
     <th>Container/Position</th>
   </tr>
@@ -38,6 +39,7 @@
       <td><%=h sample_loc.sample_tissue %></td>
       <td><%=h sample_loc.tissue_preservation %></td>
       <td><%=h sample_loc.tumor_normal %></td>
+      <td><%=h sample_loc.sample_remaining %></td>
       <td><%=h sample_loc.room_and_freezer %></td>
       <td><% if can? :edit, sample_loc %>
           <%=link_to sample_loc.container_and_position, edit_sample_loc_path(sample_loc) %>
@@ -62,6 +64,7 @@
         <td><%=h sample_loc.sample_tissue %></td>
         <td><%=h sample_loc.tissue_preservation %></td>
         <td><%=h sample_loc.tumor_normal %></td>
+        <td><%=h psample.psample_remaining %></td>
         <td><%=h psample.room_and_freezer %></td>
         <td><% if can? :edit, sample_loc %>
               <%=link_to psample.container_and_position, edit_sample_loc_path(psample) %>
