@@ -1,98 +1,82 @@
   <div class="card">
     <h6 class="card-header">Multiplex Library Details</h6>
-    <div class="card-body">
-
-      <div class="form-group row">
-        <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
-        <div class="col-auto">
-          <% if @seq_lib.new_record? || @seq_lib.dummy_barcode == false %><%= f.text_field :barcode_key, class: "form-control" %>
-          <% else %>&nbsp;<% end %>
-        </div>
-
-        <label for="lib_name" class="col-auto col-form-label col-form-label-sm">Lib Name:</label>
-        <div class="col-auto">
-          <%= f.text_field(:lib_name, class: "form-control") %>
-        </div>
-
-        <label for="adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label>
-        <div class="col-auto">
-          <%=h f.object.adapter_name %> <%=f.hidden_field(:adapter_id) %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="preparation_date" class="col-auto col-form-label col-form-label-sm">Prep Date:</label>
-        <div class="col-auto">
-          <%= f.date_field(:preparation_date, class: "form-control") %>
-        </div>
-
-        <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner:</label>
-        <div class="col-auto">
-          <%= f.select(:owner, @owners, {}, class: "form-control") %>
-        </div>
-
-        <label for="protocol_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label>
-        <div class="col-auto">
-          <%= f.collection_select(:protocol_id, @protocols, :id, :protocol_name,
+    <table class="table table-sm table-borderless">
+    <thead>
+    </thead>
+    <tbody>
+    <tr>
+      <td><label for="barcode_key" class="col-form-label col-form-label-sm">Barcode:</label>
+        <% if @seq_lib.new_record? || @seq_lib.dummy_barcode == false %><%= f.text_field :barcode_key, class: "form-control" %>
+        <% else %>&nbsp;<% end %>
+      </td>
+      <td><label for="lib_name" class="col-form-label col-form-label-sm">Lib Name:</label>
+        <% if @seq_lib.new_record? || @seq_lib.dummy_barcode == false %><%= f.text_field :barcode_key, class: "form-control" %>
+        <% else %>&nbsp;<% end %>
+      </td>
+      <td><label for="adapter_id" class="col-form-label col-form-label-sm">Runtype Adapter:</label>
+        <div><%=h f.object.adapter_name %> <%=f.hidden_field(:adapter_id) %></div>
+      </td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+      <td><label for="preparation_date" class="col-form-label col-form-label-sm">Prep Date:</label><%= f.date_field(:preparation_date, class: "form-control") %></td>
+      <td><label for="owner" class="col-form-label col-form-label-sm">Owner:</label><%= f.select(:owner, @owners, {}, class: "form-control") %></td>
+      <td><label for="protocol_id" class="col-form-label col-form-label-sm">Protocol:</label>
+        <%= f.collection_select(:protocol_id, @protocols, :id, :protocol_name,
                                   {:include_blank => 'Select Protocol'}, class: "form-control") %>
-        </div>
-      </div>
-      <br/>
-
-      <div class="form-group row">
-        <label for="pcr_size" class="col-auto col-form-label col-form-label-sm">PCR Size:</label>
-        <div class="col-sm-1">
+      </td>
+    </tr>
+    <tr>
+      <td><label for="pcr_size" class="col-form-label col-form-label-sm">PCR Size:</label>
           <%= f.text_field(:pcr_size, :size => 6, class: "form-control") %>
-        </div>
-
-        <label for="sample_conc" class="col-auto col-form-label col-form-label-sm">Library Conc:</label>
-        <div class="col-sm-1"><%= f.text_field(:sample_conc, :size => 6, :value => format_conc(f.object.sample_conc, ''), class: "form-control")%></div>
-        <div class="col-xs-2"><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control") %></div>
-
-        <label for="lib_conc_requested" class="col-auto col-form-label col-form-label-sm">FlowCell Conc:</label>
-        <div class="col-sm-1"><%= f.text_field(:lib_conc_requested, :size => 6, :value => format_conc(f.object.lib_conc_requested, ''), class: "form-control") %></div>
-        <div class="col-xs-1 col-form-label-sm">pM</div>
-      </div>
-      <br/>
-
-      <div class="form-group row">
-        <label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label>
-        <div class="col-auto">
-          <%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %>
-        </div>
-
-        <label for="trim_bases" class="col-auto col-form-label col-form-label-sm">Trim Bases:</label>
-        <div class="col-auto">
-          <%= f.text_field(:trim_bases, :size => 6, class: "form-control") %>
-        </div>
-
-        <label for="oligo_pool" class="col-auto col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
-        <div class="col-auto">
-          <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control") %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="notebook_ref" class="col-auto col-form-label col-form-label-sm">Notebook Ref:</label>
-        <div class="col-auto">
-          <%= f.text_field(:notebook_ref, size: 50, class: "form-control") %>
-        </div>
-
-        <label for="project" class="col-auto col-form-label col-form-label-sm">Project:</label>
-        <div class="col-auto">
-          <%= f.collection_select(:project, @projects, :c_value, :c_value,
+      </td>
+      <td><label for="sample_conc" class="col-form-label col-form-label-sm">Library Conc:</label>
+        <table class="nested-table table-borderless">
+          <td><%= f.text_field(:sample_conc, :size => 6, :value => format_conc(f.object.sample_conc, ''), class: "form-control")%></td>
+          <td>&nbsp;&nbsp;</td>
+          <td><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control") %></td>
+        </table>
+      </td>
+      <td><label for="lib_conc_requested" class="col-form-label col-form-label-sm">FlowCell Conc:</label>
+        <table class="nested-table table-borderless">
+          <td><%= f.text_field(:lib_conc_requested, :size => 6, :value => format_conc(f.object.lib_conc_requested, ''), class: "form-control") %></td>       
+          <td>&nbsp;&nbsp;pM</td>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="alignment_ref_id" class="col-form-label col-form-label-sm">Align Ref:</label>
+        <%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %>
+      </td>
+      <td>
+        <label for="trim_bases" class="col-form-label col-form-label-sm">Trim Bases:</label>
+        <%= f.text_field(:trim_bases, :size => 6, class: "form-control", style: "width:6rem" )%>
+      <td>
+        <label for="oligo_pool" class="col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
+        <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control", style: "width:6rem" ) %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <label for="notebook_ref" class="col-form-label col-form-label-sm">Notebook Ref:</label>
+        <%= f.text_field(:notebook_ref, size: 50, class: "form-control") %>
+      </td>
+      <td>
+        <label for="project" class="col-form-label col-form-label-sm">Project:</label>
+        <%= f.collection_select(:project, @projects, :c_value, :c_value,
                                   {:include_blank => 'Select Project'}, class: "form-control") %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="notes" class="col-auto col-form-label col-form-label-sm">Library Notes:</label>
-        <div class="col-auto">
-          <%= f.text_field(:notes, size: 80, class: "form-control") %>
-        </div>
-      </div>
-    </div>
-  </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><label for="notes" class="col-form-label col-form-label-sm">Library Notes:</label>
+        <%= f.text_field(:notes, size: 50, class: "form-control") %>
+      </td>
+      <td></td>
+    </tr>
+    </tbody>
+    </table>
+  </div><!-- /card -->   
 
   <%= f.fields_for :sample_storage_container do |c| %>
       <% if @edit_lib_storage %>
