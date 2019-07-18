@@ -20,7 +20,8 @@ class HistologiesController < ApplicationController
         # Determine next increment number for barcode suffix (only use this if allowing >1 H&E slide per sample)
         #he_barcode = Histology.next_he_barcode(@sample.id, @sample.barcode_key)
         @histology = Histology.new(:sample_id => @sample.id,
-                                   :he_barcode_key => Histology.new_he_barcode(@sample.barcode_key))
+                                   :he_barcode_key => Histology.new_he_barcode(@sample.barcode_key),
+                                   :he_date => Date.today)
         #@histology = @sample.build_histology 
         render :action => 'new'
         
@@ -36,7 +37,7 @@ class HistologiesController < ApplicationController
   end
   
   def create
-    @histology = Histology.new(params[:histology])
+    @histology = Histology.new(create_params)
 
     if @histology.save
       flash[:notice] = 'H&E slide was successfully created.'
@@ -65,7 +66,7 @@ class HistologiesController < ApplicationController
   def update
     @histology = Histology.find(params[:id])
     
-    if @histology.update_attributes(params[:histology])
+    if @histology.update_attributes(update_params)
       flash[:notice] = 'H&E slide was successfully updated'
       redirect_to(@histology)
     #render :action => 'debug'

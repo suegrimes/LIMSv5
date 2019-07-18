@@ -44,7 +44,7 @@ class SamplesController < ApplicationController
         when 'D', 'R', 'N', 'P'
           redirect_to :controller => :processed_samples, :action => :edit_by_barcode, :barcode_key => params[:barcode_key]      
         else
-          flash[:notice] = 'Invalid barcode - please try again'
+          flash[:notice] = 'Invalid barcode type - please try again'
           redirect_to :action => :edit_params
       end
     end
