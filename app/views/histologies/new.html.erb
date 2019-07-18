@@ -12,10 +12,11 @@
 
 <%= form_for(@histology) do |f| %>
   <%= render '/shared/errors', model: @histology %>
+  <%= f.hidden_field(:sample_id) %>
 
   <%= render :partial => 'histology_form', :locals => {:f => f} %>
 
-  <%= f.submit "Save" %>
+  <%= f.submit "Save", class: "btn btn-primary" %>
 <% end %>
 
 
