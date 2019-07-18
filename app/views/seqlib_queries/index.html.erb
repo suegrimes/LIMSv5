@@ -9,61 +9,69 @@
   <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
     <thead class="thead-light">
     <tr>
-  	  <th>Lib Barcode</th>
-	    <th>Patient ID</th>
-      <th>Library Name</th>
-      <th>Source DNA</th>
-	    <th>Owner</th>
-	    <th>Prep Date</th>
-	    <th>M/S</th>
-	    <th>Adapter</th>
-	    <th colspan="2">Library Conc</th>
-	    <th>Project</th>
-	    <th>Pool</th>
-	    <th>Alignment Ref</th>
-	    <th># Seq Lanes</th>
-      <% if can? :edit, SeqLib %>
-        <th class="link-col"></th>
-      <% end %>
-      <th class="link-col"></th>
-      <th class="link-col"></th>
+		<th>Lib Barcode</th>
+		<th>Patient ID</th>
+		<th>Library Name</th>
+		<th>Source DNA</th>
+		<th>Owner</th>
+		<th>Prep Date</th>
+		<th>M/S</th>
+		<th>Adapter</th>
+		<th>Library Conc</th>
+		<th>-</th>
+		<th>Project</th>
+		<th>Pool</th>
+		<th>Alignment Ref</th>
+		<th># Seq Lanes</th>
+		<th class="link-col"></th>
+		<th class="link-col"></th>
+		<th class="link-col"></th>
     </tr>
     </thead>
 
 <% for seq_lib in @seq_libs %>
   <tr>
     <td><%= link_to seq_lib.lib_barcode, seq_lib %></td>
-	  <td>
-	    <% patient_ids = [] %>
-	    <% seq_lib.lib_samples.each do |lib_sample| %>
-	      <% patient_ids.push(lib_sample.processed_sample.patient_id) if lib_sample.processed_sample && !lib_sample.processed_sample.patient_id.nil? %>
-	    <% end %>
-	    <%=h patient_ids.uniq.join(', ') if patient_ids.size > 0 %>
-	  </td>
+	<td>
+		<% patient_ids = [] %>
+		<% seq_lib.lib_samples.each do |lib_sample| %>
+			<% patient_ids.push(lib_sample.processed_sample.patient_id) if lib_sample.processed_sample && !lib_sample.processed_sample.patient_id.nil? %>
+		<% end %>
+		<%=h patient_ids.uniq.join(', ') if patient_ids.size > 0 %>
+	</td>
     <td><%=h seq_lib.lib_name %></td>
-    <td><% if seq_lib.library_type == 'S' %><%=h seq_lib.lib_samples[0].source_DNA %><% end %></td>
-	  <td><%=h seq_lib.owner_abbrev %></td>
-	  <td><%=h seq_lib.preparation_date %></td>
-	  <td style="text-align:center"><%=h seq_lib.library_type %></td>
-	  <td><%=h seq_lib.adapter_name %></td>
-	  <td><%=h format_conc(seq_lib.sample_conc_ngul)%> ng/ul</td>
+    <td>
+		<% if seq_lib.library_type == 'S' %>
+			<%=h seq_lib.lib_samples[0].source_DNA %>
+		<% else %>
+			&nbsp;
+		<% end %>
+	</td>
+	<td><%=h seq_lib.owner_abbrev %></td>
+	<td><%=h seq_lib.preparation_date %></td>
+	<td style="text-align:center"><%=h seq_lib.library_type %></td>
+	<td><%=h seq_lib.adapter_name %></td>
+	<td><%=h format_conc(seq_lib.sample_conc_ngul)%> ng/ul</td>
     <td><%=h format_conc(seq_lib.sample_conc_nm)%> nM</td>
-	  <td><%=h seq_lib.project %></td>
-	  <td><%=h seq_lib.oligo_pool %></td>
-	  <td><%=h seq_lib.alignment_ref %></td>
-	  <td style="text-align:center"><%=h seq_lib.seq_lane_cnt%></td>
-
-    <% if can? :edit, seq_lib %>
-      <td><%= link_to 'Edit',   edit_seq_lib_path(seq_lib) %></td>
-	  <% end %>
-	
-	  <td><%= link_to 'Attach', new_attached_file_path(:rec_type => 'seq_lib', :obj_id => seq_lib.id) %></td>
-	
-	  <% if seq_lib.lib_status == 'L' and (can? :delete, seq_lib) %>
-	    <td><%= link_to 'Delete', seq_lib, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
-    <% else %>
-      <td class="ltgrey"> Delete </td>
-	  <% end %>
+	<td><%=h seq_lib.project %></td>
+	<td><%=h seq_lib.oligo_pool %></td>
+	<td><%=h seq_lib.alignment_ref %></td>
+	<td style="text-align:center"><%=h seq_lib.seq_lane_cnt%></td>
+    <td>
+	  <% if can? :edit, seq_lib %>
+	  	<%= link_to 'Edit', edit_seq_lib_path(seq_lib) %>
+		<% else %>
+		&nbsp;
+		<% end %>
+	</td>
+	<td><%= link_to 'Attach', new_attached_file_path(:rec_type => 'seq_lib', :obj_id => seq_lib.id) %></td>
+	<td>
+		<% if seq_lib.lib_status == 'L' and (can? :delete, seq_lib) %>
+			<%= link_to 'Delete', seq_lib, data: {:confirm => 'Are you sure?'}, :method => :delete %>
+    	<% else %>
+      		<span class="ltgrey"> Delete </span>
+		<% end %>
+	</td>
     <%= hidden_field_tag("export_id_page[]", seq_lib.id) %>
   </tr>
   <% end %>
