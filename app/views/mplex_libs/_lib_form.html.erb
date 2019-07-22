@@ -10,8 +10,7 @@
         <% else %>&nbsp;<% end %>
       </td>
       <td><label for="lib_name" class="col-form-label col-form-label-sm">Lib Name:</label>
-        <% if @seq_lib.new_record? || @seq_lib.dummy_barcode == false %><%= f.text_field :barcode_key, class: "form-control" %>
-        <% else %>&nbsp;<% end %>
+        <%= f.text_field :lib_name, class: "form-control" %>
       </td>
       <td><label for="adapter_id" class="col-form-label col-form-label-sm">Runtype Adapter:</label>
         <div><%=h f.object.adapter_name %> <%=f.hidden_field(:adapter_id) %></div>
