@@ -45,7 +45,7 @@ class FlowCell < ApplicationRecord
   scope :desc_by_date, -> { order("flow_cells.flowcell_date DESC")}
   
   DEFAULT_MACHINE_TYPE = 'MiSeq'
-  NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 2, :GAIIx => 8, :HiSeq => 8}
+  NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 4, :GAIIx => 8, :HiSeq => 8}
   STATUS = %w{F R S Q N X}
   RUN_NR_TYPES = %w{LIMS Illumina}
   
