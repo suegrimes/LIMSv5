@@ -27,6 +27,12 @@
 	  <td><%=h storage_container[:container_type] %></td>
 	  <td><%=h storage_container[:container_name] %></td>
 	  <td><%=link_to ssc_count, :action => :list_contents, :id => storage_container[:id] %></td>
+    <td><% if can? :edit, storage_container %><%=link_to 'Edit', edit_storage_container_path(storage_container) %>
+        <% else %> &nbsp; <% end %>  </td>
   </tr>
   <% end %>
 </table>
+
+<% if can? :new, StorageContainer.new %>
+    <%= link_to 'New storage container', new_storage_container_path(:freezer_location_id => @freezer.id) %>
+<% end %>

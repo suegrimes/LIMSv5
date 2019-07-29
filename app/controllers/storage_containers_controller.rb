@@ -3,11 +3,11 @@ class StorageContainersController < ApplicationController
 
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
 
-  before_action :dropdowns, :only => [:new, :new_query]
+  before_action :dropdowns, :only => [:new, :edit, :new_query]
 
   # GET /storage_containers/new
   def new
-    @storage_container = StorageContainer.new
+    @storage_container = StorageContainer.new(:freezer_location_id => params[:freezer_location_id])
   end
 
   # GET /storage_containers/1/edit
@@ -39,6 +39,7 @@ class StorageContainersController < ApplicationController
       flash[:notice] = 'StorageContainer was successfully updated.'
       redirect_to(@storage_container)
     else
+      dropdowns
       render :action => "edit"
     end
   end
