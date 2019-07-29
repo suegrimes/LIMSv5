@@ -45,8 +45,9 @@ gem 'rubyXL', '~> 3.3.3'
 # ruby encyrption
 gem 'ezcrypto'
 
-# date validation
+# date validation, database field length validation
 gem 'validates_timeliness'
+gem 'validates_lengths_from_database'
 
 # file uploading
 gem 'carrierwave'
