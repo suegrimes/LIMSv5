@@ -41,11 +41,9 @@
             <td><%= link_to 'Attach', new_attached_file_path(:rec_type => 'flow_cell', :obj_id => flow_cell.id) %></td>
 
             <% if can? :edit, flow_cell %>
-              <% if flow_cell.flowcell_status == 'F' %>
-                <td><%= link_to 'Edit', edit_flow_cell_path(flow_cell) %></td>
-              <% else %>
-                <td class="ltgrey">Edit</td>
-              <% end %>
+              <td><%= link_to 'Edit', edit_flow_cell_path(flow_cell) %></td>
+            <% else %>
+              <td class="ltgrey">Edit</td>
             <% end %>
 
             <% if can? :delete, flow_cell  %>
