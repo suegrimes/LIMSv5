@@ -132,7 +132,7 @@ class FlowCellsController < ApplicationController
   # PUT /flow_cells/1
   def update
     @flow_cell = FlowCell.find(params[:id])
-    fc_attrs = params[:flow_cell]
+    fc_attrs = update_params
     machine_type = @flow_cell.machine_type
 
     # NextSeq requires only 1 lane when entered (since all 4 lanes identical), but all 4 lanes needed for update
@@ -140,13 +140,14 @@ class FlowCellsController < ApplicationController
     lanes_required  = (params[:partial_flowcell] == 'Y'? params[:lane_count].to_i : max_lane_nr)
     
     # Create copy of params, since need to delete blank lanes during validation, but want all lanes available for render :new, if error
-    lane_params = params[:flow_cell][:existing_lane_attributes]  
+    # Convert to unsafe hash since non-standard params otherwise generate exception
+    lane_params = params[:flow_cell][:existing_lane_attributes].to_unsafe_hash
     lane_errors = validate_lane_nrs(lane_params, 'update', lanes_required, max_lane_nr)
     
     if lane_errors[0] > 0
       flash[:error] = "ERROR - #{lane_errors[1]}"     
       dropdowns
-      @flow_cell[:existing_lane_attributes] = params[:flow_cell][:existing_lane_attributes]
+      @flow_cell.existing_lane_attributes = lane_params
       render :action => 'edit'
       
     elsif @flow_cell.update_attributes(fc_attrs)
@@ -156,7 +157,7 @@ class FlowCellsController < ApplicationController
     else
       flash[:error] = 'ERROR - Unable to update flow cell'
       dropdowns
-      @flow_cell[:existing_lane_attributes] = params[:flow_cell][:existing_lane_attributes]
+      @flow_cell.existing_lane_attributes = lane_params
       render :action => 'edit'
     end
   end
@@ -203,14 +204,15 @@ protected
                                       :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
                                       :notes, :sequencing_date,
                    flow_lanes_attributes: [:lane_nr, :lib_conc, :pool_id, :oligo_pool, :notes, :sequencing_key,
-                                           :seq_lib_id, :lib_barcode, :lib_name, :lib_conc_uom, :adapter_id,
+                                           :seq_lib_id, :lib_barcode, :lib_name, :lib_conc, :adapter_id,
                                            :alignment_ref_id, :alignment_ref])
   end
 
   def update_params
     params.require(:flow_cell).permit(:flowcell_date, :machine_type, :nr_bases_read1, :nr_bases_read2, :nr_bases_index1,
                                       :nr_bases_index2, :cluster_kit, :sequencing_kit, :hiseq_xref, :run_description,
-                                      :notes, :sequencing_date, :sequencing_key, :seq_machine_id, :seq_run_nr, :flowcell_status)
+                                      :notes, :sequencing_date, :sequencing_key, :seq_machine_id, :seq_run_nr, :flowcell_status,
+                     existing_lanes_attributes: [:id, :pool_id, :oligo_pool, :lib_conc, :notes])
   end
 
   def flow_lane_create_params(flow_lane)
@@ -248,7 +250,7 @@ protected
       @seq_libs.push(SeqLib.find(lane[:seq_lib_id]))
     end
   end
-  
+
   def validate_lane_nrs(lanes, upd_method, lanes_required, max_lane_nr = nil)
     errno = 0
     max_lane_nr ||= FlowCell::NR_LANES[FlowCell::DEFAULT_MACHINE_TYPE.to_sym]
