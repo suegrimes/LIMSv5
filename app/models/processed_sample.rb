@@ -45,6 +45,7 @@ class ProcessedSample < ApplicationRecord
   
   validates_date :processing_date
   before_validation :derive_barcode, on: :create
+  before_create :get_sample_flds
 
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
@@ -53,6 +54,11 @@ class ProcessedSample < ApplicationRecord
     if self.barcode_key.blank?
       self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
     end
+  end
+
+  def get_sample_flds
+    self.patient_id = (self.sample ? self.sample.patient_id : nil)
+    self.input_uom = (self.sample ? self.sample.amount_uom : nil)
   end
   
   def initial_amt_ug
