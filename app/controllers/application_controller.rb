@@ -72,6 +72,28 @@ class ApplicationController < ActionController::Base
     return val_blank 
   end
 
+  def params_all_blank?(val)
+    val_blank = false
+    if val.is_a? Array
+      val_blank = true
+      val.each do |v|
+        if !(v.nil? or v.blank?)
+          val_blank = false
+          break
+        end
+      end
+    elsif val.is_a? Hash
+      val_blank = true
+      val.each do |k,v|
+        if !(v.nil? or v.blank?)
+          val_blank = false
+          break
+        end
+      end
+    end
+    return val_blank
+  end
+
   def nil_if_blank(val)
     return (val.blank? ? nil : val)
   end

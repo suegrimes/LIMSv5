@@ -46,10 +46,19 @@ class ProcessedSample < ApplicationRecord
   validates_date :processing_date
   before_validation :derive_barcode, on: :create
   before_create :get_sample_flds
+  before_save :del_blank_storage
 
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
-  
+
+  def del_blank_storage
+    if self.sample_storage_container
+      if self.psample_remaining == 'N' or self.sample_storage_container.storage_container_id.nil?
+        self.sample_storage_container = nil
+      end
+    end
+  end
+
   def derive_barcode
     if self.barcode_key.blank?
       self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
@@ -107,31 +116,24 @@ class ProcessedSample < ApplicationRecord
   end
 
   def self.find_all_incl_sample(condition_array=[])
-    #self.find(:all, :include => [:sample, :sample_storage_container],
-    #                :order => 'samples.patient_id, samples.barcode_key',
-    #                :conditions => condition_array)
     self.includes(:sample, :sample_storage_container).where(sql_where(condition_array)).order('samples.patient_id, samples.barcode_key')
   end
   
   def self.find_one_incl_patient(condition_array=[])
-    #self.find(:first, :include => [{:sample => [:sample_characteristic, :patient]}, :sample_storage_container],
-    #                  :conditions => condition_array)
     self.includes({:sample => [:sample_characteristic, :patient]}, :sample_storage_container).where(sql_where(condition_array)).first
   end
   
   def self.find_for_query(condition_array=[])
-    #self.find(:all, :include => [{:sample => :sample_characteristic}, :sample_storage_container],
-    #                :order => "samples.patient_id, samples.barcode_key, processed_samples.barcode_key",
-    #                :conditions => condition_array)
-    self.includes({:sample => :sample_characteristic}, :protocol, :sample_storage_container).where(sql_where(condition_array))
+    self.includes({:sample => :sample_characteristic}, :protocol, :user, {:sample_storage_container => {:storage_container => :freezer_location}})
+        .references(:protocol, :user, {:sample_storage_container => {:storage_container => :freezer_location}})
+        .where(sql_where(condition_array))
         .order('samples.patient_id, samples.barcode_key, processed_samples.barcode_key').all
   end
   
   def self.find_for_export(psample_ids)
-    #self.find(:all, :include => [:sample, :sample_storage_container],
-    #          :conditions => ["processed_samples.id IN (?)", psample_ids],
-    #          :order => "samples.patient_id, samples.barcode_key, processed_samples.barcode_key")
-    self.includes([:sample => [:sample_characteristic => :consent_protocol]], :sample_storage_container).where('processed_samples.id IN (?)', psample_ids)
+    self.includes({:sample => {:sample_characteristic => :consent_protocol}}, :protocol, {:sample_storage_container => {:storage_container => :freezer_location}})
+        .references(:protocol, {:sample_storage_container => :storage_container})
+        .where('processed_samples.id IN (?)', psample_ids)
         .order('samples.patient_id, samples.barcode_key, processed_samples.barcode_key').all
   end
   

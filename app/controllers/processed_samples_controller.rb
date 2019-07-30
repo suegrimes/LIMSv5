@@ -5,7 +5,7 @@ class ProcessedSamplesController < ApplicationController
 
   load_and_authorize_resource
   
-  before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]
+  before_action :dropdowns, :only => [:new, :create, :edit, :edit_by_barcode, :update]
   
   autocomplete :processed_sample, :barcode_search
     
@@ -55,7 +55,7 @@ class ProcessedSamplesController < ApplicationController
                                               :vial => '2ml',
                                               :final_vol => 50,
                                               :elution_buffer => 'TB')
-      @processed_sample.build_sample_storage_container(:freezer_location_id => 1)
+      @processed_sample.build_sample_storage_container
       render :action => 'new'
       
     else  # clinical sample with one or more dissections, so show list to select from
@@ -99,7 +99,6 @@ class ProcessedSamplesController < ApplicationController
 
   # POST /processed_samples
   def create
-    #@processed_sample = ProcessedSample.new(params[:processed_sample])
     @processed_sample = ProcessedSample.new(create_params)
     @sample = Sample.find(params[:processed_sample][:sample_id])
 
@@ -110,8 +109,9 @@ class ProcessedSamplesController < ApplicationController
       if params[:processed_sample][:input_amount]
         params[:sample].merge!(:amount_rem => @sample.amount_rem - params[:processed_sample][:input_amount].to_f)
       end
-      #@sample.update_attributes!(params[:sample])
-      @sample.update_attributes!(update_sample_params)
+      if params[:sample]
+        @sample.update_attributes!(update_sample_params)
+      end
       flash[:notice] = 'Processed sample was successfully created'
       redirect_to(:action => 'show_by_sample',
                   :sample_id => params[:processed_sample][:sample_id])
@@ -119,7 +119,7 @@ class ProcessedSamplesController < ApplicationController
 
   rescue ActiveRecord::RecordInvalid
       dropdowns
-      flash[:notice] = 'Error adding processed sample - Please contact system admin'
+      #flash[:notice] = 'Error adding processed sample - Please contact system admin'
       render :action => "new"
   end
 
@@ -134,8 +134,15 @@ class ProcessedSamplesController < ApplicationController
       redirect_to(@processed_sample)
     end
 
-    rescue ActiveRecord::RecordInvalid
-      render :action => "edit"
+  rescue ActiveRecord::RecordInvalid
+    if @processed_sample.sample_storage_container.nil?
+      @processed_sample.build_sample_storage_container
+      @edit_sample_storage = false
+    else
+      @storage_container_id = @processed_sample.sample_storage_container.storage_container_id
+      @edit_sample_storage = true
+    end
+    render :action => "edit"
   end
 
   # DELETE /processed_samples/1
@@ -175,19 +182,32 @@ protected
   end
 
   def create_params
-    params.require(:processed_sample).permit(
-      :sample_id, :barcode_key, :patient_id, :input_uom, :extraction_type, :processing_date, :protocol_id, :vial,
-      :support, :elution_buffer, :final_vol, :final_conc, :psample_remaining, :final_a260_a280, :final_a260_a230,
-      :final_rin_nr, :comments, :updated_by,
-      {sample_storage_container_attributes: [
-            :sample_name_or_barcode, :container_type, :container_name,
-            :position_in_container, :storage_container_id, :freezer_location_id, :notes
-      ]}
-    )
+    #Don't add blank container record
+    container_params = params[:processed_sample][:sample_storage_container_attributes].to_unsafe_h
+    container_params.delete(:sample_name_or_barcode)
+    if params_all_blank?(container_params)
+      params.require(:processed_sample).permit(*(sample_params))
+    else
+      params.require(:processed_sample).permit(*(sample_params + [storage_params]))
+    end
   end
 
   def update_params
     create_params
+    #params.require(:processed_sample).permit(*(sample_params + [storage_params]))
+  end
+
+  def sample_params
+    [:sample_id, :barcode_key, :patient_id, :input_uom, :extraction_type, :processing_date, :protocol_id, :vial,
+     :support, :elution_buffer, :final_vol, :final_conc, :psample_remaining, :final_a260_a280, :final_a260_a230,
+     :final_rin_nr, :comments, :updated_by]
+  end
+
+  def storage_params
+    {sample_storage_container_attributes: [
+      :sample_name_or_barcode, :container_type, :container_name,
+      :position_in_container, :storage_container_id, :freezer_location_id, :notes
+    ]}
   end
 
   def update_sample_params
