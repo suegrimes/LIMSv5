@@ -32,12 +32,10 @@
 
 class Sample < ApplicationRecord
   include LimsCommon
-  
-  #attr_accessible :barcode_key, :source_sample_id, :amount_uom, :sample_date, :tumor_normal, :sample_container, :vial_type, :amount_initial, :sample_remaining, :comments, :amount_rem
-  
+
   # Rails 5 defaults to required: true, so make it explicitly optional
-  belongs_to :patient, optional: true
-  belongs_to :sample_characteristic, optional: true
+  belongs_to :patient
+  belongs_to :sample_characteristic
   belongs_to :source_sample, optional: true, class_name: 'Sample', foreign_key: 'source_sample_id'
   has_many   :samples, foreign_key: 'source_sample_id'
   belongs_to :user, optional: true, foreign_key: 'updated_by'
@@ -99,8 +97,10 @@ class Sample < ApplicationRecord
   end
 
   def del_blank_storage
-    if self.sample_storage_container and self.sample_storage_container.storage_container_id.nil?
-      self.sample_storage_container = nil
+    if self.sample_storage_container
+      if self.sample_remaining == 'N' or self.sample_storage_container.storage_container_id.nil?
+        self.sample_storage_container = nil
+      end
     end
   end
 

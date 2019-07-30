@@ -25,6 +25,7 @@ class SampleStorageContainer < ApplicationRecord
   belongs_to :storage_container, optional: true
   belongs_to :user, :foreign_key => :updated_by, optional: true
 
+  validates_presence_of :storage_container, on: :create, message: "is invalid.  Please enter a valid container, or leave all location fields blank"
   validate :position_must_be_valid_for_container_type
 
   before_create :upd_sample_name, :upd_storage_container_fields

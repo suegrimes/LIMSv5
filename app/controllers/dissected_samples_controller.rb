@@ -4,7 +4,7 @@ class DissectedSamplesController < ApplicationController
   layout  Proc.new {|controller| controller.request.xhr? ? false : 'main/main'}
 
   #before_action :dropdowns, :only => :edit
-  before_action :dropdowns, :only => [:edit, :add_multi]
+  before_action :dropdowns, :only => [:edit, :add_multi, :update]
 
   def index
   end
@@ -191,16 +191,32 @@ protected
     storage_container_ui_data
   end
 
-  # allow params for new sample save
   def create_params
-    params.require(:sample).permit(
-      :source_sample_id, :barcode_key, :sample_date, :tumor_normal, :sample_container,
-      :vial_type, :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments,
-      {sample_storage_container_attributes: [
+    #Don't add blank container record
+    container_params = params[:sample][:sample_storage_container_attributes].to_unsafe_h
+    container_params.delete(:sample_name_or_barcode)
+    if params_all_blank?(container_params)
+      params.require(:sample).permit(*(sample_params))
+    else
+      params.require(:sample).permit(*(sample_params + [storage_params]))
+    end
+  end
+
+  def update_params
+    create_params
+    #params.require(:sample).permit(*(sample_params + [storage_params]))
+  end
+
+  def sample_params
+    [:source_sample_id, :barcode_key, :sample_date, :tumor_normal, :sample_container, :vial_type,
+     :amount_uom, :amount_initial, :amount_rem, :sample_remaining, :comments]
+  end
+
+  def storage_params
+    {sample_storage_container_attributes: [
         :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :storage_container_id, :freezer_location_id
-      ]}
-    )
+        :position_in_container, :storage_container_id, :freezer_location_id, :notes
+    ]}
   end
 
   def create_multi_attr
@@ -214,10 +230,6 @@ protected
 
   def update_source_params
     {sample_remaining: params.require(:source_sample).permit(:sample_remaining)}
-  end
-
-  def update_params
-    create_params
   end
 
 end
