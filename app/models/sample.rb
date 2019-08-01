@@ -67,9 +67,9 @@ class Sample < ApplicationRecord
     #sample date cannot be blank for new record, or for existing record if a sample date currently exists for that record
     #self.errors.add(:sample_date, "cannot be blank") if self.new_record? || !sample_date.blank?
   #end
-  
+
+  before_validation :upd_parent_ids, :del_blank_storage
   before_create :upd_from_source_sample
-  before_save :upd_parent_ids, :del_blank_storage
   after_update :upd_dissections
 
   def upd_from_source_sample
@@ -98,7 +98,7 @@ class Sample < ApplicationRecord
 
   def del_blank_storage
     if self.sample_storage_container
-      if self.sample_remaining == 'N' or self.sample_storage_container.storage_container_id.nil?
+      if self.sample_remaining == 'N' or self.sample_storage_container.storage_blank?
         self.sample_storage_container = nil
       end
     end

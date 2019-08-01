@@ -41,6 +41,15 @@ class SampleStorageContainer < ApplicationRecord
     end
   end
 
+  def storage_blank?
+    nr_blank = 0
+    flds = %w(freezer_location_id container_type position_in_container)
+    flds.each do |fld|
+      nr_blank += 1 if self[fld].nil?
+    end
+    return (nr_blank < flds.size ? false : true)
+  end
+
   def upd_sample_name
     self.sample_name_or_barcode = self.stored_sample.barcode_key
   end
