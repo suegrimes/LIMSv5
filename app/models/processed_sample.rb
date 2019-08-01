@@ -45,15 +45,15 @@ class ProcessedSample < ApplicationRecord
   
   validates_date :processing_date
   before_validation :derive_barcode, on: :create
+  before_validation :del_blank_storage
   before_create :get_sample_flds
-  before_save :del_blank_storage
 
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
 
   def del_blank_storage
     if self.sample_storage_container
-      if self.psample_remaining == 'N' or self.sample_storage_container.storage_container_id.nil?
+      if self.psample_remaining == 'N' or self.sample_storage_container.storage_blank?
         self.sample_storage_container = nil
       end
     end
