@@ -8,7 +8,8 @@
     <th>Researcher name</th>
 	  <th>Initials</th>
 	  <th>Login</th>
-    <th colspan="2"></th>
+    <% if can? :edit, Researcher %><th></th><% end %>
+    <% if can? :delete, Researcher %><th></th><% end %>
   </tr>
 
   <% researchers.each do |researcher| %>

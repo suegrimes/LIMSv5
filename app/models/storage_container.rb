@@ -24,7 +24,8 @@ class StorageContainer < ApplicationRecord
   end
 
   def self.find_for_summary_query(condition_array)
-    self.joins(:freezer_location, :sample_storage_containers)
+    self.joins(:freezer_location)
+        .left_joins(:sample_storage_containers)
         .where(sql_where(condition_array))
         .group(:freezer_location_id, :container_type, :container_name, :id, :room_nr, :freezer_nr, :owner_name)
         .count('sample_storage_containers.id')
@@ -44,7 +45,7 @@ class StorageContainer < ApplicationRecord
 select ssc.freezer_location_id,ssc.container_type,ssc.container_name,ssc.storage_container_id,count(ssc.id),typ.nr_rows,typ.nr_cols
 from storage_containers sc
   join storage_types typ on sc.container_type = typ.container_type
-  join sample_storage_containers ssc on sc.container_type = ssc.container_type and sc.container_name = ssc.container_name
+  left join sample_storage_containers ssc on sc.container_type = ssc.container_type and sc.container_name = ssc.container_name
 group by ssc.freezer_location_id, ssc.container_type, ssc.container_name;
 HERE
     result = ActiveRecord::Base.connection.exec_query(sql)
