@@ -32,6 +32,7 @@ class ResearchersController < ApplicationController
       flash[:notice] = 'Researcher was successfully created.'
       redirect_to(@researcher)
     else
+      dropdowns
       render :action => "new"
     end
   end
