@@ -128,7 +128,7 @@ class MplexLibsController < ApplicationController
       dropdowns
       render :action => 'new'
     else
-     flash[:notice] = 'Multiplex library successfully created'
+     flash[:notice] = "Multiplex library successfully created from #{@singleplex_libs.size} individual libraries"
      redirect_to(@seq_lib)
     end
     #render :action => 'debug'
@@ -200,27 +200,38 @@ protected
   end
 
   def create_params
-    params.require(:seq_lib).permit(
-        :barcode_key, :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
-        :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
-        :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
-        lib_samples_attributes: [
-            :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
-            :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
-        ]
-    )
+    params.require(:seq_lib).permit(*(lib_params + [sample_params]))
   end
 
   def update_params
-    params.require(:seq_lib).permit(
-        :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
-        :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
-        :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by,
-        sample_storage_container_attributes: [
-            :sample_name_or_barcode, :container_type, :container_name,
-            :position_in_container, :freezer_location_id, :storage_container_id, :notes
-        ]
-    )
+    #Don't add blank container record
+    container_params = params[:seq_lib][:sample_storage_container_attributes].to_unsafe_h
+    container_params.delete(:sample_name_or_barcode)
+    if params_all_blank?(container_params)
+      params.require(:seq_lib).permit(*(lib_params))
+    else
+      params.require(:seq_lib).permit(*(lib_params + [storage_params]))
+    end
   end
-  
-end 
+
+  def lib_params
+    [:lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
+     :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
+     :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by]
+  end
+
+  def sample_params
+    {lib_samples_attributes: [
+        :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
+        :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
+    ]}
+  end
+
+  def storage_params
+    {sample_storage_container_attributes: [
+        :sample_name_or_barcode, :container_type, :container_name,
+        :position_in_container, :storage_container_id, :freezer_location_id, :notes
+    ]}
+  end
+
+end
