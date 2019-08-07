@@ -45,7 +45,7 @@ gem 'rubyXL', '~> 3.3.3'
 # ruby encyrption
 gem 'ezcrypto'
 
-# date validation, database field length validation
+# date validation, and field length validation
 gem 'validates_timeliness'
 gem 'validates_lengths_from_database'
 

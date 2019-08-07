@@ -65,8 +65,8 @@ class Ability
 #          @_roles.include?("clinical") || usr == user
 #        end
         
-        can :manage, [ConsentProtocol, Protocol, FreezerLocation, StorageType]
-        cannot :delete, [ConsentProtocol, FreezerLocation, StorageType]
+        can :manage, [ConsentProtocol, Protocol, FreezerLocation, StorageContainer, StorageType]
+        cannot :delete, [ConsentProtocol, FreezerLocation, StorageContainer, StorageType]
       end
       
       # Additional capabilities for clin_admin or lab_admin (update drop-down list values)

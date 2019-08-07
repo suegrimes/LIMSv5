@@ -11,6 +11,11 @@ function samples_edit_init() {
   edit_storage_container_init();
 }
 
+function samples_edit_by_barcode_init() {
+    storage_container_init();
+    edit_storage_container_init();
+}
+
 // need update to have access to same functions as edit since renders :edit after validation error
 function samples_update_init() {
     storage_container_init();
