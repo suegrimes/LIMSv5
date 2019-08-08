@@ -212,22 +212,6 @@ protected
     params.require(:sample_default).permit(:source_DNA, :adapter_id, :enzyme_code)
   end
 
-  #def lib_sample_create_params
-  #  params.permit(:splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
-  #                :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
-  #end
-  #
-  #def multi_lib_params
-  #  params.permit(:owner, :preparation_date, :protocol_id, :barcode_key, :lib_name, :sample_conc, :sample_conc_uom,
-  #                :adapter_id, :quantitation_method, :pcr_size, :lib_conc_requested, :alignment_ref_id, :pool_id,
-  #                :notes, :notebook_ref)
-  #end
-  #
-  #def multi_sample_params
-  #  params.permit(:splex_lib_id, :splex_lib_barcode, :processed_sample_id, :source_sample_name, :runtype_adapter,
-  #                :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by)
-  #end
-
   def dropdowns
     @adapters     = Adapter.populate_dropdown
     @enzymes      = Category.populate_dropdown_for_category('enzyme')

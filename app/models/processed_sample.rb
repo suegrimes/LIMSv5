@@ -42,20 +42,18 @@ class ProcessedSample < ApplicationRecord
   has_many :attached_files, :as => :sampleproc
   
   accepts_nested_attributes_for :sample_storage_container
-  
-  validates_date :processing_date
-  before_validation :derive_barcode, on: :create
-  before_validation :del_blank_storage
-  before_create :get_sample_flds
 
+  before_validation :derive_barcode, on: :create
+  validates_date :processing_date
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
 
+  before_create :get_sample_flds
+  before_save :del_blank_storage
+
   def del_blank_storage
-    if self.sample_storage_container
-      if self.psample_remaining == 'N' or self.sample_storage_container.storage_blank?
-        self.sample_storage_container = nil
-      end
+    if self.sample_storage_container and self.sample_storage_container.container_blank?
+      self.sample_storage_container = nil
     end
   end
 

@@ -60,13 +60,20 @@ class SeqLib < ApplicationRecord
   validate :barcode_prefix_valid
   
   before_create :set_default_values
+  before_save :del_blank_storage
   #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
   #after_update :save_samples
   
   BARCODE_PREFIX = 'L'
   SAMPLE_CONC = ['nM', 'ng/ul']
   BASE_GRAMS_PER_MOL = 660
-  
+
+  def del_blank_storage
+    if self.sample_storage_container and self.sample_storage_container.container_blank?
+      self.sample_storage_container = nil
+    end
+  end
+
   def barcode_prefix_valid
     valid_prefix = [BARCODE_PREFIX]
     valid_prefix.push('X') if !self.new_record?

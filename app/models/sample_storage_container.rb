@@ -31,6 +31,10 @@ class SampleStorageContainer < ApplicationRecord
   before_create :upd_sample_name, :upd_storage_container_fields
   before_update :upd_storage_container_fields
 
+  def container_blank?
+    self.container_type.blank? and self.container_name.blank? and self.position_in_container.blank? and self.freezer_location_id.nil?
+  end
+
   def position_must_be_valid_for_container_type
     unless self.container_type.nil?
       storage_type = StorageType.where('container_type = ?', self.container_type).first
@@ -39,15 +43,6 @@ class SampleStorageContainer < ApplicationRecord
         errors.add(:position_in_container, "is not valid for this container type")
       end
     end
-  end
-
-  def storage_blank?
-    nr_blank = 0
-    flds = %w(freezer_location_id container_type position_in_container)
-    flds.each do |fld|
-      nr_blank += 1 if self[fld].nil?
-    end
-    return (nr_blank < flds.size ? false : true)
   end
 
   def upd_sample_name

@@ -116,4 +116,18 @@ module CategoryValues
     return false
   end
 
+  # return a hash of allowed category values keyed by attribute names
+  def allowed_values(model)
+    cv_method = (model.name.underscore + "_values").to_sym
+    return {} if !self.respond_to?(cv_method)
+    self.send(cv_method)
+  end
+
+  # return a map of aliases related to a value keyed by attribute names
+  def mapped_values(model)
+    cv_method = (model.name.underscore + "_mapped_values").to_sym
+    return {} if !self.respond_to?(cv_method)
+    self.send(cv_method)
+  end
+
 end

@@ -70,6 +70,8 @@ class Sample < ApplicationRecord
 
   before_validation :upd_parent_ids, :del_blank_storage
   before_create :upd_from_source_sample
+  before_save :upd_parent_ids, :del_blank_storage
+
   after_update :upd_dissections
 
   def upd_from_source_sample
@@ -97,10 +99,8 @@ class Sample < ApplicationRecord
   end
 
   def del_blank_storage
-    if self.sample_storage_container
-      if self.sample_remaining == 'N' or self.sample_storage_container.storage_blank?
-        self.sample_storage_container = nil
-      end
+    if self.sample_storage_container and self.sample_storage_container.container_blank?
+      self.sample_storage_container = nil
     end
   end
 
