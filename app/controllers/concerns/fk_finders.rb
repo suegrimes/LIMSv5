@@ -1,34 +1,6 @@
 module FkFinders
   extend ActiveSupport::Concern
 
-# map model names to foreign key fields that reference them
-# this could be done with reflections, but for simplicity
-# and efficiency we specify the ones we care about here
-=begin
-ModelToForeignKeyFields = {
-  'Patient' => ['patient_id'],
-  'Sample' => ['sample_id', 'source_sample_id']
-}
-=end
-
-# map foreign key fields to model names they reference
-ForeignKeyFieldToModels = {
-  'patient_id' => 'Patient',
-  'sample_id' => 'Sample',
-  'source_sample_id' => 'Sample',
-  'stored_sample_id' => 'Sample',
-  'consent_protocol_id' => 'ConsentProtocol',
-  'protocol_id' => 'Protocol'
-}
-
-# these should match the keys used in the finder methods defined below
-=begin
-FinderKeys = {
-  'Patient' => ['mrn'],
-  'Sample' => ['barcode']
-}
-=end
-
 # Methods in this module have names that can be constructed from the following parts:
 #  fk_find_ - prefix
 #  <singular_table_name>_ - of the table we are finding from

@@ -70,7 +70,8 @@ class MplexLibsController < ApplicationController
     @seq_lib[:alignment_ref] = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
     
     #slib_params = array of arrays [][id, notes]; slib_ids = array of ids [id1, id2, ..]
-    slib_params = params[:lib_samples].collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    temp_params = params.to_unsafe_h
+    slib_params = temp_params[:lib_samples].collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
     slib_params.delete_if{|sparam| sparam[0] == 0}
     slib_ids_checked = slib_params.collect{|sparam| sparam[0]}
     slib_ids_all = params[:lib_id].to_a

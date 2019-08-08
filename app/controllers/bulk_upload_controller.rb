@@ -1,7 +1,5 @@
 class BulkUploadController < ApplicationController
-  include CategoryValues
-  include FkFinders
-
+  include XlsProcessing, XlsHdrValidation, BulkUploadCols, CategoryValues, FkFinders
   layout 'main/main'
 
   def new
@@ -13,7 +11,6 @@ class BulkUploadController < ApplicationController
     #deliberate_error_here
 
     @validation_passed = 'no'
-    # permit file
     @file = params.permit(:file)[:file]
 
 logger.debug "#{self.class}#create file.class: #{@file.class}"
@@ -26,11 +23,7 @@ logger.debug "#{self.class}#create file.class: #{@file.class}"
     # dry run option
     @action_type = params[:action_type]
 logger.debug "@action_type: #{@action_type}"
-    @dry_run = false
-    if @action_type[:dry_run]
-      @dry_run = true
-    end
-logger.debug "@dry_run: #{@dry_run}"
+    @dry_run = (@action_type[:dry_run] ? true : false)
 
 =begin
 # Use something like this section if saving the files is required
@@ -49,7 +42,6 @@ logger.debug "#{self.class}#create @store_path: #{@store_path}"
 =end
 
     @ss = open_spreadsheet(@file)
-logger.debug "#{self.class}#process_upload ss.class: #{@ss.class}"
     if @ss.nil?
       flash[:error] =  "Unknown file type for file: #{@file.original_filename}"
       render action: :new
@@ -65,15 +57,14 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
     # do validations on as many rows as possible, but do not save to the database
     # will still stop on header errors though
 
-    # do all processing within a transaction so everything
-    # gets rolled back on a save error
+    # do all processing within a transaction so everything is rolled back on save error
     @errors = []
     ActiveRecord::Base.transaction do
       if !process_upload()
         # rollback all prior saves on any error
         raise ActiveRecord::Rollback
       end
-      # helpfull for testing
+      # helpful for testing
       if @force_rollback
         @rollback_forced = true
         raise ActiveRecord::Rollback
@@ -139,19 +130,18 @@ logger.debug "#{self.class}#process_upload sheet_map: #{@sheet_map}"
     # valid sheets found
     valid_sheets = 0
     got_error = false
-    @sheet_info.each do |key, info|
-      next unless @sheet_map.has_key?(key)
+    @sheet_info.each do |sheet_name, sheet_models|
+      next unless @sheet_map.has_key?(sheet_name)
       valid_sheets += 1
-      set_sheet_index(@sheet_map[key])
-#logger.debug "#{self.class}#process_upload sheet index: #{get_sheet_index}"
+      set_sheet_index(@sheet_map[sheet_name])
 
       # authorize create on the model
-      info[:models].each do |model|
+      sheet_models[:models].each do |model|
          authorize! :create, model
       end
 
       # prepare the sheet attribute values for saving
-      if !process_sheet(key, info[:models])
+      if !process_sheet(sheet_name, sheet_models[:models])
         got_error = true
         return false unless @dry_run
       end
@@ -166,57 +156,22 @@ logger.debug "#{self.class}#process_upload sheet_map: #{@sheet_map}"
     return true
   end
 
-  # return hash with sheet name symbols as keys and sheet indexes as values
-  def sheets_to_process(given, expected)
-    map = {}
-    given.each_with_index do |sh, i|
-      cl = sh.downcase.to_sym
-      if expected.include?(cl)
-        map[cl] = i
-      end
-    end
-    return map
-  end
-
   # process a sheet given its sheet key AR model, Roo spreadsheet and sheet index
-  def process_sheet(key, models)
-logger.debug "process_sheet(#{key}, #{models.inspect})"
-    # set the default sheet
+  def process_sheet(sheet_name, models)
+logger.debug "process_sheet(#{sheet_name}, #{models.inspect})"
     @ss.default_sheet = cur_sheet_name
-    # get the header as an array
     header = get_header()
 logger.debug "raw header: #{header}"
     # get all model(s) columns and category values defined for attributes
-    models_columns = []
-    models.each do |model|
-      h = {}
-      h[:model] = model
-      h[:allowed_cols] = model.column_names - ["updated_by", "created_at", "updated_at"]
-      content_cols = model.content_columns.map {|cc| cc.name}
-      special_cols = model.column_names - content_cols
-      # regular content columns for this model
-      #content_cols = content_cols - ["updated_by", "created_at", "updated_at"]
-      # foreign key columns
-      h[:fk_cols] = special_cols - ["id"]
-      h[:allowed_values] = allowed_values(model)
-      h[:mapped_values] = mapped_values(model)
-      h[:fk_finders] = {} # place to put fk finders mao
-      h[:headers] = []  # place to put verified header names
-      h[:dups] = {}     # place to put dup indexes
-#logger.debug "models_columns for model: #{model.name}: #{h}"
-      models_columns << h
-    end
-
+    models_columns = get_attributes(models)
     resolve_ambiguous_headers(models_columns, header)
-#logger.debug "models_columns[0][:dups]: #{models_columns[0][:dups]}"
-#logger.debug "models_columns[1][:dups]: #{models_columns[1][:dups]}"
 
-    return false if !verify_header_names(key, models_columns, header)
+    return false if !verify_header_names(sheet_name, models_columns, header)
     
     # prepare each row for saving
     got_error = false
     (2..@ss.last_row).each do |rn|
-      if !process_row(key, models_columns, get_row(rn), rn)
+      if !process_row(sheet_name, models_columns, get_row(rn), rn)
         got_error = true
         # keep processing to get as many errors as possible, if it is a dry run
         return false unless @dry_run
@@ -225,119 +180,6 @@ logger.debug "raw header: #{header}"
 
     return false if got_error
     return true
-  end
-
-  # verify the header names and add normalized names with row index
-  # into the models_columns structure
-  def verify_header_names(key, models_columns, header)
-    normalized_header = []
-    
-    got_error = false
-    header.each_with_index do |h, i|
-logger.debug "verify header: #{h}"
-      if h == "id"
-        error(cur_sheet_name, 1, "Header column #{h} not allowed, update not supported yet")
-        next
-      end
-
-      if h.nil?	# ignore mepty header
-        normalized_header[i] = nil
-        next
-      else
-        normalized_header[i] = normalize_header(h)
-      end
-
-      # see if heading is an attribute name, pseudo attribute,
-      # fk_finder, refrerence id or reference to one
-      # if so, put it in the models_columns :headers hash with header index
-      header_is_known = false
-      show_header_in_results = true
-      models_columns.each_with_index do |mc, ci|
-
-        # check for ambiguous header name
-        if mc[:dups].has_key?(normalized_header[i])
-#logger.debug "verify_header:  ci: #{ci} found ambiguous header: #{normalized_header[i]}"
-          dup_index = mc[:dups][normalized_header[i]]
-#logger.debug "verify_header: ci: #{ci} dup_index: #{dup_index}"
-          next if dup_index.nil?
-          if dup_index == i
-            header_is_known = true
-            mc[:headers] << [normalized_header[i], i]  # 0 based index
-#logger.debug "header #{h} i: #{i} ci: #{ci} is_ambiguous_model_column mc[:headers]: #{mc[:headers]}"
-            break
-          end
-          next
-        end
-
-        if mc[:allowed_cols].include?(normalized_header[i])
-          header_is_known = true
-          mc[:headers] << [normalized_header[i], i]  # 0 based index
-#logger.debug "header #{h} is_model_column mc[:headers]: #{mc[:headers]}"
-          break
-        end
-
-        if is_pseudo_attr(mc[:model], normalized_header[i])
-          header_is_known = true
-          mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_model_pseudo_attr mc[:headers]: #{mc[:headers]}"
-          break
-        end
-
-        if is_fk_finder_header(normalized_header[i], mc)
-          header_is_known = true
-          mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_fk_finder mc[:headers]: #{mc[:headers]}"
-          break
-        end
-
-        if is_ref_def_header(normalized_header[i], mc[:model])
-          header_is_known = true
-          show_header_in_results = false
-          @sheet_results[key][:_refs][(mc[:model]).name] = normalized_header[i]
-          @sheet_results[key][:_ref_ids][normalized_header[i]] = {}
-          mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_ref_def mc[:headers]: #{mc[:headers]}"
-          break
-        end
-
-        if is_ref_ref_header(normalized_header[i], mc)
-          header_is_known = true
-          mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_ref_ref mc[:headers]: #{mc[:headers]}"
-          break
-        end
-      end
-      if !show_header_in_results
-        normalized_header.delete_at(i)
-      end
-      next if header_is_known
-
-      # error if not recognized, but continue to gather all errors
-      got_error = true
-      error(cur_sheet_name, 1, "Header name '#{h}' is not recognized for model(s) #{model_column_names(models_columns)}")
-    end
-    return false if got_error
-
-#logger.debug "mc[0][:headers]: #{models_columns[0][:headers]}"
-#logger.debug "mc[1][:headers]: #{models_columns[1][:headers]}"
-
-    @sheet_results[key][:header] = ["id"] + normalized_header.compact
-logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
-    return true
-  end
-
-  # return a hash of allowed category values keyed by attribute names
-  def allowed_values(model)
-    cv_method = (model.name.underscore + "_values").to_sym
-    return {} if !self.respond_to?(cv_method)
-    self.send(cv_method)
-  end
-
-  # return a map of aliases related to a value keyed by attribute names
-  def mapped_values(model)
-    cv_method = (model.name.underscore + "_mapped_values").to_sym
-    return {} if !self.respond_to?(cv_method)
-    self.send(cv_method)
   end
 
   # process a row with column and header info
@@ -358,8 +200,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
         ci = h[1]	# column index 0 based
         value = row[ci] # value in row
 #logger.debug "value: #{value}"
-        # Allow quoted "<values>" so numerals can be input as strings
-        # remove quotes here
+        # Allow quoted "<values>" so numerals can be input as strings; remove quotes here
         value = unquote(value)
 
         # we ignore nil values in the spreadsheet
@@ -370,8 +211,7 @@ logger.debug "Normalized header: key: #{key} #{@sheet_results[key][:header]}"
 
         # check for "_ref" definition column
         if is_ref_def_header(name, mc[:model])
-          # stash header name, ref key and model index
-          # so we can store the saved id below
+          # stash header name, ref key and model index so we can stored saved id below
           ref_def_keys << [name, value, mi]
           next
         end
@@ -493,22 +333,8 @@ logger.debug "Saved Row: key: #{key} row: #{s_row}"
     return true
   end
 
-  # saves a row cell value for later display in the saved report page
-  # model_index is the index of the model the value belongs to,
-  # name is the normalized column name, value the value saved,
-  # name_col an array of associations between names and header columns
-  # and saved_row is an array in which to place the values
-  def save_row_value(model_index, col_index, name, value, saved_row)
-    saved_row[col_index] = [value, model_index]
-  end
-
-  def final_saved_row(id, saved_row)
-    [[id, 0]] + saved_row.compact
-  end
-
-  # inputs should both be either a 1 or 2 element array
-  # return nil if there are no attributes to save
-  # return false on failure
+  # inputs should be either a 1 or 2 element array
+  # return nil if there are no attributes to save; return false on failure
   def instantiate_models(rn, models_columns, attributes)
     raise "Maximum of 2 models is exceeded" if models_columns.size > 2
 
@@ -559,88 +385,8 @@ logger.debug "Saved Row: key: #{key} row: #{s_row}"
     end
   end
 
-  # true if the name is a pseudo attribute of the model
-  def is_pseudo_attr(model, name)
-    # see if there is a method to assign to it
-    model.instance_methods.include? (name + "=").to_sym
-  end
-
-  # set the default sheet index
-  def set_sheet_index(index)
-    @sh_index = index
-  end
-
-  # get the default sheet index
-  def get_sheet_index()
-    @sh_index
-  end
-
-  # return an array of column header names
-  # we assume headers are in the first row (count starting from 1)
-  # this should work wether the default sheet is set or not
-  def get_header
-    @ss.sheet(@sh_index).row(1)
-  end
-
-  def cur_sheet_name
-    @ss.sheets[@sh_index]
-  end
-
-  def get_row(row_index)
-    @ss.sheet(@sh_index).row(row_index)
-  end
-
-  # if spreadsheet return a capitalized column label
-  def column_id(col_index)
-    return col_index if @input_type == "csv"
-    if col_index < 26
-      return (('A'.ord) + col_index).chr
-    else
-      x = (col_index - 1) / 26
-      y = col_index % 26
-      a = (('A'.ord) + x).chr
-      b = (('A'.ord) + y).chr
-      return a + b
-    end
-  end
-
-  # use Roo gem to open a csv, xls or xlsx file
-  def open_spreadsheet(file)
-logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
-    ss = nil
-    case File.extname(file.original_filename)
-    when '.csv'
-      ss = Roo::Csv.new(file.tempfile)
-      @input_type = "csv"
-    # for some reason Roo fails to open an IO opbect but can use the file path
-    when '.ods'
-      ss = Roo::OpenOffice.new(file.tempfile.path)
-      @input_type = "ods"
-    when '.xlsx'
-      ss = Roo::Excelx.new(file.tempfile)
-      @input_type = "xlsx"
-    else nil
-    end
-    return ss
-  end
-
-  # make everything lower case and replace spaces with underbar, remove last char '?' if exists
-  def normalize_header(header)
-    return nil if header.nil?
-    header.downcase.split.join("_").chomp('?')
-  end
-
-  # return strign with model names from models_columns structure for error report 
-  def model_column_names(models_columns)
-    model_names = ""
-    models_columns.each do |mc|
-      if model_names.empty?
-        model_names = mc[:model].name 
-      else
-        model_names = model_names + ', ' + mc[:model].name 
-      end
-    end
-    return model_names
+  def get_last_created_id(model)
+    model.all.order("created_at DESC").first.id
   end
 
   # strip the quotes off of a quoted string
@@ -652,155 +398,17 @@ logger.debug "open_spreadsheet: file.tempfile: #{file.tempfile}"
     return value
   end
 
-  # is this column a valid foreign key finder
-  def is_fk_finder_header(name, model_column)
-    ns = name.split('.')
-    return false unless (ns.size == 2)
-    ref_field = ns.first
-    key = ns.last
-    return false unless model_column[:fk_cols].include?(ref_field)
-    # get the referred to model name
-    model_name =  ForeignKeyFieldToModels[ref_field]
-    return false if model_name.nil?
-    stn = model_name.tableize.singularize
-    method = ('fk_find_' + stn + '_' + key).to_sym
-#logger.debug "is_fk_finder_header: name: #{name} method: #{method}"
-    if self.respond_to?(method)
-      # store in the :fk_finders map for use during row processing
-      # if not already there and return true
-      if !model_column[:fk_finders].has_key?(name)
-        model_column[:fk_finders][name] = method
-      end
-      return true
-    end
-    return false
+  # saves a row cell value for later display in the saved report page
+  # model_index is the index of the model the value belongs to,
+  # name is the normalized column name, value the value saved,
+  # name_col an array of associations between names and header columns
+  # and saved_row is an array in which to place the values
+  def save_row_value(model_index, col_index, name, value, saved_row)
+    saved_row[col_index] = [value, model_index]
   end
 
-  # is this a column where reference ids are defined
-  def is_ref_def_header(name, model)
-    name == model.name.tableize.singularize + '_ref'
-  end
-
-  # is this a column where reference ids are referred to
-  # name is normalized header and model_column is where the
-  # header may appear
-  def is_ref_ref_header(name, model_column)
-    ns = name.split('.')
-    return false unless (ns.size == 2 && ns.last == "ref")
-    return true if model_column[:fk_cols].include?(ns.first)
-    return false
-  end
-
-  # given a referencing header name, return the related
-  # reference definition header name or nil if none found
-  def ref_to_def_header(name)
-    model_name = ForeignKeyFieldToModels[ref_ref_real_attr(name)]
-    return nil if model_name.nil?
-    @sheet_results.each do |sh, res|
-      refs = res[:_refs]
-      next if refs.nil?  # this shouldn't really happen
-      def_header = refs[model_name]
-      return def_header unless def_header.nil?
-    end
-    return nil
-  end
-
-  # given a reference definition header and a reference value
-  # return the store id for it, or nil if not found or referenceable
-  def get_id_from_ref(def_header, ref_key)
-    @sheet_results.each do |sh, res|
-      ref_ids = res[:_ref_ids]
-      next if ref_ids.nil?  # this shouldn't really happen
-      hdr_ids = ref_ids[def_header]
-      next if hdr_ids.nil?
-      id = hdr_ids[ref_key]
-      return id unless id.nil?
-    end
-    return nil
-  end
-
-  # If there is the same attribute name in both models
-  # resolve which model it/they should belong to.
-  # If there are two instances, the first in the header should belong to
-  # the first model and the 2nd to the 2nd model.
-  # If there is only one instance in the header,
-  # if it's position in the header is after any non-dup header
-  # belonging to the 2nd model it is assigned to the 2nd model
-  # else to the first model
-  def resolve_ambiguous_headers(models_columns, raw_header)
-    return if models_columns.size < 2
-    m0_cols = models_columns[0][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
-    m1_cols = models_columns[1][:allowed_cols] - ["id", "updated_by", "created_at", "updated_at"]
-    dup_names = []
-    m0_cols.each do |n1|
-      m1_cols.each do |n2|
-        if n1 == n2
-          dup_names << n1
-        end
-      end
-    end
-#logger.debug "resolve_ambiguous_headers found dup_names: #{dup_names}"
-    return if dup_names.empty?
-    # normalize all headers
-    header = raw_header.map {|h| normalize_header(h) }
-    dup_names.each do |dn|
-#logger.debug "resolve_ambiguous_headers handle dup_name: #{dn}"
-      fi = li = nil
-      # find first instance of the dup name in header
-      header.each_with_index do |h, i|
-        if dn == h
-          fi = i
-          break
-        end
-      end
-#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} first index: #{fi}"
-      # next if the dup name is not used in the sheet
-      next if fi.nil?
-      # find last instance of the dup name in header
-      header.reverse_each.with_index do |h, ri|
-        if dn == h
-          li = (header.size - 1) - ri
-          break
-        end
-      end
-#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} last index: #{li}"
-      if fi == li
-        # one instance of dup name
-        m1_no_dups = models_columns[1][:allowed_cols] - dup_names
-        first_m1_index = nil
-        header.each_with_index do |h, i|
-          if m1_no_dups.include?(h)
-            # we foud the first non-ambiguous header of 2nd model
-            first_m1_index = i
-            break
-          end
-        end
-        if first_m1_index.nil? || fi < first_m1_index
-          # assign to the 1st model
-#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} assign to first"
-          models_columns[0][:dups][dn] = fi
-          models_columns[1][:dups][dn] = nil
-        else
-          # assign to the 2nd model
-#logger.debug "resolve_ambiguous_headers  dup_name: #{dn} assign to second"
-          models_columns[0][:dups][dn] = nil
-          models_columns[1][:dups][dn] = fi
-        end
-      else
-#logger.debug "resolve_ambiguous_headers assign dup_name: #{dn} first index: #{fi} last index: #{li}"
-        # two instances of dup name
-        models_columns[0][:dups][dn] = fi
-        models_columns[1][:dups][dn] = li
-      end
-    end
-  end
-
-  def ref_ref_real_attr(name)
-    name.split('.').first
-  end
-
-  def get_last_created_id(model)
-    model.all.order("created_at DESC").first.id
+  def final_saved_row(id, saved_row)
+    [[id, 0]] + saved_row.compact
   end
 
   # log an error

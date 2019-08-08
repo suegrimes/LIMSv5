@@ -30,6 +30,10 @@ class SampleStorageContainer < ApplicationRecord
   before_create :upd_sample_name, :upd_storage_container_fields
   before_update :upd_storage_container_fields
 
+  def container_blank?
+    self.container_type.blank? and self.container_name.blank? and self.position_in_container.blank? and self.freezer_location_id.nil?
+  end
+
   def position_must_be_valid_for_container_type
     unless self.container_type.nil?
       storage_type = StorageType.where('container_type = ?', self.container_type).first
