@@ -28,11 +28,8 @@ class PsampleQuery
 
   #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
   validates_date :to_date, :from_date, :allow_blank => true
-  
-  #SCHAR_FLDS   = %w{consent_protocol_id clinic_or_location pathology}
-  #SAMPLE_FLDS  = %w{sample_tissue sample_type tissue_preservation tumor_normal}
-  #PSAMPLE_FLDS = %w{barcode_key protocol_id extraction_type updated_by}
-  #ALL_FLDS     = SCHAR_FLDS | SAMPLE_FLDS | PSAMPLE_FLDS
+  validates :patient_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
+  validates :barcode_string, compound_string: {:datatype => 'alpha_dot_numeric'}, :allow_blank => true
 
   STD_FIELDS = {'sample_characteristics' => %w(consent_protocol_id clinic_or_location pathology),
                 'samples' => %w(sample_tissue sample_type tissue_preservation tumor_normal),

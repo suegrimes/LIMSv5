@@ -17,7 +17,8 @@ class SeqlibQuery
 
   attr_accessor :patient_string, :owner, :project, :lib_name, :barcode_string, :alignment_ref, :from_date, :to_date
 
-  validates_format_of :barcode_string, :with => /\A[0-9\-,]+\Z/, :allow_blank => true, :message => 'must be digits only'
+  validates :patient_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
+  validates :barcode_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
   validates_date :to_date, :from_date, :allow_blank => true
 
   SEARCH_FLDS = {'seq_libs' => %w(lib_name)}

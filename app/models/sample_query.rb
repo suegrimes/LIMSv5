@@ -1,3 +1,4 @@
+
 # == Schema Information
 #
 # Table name: sample_queries
@@ -30,6 +31,8 @@ class SampleQuery
 
   #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
   validates_date :to_date, :from_date, :allow_blank => true
+  validates :patient_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
+  validates :barcode_string, compound_string: {:datatype => 'alphanumeric'}, :allow_blank => true
 
   STD_FIELDS = {'patients' => %w(organism),
                 'sample_characteristics' => %w(patient_id gender race ethnicity consent_protocol_id clinic_or_location),

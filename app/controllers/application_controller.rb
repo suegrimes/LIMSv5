@@ -141,30 +141,32 @@ class ApplicationController < ActionController::Base
     str_vals = []; str_ranges = []; error = [];
 
     for str_val in str_split_all
-      str_val = str_val.to_s.delete(' ')
+      str_val = str_val.to_s.delete(" \t\r\n")
 
       if convert_with_prefix  # reformat/add prefix and push to array
         case str_val
-          when /^(\d+)$/ # digits only
+          when /\A(\d+)\z/ # digits only
             str_vals.push(barcode_format(str_prefix, pad_len, str_val))
-          when /^(\d+)\-(\d+)$/ # has range of digits
+          when /\A(\d+)\-(\d+)\z/ # has range of digits
             str_ranges.push([barcode_format(str_prefix, pad_len, $1), barcode_format(str_prefix, pad_len, $2)])
           else error << str_val + ' is unexpected value'
         end # case
 
       else
         case str_val
-          when /^(\w+)(\.*)(\w+)$/ #alphanumeric only (not a range)
+          when /\A(\w+)(\.*)(\w+)\z/ #alphanumeric only (not a range)
             str_vals.push(str_val)
-          when /^(\d+)-(\d+)$/ #numeric range, convert to integer so that SQL search will work correctly
+          when /\A(\w+)\z/  #account for one character string (without '.')
+            str_vals.push(str_val)
+          when /\A(\d+)-(\d+)\z/ #numeric range, convert to integer so that SQL search will work correctly
             str_ranges.push([$1.to_i, $2.to_i])
-          when /^(\w+)-(\w+)$/ #alphanumeric range, leave as is
+          when /\A(\w+)-(\w+)\z/ #alphanumeric range, leave as is
             str_ranges.push([$1, $2])
           else  error << str_val + ' is unexpected value'
         end #case
       end #if convert_with_prefix
     end # for
-
+logger.debug "Str vals: #{str_vals}, Ranges: #{str_ranges}, Error: #{error}"
     return str_vals, str_ranges, error
   end
 

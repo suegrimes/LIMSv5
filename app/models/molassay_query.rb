@@ -16,7 +16,8 @@ class MolassayQuery
   validates_date :to_date, :from_date, :allow_blank => true
 
   #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
-  validates_format_of :patient_string, :with => /\A[\d,\s]+\z/, :allow_blank => true, :message => "ids must be integer"
+  #validates_format_of :patient_string, :with => /\A[\d,\s]+\z/, :allow_blank => true, :message => "ids must be integer"
+  validates :patient_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
   validates_date :to_date, :from_date, :allow_blank => true
 
   STD_FIELDS = {'molecular_assays' => %w(owner)}
