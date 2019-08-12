@@ -125,14 +125,13 @@ logger("got container change: "+container);
 
 }
 
-// handle loading only container types for freezer 
+// handle loading only container types for freezer - JP 8/9/2019
 function storage_containers_new_query_init() {
     // handle freezer selection or de-selection
   var freezer_id = ''
   var select_freezer_container_types = []
   $("select#freezer_location_freezer_location_id").on("change", function() {
     var freezer_id = $(this).val();
-logger("DEBUG::storage_containers_new_query_init:got freezer change: "+freezer_id);
     if (freezer_id == "") {
       // remove all container options
       remove_container_options();
@@ -311,7 +310,7 @@ function mk_container_select_options(container_data, freezer_id, container_type)
   return options;
 }
 
-// make options of container types with just selected freezer location id
+// make options of container types with just selected freezer location id - JP 8/9/2019
 function mk_container_select_selected_freezer_id_options(container_data) {
   var options = [];
   container_data.forEach(function(row) {
