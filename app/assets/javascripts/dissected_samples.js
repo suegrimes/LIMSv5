@@ -281,7 +281,7 @@ function grid_attrs_order() {
     "position_in_container",
     "container_name",
     "freezer_location_id",
-    "vial_type",
+    "container_type",
     "comments"
   ];
   return order;
