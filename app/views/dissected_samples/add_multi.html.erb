@@ -12,7 +12,7 @@
   <div class="form-group row">
     <label for="barcode_key" class="col-auto col-form-label col-form-label-sm">Barcode:</label>
     <div class="col-auto">
-      <%=f.text_field :barcode_key, disabled: true, size: 14, class: "form-control barcode" %>
+      <%=f.text_field :barcode_key, readonly: true, size: 14, class: "form-control barcode" %>
     </div>
 
     <label for=":sample_date" class="col-auto col-form-label col-form-label-sm">Sample Date:</label>
@@ -123,7 +123,7 @@
         <th>Position</th>
         <th>Container Name</th>
         <th>Room/Freezer</th>
-        <th>Vial Type</th>
+        <th>Container Type</th>
         <th>Comments</th>
       </tr>
     </thead>

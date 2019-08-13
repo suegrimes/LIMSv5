@@ -28,8 +28,9 @@ class SampleStorageContainer < ApplicationRecord
   validates_presence_of :storage_container, on: :create, message: "is invalid.  Please enter a valid container, or leave all location fields blank"
   validate :position_must_be_valid_for_container_type
 
-  before_create :upd_sample_name, :upd_storage_container_fields
-  before_update :upd_storage_container_fields
+  before_validation :upd_storage_container_fields
+  before_create :upd_sample_name
+  #before_update :upd_storage_container_fields
 
   def container_blank?
     self.container_type.blank? and self.container_name.blank? and self.position_in_container.blank? and self.freezer_location_id.nil?
