@@ -48,13 +48,7 @@ class Sample < ApplicationRecord
   
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
-
-  #validates_presence_of :sample_date, :if => Proc.new {|a| a.new_record? }
   validates_date :sample_date, allow_blank: true
-  
-  #validates_format_of :barcode_key, :with => /^([^\.])*$/, :message => "invalid - cannot use '.'"  # only use this validation if source_sample_id is null
-  
-  #before_validation :check_sample_date
 
   # Set date parameters for use in date_select lists.
   # Start year will be 2001, end year will be current year
@@ -62,11 +56,6 @@ class Sample < ApplicationRecord
   END_YEAR   = Time.now.strftime('%Y').to_i
   FLDS_FOR_COPY = (%w{sample_type sample_tissue left_right tissue_preservation sample_container vial_type amount_uom})
   SOURCE_FLDS_FOR_DISSECT = (%w{sample_characteristic_id patient_id tumor_normal sample_type sample_tissue left_right tissue_preservation})
- 
-  #def check_sample_date
-    #sample date cannot be blank for new record, or for existing record if a sample date currently exists for that record
-    #self.errors.add(:sample_date, "cannot be blank") if self.new_record? || !sample_date.blank?
-  #end
 
   before_validation :upd_parent_ids, :del_blank_storage
   before_create :upd_from_source_sample
