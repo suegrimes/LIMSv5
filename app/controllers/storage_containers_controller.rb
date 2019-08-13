@@ -8,6 +8,8 @@ class StorageContainersController < ApplicationController
   # GET /storage_containers/new
   def new
     @storage_container = StorageContainer.new(:freezer_location_id => params[:freezer_location_id])
+    @container_by_location_id = StorageContainer.where(:freezer_location_id => params[:freezer_location_id]).group(:container_type)  # JP added for prefilling container type dropdown
+    @selected_freezer = FreezerLocation.where(:id => params[:freezer_location_id])
   end
 
   # GET /storage_containers/1/edit

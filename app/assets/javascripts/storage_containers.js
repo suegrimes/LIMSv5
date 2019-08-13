@@ -127,8 +127,8 @@ logger("got container change: "+container);
 
 // handle loading only container types for freezer - JP 8/9/2019
 function storage_containers_new_query_init() {
-    // handle freezer selection or de-selection
-  var freezer_id = ''
+  // handle freezer selection or de-selection
+  var freezer_id = '' 
   $("select#freezer_location_freezer_location_id").on("change", function() {
     var freezer_id = $(this).val();
     if (freezer_id == "") {
@@ -148,6 +148,21 @@ function storage_containers_new_query_init() {
     add_container_options_new_query(options);
     //arrange_container_types($("select.container-type"), freezer);
   });
+} // storage_containers_new_query_init() 
+
+// handle loading only container types for freezer on create new container - JP 8/13/2019
+function storage_containers_new_init() {
+  // handle preloading container types for freezer location on New Storage Continer form  
+  var freezer_id = $("select#storage_container_freezer_location_id option:selected" ).val();
+  logger('DEBUG::freezer id: '+freezer_id)
+  
+  // check for freezer location id
+  var select_freezer_container_types = window.container_by_location_id
+  logger('DEBUG::select_freezer_container_types'+select_freezer_container_types)
+  var options = mk_new_container_select_selected_freezer_id_options(select_freezer_container_types)
+  add_container_options_new_container(options);
+  //arrange_container_types($("select.container-type"), freezer);
+
 } // storage_containers_new_query_init() 
 
 // additional init for the edit page
@@ -172,7 +187,7 @@ logger("edit_storage_container_init()");
 
   // save state for current position in container
   // used for grid display with a currently existing position
-  var cur_pic = $("div.current-container-fields .position-in-container input").val()
+  var cur_pic = $("div.current-container-fields.position-in-container input").val()
   window.current_position_in_container = cur_pic;
   window.edit_current_container = true;
 
@@ -279,6 +294,20 @@ logger("add_container_options_new_query() "+options.length+" options");
   first_option.text("Select("+options.length+")..");
 }
 
+function add_container_options_new_container(options) {
+logger("add_container_options_new_query() "+options.length+" options");
+  var first_option = $("select#storage_container_container_type :first-child");
+  if (options.length == 0) {
+    first_option.nextAll().remove();
+    first_option.text("No existing containers for Freezer/Type");
+    hide_position_ui();
+    return;
+  }
+  first_option.nextAll().remove();
+  first_option.after(options);
+  first_option.text("Select("+options.length+")..");
+}
+
 function remove_container_options() {
   var select_text = "Select Freezer/Type first";
   $("select.storage-container :first-child").text(select_text).nextAll().remove();
@@ -319,6 +348,23 @@ function mk_container_select_selected_freezer_id_options(container_data) {
       capacity = available = "Unknown";
     }
     var text = row[0]
+    option.text(text);
+    options.push(option);
+  });
+  return options;
+}
+
+function mk_new_container_select_selected_freezer_id_options(container_data) {
+  var options = [];
+  container_data.forEach(function(row) {
+    logger(row)
+    var option = $("<option></option>");
+    option.attr("value", row.freezer_location_id);  // container_id
+    // handle null dimensions
+    if (row.container_type == null) {
+      capacity = available = "Unknown";
+    }
+    var text = row.container_type
     option.text(text);
     options.push(option);
   });
