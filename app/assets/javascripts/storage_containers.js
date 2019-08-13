@@ -129,7 +129,6 @@ logger("got container change: "+container);
 function storage_containers_new_query_init() {
     // handle freezer selection or de-selection
   var freezer_id = ''
-  var select_freezer_container_types = []
   $("select#freezer_location_freezer_location_id").on("change", function() {
     var freezer_id = $(this).val();
     if (freezer_id == "") {
@@ -137,8 +136,8 @@ function storage_containers_new_query_init() {
       remove_container_options();
       return
     }
-    //if (container_type == "") {
     // check for freezer location id
+    var select_freezer_container_types = []
     $.each(window.container_type_freezer, function( index, value ) {
       if (value.includes(Number(freezer_id))) {
         select_freezer_container_types.push(value)
@@ -148,7 +147,6 @@ function storage_containers_new_query_init() {
     var options = mk_container_select_selected_freezer_id_options(select_freezer_container_types)
     add_container_options_new_query(options);
     //arrange_container_types($("select.container-type"), freezer);
-    //}
   });
 } // storage_containers_new_query_init() 
 
@@ -314,7 +312,6 @@ function mk_container_select_options(container_data, freezer_id, container_type)
 function mk_container_select_selected_freezer_id_options(container_data) {
   var options = [];
   container_data.forEach(function(row) {
-    logger('mk_container_select_selected_freezer_id_options:'+row[0]+'|'+row[1])
     var option = $("<option></option>");
     option.attr("value", row[1]);  // container_id
     // handle null dimensions
