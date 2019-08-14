@@ -360,7 +360,7 @@ function mk_new_container_select_selected_freezer_id_options(container_data) {
   container_data.forEach(function(row) {
     logger(row)
     var option = $("<option></option>");
-    option.attr("value", row.freezer_location_id);  // container_id
+    option.attr("value", row.container_type);
     // handle null dimensions
     if (row.container_type == null) {
       capacity = available = "Unknown";
