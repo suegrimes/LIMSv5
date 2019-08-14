@@ -11,7 +11,7 @@
       </div>
     </div>
 <!-- leaving out as select type happens later in storage container form and items needed from collection tag JP 8/13/19-->
-    <div class="form-group row" style="display:none">
+    <div class="form-group row">
       <label for="storage_type_container_type" class="col-sm-2 col-form-label col-form-label-sm">Container Type:</label>
       <div class="col-auto">
         <%= collection_select(:storage_type, :container_type, @storage_types, :container_type, :container_type, {:include_blank => true}, {class: "form-control"}) %>
