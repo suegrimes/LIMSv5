@@ -128,6 +128,7 @@ logger("got container change: "+container);
 // handle loading only container types for freezer - JP 8/9/2019
 function storage_containers_new_query_init() {
   // handle freezer selection or de-selection
+  logger('DEBUG::storage_containers_new_query_init')
   var freezer_id = '' 
   $("select#freezer_location_freezer_location_id").on("change", function() {
     var freezer_id = $(this).val();
@@ -342,7 +343,7 @@ function mk_container_select_selected_freezer_id_options(container_data) {
   var options = [];
   container_data.forEach(function(row) {
     var option = $("<option></option>");
-    option.attr("value", row[1]);  // container_id
+    option.attr("value", row[0]);  // container_id
     // handle null dimensions
     if (row[0] == null || row[1] == null) {
       capacity = available = "Unknown";
