@@ -129,7 +129,7 @@ class MplexLibsController < ApplicationController
       dropdowns
       render :action => 'new'
     else
-     flash[:notice] = "Multiplex library successfully created from #{@singleplex_libs.size} individual libraries"
+     flash[:notice] = "Multiplex library successfully created from #{splex_libs.size} individual libraries"
      redirect_to(@seq_lib)
     end
     #render :action => 'debug'
@@ -216,7 +216,7 @@ protected
   end
 
   def lib_params
-    [:lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
+    [:barcode_key, :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
      :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
      :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by]
   end
