@@ -71,7 +71,16 @@ class MplexLibsController < ApplicationController
     
     #slib_params = array of arrays [][id, notes]; slib_ids = array of ids [id1, id2, ..]
     temp_params = params.to_unsafe_h
-    slib_params = temp_params[:lib_samples].collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    lsample_params = temp_params[:lib_samples]
+
+    if lsample_params.is_a?(Array)
+      slib_params = lsample_params.collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    elsif lsample_params.is_a?(Hash)
+      slib_params = lsample_params.collect{|lkey, lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    else
+      slib_params = []
+    end
+
     slib_params.delete_if{|sparam| sparam[0] == 0}
     slib_ids_checked = slib_params.collect{|sparam| sparam[0]}
     slib_ids_all = params[:lib_id].to_a
