@@ -333,7 +333,7 @@ function display_position_ui(container_type) {
   }
   var display_format = dimensions[1];
 
-  if (display_format == "2D") {
+  if (display_format == "2D" || display_format == "2Dseq") {
     // we have a 2-d grid
 //    $(".position-in-container").hide();
     $(".position-in-container").show();
@@ -413,12 +413,13 @@ logger("got ajax data: "+ data);
 // and with clickable available cells
 function build_grid(container_type, positions_used) {
 logger("build_grid("+container_type+","+positions_used+")");
-  var row, nr_rows, nr_cols, first_row, first_col;
+  var row, display_format, nr_rows, nr_cols, first_row, first_col;
 
   row = get_container_dimensions(container_type);
+  display_format = row[1];
   nr_rows = row[2]; nr_cols = row[3];
   first_row = row[4]; first_col = row[5];
-logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first_col: "+first_col);
+logger("display_format: "+display_format+" nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first_col: "+first_col);
 
   var table = $("<table/>");
   table.addClass("grid-locations table table-bordered table-sm");
@@ -446,7 +447,12 @@ logger("nr_rows: "+nr_rows+" nr_cols: "+nr_cols+" first_row: "+first_row+" first
         } else {  // build content td
           var col_label = char_at(first_col, j-1)
           var row_col = row_label + col_label;
-          var col_row = col_label + row_label;
+
+          if (display_format == "2D") {
+              var col_row = col_label + row_label;
+          } else {
+              var col_row = char_at((i-1)*10, j);
+          }
 
           if (positions_used.includes(col_row)) {
             // check if we are editing a current position,
