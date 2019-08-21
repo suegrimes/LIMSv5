@@ -5,7 +5,8 @@ class SampleLocQuery
                 :clinic_or_location, :sample_tissue, :sample_type, :tissue_preservation,
                 :tumor_normal, :date_filter, :from_date, :to_date
 
-  #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
+  validates :patient_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
+  validates :barcode_string, compound_string: {:datatype => 'alphanumeric'}, :allow_blank => true
   validates_date :to_date, :from_date, :allow_blank => true
 
   STD_FIELDS = {'sample_characteristics' => %w(patient_id consent_protocol_id clinic_or_location),

@@ -87,7 +87,11 @@ class SampleStorageContainer < ApplicationRecord
   end
   
   def room_and_freezer
-    (storage_container ? storage_container.freezer_location.room_and_freezer : '')
+    if storage_container and storage_container.freezer_location
+      return storage_container.freezer_location.room_and_freezer
+    else
+      return ''
+    end
   end
 
   def self.find_for_query(condition_array)

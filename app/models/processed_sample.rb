@@ -49,7 +49,7 @@ class ProcessedSample < ApplicationRecord
   validates_uniqueness_of :barcode_key, message: 'is not unique'
 
   before_create :get_sample_flds
-  before_save :del_blank_storage
+  before_save :upd_if_sample_not_remaining
 
   def del_blank_storage
     if self.sample_storage_container and self.sample_storage_container.container_blank?
@@ -57,6 +57,14 @@ class ProcessedSample < ApplicationRecord
     end
   end
 
+  def upd_if_sample_not_remaining
+    if self.sample_storage_container
+      if self.psample_remaining == 'N' or self.sample_storage_container.container_blank?
+        self.sample_storage_container = nil
+      end
+    end
+  end
+  
   def derive_barcode
     if self.barcode_key.blank?
       self.barcode_key = ProcessedSample.next_extraction_barcode(self.sample_id, self.sample.barcode_key, self.extr_type_char)
