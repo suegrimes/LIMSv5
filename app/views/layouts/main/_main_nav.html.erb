@@ -1,4 +1,4 @@
-<% user_roles = (logged_in? ? current_user.roles.collect(&:name) : nil) %>
+"<% user_roles = (logged_in? ? current_user.roles.collect(&:name) : nil) %>
 
 <ul id="top-nav" class="nav nav-tabs">
 
@@ -107,12 +107,15 @@
     </div>
   </li>
 
-  <% if user_has_access?(user_roles, ["admin", "barcodes"]) %>
+  <% if user_has_access?(user_roles, ["admin", "clin_admin", "barcodes"]) %>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
     <div class="dropdown-menu">
       <% if user_has_access?(user_roles, ["barcodes"]) %>
         <a class="dropdown-item" href="/assigned_barcodes">Manage Barcodes</a>
+      <% end %>
+      <% if user_has_access?(user_roles, ["clin_admin"]) %>
+          <a class="dropdown-item" href="/storage_containers/new">Add Container</a>
       <% end %>
       <% if user_has_access?(user_roles, ["admin"]) %>
         <a class="dropdown-item" href="/researchers">Manage Researchers</a>
