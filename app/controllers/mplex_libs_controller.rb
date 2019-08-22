@@ -232,15 +232,15 @@ protected
 
   def sample_params
     {lib_samples_attributes: [
-        :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
+        :id, :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
         :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
     ]}
   end
 
   def storage_params
     {sample_storage_container_attributes: [
-        :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :storage_container_id, :freezer_location_id, :notes
+        :id, :sample_name_or_barcode, :container_type, :container_name,
+        :position_in_container, :storage_container_id, :freezer_location_id, :notes, :_destroy
     ]}
   end
 

@@ -47,7 +47,7 @@ class SeqLib < ApplicationRecord
   has_one :sample_storage_container, :as => :stored_sample, :dependent => :destroy
 
   accepts_nested_attributes_for :lib_samples
-  accepts_nested_attributes_for :sample_storage_container
+  accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
   
   validates_uniqueness_of :barcode_key, :message => 'is not unique'
   validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
@@ -58,9 +58,9 @@ class SeqLib < ApplicationRecord
                             :message => "must be >= 1nM"
 
   validate :barcode_prefix_valid
-  
+
+  before_validation :del_blank_storage
   before_create :set_default_values
-  before_save :del_blank_storage
   #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
   #after_update :save_samples
   

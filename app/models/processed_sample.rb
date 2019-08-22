@@ -41,9 +41,10 @@ class ProcessedSample < ApplicationRecord
   has_one :sample_storage_container, :as => :stored_sample, :dependent => :destroy
   has_many :attached_files, :as => :sampleproc
   
-  accepts_nested_attributes_for :sample_storage_container
+  accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
 
   before_validation :derive_barcode, on: :create
+  before_validation :del_blank_storage
   validates_date :processing_date
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
