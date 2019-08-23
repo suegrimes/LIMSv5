@@ -210,7 +210,7 @@ protected
   end
 
   def create_params
-    params.require(:seq_lib).permit(*(lib_params + [sample_params]))
+    params.require(:seq_lib).permit(*(lib_params + [sample_params] + [storage_params]))
   end
 
   def update_params
