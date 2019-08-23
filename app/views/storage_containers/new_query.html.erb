@@ -7,10 +7,10 @@
     <div class="form-group row">
       <label for="freezer_location_freezer_location_id" class="col-sm-2 col-form-label col-form-label-sm">Freezer/Loc:</label>
       <div class="col-auto">
-        <%= collection_select(:freezer_location, :freezer_location_id, @freezers, :id, :room_and_freezer, {}, {class: "form-control"}) %>
+        <%= collection_select(:freezer_location, :freezer_location_id, @freezers, :id, :room_and_freezer, {prompt: 'Select Location'}, {class: "form-control"}) %>
       </div>
     </div>
-
+<!-- leaving out as select type happens later in storage container form and items needed from collection tag JP 8/13/19-->
     <div class="form-group row">
       <label for="storage_type_container_type" class="col-sm-2 col-form-label col-form-label-sm">Container Type:</label>
       <div class="col-auto">
@@ -27,3 +27,5 @@
     </div>
   </div>
 <%end%>
+
+<%= render :partial => 'shared/storage_container_data' %>
