@@ -205,8 +205,8 @@ protected
 
   def storage_params
     {sample_storage_container_attributes: [
-      :sample_name_or_barcode, :container_type, :container_name,
-      :position_in_container, :storage_container_id, :freezer_location_id, :notes
+      :id, :sample_name_or_barcode, :container_type, :container_name,
+      :position_in_container, :storage_container_id, :freezer_location_id, :notes, :_destroy
     ]}
   end
 

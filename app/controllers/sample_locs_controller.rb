@@ -33,9 +33,9 @@ protected
     params.require(:sample_loc).permit(
         :alt_identifier, :tumor_normal, :sample_tissue, :left_right, :sample_type, :tissue_preservation,
         :sample_container, :vial_type, :amount_uom, :amount_initial, :sample_remaining, :comments,
-        sample_storage_container_attributes: [
-            :sample_name_or_barcode, :container_type, :container_name,
-            :position_in_container, :freezer_location_id, :storage_container_id, :notes
+        sample_storage_containers_attributes: [
+            :id, :sample_name_or_barcode, :container_type, :container_name,
+            :position_in_container, :freezer_location_id, :storage_container_id, :notes, :_destroy
         ]
     )
   end

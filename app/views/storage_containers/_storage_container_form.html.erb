@@ -5,7 +5,7 @@
     <div class="form-group row">
       <label for="freezer_location_id" class="col-sm-2 col-form-label col-form-label-sm">Freezer/Loc:</label>
       <div class="col-auto">
-        <%= f.collection_select(:freezer_location_id, @freezers, :id, :room_and_freezer, {}, {class: "form-control"}) %>
+        <%= f.collection_select(:freezer_location_id, @selected_freezer, :id, :room_and_freezer, {:disabled=>'disabled'}, {class: "form-control"}) %>
       </div>
     </div>
 
@@ -32,3 +32,5 @@
 
   </div>
 </div>
+
+<%= render :partial => 'shared/storage_container_data' %>

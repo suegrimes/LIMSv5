@@ -43,14 +43,19 @@ class StorageType < ApplicationRecord
   end
 
   def valid_positions
-    return nil if display_format != '2D'
-    grid_positions = []
-    (first_col..max_col).each do |col|
-      (first_row..max_row).each do |row|
-        grid_positions.push([col, row].join())
+    if display_format[0..1] != '2D'
+      return nil
+    elsif display_format == '2Dseq'
+      return [*1..nr_rows*nr_cols].map(&:to_s)
+    else
+      grid_positions = []
+      (first_col..max_col).each do |col|
+        (first_row..max_row).each do |row|
+          grid_positions.push([col, row].join())
+        end
       end
+      return grid_positions
     end
-    return grid_positions
   end
 
 end
