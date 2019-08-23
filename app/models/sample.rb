@@ -44,7 +44,7 @@ class Sample < ApplicationRecord
   has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
   has_many :attached_files, as: :sampleproc
   
-  accepts_nested_attributes_for :sample_storage_container
+  accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
   
   validates_presence_of :barcode_key
   validates_uniqueness_of :barcode_key, message: 'is not unique'
@@ -59,7 +59,8 @@ class Sample < ApplicationRecord
 
   before_validation :upd_parent_ids, :del_blank_storage
   before_create :upd_from_source_sample
-  before_save :upd_parent_ids, :upd_if_sample_not_remaining
+  #before_save :upd_parent_ids, :upd_if_sample_not_remaining
+  before_save :upd_if_sample_not_remaining
 
   after_update :upd_dissections
 

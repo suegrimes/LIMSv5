@@ -194,6 +194,10 @@ protected
         lib_samples_attributes: [
             :id, :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :source_sample_name,
             :runtype_adapter, :adapter_id, :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
+        ],
+        sample_storage_container_attributes: [
+            :id, :sample_name_or_barcode, :container_type, :container_name,
+            :position_in_container, :freezer_location_id, :storage_container_id, :notes, :_destroy
         ]
     )
   end

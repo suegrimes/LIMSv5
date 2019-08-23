@@ -150,8 +150,8 @@ protected
       :alt_identifier, :tumor_normal, :sample_tissue, :left_right, :sample_type, :tissue_preservation,
       :sample_container, :vial_type, :amount_uom, :amount_initial, :sample_remaining, :comments, :updated_by,
       sample_storage_container_attributes: [
-        :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :freezer_location_id, :storage_container_id, :notes
+        :id, :sample_name_or_barcode, :container_type, :container_name,
+        :position_in_container, :freezer_location_id, :storage_container_id, :notes, :_destroy
       ]
     )
   end

@@ -47,20 +47,21 @@ class SeqLib < ApplicationRecord
   has_one :sample_storage_container, :as => :stored_sample, :dependent => :destroy
 
   accepts_nested_attributes_for :lib_samples
-  accepts_nested_attributes_for :sample_storage_container
+  accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
   
   validates_uniqueness_of :barcode_key, :message => 'is not unique'
   validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
   validates_date :preparation_date
   validates_format_of :trim_bases, :with => /\A\d+\z/, :allow_blank => true, :message => "# bases to trim must be an integer"
-  validates_numericality_of :pcr_size, :only_integer => true, :greater_than => 20, :on => :create, :message => "is not a valid integer >20"
-  validates_numericality_of :sample_conc, :greater_than_or_equal_to => 1, :on => :create, :if => "sample_conc_uom == 'nM'",
-                            :message => "must be >= 1nM"
+  validates_numericality_of :pcr_size, :only_integer => true, :greater_than => 20, :on => :create,
+                            :if => "library_type == 'S'", :message => "is not a valid integer >20"
+  validates_numericality_of :sample_conc, :greater_than_or_equal_to => 1, :on => :create,
+                            :if => "sample_conc_uom == 'nM' and library_type == 'S'", :message => "must be >= 1nM"
 
   validate :barcode_prefix_valid
-  
+
+  before_validation :del_blank_storage
   before_create :set_default_values
-  before_save :del_blank_storage
   #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
   #after_update :save_samples
   

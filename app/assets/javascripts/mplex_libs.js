@@ -2,14 +2,15 @@
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 //
-// currently handling both samples and sample_characteristics in this file
 
-// samples edit init
-function mplex_libs_edit_init() {
-    // new storage management init
+// mplex_libs new init
+function mplex_libs_new_init() {
     storage_container_init();
+}
 
-    // storage containers edit init
+// mplex_libs edit init
+function mplex_libs_edit_init() {
+    storage_container_init();
     edit_storage_container_init();
 }
 
