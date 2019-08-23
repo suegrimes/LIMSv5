@@ -71,7 +71,16 @@ class MplexLibsController < ApplicationController
     
     #slib_params = array of arrays [][id, notes]; slib_ids = array of ids [id1, id2, ..]
     temp_params = params.to_unsafe_h
-    slib_params = temp_params[:lib_samples].collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    lsample_params = temp_params[:lib_samples]
+
+    if lsample_params.is_a?(Array)
+      slib_params = lsample_params.collect{|lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    elsif lsample_params.is_a?(Hash)
+      slib_params = lsample_params.collect{|lkey, lsample| [lsample[:splex_lib_id].to_i, lsample[:notes]]}
+    else
+      slib_params = []
+    end
+
     slib_params.delete_if{|sparam| sparam[0] == 0}
     slib_ids_checked = slib_params.collect{|sparam| sparam[0]}
     slib_ids_all = params[:lib_id].to_a
@@ -129,7 +138,7 @@ class MplexLibsController < ApplicationController
       dropdowns
       render :action => 'new'
     else
-     flash[:notice] = "Multiplex library successfully created from #{@singleplex_libs.size} individual libraries"
+     flash[:notice] = "Multiplex library successfully created from #{splex_libs.size} individual libraries"
      redirect_to(@seq_lib)
     end
     #render :action => 'debug'
@@ -216,22 +225,22 @@ protected
   end
 
   def lib_params
-    [:lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
+    [:barcode_key, :lib_name, :library_type, :lib_status, :protocol_id, :owner, :preparation_date, :adapter_id, :runtype_adapter,
      :project, :oligo_pool, :alignment_ref_id, :trim_bases, :sample_conc, :sample_conc_uom, :lib_conc_requested, :lib_conc_uom,
      :notebook_ref, :notes, :quantitation_method, :starting_amt_ng, :pcr_size, :dilution, :updated_by]
   end
 
   def sample_params
     {lib_samples_attributes: [
-        :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
+        :id, :splex_lib_id, :splex_lib_barcode, :processed_sample_id, :sample_name, :source_DNA, :runtype_adapter, :adapter_id,
         :index1_tag_id, :index2_tag_id, :enzyme_code, :notes, :updated_by
     ]}
   end
 
   def storage_params
     {sample_storage_container_attributes: [
-        :sample_name_or_barcode, :container_type, :container_name,
-        :position_in_container, :storage_container_id, :freezer_location_id, :notes
+        :id, :sample_name_or_barcode, :container_type, :container_name,
+        :position_in_container, :storage_container_id, :freezer_location_id, :notes, :_destroy
     ]}
   end
 

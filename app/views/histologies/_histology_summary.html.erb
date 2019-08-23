@@ -8,8 +8,8 @@
     <th>Histopathology</th>
     <th>H&E classification</th>
     <th>Tumor cell content</th>
-    <th></th>
-    <th></th>
+    <% if (can? :edit, histology) %><th></th><% end %>
+    <% if (can? :delete, histology) %><th></th><% end %>
   </tr>
   </thead>
 
@@ -24,6 +24,10 @@
     <% if (can? :delete, histology) %> <td class="linkborder"><%= link_to 'Delete', histology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
   </tr>
   <% if !histology.comments.blank? %>
-    <tr><td></td><td colspan="5"><%=h histology.comments %></td></tr>
+    <tr>
+      <td></td><td colspan="5"><%=h histology.comments %></td>
+      <% if (can? :edit, histology) %><td></td><% end %>
+      <% if (can? :delete, histology) %><td></td><% end %>
+    </tr>
   <% end %>
 </table>

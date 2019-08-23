@@ -124,7 +124,7 @@ logger.debug "#{self.class}#create_multi: request.xhr: #{request.xhr?}"
 
     # convert hash with index keys to an array of sample params hashes
     @sample_params_hash = params[:sample]
-    return bad_request_error("Missing sample parameter") if @sample_params_hash.nil?
+    return bad_request_error("Missing sample parameters") if @sample_params_hash.nil?
     @sample_params_array = []
     @sample_params_hash.each do |k, v|
       i = k.to_i
@@ -141,9 +141,9 @@ logger.debug "#{self.class}#create_multi: request.xhr: #{request.xhr?}"
       unless @sample.save
         # on error we stop saving and return errors on failing object
         if @saved_ids.size > 0
-          flash[:notice] = "#{@saved_ids.size} Dissections saved" 
+          flash[:notice] = "#{@saved_ids.size} dissections saved"
         end
-        flash[:error] = "#{@sample_params_array.size - @saved_ids.size} Dissections not saved"
+        flash[:error] = "#{@sample_params_array.size - @saved_ids.size} dissections not saved"
 
         respond_to do |format|
           format.json do
@@ -158,7 +158,7 @@ logger.debug "#{self.class}#create_multi: request.xhr: #{request.xhr?}"
       end
       @saved_ids << @sample.id
     end
-    flash[:notice] = "All #{@sample_params_array.size} Dissections successfully created"
+    flash[:notice] = "All #{@sample_params_array.size} dissections successfully created"
     respond_to do |format|
       format.json do
         render json: {saved_ids: @saved_ids}, status: :created

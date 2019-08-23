@@ -79,7 +79,7 @@ function remote_error(xhr, error, fcn_label, flash_selector) {
 // set the flash message in the flash box
 // selector is an optional parameter for the flashbox
 function set_flash(key, message, selector) {
-  if (typeof selector === 'undefined') { selector = '#flash_box"'; }
+  if (typeof selector === 'undefined') { selector = '#flash_box'; }
   var html = '<div class="'+key+' flash_msg" id="flash_'+key+'">'+message+'</div>';
   $(selector).empty().append(html);
 }
@@ -87,7 +87,7 @@ function set_flash(key, message, selector) {
 // set flash messages from response headers
 // selector is an optional parameter for the flashbox
 function set_header_flash_messages(xhr, selector) {
-  if (typeof selector === 'undefined') { selector = '#flash_box"'; }
+  if (typeof selector === 'undefined') { selector = '#flash_box'; }
   var box = $(selector);
   box.empty();
   var fm_str = xhr.getResponseHeader("X-Flash-Messages");
