@@ -149,22 +149,22 @@ function storage_containers_new_query_init() {
     add_container_options_new_query(options);
     //arrange_container_types($("select.container-type"), freezer);
   });
+
 } // storage_containers_new_query_init() 
 
 // handle loading only container types for freezer on create new container - JP 8/13/2019
-function storage_containers_new_init() {
-  // handle preloading container types for freezer location on New Storage Continer form  
-  var freezer_id = $("select#storage_container_freezer_location_id option:selected" ).val();
-  logger('DEBUG::freezer id: '+freezer_id)
+//function storage_containers_new_init() {
+  // handle preloading container types for freezer location on New Storage Container form
+//  var freezer_id = $("select#storage_container_freezer_location_id option:selected" ).val();
+//  logger('DEBUG::freezer id: '+freezer_id)
   
   // check for freezer location id
-  var select_freezer_container_types = window.container_by_location_id
-  logger('DEBUG::select_freezer_container_types'+select_freezer_container_types)
-  var options = mk_new_container_select_selected_freezer_id_options(select_freezer_container_types)
-  add_container_options_new_container(options);
-  //arrange_container_types($("select.container-type"), freezer);
+//  var select_freezer_container_types = window.container_by_location_id
+//  logger('DEBUG::select_freezer_container_types'+select_freezer_container_types)
+//  var options = mk_new_container_select_selected_freezer_id_options(select_freezer_container_types)
+//  add_container_options_new_container(options);
 
-} // storage_containers_new_query_init() 
+//} // storage_containers_new_query_init()
 
 // additional init for the edit page
 function edit_storage_container_init() {
