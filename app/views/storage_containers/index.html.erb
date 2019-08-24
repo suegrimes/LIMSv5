@@ -26,9 +26,14 @@
 	  <td><%=h storage_container[:owner_name] %></td>
 	  <td><%=h storage_container[:container_type] %></td>
 	  <td><%=h storage_container[:container_name] %></td>
-	  <td><%=link_to ssc_count, :action => :list_contents, :id => storage_container[:id] %></td>
-    <td><% if can? :edit, storage_container %><%=link_to 'Edit', edit_storage_container_path(storage_container) %>
-        <% else %> &nbsp; <% end %>  </td>
+	  <td><% if ssc_count > 0 %><%=link_to ssc_count, :action => :list_contents, :id => storage_container[:id] %>
+        <% else %><%= ssc_count %><% end %>
+    </td>
+    <td><% if ssc_count > 0 and can? :edit, storage_container %><%=link_to 'Edit', edit_storage_container_path(storage_container) %>
+        <% elsif ssc_count == 0 and can? :delete, storage_container %>
+          <%= link_to 'Delete', storage_container_path(storage_container), data: {:confirm => 'Are you sure?'}, :method => :delete %>
+        <% else %> &nbsp; <% end %>
+    </td>
   </tr>
   <% end %>
 </table>

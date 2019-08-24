@@ -15,6 +15,7 @@ class StorageContainersController < ApplicationController
   # GET /storage_containers/1/edit
   def edit
     @storage_container = StorageContainer.find(params[:id])
+    @selected_freezer = FreezerLocation.find(@storage_container.freezer_location_id)
   end
 
   def show
@@ -46,11 +47,21 @@ class StorageContainersController < ApplicationController
     end
   end
 
+  def destroy
+    @storage_container = StorageContainer.find(params[:id])
+    @container_type = @storage_container.container_type
+    @freezer_location = FreezerLocation.find(@storage_container.freezer_location_id)
+    @storage_container.destroy
+
+    redirect_to storage_containers_url({:freezer_location => {:freezer_location_id => @freezer_location.id},
+                                        :storage_type => {:container_type => @container_type}})
+  end
+
   def new_query
   end
 
   def index
-    @freezer = StorageContainer.find(params[:freezer_location][:freezer_location_id])
+    @freezer = FreezerLocation.find(params[:freezer_location][:freezer_location_id])
     condition_array = define_conditions(params)
     @storage_containers = StorageContainer.find_for_summary_query(condition_array)
     render :action => :index
