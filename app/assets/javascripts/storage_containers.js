@@ -149,22 +149,62 @@ function storage_containers_new_query_init() {
     add_container_options_new_query(options);
     //arrange_container_types($("select.container-type"), freezer);
   });
+}
 
-} // storage_containers_new_query_init() 
+function storage_containers_index_init() {
+    var dt = $("table.data-table").DataTable( {
+        iDisplayLength: 50,
+        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+        // Columns with links should not be sortable or searchable
+        columnDefs: [ { targets: [ 'action', 'link-col'], sortable: false, searchable: false } ]
+    });
 
-// handle loading only container types for freezer on create new container - JP 8/13/2019
-//function storage_containers_new_init() {
+    // save the Datatable for later use
+    window.datatable = dt;
+
+    // fix for back button, destroy DataTables before caching the page
+    document.addEventListener("turbolinks:before-cache", function() {
+        if (dt !== null) {
+            dt.destroy();
+            dt = null;
+        }
+    });
+}
+
+function storage_containers_list_contents_init() {
+    var dt = $("table.data-table").DataTable( {
+        iDisplayLength: 50,
+        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+        // Columns with links should not be sortable or searchable
+        columnDefs: [ { targets: [ 'action', 'link-col'], sortable: false, searchable: false } ]
+    });
+
+    // save the Datatable for later use
+    window.datatable = dt;
+
+    // fix for back button, destroy DataTables before caching the page
+    document.addEventListener("turbolinks:before-cache", function() {
+        if (dt !== null) {
+            dt.destroy();
+            dt = null;
+        }
+    });
+}
+/* SG 8/23/2019 Not needed for storage_containers/new - all container types should be selectable not just existing
+// JP 8/13/2019 Handle loading only container types for freezer on create new container
+function storage_containers_new_init() {
   // handle preloading container types for freezer location on New Storage Container form
-//  var freezer_id = $("select#storage_container_freezer_location_id option:selected" ).val();
-//  logger('DEBUG::freezer id: '+freezer_id)
+  var freezer_id = $("select#storage_container_freezer_location_id option:selected" ).val();
+  logger('DEBUG::freezer id: '+freezer_id)
   
-  // check for freezer location id
-//  var select_freezer_container_types = window.container_by_location_id
-//  logger('DEBUG::select_freezer_container_types'+select_freezer_container_types)
-//  var options = mk_new_container_select_selected_freezer_id_options(select_freezer_container_types)
-//  add_container_options_new_container(options);
+// check for freezer location id
+  var select_freezer_container_types = window.container_by_location_id
+  logger('DEBUG::select_freezer_container_types'+select_freezer_container_types)
+  var options = mk_new_container_select_selected_freezer_id_options(select_freezer_container_types)
+  add_container_options_new_container(options);
 
-//} // storage_containers_new_query_init()
+} // storage_containers_new_init()
+*/
 
 // additional init for the edit page
 function edit_storage_container_init() {
@@ -286,7 +326,7 @@ logger("add_container_options_new_query() "+options.length+" options");
   var first_option = $("select#storage_type_container_type :first-child");
   if (options.length == 0) {
     first_option.nextAll().remove();
-    first_option.text("No existing containers for Freezer/Type");
+    first_option.text("No existing containers for Room/Freezer");
     hide_position_ui();
     return;
   }
@@ -295,12 +335,13 @@ logger("add_container_options_new_query() "+options.length+" options");
   first_option.text("Select("+options.length+")..");
 }
 
+/* SG 8/23/2019 Not needed, new containers select from all possible container types, not just existing
 function add_container_options_new_container(options) {
 logger("add_container_options_new_query() "+options.length+" options");
   var first_option = $("select#storage_container_container_type :first-child");
   if (options.length == 0) {
     first_option.nextAll().remove();
-    first_option.text("No existing containers for Freezer/Type");
+    first_option.text("No existing containers for Room/Freezer");
     hide_position_ui();
     return;
   }
@@ -308,6 +349,7 @@ logger("add_container_options_new_query() "+options.length+" options");
   first_option.after(options);
   first_option.text("Select("+options.length+")..");
 }
+*/
 
 function remove_container_options() {
   var select_text = "Select Freezer/Type first";
@@ -345,16 +387,16 @@ function mk_container_select_selected_freezer_id_options(container_data) {
     var option = $("<option></option>");
     option.attr("value", row[0]);  // container_id
     // handle null dimensions
-    if (row[0] == null || row[1] == null) {
+    /*if (row[0] == null || row[1] == null) {
       capacity = available = "Unknown";
-    }
+    }*/
     var text = row[0]
     option.text(text);
     options.push(option);
   });
   return options;
 }
-
+/* SG 8/23/2019  This function not needed, new containers select from all available container types
 function mk_new_container_select_selected_freezer_id_options(container_data) {
   var options = [];
   container_data.forEach(function(row) {
@@ -371,6 +413,7 @@ function mk_new_container_select_selected_freezer_id_options(container_data) {
   });
   return options;
 }
+*/
 
 // re-arrange the container type options so ones in the selected freezer are diplayed first
 function arrange_container_types(select, freezer_id) {

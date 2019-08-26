@@ -1,14 +1,14 @@
 <h5>Freezer: <%=h @ss_container.freezer_location.room_and_freezer %>
   Container: <%=h @ss_container.container_type %>&nbsp;<%=h @ss_container.container_name %></h5>
 
-<table class="table table-bordered table-sm table-font-sm">
+<table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
     <th>Sample Name</th>
     <th>Position</th>
     <th>Sample Type</th>
     <th>Upd By</th>
-    <th>&nbsp;</th>
+    <th class="link-col">&nbsp;</th>
   </tr>
   </thead>
 
@@ -27,7 +27,6 @@
               <%=link_to 'Edit', edit_path_by_type(ssc) %>
           <% end %>
         </td>
-      </tr>
       </tr>
   <% end %>
 </table>
