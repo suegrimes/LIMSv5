@@ -89,6 +89,8 @@ class Ability
         can :manage, CategoryValue do |val|
           [4,5].include?(val.category.cgroup_id)
         end
+        can :manage, SequencerKit
+        cannot :delete, SequencerKit
       end
 
       if user.has_role?("barcodes")

@@ -1,4 +1,4 @@
-<%= render :partial => 'shared/container_js' %>
+<%= render :partial => 'shared/js_data/container_functions' %>
 
 <%= fields_for :sample, @sample do |s| %>
     <%= render :partial => 'samples_form', :locals => {s: s, sample: @sample, edit_sample_storage: edit_sample_storage} %>
