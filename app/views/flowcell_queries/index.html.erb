@@ -11,6 +11,7 @@
       <tr>
         <th>LIMS Run#</th>
         <th>Sequencer Run#</th>
+        <th>Seq Kit</th>
         <th># Bases: R1,I1,I2,R2</th>
         <th>Run Description/Notes</th>
         <th>Pub?</th>
@@ -27,6 +28,7 @@
 
             <td><%=link_to flow_cell.seq_run_key, flow_cell %></td>
             <td><%=h flow_cell.hiseq_xref %></td>
+            <td><%=h flow_cell.sequencing_kit %></td>
             <td><%=h flow_cell.nr_bases_read1 %>, <%=h flow_cell.nr_bases_index1 %>, <%=h flow_cell.nr_bases_index2 %>, <%=h flow_cell.nr_bases_read2 %> </td>
             <td>
               <% notes_brk = 'no'%>
@@ -36,8 +38,7 @@
                   <i><strong>Notes:</strong>&nbsp;&nbsp;<%=h flow_cell.notes %></i>
               <% end %>
             </td>
-            <td style="text-align:center"><!--%= link_to flow_cell.for_publication?, :action => 'show_publications', :controller => 'flow_cells', :id => flow_cell.id %--></td>
-
+            <td style="text-align:center"><%= link_to flow_cell.for_publication?, :action => 'show_publications', :controller => 'flow_cells', :id => flow_cell.id %></td>
             <td><%= link_to 'Attach', new_attached_file_path(:rec_type => 'flow_cell', :obj_id => flow_cell.id) %></td>
 
             <% if can? :edit, flow_cell %>

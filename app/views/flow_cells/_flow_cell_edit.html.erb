@@ -7,20 +7,26 @@
   </thead>
   <tbody>
     <tr>
-      <td class="label"><label for="flowcell_date" class="col-form-label col-form-label-sm">Date:</label></td>
-      <td><%= f.date_field(:flowcell_date, class: "form-control") %></td>
+      <td class="label"><label for="sequencing_date" class="col-form-label col-form-label-sm">Date:</label></td>
+      <td style="vertical-align:middle"><%=h f.object.sequencing_date %></td>
 
-      <td class="label"><label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label></td>
-      <td>
-        <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
-      </td>
+      <td class="label"><label for="machine_name_and_type" class="col-form-label col-form-label-sm">Seq Machine:</label></td>
+      <td style="vertical-align:middle"><%=h (f.object.seq_machine ? f.object.seq_machine.machine_name_and_type : ['N/A', '(', f.object.machine_type, ')'].join) %></td>
 
       <td class="label"><label for="partial_flowcell" class="col-form-label col-form-label-sm">Partial FlowCell?</label></td>
-      <td><%= select_tag :partial_flowcell, options_for_select(%w{N Y}, selected_value=@partial_flowcell), class: "form-control", style: "width:4rem" %></td>
+      <td style="vertical-align:middle"><%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %></td>
     </tr>
 
+    <% if can? :new, AlignmentRef %>
     <tr>
-      <td class="label"><label for="nr_bases_read1" class="col-form-label col-form-label-sm">Read Lengths:</label></td>
+      <td class="label"><label for="flowcell_status" class="col-form-label col-form-label-sm">Status:</label></td>
+      <td><%= f.select(:flowcell_status, FlowCell::STATUS, {}, class: "form-control", style: "width:6rem") %></td>
+      <td colspan="4"></td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <td class="label"><label for="nr_bases_read1" class="col-form-label col-form-label-sm">R1,R2,I1,I2:</label></td>
       <td colspan="3">
         <table class="nested-table table-borderless">
           <td><%= f.text_field :nr_bases_read1, placeholder: 'R1', class: "form-control", style: "width:6rem" %></td>
@@ -36,7 +42,7 @@
     </tr>
     <tr>
       <td class="label"><label for="sequencing_kit" class="col-form-label col-form-label-sm">Sequencing Kit:</label></td>
-      <td><%= f.collection_select(:sequencing_kit, {}, nil, nil, {include_blank: 'Select Machine first'}, class: "form-control") %></td>
+      <td><%= f.select(:sequencing_kit, grouped_options_for_select(@seq_kits, 1), {}, class: "form-control") %></td>
       <td class="label"><label for="cluster_kit" class="col-form-label col-form-label-sm">Cluster Kit:</label></td>
       <td><%= f.collection_select(:cluster_kit, @cluster_kits, :c_value, :c_value, {}, class: "form-control") %></td>
       <td colspan="2"></td>

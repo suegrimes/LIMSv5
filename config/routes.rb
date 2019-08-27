@@ -112,7 +112,7 @@ Rails.application.routes.draw do
   resources :sample_loc_queries, :only => :index
 
   # Routes for sequencing libraries
-  get 'sequencing/main' => 'seq_libs#main_hdr'
+  #get 'sequencing/main' => 'seq_libs#main_hdr'
   resources :seq_libs do
     get :get_adapter_info, on: :collection
    end
@@ -173,6 +173,7 @@ Rails.application.routes.draw do
   resources :seq_machines
   resources :freezer_locations
   resources :storage_types
+  resources :sequencer_kits
   resources :researchers
 
   # Routes for ordering chemicals & supplies

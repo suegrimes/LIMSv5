@@ -1,0 +1,31 @@
+<h5>Sequencing Kits</h5>
+<div class="offset-sm-1 col-md-6">
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Machine Type</th>
+    <th>Kit Name</th>
+    <% if can? :edit, SequencerKit %><th>&nbsp;</th><% end %>
+    <% if can? :delete, SequencerKit %><th>&nbsp;</th><% end %>
+  </tr>
+  </thead>
+
+  <tbody>
+    <% @sequencer_kits.each do |sequencer_kit| %>
+      <tr>
+        <td><%=h sequencer_kit.machine_type %></td>
+        <td><%=h sequencer_kit.kit_name %></td>
+        <% if can? :edit, sequencer_kit %>
+          <td><%= link_to 'Edit', edit_sequencer_kit_path(sequencer_kit) %></td>
+        <% end %>
+        <% if can? :delete, sequencer_kit %>
+          <td><%= link_to 'Delete', sequencer_kit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+
+<%= link_to 'New Sequencer Kit', new_sequencer_kit_path %>

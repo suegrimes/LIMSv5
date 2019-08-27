@@ -20,14 +20,14 @@
       <label for="machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
       <div class="col-auto">
         <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value,
-                                  {:include_blank => 'Select..', class: "form-control"}) %>
+                                  {:include_blank => 'Select..'}, class: "form-control") %>
       </div>
     </div>
 
     <div class="form-group row">
       <label for="bldg_location" class="col-auto col-form-label col-form-label-sm">Building:</label>
       <div class="col-auto">
-        <%= f.select(:bldg_location, %w{SGTC 1050A IMH CCSR Core Snyder Other}, class: "form-control") %>
+        <%= f.select(:bldg_location, %w{SGTC 1050A CCSR IMH Core Snyder Other}, {}, class: "form-control") %>
       </div>
     </div>
 
