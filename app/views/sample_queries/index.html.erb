@@ -10,6 +10,7 @@
 <thead class="thead-light">
   <tr>
     <th>Barcode</th>
+    <th>Alt ID</th>
     <th>Source</th>
     <th>Sample Date</th>
     <th>OR Designation</th>
@@ -45,6 +46,7 @@
         <% else %>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.barcode_key %></td>
         <% end %>
+        <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.alt_identifier %></td>
         <% if sample.clinical_sample == 'yes' %>
 		<td class=<%= "dotted_border_bottom" if nonblank_comments %>> Clinical </td>
         <% else %>

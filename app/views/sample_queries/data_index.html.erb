@@ -41,6 +41,7 @@
     <th></th> <!-- hold source sample indicator tag -->
     <th>Patient ID</th>
     <th>Barcode</th>
+    <th>Alt ID</th>
     <th>Sample Date</th>
     <th>Sample Type</th>
     <th>OR Designation</th>
@@ -66,6 +67,7 @@
 
         <td><%==link_to patient_id[0], "#{sample_queries_path}?#{{patient_id: patient_id[0], rpt_type: "tree"}.to_query(:sample_query)}" %></td>
         <td><%=link_to sample.barcode_key, sample_path(sample) %></td>
+        <td><%=h sample.alt_identifier %></td>
         <td><%=h sample.sample_date %></td>
         <td><%=h sample.sample_category %></td>
         <td><%=h sample.tumor_normal %></td>
