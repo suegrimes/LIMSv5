@@ -3,7 +3,7 @@ class FlowCellsController < ApplicationController
   layout 'main/main'
   authorize_resource class: FlowCell
   
-  before_action :dropdowns, :only => [:new, :edit]
+  before_action :dropdowns, :only => [:new, :edit, :create, :update]
   before_action :setup_dropdowns, :only => :setup_params
   before_action :seq_dropdowns, :only => :show
   
@@ -224,7 +224,7 @@ protected
     @category_dropdowns = Category.populate_dropdowns([Cgroup::CGROUPS['Sequencing']])
     @machine_types      = category_filter(@category_dropdowns, 'machine type')
     @cluster_kits       = category_filter(@category_dropdowns, 'cluster kit')
-    @seq_kits           = SequencerKit.populate_dropdown_grouped
+    #@seq_kits           = SequencerKit.populate_dropdown_grouped
     @machine_type_kits  = SequencerKit.machine_type_kits
     @projects           = category_filter(@category_dropdowns, 'project')
     @oligo_pools        = Pool.populate_dropdown('flowcell')
