@@ -34,8 +34,10 @@ class Sample < ApplicationRecord
   include LimsCommon
 
   # Rails 5 defaults to required: true, so make it explicitly optional
-  belongs_to :patient
-  belongs_to :sample_characteristic
+  # Patient and sample_characteristic are not really optional, but during edit or bulk upload foreign keys are not initially set
+  #    so validation fails if relationships not set to optional.  upd_parent_ids callback will set fk values.
+  belongs_to :patient, optional: true
+  belongs_to :sample_characteristic, optional: true
   belongs_to :source_sample, optional: true, class_name: 'Sample', foreign_key: 'source_sample_id'
   has_many   :samples, foreign_key: 'source_sample_id'
   belongs_to :user, optional: true, foreign_key: 'updated_by'
@@ -57,9 +59,10 @@ class Sample < ApplicationRecord
   FLDS_FOR_COPY = (%w{sample_type sample_tissue left_right tissue_preservation sample_container vial_type amount_uom})
   SOURCE_FLDS_FOR_DISSECT = (%w{sample_characteristic_id patient_id tumor_normal sample_type sample_tissue left_right tissue_preservation})
 
-  before_validation :upd_parent_ids, :del_blank_storage
-  before_create :upd_from_source_sample
-  #before_save :upd_parent_ids, :upd_if_sample_not_remaining
+  #SG 8/28/2019: For bulk upload upd_parent_ids cannot be done until before_create (or before_save if also appropriate after edit)
+  #before_validation :upd_parent_ids, :del_blank_storage
+  before_validation :del_blank_storage
+  before_create :upd_parent_ids, :upd_from_source_sample
   before_save :upd_if_sample_not_remaining
 
   after_update :upd_dissections
