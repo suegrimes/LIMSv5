@@ -12,7 +12,7 @@
 
       <td class="label"><label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label></td>
       <td>
-        <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'}, class: "form-control")%>
+        <%= f.collection_select(:machine_type, @machine_types, :c_value, :c_value, {:include_blank => 'Select..'}, class: "machine-type form-control")%>
       </td>
 
       <td class="label"><label for="partial_flowcell" class="col-form-label col-form-label-sm">Partial FlowCell?</label></td>
@@ -38,7 +38,7 @@
       <td class="label"><label for="sequencing_kit" class="col-form-label col-form-label-sm">Sequencing Kit:</label></td>
       <!--%= f.collection_select(:sequencing_kit, {}, nil, nil, {include_blank: 'Select Machine first'}, class: "form-control") %-->
 
-      <td><%=f.select :sequencing_kit, grouped_options_for_select(@seq_kits), {include_blank: true}, class: "form-control" %></td>
+      <td><%=f.select :sequencing_kit, grouped_options_for_select(@seq_kits), {include_blank: true}, class: "seq-kit form-control" %></td>
 
       <td class="label"><label for="cluster_kit" class="col-form-label col-form-label-sm">Cluster Kit:</label></td>
       <td><%= f.collection_select(:cluster_kit, @cluster_kits, :c_value, :c_value, {}, class: "form-control") %></td>

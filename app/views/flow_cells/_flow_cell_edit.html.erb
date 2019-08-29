@@ -13,7 +13,7 @@
 
       <td class="label"><label for="machine_name_and_type" class="col-form-label col-form-label-sm">Seq Machine:</label></td>
       <td style="vertical-align:middle"><%=h (f.object.seq_machine ? f.object.seq_machine.machine_name_and_type : ['N/A', '(', f.object.machine_type, ')'].join) %>
-          <%=f.hidden_field(:machine_type) %></td>
+          <%=f.hidden_field(:machine_type, class: "machine-type") %></td>
 
       <td class="label"><label for="partial_flowcell" class="col-form-label col-form-label-sm">Partial FlowCell?</label></td>
       <td style="vertical-align:middle"><%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %></td>
