@@ -35,6 +35,7 @@ class FlowCell < ApplicationRecord
   
   validates_presence_of :machine_type, :nr_bases_read1
   validates_date :flowcell_date, :sequencing_date, :allow_blank => true
+  validate :seq_kit_valid, on: :create
   
   #scope :sequenced,   :conditions => "flowcell_status <> 'F'"
   #scope :unsequenced, :conditions => "flowcell_status = 'F'"
@@ -49,6 +50,13 @@ class FlowCell < ApplicationRecord
   STATUS = %w{F R S Q N X}
   RUN_NR_TYPES = %w{LIMS Illumina}
   
+  def seq_kit_valid
+    sequencer_kits = SequencerKit.where('machine_type = ?', machine_type).pluck(:kit_name)
+    unless sequencer_kits.include?(sequencing_kit)
+      errors.add(:sequencing_kit, "is not valid for selected machine type")
+    end
+  end
+
   def for_publication?
     publication_flags = self.flow_lanes.collect{|flow_lane| flow_lane.for_publication?}
     return publication_flags.max

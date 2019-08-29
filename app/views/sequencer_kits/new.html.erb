@@ -1,0 +1,12 @@
+<h5>New Storage Type</h5>
+
+<%= form_for(@sequencer_kit, :action => 'create') do |f| %>
+  <%= render '/shared/errors', model: @sequencer_kit %>
+
+  <%= render :partial => 'sequencer_kit_form', :locals => {:f => f} %>
+
+  <%= f.submit "Create", class: "btn btn-primary"  %>
+<% end %>
+
+<%= link_to 'List All', sequencer_kits_path %>
+
