@@ -228,7 +228,9 @@ logger("edit_storage_container_init()");
 
   // save state for current position in container
   // used for grid display with a currently existing position
-  var cur_pic = $("div.current-container-fields.position-in-container input").val()
+  //var cur_pic = $("div.current-container-fields.position-in-container input").val()
+  var cur_pic = $("input.position-in-container").val()
+  logger("saving current position in container "+cur_pic)
   window.current_position_in_container = cur_pic;
   window.edit_current_container = true;
 
@@ -362,6 +364,7 @@ function remove_container_options() {
 // [freezer_location_id, container_type, container_name, container_id,
 // count_of_samples_in_container, nr_rows, nr_cols]
 function mk_container_select_options(container_data, freezer_id, container_type) {
+  logger("mk_container_select_options freezer: "+freezer_id+" container_type: "+container_type);
   var options = [];
   container_data.forEach(function(row) {
     if (freezer_id != row[0] || container_type != row[1]) { return };
@@ -377,6 +380,7 @@ function mk_container_select_options(container_data, freezer_id, container_type)
     option.text(text);
     options.push(option);
   });
+  logger ("mk_container_select_options "+options.length+" options")
   return options;
 }
 
@@ -597,7 +601,7 @@ logger("display_format: "+display_format+" nr_rows: "+nr_rows+" nr_cols: "+nr_co
           if (display_format == "2D") {
               var col_row = col_label + row_label;
           } else {
-              var col_row = char_at((i-1)*10, j);
+              var col_row = char_at((i-1)*nr_rows, j);
           }
 
           if (positions_used.includes(col_row)) {
