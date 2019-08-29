@@ -1,2 +1,2 @@
-Production	http://liimstest.stanford.edu
+Production	http://liims.stanford.edu
 Tagline	Ji Research Group - Stanford Genome Technology Center
