@@ -1,23 +1,14 @@
-
 // standard init functions
 // Format: <controller>_init() => controller specific init
 //   <controller>_<action>_init() => controller/action specific init
 
-// dissected_samples edit init
-function dissected_samples_edit_init() {
-    // new storage management init
+function dissected_samples_new_init() {
     storage_container_init();
-
-    // storage containers edit init
-    edit_storage_container_init();
+    //edit_storage_container_init();
 }
 
-// dissected_samples edit init
-function dissected_samples_new_init() {
-    // new storage management init
+function dissected_samples_edit_init() {
     storage_container_init();
-
-    // storage containers edit init
     edit_storage_container_init();
 }
 

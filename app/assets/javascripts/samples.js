@@ -24,13 +24,11 @@ function samples_update_init() {
 
 // sample_characteristics new_sample init
 function sample_characteristics_new_sample_init() {
-  // new storage management init
   storage_container_init();
 }
 
 // sample_characteristics create init
 function sample_characteristics_create_init() {
-  // new storage management init
   storage_container_init();
 }
 
