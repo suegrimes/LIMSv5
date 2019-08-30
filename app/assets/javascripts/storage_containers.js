@@ -106,8 +106,7 @@ function storage_containers_new_query_init() {
   $("select#freezer_location_freezer_location_id").on("change", function() {
     var freezer_id = $(this).val();
     if (freezer_id == "") {
-      remove_container_options();
-      return
+        return
     }
     // check for freezer location id
     var select_freezer_container_types = []
@@ -116,10 +115,8 @@ function storage_containers_new_query_init() {
         select_freezer_container_types.push(value)
       }
     });
-    //var options = mk_container_select_options(window.container_type_freezer, freezer, '');
     var options = mk_container_select_selected_freezer_id_options(select_freezer_container_types)
     add_container_options_new_query(options);
-    //arrange_container_types($("select.container-type"), freezer);
   });
 }
 
@@ -267,15 +264,22 @@ function mk_container_select_options(container_data, freezer_id, container_type)
 function add_container_options(options) {
     logger("add_container_options() "+options.length+" options");
     var first_option = $("select.storage-container :first-child");
+    first_option.nextAll().remove();
+
     if (options.length == 0) {
-        first_option.nextAll().remove();
         first_option.text("No existing containers for Freezer/Type");
         hide_position_ui();
         return;
-    }
-    first_option.nextAll().remove();
-    first_option.after(options);
+    }  //else
     first_option.text("Select("+options.length+")..");
+    first_option.after(options);
+}
+
+// FUNCTION: remove_container_options
+//   remove all storage containers from drop-down list
+function remove_container_options() {
+    var select_text = "Select Freezer/Type first";
+    $("select.storage-container :first-child").text(select_text).nextAll().remove();
 }
 
 //****************************************************************************************************//
@@ -308,7 +312,7 @@ function add_container_options_new_query(options) {
 }
 
 //****************************************************************************************************//
-// Lightbox grid handling
+// Lightbox storage container grid handling
 //****************************************************************************************************//
 function lightbox_selector() {
     // featherligth-inner class needed for nested lightboxes
@@ -356,8 +360,7 @@ function get_positions_build_grid(url, container_type, context) {
     });
 }
 
-// build a table with positions used data filled in
-// and with clickable available cells
+// build a table with positions used data filled in and with available cells clickable
 function build_grid(container_type, positions_used) {
     logger("build_grid("+container_type+","+positions_used+")");
     var row, display_format, nr_rows, nr_cols, first_row, first_col;
@@ -435,8 +438,7 @@ function build_clickable_td(row_col) {
     return td;
 }
 
-// given a character as a string return the
-// character n characters away in sequence as a string
+// given a character as a string, return the character n characters away sequentially as a string
 function char_at(char_string, n) {
     var num = +char_string;  // converts to number if a number
     if (isNaN(num)) {
@@ -593,11 +595,6 @@ function display_position_ui(container_type) {
         $(".select-position-btn").hide();
         $(".position-in-container").show();
     }
-}
-
-function remove_container_options() {
-  var select_text = "Select Freezer/Type first";
-  $("select.storage-container :first-child").text(select_text).nextAll().remove();
 }
 
 // re-arrange the container type options so ones in the selected freezer are diplayed first
