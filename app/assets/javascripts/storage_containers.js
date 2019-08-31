@@ -618,7 +618,6 @@ logger("get_container_dimensions("+container_type+")");
   return dimensions;
 }
 
-
 function hide_position_ui() {
   $(".position-in-container").hide();
   $(".select-position-btn").hide();

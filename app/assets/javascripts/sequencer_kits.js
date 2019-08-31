@@ -4,23 +4,15 @@ function seq_kit_populate_dropdown() {
     console.log(seq_kits);
 
     // For edit form, or after validation error on create, have existing machine type
-    handle_existing_machine_type(seq_kits)
+    handle_existing_machine_type(seq_kits);
 
     $('select.machine-type').change(function() {
-        var machine_type, options;
-        machine_type = $('select.machine-type :selected').val();
-
-        options = kit_options_for_machine_type(seq_kits, machine_type)
-        console.log(options);
-        if (options) {
-            return $('select.seq-kit').html(options);
-        } else {
-            return $('select.seq-kit').empty();
-        }
+        var machine_type = $('select.machine-type :selected').val();
+        set_kit_options_for_machine_type(seq_kits, machine_type)
     });
 };
 
-// After error the machine type may already be selected
+// After error, or pressing 'Back' button, machine type may already be selected
 // If so initialize the sequencing kit dropdown accordingly
 function handle_existing_machine_type(seq_kits) {
     var selected_kit = $("select.seq-kit");
@@ -28,21 +20,25 @@ function handle_existing_machine_type(seq_kits) {
 
     var selected_machine = $("select.machine-type").val();
     if (selected_machine === undefined) { selected_machine = $("input.machine-type").val() }
-    logger("Have machine type "+selected_machine)
 
-    var options =  kit_options_for_machine_type(seq_kits, selected_machine);
-    console.log(options);
-    if (options) {
-        return $('select.seq-kit').html(options);
-    } else {
-        return $('select.seq-kit').empty();
-    }
+    logger("Have machine type "+selected_machine)
+    set_kit_options_for_machine_type(seq_kits, selected_machine)
 }
 
-function kit_options_for_machine_type(seq_kits, machine_type) {
+function set_kit_options_for_machine_type(seq_kits, machine_type) {
+    var kit_options;
     if (machine_type == "") {
-        return seq_kits
+        kit_options = seq_kits
     } else {
-        return $(seq_kits).filter("optgroup[label=" + machine_type + "]").html();
+        kit_options = $(seq_kits).filter("optgroup[label=" + machine_type + "]").html();
+        nr_options = (kit_options.match(/<option/g) || []).length;
+        if (nr_options > 1) {kit_options = "<option value=''>Select..</option>" + kit_options;}
+    }
+
+    console.log(kit_options);
+    if (kit_options) {
+        return $('select.seq-kit').html(kit_options);
+    } else {
+        return $('select.seq-kit').empty();
     }
 }
