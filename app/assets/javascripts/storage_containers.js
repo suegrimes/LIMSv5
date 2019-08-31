@@ -173,7 +173,7 @@ function storage_container_populate_dropdowns() {
         }
         // move container types in this freezer to the top of list of options
         // SG 6/15/2019: commenting this out since can end up with duplicate container-types when re-arranging
-        //arrange_container_types($("select.container-type"), freezer);
+        arrange_container_types($("select.container-type"), freezer);
     });
 
 // ON CHANGE: handle container type selection or de-selection
@@ -264,6 +264,27 @@ function add_container_select_options(freezer_id, container_type) {
 function remove_container_options() {
     var select_text = "Select Freezer/Type first";
     $("select.storage-container :first-child").text(select_text).nextAll().remove();
+}
+
+// FUNCTION: arrange_container_types
+//   re-arrange the container type options so ones in the selected freezer are displayed first
+//   the select param is a jquery object of the select element to adjust
+function arrange_container_types(select, freezer_id) {
+    var priority_types = freezer_container_types(window.container_type_freezer, freezer_id);
+    var options = select.find("option");
+    var priority_options = [];
+
+    options.each(function() {
+        var option = $(this);
+        if (priority_types.includes(option.attr("value"))) {
+            // save priority option and remove from existing place in dom
+            priority_options.push(option);
+            option.remove();
+        }
+    });
+    // insert priority type options after the first option (which is blank)
+    var first_option = select.find(":first-child");
+    first_option.after(priority_options);
 }
 
 //****************************************************************************************************//
@@ -578,34 +599,7 @@ function display_position_ui(container_type) {
     }
 }
 
-// re-arrange the container type options so ones in the selected freezer are diplayed first
-function arrange_container_types(select, freezer_id) {
-  var freezer_types = freezer_container_types(window.container_type_freezer, freezer_id);
-  sort_container_type_options(select, freezer_types);
-}
-
-// move the select options contained in priority_types to
-// the top of the options listed.
-// leave the first one alone since it has a blank value
-// the select param is a jquery object of the select element to adjust
-function sort_container_type_options(select, priority_types) {
-  var options = select.find("option");
-  var priority_options = [];
-  options.each(function() {
-    var option = $(this);
-    if (priority_types.includes(option.attr("value"))) {
-      // save priority option and remove from existing place in dom
-      priority_options.push(option);
-      option.remove();
-    } 
-  });
-  // insert priority type options after the first option (which is blank)
-  var first_option = select.find(":first-child");
-  first_option.after(priority_options);
-}
-
-// given a container type, return the container dimension
-// information in an array
+// given a container type, return the container dimension information in an array
 function get_container_dimensions(container_type) {
 logger("get_container_dimensions("+container_type+")");
   var dimensions;
