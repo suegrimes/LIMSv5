@@ -5,7 +5,24 @@
 //
 // currently handling both samples and sample_characteristics in this file
 
-// samples edit init
+function sample_characteristics_create_init() {
+    storage_container_init();
+}
+
+// This method called via Ajax, so js standard init functions not executed - use partial with js script call instead
+//function sample_characteristics_add_another_sample_init() {
+//   storage_container_init();
+//}
+
+function sample_characteristics_edit_init() {
+    edit_add_another_sample();
+}
+
+function sample_characteristics_show_init() {
+    show_sample();
+    storage_container_init();
+}
+
 function samples_edit_init() {
   storage_container_init();
   edit_storage_container_init();
@@ -22,30 +39,8 @@ function samples_update_init() {
     edit_storage_container_init();
 }
 
-// sample_characteristics new_sample init
 function sample_characteristics_new_sample_init() {
-  // new storage management init
   storage_container_init();
-}
-
-// sample_characteristics create init
-function sample_characteristics_create_init() {
-  // new storage management init
-  storage_container_init();
-}
-
-// sample_characteristics new_sample init
-function sample_characteristics_edit_init() {
-  edit_add_another_sample();
-
-  storage_container_init();
-  edit_storage_container_init();
-}
-
-// sample_characteristics show init
-function sample_characteristics_show_init() {
-   show_sample();
-   storage_container_init();
 }
 
 //--------------------------------------------------------

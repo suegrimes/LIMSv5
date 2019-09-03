@@ -1,25 +1,4 @@
 // Routines to help manage flow cell form responses
-// All actions in flow_cells controller should call sequencer_kits_init()
-
-jQuery(function() {
-    var seq_kits;
-    seq_kits = $('#flow_cell_sequencing_kit').html();
-    console.log(seq_kits);
-    return $('#flow_cell_machine_type').change(function() {
-        var machine_type, options;
-        machine_type = $('#flow_cell_machine_type :selected').text();
-        options = $(seq_kits).filter("optgroup[label=" + machine_type + "]").html();
-        console.log(options);
-        if (options) {
-            return $('#flow_cell_sequencing_kit').html(options);
-        } else {
-            return $('#flow_cell_sequencing_kit').empty();
-        }
-    });
-});
-
-
 function flow_cells_init() {
-//    sequencer_kit_init()
+    seq_kit_populate_dropdown()
 }
-
