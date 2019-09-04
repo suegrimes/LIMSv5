@@ -8,7 +8,12 @@ module XlsHdrValidation
       'source_sample_id' => 'Sample',
       'stored_sample_id' => 'Sample',
       'consent_protocol_id' => 'ConsentProtocol',
-      'protocol_id' => 'Protocol'
+      'protocol_id' => 'Protocol',
+      'adapter_id' => 'Adapter',
+      'alignment_ref_id' => 'AlignmentRef',
+      'index1_tag_id' => 'IndexTag',
+      'index2_tag_id' => 'IndexTag',
+      'pool_id' => 'Pool'
   }
 
   # verify the header names and add normalized names with row index
@@ -251,7 +256,7 @@ end
   end
 
 # given a reference definition header and a reference value
-# return the store id for it, or nil if not found or referenceable
+# return the store id for it, or nil if not found or referencable
   def get_id_from_ref(def_header, ref_key)
     @sheet_results.each do |sh, res|
       ref_ids = res[:_ref_ids]

@@ -77,6 +77,24 @@ module CategoryValues
     return mapped
   end
 
+  def seq_lib_values
+    values = {'oligo_pool' => Pool.pluck(:tube_label)}
+  end
+
+  def seq_lib_mapped_values
+    mapped = {}
+    pa = Protocol.find_for_protocol_type('L').to_a
+    mapped['protocol_id'] = []
+    pa.each do |p|
+      mapped['protocol_id'] << [[p.protocol_name, p.protocol_abbrev ], p.id]
+    end
+    return mapped
+  end
+
+  def lib_sample_values
+    category_values_for([['quantitation', 'quantitation_method']])
+  end
+
   # return a hash where keys are the attributes passed in as an Array
   # and values are arrays of acceptable values
   # the attributes Array may contain either:

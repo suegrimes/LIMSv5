@@ -2,6 +2,22 @@ class BulkUploadController < ApplicationController
   include XlsProcessing, XlsHdrValidation, BulkUploadCols, CategoryValues, FkFinders
   layout 'main/main'
 
+  before_action :set_variables
+  def set_variables
+  # keys are the normalized expected sheet names
+  # values have the model name(s) and dropdown method prefix
+  # only 2 models may be listed for a sheet and it implies
+  # the first model accepts_nested_attributes_for the second
+    @sheet_info = {
+      patients: { models: [Patient] },
+      samples: { models: [SampleCharacteristic, Sample] },
+      sample_locs: { models: [SampleStorageContainer] },
+      dissections: { models: [Sample, SampleStorageContainer] },
+      extractions: { models: [ProcessedSample, SampleStorageContainer] },
+      seq_libs: { models: [SeqLib, LibSample] }
+    }
+  end
+
   def new
     @upload_ok = params[:upload_ok]
     @accept_suffixes = ".ods,.xlsx,.csv"
@@ -47,7 +63,7 @@ logger.debug "#{self.class}#create @store_path: #{@store_path}"
       render action: :new
       return
     end
-logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
+logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}, expected: #{@sheet_info.keys}"
 
     # for testing only
     #@force_rollback = true
@@ -98,18 +114,6 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
 
   # process a spreadsheet opened by a Roo instance
   def process_upload()
-    
-    # keys are the normalized expected sheet names
-    # values have the model name(s) and dropdown method prefix
-    # only 2 models may be listed for a sheet and it implies
-    # the first model accepts_nested_attributes_for the second
-    @sheet_info = {
-      patients: { models: [Patient] },
-      samples: { models: [SampleCharacteristic, Sample] },
-      sample_locs: { models: [SampleStorageContainer] },
-      dissections: { models: [Sample, SampleStorageContainer] },
-      extractions: { models: [ProcessedSample, SampleStorageContainer] }
-    }
     # Store sheet results data here:
     # header: array of normalized headers
     # saved_rows: array of saved rows
@@ -120,7 +124,8 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}"
       samples: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       sample_locs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       dissections: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
-      extractions: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
+      extractions: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
+      seq_libs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
     }
     # get the sheets to process mapped to the sheet index (0 based)
     @sheet_map = sheets_to_process(@ss.sheets, @sheet_info.keys)
@@ -164,6 +169,7 @@ logger.debug "process_sheet(#{sheet_name}, #{models.inspect})"
 logger.debug "raw header: #{header}"
     # get all model(s) columns and category values defined for attributes
     models_columns = get_attributes(models)
+logger.debug "model columns: #{models_columns}"
     resolve_ambiguous_headers(models_columns, header)
 
     return false if !verify_header_names(sheet_name, models_columns, header)

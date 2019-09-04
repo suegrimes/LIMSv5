@@ -49,6 +49,18 @@ class LibSample < ApplicationRecord
 
   before_update :set_index2
 
+  def index1_code=(index_code)
+    if index_code and self.adapter
+      self.index1_tag = IndexTag.where('adapter_id = ? and index_read = 1 and index_code = ?', self.adapter_id, index_code)
+    end
+  end
+
+  def index2_code=(index_code)
+    if index_code and self.adapter
+      self.index2_tag = IndexTag.where('adapter_id = ? and index_read = 2 and index_code = ?', self.adapter_id, index_code)
+    end
+  end
+
   def set_index2
     if self.adapter && Adapter::IDS_FORCEI2.include?(self.adapter.id)
       i2tag_id = IndexTag.i2id_for_i1tag(self.index1_tag_id)

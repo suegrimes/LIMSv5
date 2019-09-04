@@ -16,7 +16,7 @@ module BulkUploadCols
       h[:fk_cols] = special_cols - ["id"]
       h[:allowed_values] = allowed_values(model)
       h[:mapped_values] = mapped_values(model)
-      h[:fk_finders] = {} # place to put fk finders mao
+      h[:fk_finders] = {} # place to put fk finders map
       h[:headers] = []  # place to put verified header names
       h[:dups] = {}     # place to put dup indexes
       models_columns << h
