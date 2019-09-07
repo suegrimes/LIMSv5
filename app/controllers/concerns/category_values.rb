@@ -52,9 +52,8 @@ module CategoryValues
   end
 
   def sample_storage_container_mapped_values
-    mapped = {}
+    mapped = {'freezer_location_id' => []}
     fla = FreezerLocation.list_all_by_room.to_a
-    mapped['freezer_location_id'] = []
     fla.each do |fl|
       mapped['freezer_location_id'] << [[fl.room_nr + (fl.freezer_nr.blank? ? "" : ('/'+fl.freezer_nr))], fl.id]
     end
@@ -82,12 +81,13 @@ module CategoryValues
   end
 
   def seq_lib_mapped_values
-    mapped = {}
+    mapped = {'protocol_id' => [], 'adapter_id' => []}
     pa = Protocol.find_for_protocol_type('L').to_a
-    mapped['protocol_id'] = []
     pa.each do |p|
-      mapped['protocol_id'] << [[p.protocol_name, p.protocol_abbrev ], p.id]
+      mapped['protocol_id'] << [[p.protocol_name, p.protocol_abbrev], p.id]
     end
+    adapters = Adapter.all.to_a
+    mapped['adapter_id'] = adapters.map{|a| [[a.runtype_adapter], a.id]}
     return mapped
   end
 

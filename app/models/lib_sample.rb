@@ -30,15 +30,9 @@ class LibSample < ApplicationRecord
   belongs_to :index1_tag, optional: true, class_name: "IndexTag", foreign_key: :index1_tag_id
   belongs_to :index2_tag, optional: true, class_name: "IndexTag", foreign_key: :index2_tag_id
   
-  validates_presence_of :sample_name
+  #validates_presence_of :sample_name
   validates_presence_of :adapter_id, :if => Proc.new {|s| !s.seq_lib_id.nil? }
   validates_presence_of :index1_tag_id, :if => Proc.new{|s| !s.adapter_id.nil? && s.adapter.runtype_adapter[0,1] == 'M'}, :message => 'not supplied or not valid for given multiplex adapter'
-  #validates_presence_of :runtype_adapter, :if => Proc.new {|s| !s.seq_lib_id.nil? }
-  #validates_presence_of :index_tag, :if => Proc.new{|s| s.runtype_adapter[0,1] == 'M'}, :message => 'must be supplied for multiplex adapters'
-  #validates_numericality_of :index_tag, :only_integer => true, :allow_blank => true, :message => 'must be an integer'
-  #validates_format_of :index_tag, :with => /^\d+$/, :allow_blank => true, :message => "must be an integer"
-  #validates_inclusion_of :index_tag, :in => 1..12, :if => Proc.new{|s| s.runtype_adapter[0,1] == 'M'},
-  #                       :message => 'must be between 1 and 12'
    
   #def validate
   #  max_tags = (runtype_adapter == 'M_PE_Illumina' ? SeqLib::MILLUMINA_SAMPLES : SeqLib::MULTIPLEX_SAMPLES)
@@ -47,7 +41,7 @@ class LibSample < ApplicationRecord
   #  end
   #end
 
-  before_update :set_index2
+  before_update :set_sample_name, :set_index2
 
   def index1_code=(index_code)
     if index_code and self.adapter
@@ -65,6 +59,12 @@ class LibSample < ApplicationRecord
     if self.adapter && Adapter::IDS_FORCEI2.include?(self.adapter.id)
       i2tag_id = IndexTag.i2id_for_i1tag(self.index1_tag_id)
       self.index2_tag = IndexTag.find(i2tag_id)
+    end
+  end
+
+  def set_sample_name
+    if self.sample_name.blank?
+      self.sample_name = self.seq_lib.lib_name
     end
   end
   

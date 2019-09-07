@@ -11,8 +11,6 @@ module XlsHdrValidation
       'protocol_id' => 'Protocol',
       'adapter_id' => 'Adapter',
       'alignment_ref_id' => 'AlignmentRef',
-      'index1_tag_id' => 'IndexTag',
-      'index2_tag_id' => 'IndexTag',
       'pool_id' => 'Pool'
   }
 
@@ -44,14 +42,14 @@ def verify_header_names(key, models_columns, header)
 
       # check for ambiguous header name
       if mc[:dups].has_key?(normalized_header[i])
-#logger.debug "verify_header:  ci: #{ci} found ambiguous header: #{normalized_header[i]}"
+logger.debug "verify_header:  ci: #{ci} found ambiguous header: #{normalized_header[i]}"
         dup_index = mc[:dups][normalized_header[i]]
-#logger.debug "verify_header: ci: #{ci} dup_index: #{dup_index}"
+logger.debug "verify_header: ci: #{ci} dup_index: #{dup_index}"
         next if dup_index.nil?
         if dup_index == i
           header_is_known = true
           mc[:headers] << [normalized_header[i], i]  # 0 based index
-#logger.debug "header #{h} i: #{i} ci: #{ci} is_ambiguous_model_column mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} i: #{i} ci: #{ci} is_ambiguous_model_column mc[:headers]: #{mc[:headers]}"
           break
         end
         next
@@ -60,21 +58,21 @@ def verify_header_names(key, models_columns, header)
       if mc[:allowed_cols].include?(normalized_header[i])
         header_is_known = true
         mc[:headers] << [normalized_header[i], i]  # 0 based index
-#logger.debug "header #{h} is_model_column mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} is_model_column mc[:headers]: #{mc[:headers]}"
         break
       end
 
       if is_pseudo_attr(mc[:model], normalized_header[i])
         header_is_known = true
         mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_model_pseudo_attr mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} is_model_pseudo_attr mc[:headers]: #{mc[:headers]}"
         break
       end
 
       if is_fk_finder_header(normalized_header[i], mc)
         header_is_known = true
         mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_fk_finder mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} is_fk_finder mc[:headers]: #{mc[:headers]}"
         break
       end
 
@@ -84,14 +82,14 @@ def verify_header_names(key, models_columns, header)
         @sheet_results[key][:_refs][(mc[:model]).name] = normalized_header[i]
         @sheet_results[key][:_ref_ids][normalized_header[i]] = {}
         mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_ref_def mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} is_ref_def mc[:headers]: #{mc[:headers]}"
         break
       end
 
       if is_ref_ref_header(normalized_header[i], mc)
         header_is_known = true
         mc[:headers] << [normalized_header[i], i]
-#logger.debug "header #{h} is_ref_ref mc[:headers]: #{mc[:headers]}"
+logger.debug "header #{h} is_ref_ref mc[:headers]: #{mc[:headers]}"
         break
       end
     end
@@ -220,6 +218,19 @@ end
     return false
   end
 
+  # true if the name is a pseudo attribute of the model
+  def is_pseudo_attr(model, name)
+    # see if there is a method to assign to it
+    model.instance_methods.include? (name + "=").to_sym
+  end
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# Most (all?) of columns defined below are for inter-sheet relationships
+# Eg: if entering new patients and new samples,
+#   patients sheet could have patient_ref column with randomly assigned values
+#   samples sheet would have a patient_id.ref column referencing the appropriate patient_ref value
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 # is this a column where reference ids are defined
   def is_ref_def_header(name, model)
     name == model.name.tableize.singularize + '_ref'
@@ -247,12 +258,6 @@ end
       return def_header unless def_header.nil?
     end
     return nil
-  end
-
-# true if the name is a pseudo attribute of the model
-  def is_pseudo_attr(model, name)
-    # see if there is a method to assign to it
-    model.instance_methods.include? (name + "=").to_sym
   end
 
 # given a reference definition header and a reference value

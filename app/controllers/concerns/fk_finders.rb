@@ -31,6 +31,16 @@ module FkFinders
     return (protocol.nil? ? nil : protocol.id)
   end
 
+  def fk_find_adapter_adapter(adapter)
+    adapter = Adapter.find_by_runtype_adapter(adapter)
+    return (adapter.nil? ? nil : adapter.id)
+  end
+
+  def fk_find_alignment_ref_genome(genome)
+    align_ref = AlignmentRef.find_by_alignment_key(genome)
+    return (align_ref.nil? ? nil : align_ref.id)
+  end
+
 =begin
   # takes a model and returns a hash of possible
   # header names indicating that there is a foreign key finder available

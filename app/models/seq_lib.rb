@@ -38,6 +38,7 @@ class SeqLib < ApplicationRecord
   
   belongs_to :user, optional: true, foreign_key: :updated_by
   belongs_to :adapter, optional: true
+  #belongs_to :alignment_ref, optional: true
   has_many :lib_samples, :dependent => :destroy
   has_many :mlib_samples, :class_name => 'LibSample', :foreign_key => :splex_lib_id
   has_many :flow_lanes
