@@ -41,20 +41,10 @@ class LibSample < ApplicationRecord
   #  end
   #end
 
-  before_update :set_sample_name, :set_index2
+  before_create :upd_flds_from_lib
+  before_save :set_index2
 
-  def index1_code=(index_code)
-    if index_code and self.adapter
-      self.index1_tag = IndexTag.where('adapter_id = ? and index_read = 1 and index_code = ?', self.adapter_id, index_code)
-    end
-  end
-
-  def index2_code=(index_code)
-    if index_code and self.adapter
-      self.index2_tag = IndexTag.where('adapter_id = ? and index_read = 2 and index_code = ?', self.adapter_id, index_code)
-    end
-  end
-
+  # Validation, callbacks
   def set_index2
     if self.adapter && Adapter::IDS_FORCEI2.include?(self.adapter.id)
       i2tag_id = IndexTag.i2id_for_i1tag(self.index1_tag_id)
@@ -62,12 +52,56 @@ class LibSample < ApplicationRecord
     end
   end
 
-  def set_sample_name
-    if self.sample_name.blank?
-      self.sample_name = self.seq_lib.lib_name
+  def upd_flds_from_lib
+    self.sample_name = self.seq_lib.lib_name if self.sample_name.blank?
+    self.notes = self.seq_lib.notes if self.notes.blank? and self.splex_lib_id.nil?
+  end
+
+  # Pseudo attributes predominantly for bulk upload
+  def adapter_i1=(index_code)
+    if index_code
+      adapter_itag = index_code.split(":")
+      self.adapter = Adapter.where('runtype_adapter = ?', adapter_itag[0]).first
+      self.index1_tag = IndexTag.where('adapter_id = ? and index_read = 1 and index_code = ?', self.adapter_id, adapter_itag[1]).first
     end
   end
-  
+
+  def adapter_i2=(index_code)
+    if index_code
+      adapter_itag = index_code.split(":")
+      self.adapter = Adapter.where('runtype_adapter = ?', adapter_itag[0]).first
+      self.index2_tag = IndexTag.where('adapter_id = ? and index_read = 2 and index_code = ?', self.adapter_id, adapter_itag[1]).first
+    end
+  end
+
+  def source_sample=(barcode)
+    self.source_DNA = barcode
+    self.processed_sample = ProcessedSample.where("barcode_key = ?", barcode).first if !barcode.blank?
+  end
+
+  def singleplex_lib=(lib_barcode)
+    #self.splex_lib_barcode = lib_barcode
+    self.splex_lib = nil if lib_barcode.blank?
+
+    if !lib_barcode.blank?
+      #slib = SeqLib.find(:first, :include => :lib_samples, :conditions => ["library_type = 'S' AND barcode_key = ?", lib_barcode])
+      slib = SeqLib.includes(:lib_samples).where("library_type = 'S' AND barcode_key = ?", lib_barcode).first
+      if slib && slib.lib_samples
+        ssample = slib.lib_samples[0]
+        self.splex_lib = slib
+        self.splex_lib_barcode = slib.barcode_key
+        self.processed_sample_id = ssample.processed_sample_id
+        self.sample_name = ssample.sample_name
+        self.source_DNA  = ssample.source_DNA
+        self.adapter_id = ssample.adapter_id
+        self.index1_tag_id = ssample.index1_tag_id
+        self.index2_tag_id = ssample.index2_tag_id
+        self.enzyme_code = ssample.enzyme_code
+      end
+    end
+  end
+
+  # Virtual attributes
   def patient_id
     (!processed_sample.nil? ? processed_sample.patient_id : nil)
   end
@@ -107,38 +141,12 @@ class LibSample < ApplicationRecord
   def source_sample_name
     return source_DNA
   end
-  
-  def source_sample_name=(barcode)
-    self.source_DNA = barcode
-    self.processed_sample = ProcessedSample.where("barcode_key = ?", barcode).first if !barcode.blank?
-  end
-  
+
   def singleplex_lib
     return splex_lib_barcode
   end
-  
-  def singleplex_lib=(lib_barcode)
-    #self.splex_lib_barcode = lib_barcode
-    self.splex_lib = nil if lib_barcode.blank?
-    
-    if !lib_barcode.blank?
-      #slib = SeqLib.find(:first, :include => :lib_samples, :conditions => ["library_type = 'S' AND barcode_key = ?", lib_barcode])
-      slib = SeqLib.includes(:lib_samples).where("library_type = 'S' AND barcode_key = ?", lib_barcode).first
-      if slib && slib.lib_samples
-        ssample = slib.lib_samples[0]
-        self.splex_lib = slib
-        self.splex_lib_barcode = slib.barcode_key
-        self.processed_sample_id = ssample.processed_sample_id
-        self.sample_name = ssample.sample_name
-        self.source_DNA  = ssample.source_DNA
-        self.adapter_id = ssample.adapter_id
-        self.index1_tag_id = ssample.index1_tag_id
-        self.index2_tag_id = ssample.index2_tag_id
-        self.enzyme_code = ssample.enzyme_code
-      end
-    end
-  end
-  
+
+  # Class methods
   def self.upd_mplex_sample_fields(seq_lib)
     lsample_attrs = {}
     
