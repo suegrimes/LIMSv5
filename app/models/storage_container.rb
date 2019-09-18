@@ -43,9 +43,9 @@ class StorageContainer < ApplicationRecord
   def self.container_data
     sql = <<HERE
 select sc.freezer_location_id,sc.container_type,sc.container_name,sc.id,count(ssc.id),typ.nr_rows,typ.nr_cols
-from storage_containers sc
+from sample_storage_containers ssc
+  join storage_containers sc on ssc.storage_container_id = sc.id
   join storage_types typ on sc.container_type = typ.container_type
-  left join sample_storage_containers ssc on sc.container_type = ssc.container_type and sc.container_name = ssc.container_name
 group by sc.freezer_location_id, sc.container_type, sc.container_name;
 HERE
     result = ActiveRecord::Base.connection.exec_query(sql)

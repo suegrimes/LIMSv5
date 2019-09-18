@@ -75,7 +75,7 @@ class ProcessedSamplesController < ApplicationController
         @edit_sample_storage = true
       end
       # special edit form for ajax calls, otherwise defaults to standard :edit view
-      render :ajax_edit if request.xhr?
+      render :edit
     else
       flash[:error] = 'No entry found for extraction barcode: ' + params[:barcode_key]
       redirect_to :controller => :samples, :action => :edit_params
