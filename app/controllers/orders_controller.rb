@@ -30,21 +30,21 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.xml
   def index
-    @orders = Order.includes(:items).order('date_ordered DESC').all
+    @orders = Order.includes(:items).references(:items).order('date_ordered DESC').all
   end
 
   # GET /orders/1
   def show
-    @order = Order.includes(:items).find(params[:id])
+    @order = Order.includes(:items).references(:items).find(params[:id])
   end
 
   # GET /orders/1/edit
   def edit
-    @order = Order.includes(:items).find(params[:id])
+    @order = Order.includes(:items).references(:items).find(params[:id])
   end
   
   def edit_order_items
-    @order = Order.includes(:items).find(params[:id])
+    @order = Order.includes(:items).references(:items).find(params[:id])
   end
 
   # POST /orders
