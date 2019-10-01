@@ -64,7 +64,7 @@ class Patient < ApplicationRecord
 ## NEED TO make this protected or private?  If so, cannot call any of these methods from 
 ## sample_characteristics controller?
   def self.find_id_using_mrn(mnum)
-    patients = self.where('clinical_id_encrypted = ?', self.ezkey.encrypt(mnum)).to_a
+    patients = self.where('clinical_id_encrypted = ?', self.ezkey.encrypt(mnum.to_s)).to_a
     return (patients.empty? ? nil : patients[0].id)
   end
 
@@ -77,7 +77,7 @@ class Patient < ApplicationRecord
   end
 
   def mrn=(mrn)
-    self.clinical_id_encrypted = key.encrypt(mrn)
+    self.clinical_id_encrypted = key.encrypt(mrn.to_s)
   end
 
   def hipaa_data=(hipaa_data)
