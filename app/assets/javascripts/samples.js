@@ -25,6 +25,7 @@ function sample_characteristics_show_init() {
 
 function samples_edit_init() {
   storage_container_init();
+  edit_storage_container_init();
 }
 
 function samples_edit_by_barcode_init() {

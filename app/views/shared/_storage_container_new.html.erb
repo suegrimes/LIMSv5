@@ -2,15 +2,11 @@
   <h6 class="card-header">Storage Location</h6>
   <div class="card-body">
 
-    <div class="form-group row">
-
-      <div class="col-auto btn-group-toggle" data-toggle="buttons">
-
-        <label for="which_container" class="btn btn-secondary" id="new-container-button">
-          <input type="checkbox" id="new-container-check" name="which_container" value="new" autocomplete="off" checked="false"> New Container
-        </label>
-
-      </div>
+    <div class="col-auto btn-group-toggle" data-toggle="buttons">
+      <label for="which_container" class="btn btn-secondary" id="new-container-button">
+          <input type="checkbox" id="new-container-check" name="which_container" value="new" autocomplete="off">
+          <span id="new-container-text">New Container</span>
+      </label>
     </div>
 
   <%= render :partial => 'shared/container_existing_new', :locals => {f: f, barcode: barcode} %>
