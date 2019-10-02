@@ -47,7 +47,10 @@ class Ability
       if user.has_role?("researcher") || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
                       FlowLane, Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
-        cannot [:edit, :update, :delete], Sample
+        cannot [:edit, :update], Sample do |sample|
+          sample.source_sample_id.nil?
+        end
+        cannot :delete, Sample
       end
     
       # Clinical users can enter/update patient and clinical samples

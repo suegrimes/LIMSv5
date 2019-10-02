@@ -4,6 +4,7 @@ module XlsHdrValidation
   # map foreign key fields to model names they reference
   ForeignKeyFieldToModels = {
       'patient_id' => 'Patient',
+      'sample_characteristic_id' => 'SampleCharacteristic',
       'sample_id' => 'Sample',
       'source_sample_id' => 'Sample',
       'stored_sample_id' => 'Sample',

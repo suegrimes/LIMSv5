@@ -75,7 +75,7 @@ class Order < ApplicationRecord
   end
 
   def self.find_for_query(condition_array)
-    self.includes(:items).where(sql_where(condition_array)).order('date_ordered DESC').all
+    self.includes(:items).references(:items).where(sql_where(condition_array)).order('date_ordered DESC').all
   end
  
 end

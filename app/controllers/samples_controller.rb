@@ -52,7 +52,7 @@ class SamplesController < ApplicationController
   
   def edit_by_barcode
     @sample = Sample.find_by_barcode_key(params[:barcode_key])
-    if @sample
+    if @sample and can? :edit, @sample
       if @sample.clinical_sample == 'no' 
         redirect_to :controller => :dissected_samples, :action => :edit, :id => @sample.id
       else
@@ -70,6 +70,9 @@ class SamplesController < ApplicationController
           render :action => :edit
         end
       end
+    elsif @sample
+      flash.now[:error] = 'Sorry, you are not authorized to edit source samples'
+      render :action => :edit_params
     else
       flash.now[:error] = 'No entry found for source barcode: ' + params[:barcode_key]
       render :action => :edit_params
