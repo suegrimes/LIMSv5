@@ -10,7 +10,9 @@ class BulkUploadController < ApplicationController
   # the first model accepts_nested_attributes_for the second
     @sheet_info = {
       patients: { models: [Patient] },
-      samples: { models: [SampleCharacteristic, Sample] },
+      sample_acquisition: { models: [SampleCharacteristic]},
+      #samples: { models: [SampleCharacteristic, Sample] },
+      samples: { models: [Sample, SampleStorageContainer] },
       sample_locs: { models: [SampleStorageContainer] },
       dissections: { models: [Sample, SampleStorageContainer] },
       extractions: { models: [ProcessedSample, SampleStorageContainer] },
@@ -121,6 +123,7 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}, expected: #{@s
     # _ref_ids: hash with _ref header_name keys and maps of ref values to saved ids
     @sheet_results = {
       patients: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
+      sample_acquisition: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       samples: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       sample_locs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       dissections: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },

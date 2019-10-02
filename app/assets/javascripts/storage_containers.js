@@ -118,23 +118,31 @@ function storage_containers_new_query_init() {
 // New container UI
 //****************************************************************************************************//
 function handle_new_container_checked() {
-    $("input#new-container-check").on("change", function () {
+    $("input[name='which_container']").on("change", function() {
+        var which = $("input[name='which_container']:checked").val();
+        logger("new container toggled");
+
+        var container_button = $("input[name='which_container']");
         var container_type = $("select.container-type").val();
         var container = $("select.storage-container");
         var container_name = $(".container-name");
         var container_notes = $(".container-notes");
-        if ($(this).prop("checked")) {
+
+        if (which == "new") {
+            logger("new container is checked");
             // disable existing container select
             container.prop("disabled", true);
             // enable and display new storage container fields
             container_name.prop("disabled", false);
             container_notes.prop("disabled", false);
+            //container_button.prop("innerText", "TEST:Existing");
             display_new_fields();
             // clear any prior position in container value
             $(".position-in-container input").val("");
             // display the position ui
-            display_position_ui(container_type);
+            //display_position_ui(container_type);
         } else {
+            logger("new container not checked");
             // not a new container, so enable selection of an existing one
             container.prop("disabled", false);
             container_name.prop("disabled", true);
@@ -144,6 +152,7 @@ function handle_new_container_checked() {
             if (container.val() == "") {
                 hide_position_ui();
             }
+            //container_button.prop("innerText", "TEST:New");
             hide_new_fields();
         }
     });
