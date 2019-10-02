@@ -70,10 +70,18 @@ class SeqLib < ApplicationRecord
   SAMPLE_CONC = ['nM', 'ng/ul']
   BASE_GRAMS_PER_MOL = 660
 
+  # Validation and callbacks
   def del_blank_storage
     if self.sample_storage_container and self.sample_storage_container.container_blank?
       self.sample_storage_container = nil
     end
+  end
+
+  def set_default_values
+    self.lib_status = 'L'
+    self.lib_conc_uom = 'pM'
+    self.library_type = 'S' if self.library_type.nil?
+    self.sample_conc_uom = 'nM' if self.sample_conc_uom.nil?
   end
 
   def barcode_prefix_valid
@@ -84,6 +92,25 @@ class SeqLib < ApplicationRecord
     end
   end
 
+  # Pseudo attributes for bulk upload
+  def adapter_name=(adapter)
+    self.runtype_adapter = adapter
+    self.adapter = Adapter.where("runtype_adapter = ?", adapter).first if !adapter.blank?
+  end
+
+  def align_ref=(align_ref)
+    self.alignment_ref = align_ref
+    tmp_ref = AlignmentRef.where("alignment_key = ?", align_ref)
+    self.alignment_ref_id = (tmp_ref.empty? ? nil : tmp_ref.first.id)
+  end
+
+  def pool_name=(pool_name)
+    self.oligo_pool = pool_name
+    tmp_pool = Pool.where("tube_label = ?", pool_name)
+    self.pool_id = (tmp_pool.empty? ? nil : tmp_pool.first.id)
+  end
+
+  # Virtual attributes
   def owner_abbrev
     if owner.nil? || owner.length < 11
       owner1 = owner
@@ -169,13 +196,8 @@ class SeqLib < ApplicationRecord
   def container_and_position
     (sample_storage_container ? sample_storage_container.container_and_position : '')
   end
-  
-  def set_default_values
-    self.lib_status = 'L'
-    self.lib_conc_uom = 'pM'
-    #self.sample_conc_uom = 'ng/ul'
-  end
 
+  # Class methods
   def self.next_lib_barcode
     barcode_max = self.where("barcode_key LIKE ? AND barcode_key NOT LIKE ? AND LENGTH(barcode_key) = 7", 'L%', 'L6%').maximum(:barcode_key)
     return (barcode_max ? barcode_max.succ : 'L000001')
