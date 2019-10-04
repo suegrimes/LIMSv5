@@ -126,7 +126,6 @@ function handle_new_container_checked() {
         var container_button=$("span#new-container-text")
 
         if ($(this).prop("checked")) {
-            logger("new container is checked");
             // disable existing container select
             container.prop("disabled", true);
             // enable and display new storage container fields
@@ -139,7 +138,6 @@ function handle_new_container_checked() {
             // display the position ui
             display_position_ui(container_type);
         } else {
-            logger("new container not checked");
             // not a new container, so enable selection of an existing one
             container.prop("disabled", false);
             container_name.prop("disabled", true);
