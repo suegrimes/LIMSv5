@@ -81,44 +81,39 @@ class SeqLibsController < ApplicationController
 
   def create
     authorize! :create, SeqLib
-    @new_lib = []; @lib_id = [];
+    @new_lib = []; @lib_id = []; nr_libs = params[:nr_libs].to_i;
     @lib_index = 0; libs_created = 0
     
     #***** Libraries are created as a transaction - either all created or none ****#
     #***** otherwise when error occurs with one library, all libraries are created again, resulting in duplicates ****#
     SeqLib.transaction do 
-    0.upto(params[:nr_libs].to_i - 1) do |i|
+    0.upto(nr_libs-1) do |i|
       lib_param = params['seq_lib_' + i.to_s]
       sample_param = params['lib_sample_' + i.to_s]
       @new_lib[i] = build_simplex_lib(lib_param, sample_param)
       if !@new_lib[i][:lib_name].blank?
         @lib_index = i
-        @new_lib[i].save! 
-        @lib_id.push(@new_lib[i].id)
-        libs_created += 1
+        if @new_lib[i].save
+          @lib_id.push(@new_lib[i].id)
+          libs_created += 1
+        else
+          raise ActiveRecord::Rollback, "Error saving library line #{i+1}"
+        end
       end
     end
     end
     
-    if libs_created == 0  # All lib_names were blank
-      flash[:error] = 'No sequencing library(ies) created - at least one library name required'
-      @lib_with_error = nil
+    if libs_created < nr_libs  # One or more errors
+      flash[:error] = 'Error creating sequencing library(ies) - please enter all required fields'
+      @lib_with_error = (libs_created == 0 ? nil : @new_lib[@lib_index])
       @hide_defaults = true
-      reload_lib_defaults(params, params[:nr_libs])
+      reload_lib_defaults(params, nr_libs)
       render :action => 'new'
 
     else
       flash[:notice] = libs_created.to_s + ' sequencing library(ies) successfully created'
       redirect_to :action => 'index', :lib_id => @lib_id
     end
-    
-    # Validation error(s)
-    rescue ActiveRecord::ActiveRecordError
-      flash.now[:error] = 'Error creating sequencing library - please enter all required fields'
-      @lib_with_error = @new_lib[@lib_index]
-      @hide_defaults = true
-      reload_lib_defaults(params, params[:nr_libs])
-      render :action => 'new'
   end
   
   # PUT /seq_libs/1
@@ -239,10 +234,12 @@ protected
     @lib_samples = [] if !@lib_samples
     
     0.upto(nr_libs.to_i - 1) do |i|
-      @new_lib[i] ||= SeqLib.new(params['seq_lib_' + i.to_s])
-      @lib_samples[i] = LibSample.new(:source_sample_name => params['lib_sample_' + i.to_s][:source_sample_name],
-                                      :index1_tag_id => params['lib_sample_' + i.to_s][:index1_tag_id],
-                                      :index2_tag_id => params['lib_sample_' + i.to_s][:index2_tag_id])
+      lib_param = request.params['seq_lib_' + i.to_s]
+      sample_param = request.params['lib_sample_' + i.to_s]
+      @new_lib[i] ||= SeqLib.new(lib_param)
+      @lib_samples[i] = LibSample.new(:source_sample_name => lib_param[:source_sample_name],
+                                      :index1_tag_id => lib_param[:index1_tag_id],
+                                      :index2_tag_id => lib_param[:index2_tag_id])
     end
     @nr_libs = nr_libs
   end
