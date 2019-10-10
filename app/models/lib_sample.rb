@@ -74,7 +74,7 @@ class LibSample < ApplicationRecord
     end
   end
 
-  def source_sample=(barcode)
+  def source_sample_name=(barcode)
     self.source_DNA = barcode
     self.processed_sample = ProcessedSample.where("barcode_key = ?", barcode).first if !barcode.blank?
   end
