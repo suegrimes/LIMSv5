@@ -49,9 +49,7 @@ class SeqLib < ApplicationRecord
 
   accepts_nested_attributes_for :lib_samples
   accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
-  
-  validates_uniqueness_of :barcode_key, :message => 'is not unique'
-  validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
+
   validates_date :preparation_date
   validates_format_of :trim_bases, :with => /\A\d+\z/, :allow_blank => true, :message => "# bases to trim must be an integer"
   validates_numericality_of :pcr_size, :only_integer => true, :greater_than => 20, :on => :create,
@@ -60,6 +58,14 @@ class SeqLib < ApplicationRecord
                             :if => "sample_conc_uom == 'nM' and library_type == 'S'", :message => "must be >= 1nM"
 
   validate :barcode_prefix_valid
+  validates_uniqueness_of :barcode_key, :message => 'is not unique'
+  validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
+
+  before_validation :del_blank_storage
+  before_validation :set_lib_barcode
+  before_create :set_default_values
+  #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
+  #after_update :save_samples
 
   before_validation :del_blank_storage
   before_create :set_default_values
@@ -75,6 +81,10 @@ class SeqLib < ApplicationRecord
     if self.sample_storage_container and self.sample_storage_container.container_blank?
       self.sample_storage_container = nil
     end
+  end
+
+  def set_lib_barcode
+    self.barcode_key = (self.barcode_key.blank? ? SeqLib.next_lib_barcode : self.barcode_key)
   end
 
   def set_default_values
@@ -242,72 +252,6 @@ class SeqLib < ApplicationRecord
     flow_lanes.each do |lane|
       self.update(lane.seq_lib_id, :lib_status => lib_status) if lane.seq_lib.lib_status != 'C'
     end
-  end
-  
-  def self.load_from_xls(libs_sheet, lib_params, start_barcode)
-    alignment_ref = AlignmentRef.find(lib_params[:alignment_ref_id]).alignment_key
-    runtype_adapter = Adapter.find(lib_params[:adapter_id]).runtype_adapter
-    oligo_pool = Pool.get_pool_label(lib_params[:pool_id])
-    owner_id = Researcher.find_user_id(lib_params[:owner_name])
-    barcode = start_barcode
-    last_barcode = 'None'
-    libs_loaded = 0; libs_errors = 0
-
-    SeqLib.transaction do
-      libs_sheet.each_with_index do |lib_row, i|
-        next if i < 1  # Skip header row
-        barcode = (lib_row[0].blank? ? (i == 1 ? start_barcode : barcode.succ) : lib_row[0])
-        lib_name = lib_row[1]
-        adapter_tag = lib_row[2]
-        source_DNA   = lib_row[3]
-        lib_size  = lib_row[4]
-        sample_conc = lib_row[5]
-        lib_conc  = lib_row[6]
-        notebook_ref = lib_row[7]
-        notes = lib_row[8]
-        break if lib_name.blank?
-
-        seq_lib = SeqLib.new(:barcode_key => barcode,
-                           :lib_name => lib_name,
-                           :library_type => 'S',
-                           :protocol_id => lib_params[:protocol_id],
-                           :owner => lib_params[:owner],
-                           :preparation_date => lib_params[:preparation_date],
-                           :adapter_id => lib_params[:adapter_id],
-                           :runtype_adapter => runtype_adapter,
-                           :alignment_ref_id => lib_params[:alignment_ref_id],
-                           :alignment_ref => alignment_ref,
-                           :sample_conc => sample_conc,
-                           :sample_conc_uom => lib_params[:sample_conc_uom],
-                           :lib_conc_requested => lib_conc,
-                           :quantitation_method => lib_params[:quantitation_method],
-                           :pcr_size => lib_size,
-                           :pool_id => lib_params[:pool_id],
-                           :oligo_pool => oligo_pool,
-                           :notebook_ref => notebook_ref,
-                           :notes => notes,
-                           :updated_by => owner_id,
-                           :created_at => Time.now)
-        seq_lib.lib_samples.build(:sample_name => lib_name,
-                           :source_DNA => source_DNA,
-                           :processed_sample_id => ProcessedSample.find_psample_id(source_DNA),
-                           :adapter_id => lib_params[:adapter_id],
-                           :index1_tag_id => IndexTag.find_tag_id(lib_params[:adapter_id], 1, adapter_tag),
-                           :notes => notes,
-                           :updated_by => owner_id,
-                           :created_at => Time.now)
-
-        # Raise exception, rollback transaction, and exit if save fails due to validation error(s)
-        if !seq_lib.valid?
-          @invalid_lib = seq_lib
-          raise ActiveRecord::Rollback
-        end
-        seq_lib.save!
-        libs_loaded += 1
-        last_barcode = barcode
-      end  # End of lib row (Excel sheet) loop
-    end  # End of transaction
-    return libs_loaded, @invalid_lib ||= nil
   end
 
   def self.upd_mplex_splex(splex_lib)
