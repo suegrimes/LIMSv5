@@ -249,7 +249,7 @@ protected
 	                      :owner => lib_param[:owner],
 	                      :preparation_date => lib_param[:preparation_date],
 						  :protocol_id => lib_param[:protocol_id],
-						  :barcode_key => (param_blank?(lib_param[:barcode_key]) ? SeqLib.next_lib_barcode : lib_param[:barcode_key]),
+						  :barcode_key => lib_param[:barcode_key],
 						  :lib_name => lib_param[:lib_name],
 						  :sample_conc => lib_param[:sample_conc],
 						  :sample_conc_uom => lib_param[:sample_conc_uom],
