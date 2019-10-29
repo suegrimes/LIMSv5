@@ -54,12 +54,15 @@ class LibSample < ApplicationRecord
 
   def upd_flds_from_lib
     self.sample_name = self.seq_lib.lib_name if self.sample_name.blank?
+    self.adapter_id = self.seq_lib.adapter_id
     self.notes = self.seq_lib.notes if self.notes.blank? and self.splex_lib_id.nil?
   end
 
   # Pseudo attributes predominantly for bulk upload
+  # At the point that adapter_i1/i2 is read, associated seq_lib has not been created, so cannot use adapter_id from seq_lib
   def adapter_i1=(index_code)
-    if index_code
+    unless index_code.blank?
+      #self.adapter_id  = self.seq_lib.adapter_id
       adapter_itag = index_code.split(":")
       self.adapter = Adapter.where('runtype_adapter = ?', adapter_itag[0]).first
       self.index1_tag = IndexTag.where('adapter_id = ? and index_read = 1 and index_code = ?', self.adapter_id, adapter_itag[1]).first
@@ -67,7 +70,8 @@ class LibSample < ApplicationRecord
   end
 
   def adapter_i2=(index_code)
-    if index_code
+    unless index_code.blank?
+      #self.adapter_id  = self.seq_lib.adapter_id
       adapter_itag = index_code.split(":")
       self.adapter = Adapter.where('runtype_adapter = ?', adapter_itag[0]).first
       self.index2_tag = IndexTag.where('adapter_id = ? and index_read = 2 and index_code = ?', self.adapter_id, adapter_itag[1]).first
