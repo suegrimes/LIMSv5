@@ -32,8 +32,6 @@
 #  created_at          :datetime
 #  updated_at          :timestamp        not null
 #
-require 'rubyXL'
-
 class SeqLib < ApplicationRecord
   
   belongs_to :user, optional: true, foreign_key: :updated_by
@@ -57,17 +55,12 @@ class SeqLib < ApplicationRecord
   validates_numericality_of :sample_conc, :greater_than_or_equal_to => 1, :on => :create,
                             :if => "sample_conc_uom == 'nM' and library_type == 'S'", :message => "must be >= 1nM"
 
-  validate :barcode_prefix_valid
   validates_uniqueness_of :barcode_key, :message => 'is not unique'
   validates_format_of :barcode_key, :with => /\A\w\d{6}\z/, :message => "must be 6 digit integer after 'L' prefix"
+  validate :barcode_prefix_valid
 
   before_validation :del_blank_storage
-  before_validation :set_lib_barcode
-  before_create :set_default_values
-  #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
-  #after_update :save_samples
-
-  before_validation :del_blank_storage
+  before_validation :set_lib_barcode, on: :create
   before_create :set_default_values
   #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
   #after_update :save_samples
@@ -264,7 +257,6 @@ class SeqLib < ApplicationRecord
     if !lib_samples.empty?
       mplex_ids  = lib_samples.collect(&:seq_lib_id)
       #mplex_libs = self.find_all_by_id(mplex_ids, :include => {:lib_samples => :splex_lib})
-      #mplex_libs = self.where(id: mplex_ids).includes(:lib_samples).where(id: splex_lib.id)
       mplex_libs = self.where(id: mplex_ids).includes(:lib_samples => :splex_lib)
       
       mplex_libs.each do |lib|
