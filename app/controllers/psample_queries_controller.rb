@@ -68,7 +68,7 @@ protected
 
     if !params[:psample_query][:mrn].blank?
       patient_id = Patient.find_id_using_mrn(params[:psample_query][:mrn])
-      @where_select.push("samples.patient.id = #{patient_id ||= 0}")
+      @where_select.push("samples.patient_id = #{patient_id ||= 0}")
     end
 
     @where_select, @where_values = build_sql_where(params[:psample_query], PsampleQuery::QUERY_FLDS, @where_select, @where_values)
