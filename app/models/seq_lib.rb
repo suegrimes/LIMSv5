@@ -32,8 +32,6 @@
 #  created_at          :datetime
 #  updated_at          :timestamp        not null
 #
-require 'rubyXL'
-
 class SeqLib < ApplicationRecord
   
   belongs_to :user, optional: true, foreign_key: :updated_by
@@ -62,7 +60,7 @@ class SeqLib < ApplicationRecord
   validate :barcode_prefix_valid
 
   before_validation :del_blank_storage
-  before_validation :set_barcode, on: :create
+  before_validation :set_lib_barcode, on: :create
   before_create :set_default_values
   #after_update :upd_mplex_pool, :if => Proc.new { |lib| lib.oligo_pool_changed? }
   #after_update :save_samples
@@ -78,7 +76,7 @@ class SeqLib < ApplicationRecord
     end
   end
 
-  def set_barcode
+  def set_lib_barcode
     self.barcode_key = (self.barcode_key.blank? ? SeqLib.next_lib_barcode : self.barcode_key)
   end
 
@@ -259,7 +257,6 @@ class SeqLib < ApplicationRecord
     if !lib_samples.empty?
       mplex_ids  = lib_samples.collect(&:seq_lib_id)
       #mplex_libs = self.find_all_by_id(mplex_ids, :include => {:lib_samples => :splex_lib})
-      #mplex_libs = self.where(id: mplex_ids).includes(:lib_samples).where(id: splex_lib.id)
       mplex_libs = self.where(id: mplex_ids).includes(:lib_samples => :splex_lib)
       
       mplex_libs.each do |lib|
