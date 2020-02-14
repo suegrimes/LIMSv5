@@ -14,13 +14,14 @@
 #
 
 class AttachedFile < ApplicationRecord
-    
   FILES_ROOT = (SITE_URL.include?('stanford.edu') ? File.join(Rails.root, "..", "..", "shared", "attached_files") :
                                                    File.join(Rails.root, "..", "LIMSFiles", "AttachedFile"))
   
   belongs_to :sampleproc, optional: true, polymorphic: true
-
   mount_uploader :document, AttachmentUploader
+
+  validates_lengths_from_database except: :document
+
   #skip_callback :save, :after, :remove_previously_stored_document
   # behavior changed in Rails 5, need raise: false to make work
   skip_callback :save, :after, :remove_previously_stored_document, raise: false
