@@ -19,6 +19,7 @@
         <th>Unit Price</th>
         <th>Total</th>
         <th>Grant</th>
+        <th>Att?</th>
         <th>Recv'd?</th>
         <th class="link-col"></th>
         <% if can? :edit, Item %><th class="link-col"></th><% end %>
@@ -45,6 +46,7 @@
             <td class="dotted_border_bottom"><%=h number_to_currency(item.item_price) %></td>
             <td class="dotted_border_bottom"><%=h number_to_currency(item.item_ext_price) %></td>
             <td class="dotted_border_bottom"><%=h item.grant_nr %></td>
+            <td class="dotted_border_bottom"><%=h item.has_attachment? %></td>
             <td class="dotted_border_bottom" align="center"><%=h item.item_received %></td>
             <td rowspan=2><%= link_to 'Show', item %></td>
 
@@ -60,7 +62,7 @@
             <td colspan="5" class="border_bottom_only">&nbsp;</td>
             <td class="border_bottom_only" colspan="3"><%=h item.item_description %></td>
             <td colspan="2" class="border_bottom_only">&nbsp;</td>
-            <td class="border_bottom_only" colspan="2"><%=h item.notes %></td>
+            <td class="border_bottom_only" colspan="3"><%=h item.notes %></td>
           </tr>
       <% end %> <!-- end of item loop -->
     </tbody>

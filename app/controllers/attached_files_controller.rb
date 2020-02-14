@@ -9,8 +9,11 @@ class AttachedFilesController < ApplicationController
   # GET /attached_files/1
   def show
     @attached_file = AttachedFile.find(params[:id])
-    headers["Content-Type"] = @attached_file.document.file.content_type.to_s
-    send_file(@attached_file.doc_fullpath) 
+    disposition = 'attachment'
+    if params.has_key?(:disp) and params[:disp] == 'preview'
+      disposition = (@attached_file.previewable? ? 'inline' : 'attachment')
+    end
+    send_file(@attached_file.doc_fullpath, content_type: @attached_file.document.file.content_type.to_s, disposition: disposition)
   end
  
   def get_params  

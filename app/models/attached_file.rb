@@ -22,13 +22,9 @@ class AttachedFile < ApplicationRecord
 
   mount_uploader :document, AttachmentUploader
   #skip_callback :save, :after, :remove_previously_stored_document
-  # behavior changed in Rails 5, need rais: false to make work
+  # behavior changed in Rails 5, need raise: false to make work
   skip_callback :save, :after, :remove_previously_stored_document, raise: false
-  
-  #upload_column :document, :store_dir => proc{|inst,attr| File.join(FILES_ROOT, inst.sampleproc_type)},
-  #                        :filename  => proc{|record, file| "#{record.sampleproc_id}_#{file.basename}.#{file.extension}"},
-  #                        :extensions => %w(txt csv doc docx xls xlsx jpg png gif tif ppt pptx) # List of valid extensions
-  #validates_integrity_of :document, :message => "invalid file type - executables cannot be uploaded"
+
   validates_presence_of :document
 
   before_save :update_document_attributes
@@ -38,6 +34,10 @@ class AttachedFile < ApplicationRecord
       self.document_content_type = document.file.content_type
       self.document_file_size = document.file.size
     end
+  end
+
+  def previewable?
+    (%w(jpg jpeg gif png txt csv pdf).include?(document.file.extension.downcase) ? true : false)
   end
 
   def stored_name_has_id

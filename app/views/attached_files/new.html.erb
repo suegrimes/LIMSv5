@@ -1,15 +1,4 @@
-<%= AttachedFile::FILES_ROOT.inspect %>
-<%= @attached_file.inspect %>
-<%= @obj.inspect %>
-
-<% if @attached_file.errors.any? %>
-  <h3>Some errors were found:</h3>
-  <ul>
-    <% @attached_file.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-  </ul>
-<% end %>
+<%= render '/shared/errors', model: @attached_file %>
 
 <% klass_name = name_of_klass(@obj) %>
 <h5><%=h klass_name %>:</h5>
@@ -32,4 +21,3 @@
 
 <%= render :partial => 'attached_files/show_file', :locals => {:obj => @obj, :add_file_button => 'no'} %>
 <%= render :partial => 'attached_files/add_file',  :locals => {:obj => @obj} %>
-

@@ -42,6 +42,10 @@ class Item < ApplicationRecord
     #requester_name > 'S'  #for testing purposes only
   end
 
+  def has_attachment?
+    (attached_files.size > 0 ? 'Y' : '')
+  end
+
   def received?
     item_received == 'Y'
   end
