@@ -102,7 +102,16 @@ class ProcessedSamplesController < ApplicationController
     @processed_sample = ProcessedSample.new(create_params)
     @sample = Sample.find(params[:processed_sample][:sample_id])
 
-    #this_is_a_deliberate_error
+    # If new storage container being created, add it before adding processed sample
+    if params[:which_container] and params[:which_container] == 'new'
+      ok, emsg = create_storage_container(params[:processed_sample][:sample_storage_container_attributes])
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'new', :source_id => @sample.id
+        return
+      end
+    end
     
     Sample.transaction do
       @processed_sample.save!
@@ -127,6 +136,15 @@ class ProcessedSamplesController < ApplicationController
   # PUT /processed_samples/1.xml
   def update
     @processed_sample = ProcessedSample.find(params[:id])
+    if params[:new_storage_container]
+      ok, emsg = create_storage_container(params[:processed_sample][:sample_storage_container_attributes])
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'edit', :id => @processed_sample.id
+        return
+      end
+    end
  
     ProcessedSample.transaction do
       @processed_sample.update_attributes!(update_params)

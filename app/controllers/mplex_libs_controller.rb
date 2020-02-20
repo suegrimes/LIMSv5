@@ -68,6 +68,17 @@ class MplexLibsController < ApplicationController
     @seq_lib       = SeqLib.new(create_params)
     @seq_lib[:library_type] = 'M'
     @seq_lib[:alignment_ref] = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
+
+    if params[:which_container] and params[:which_container] == 'new'
+      sample_storage_container_attributes = params[:seq_lib][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'setup_params'
+        return
+      end
+    end
     
     #slib_params = array of arrays [][id, notes]; slib_ids = array of ids [id1, id2, ..]
     temp_params = params.to_unsafe_h
@@ -146,11 +157,21 @@ class MplexLibsController < ApplicationController
 
   # PUT /mplex_libs/1
   def update
-    #deliberate_error_here
-
     @seq_lib = SeqLib.find(params[:id])
     alignment_key = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
     params[:seq_lib].merge!(:alignment_ref => alignment_key)
+
+    # See if new storage container is specified, and if so create it
+    if (params[:new_storage_container])
+      sample_storage_container_attributes = params[:seq_lib][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'edit', :id => @seq_lib.id
+        return
+      end
+    end
      
     if @seq_lib.update_attributes(update_params)
       SeqLib.upd_mplex_fields(@seq_lib) if @seq_lib.barcode_key[0,1] == 'L'
