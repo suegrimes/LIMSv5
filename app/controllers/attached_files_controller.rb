@@ -1,11 +1,19 @@
 class AttachedFilesController < ApplicationController
   layout 'main/main'
+
+  # Turn off strong parameters for this controller (due to multiple models with attached_files)
+  def params
+    request.parameters
+  end
   
   # GET /attached_files/1
   def show
     @attached_file = AttachedFile.find(params[:id])
-    headers["Content-Type"] = @attached_file.document.file.content_type.to_s
-    send_file(@attached_file.doc_fullpath) 
+    disposition = 'attachment'
+    if params.has_key?(:disp) and params[:disp] == 'preview'
+      disposition = (@attached_file.previewable? ? 'inline' : 'attachment')
+    end
+    send_file(@attached_file.doc_fullpath, content_type: @attached_file.document.file.content_type.to_s, disposition: disposition)
   end
  
   def get_params  
@@ -48,6 +56,8 @@ class AttachedFilesController < ApplicationController
   end
   
   def create
+    #deliberate_error_here
+    @document = params[:attached_file][:document]
     @attached_file = AttachedFile.new(create_params)
     @attached_file.sampleproc = params[:obj_klass].constantize.find_by_id(params[:obj_id])
     
@@ -80,9 +90,14 @@ class AttachedFilesController < ApplicationController
   end
 
 protected
+  #def create_params
+  #  params.require(:attached_file).permit(:sampleproc_id, :sampleproc_type, :document, :document_content_type,
+  #                                        :document_file_size, :notes)
+  #end
+  #
   def create_params
-    params.require(:attached_file).permit(:sampleproc_id, :sampleproc_type, :document, :document_content_type,
-                                          :document_file_size, :notes)
+    @file = params[:attached_file][:document]
+    return {:document => @file, :document_content_type => @file.content_type}
   end
 
   def source_rec(rec_type, rec_key, obj_id=nil)
@@ -105,6 +120,7 @@ protected
           when 'molecular_assay' then MolecularAssay.getwith_attach(obj_id)
           when 'seq_lib'   then SeqLib.getwith_attach(obj_id)
           when 'flow_cell' then FlowCell.getwith_attach(obj_id)
+          when 'item' then Item.getwith_attach(obj_id)
           else nil
     end
     return obj

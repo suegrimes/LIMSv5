@@ -1,3 +1,5 @@
+<%= render '/shared/errors', model: @attached_file %>
+
 <% klass_name = name_of_klass(@obj) %>
 <h5><%=h klass_name %>:</h5>
 
@@ -13,8 +15,9 @@
   <%= render :partial => 'seq_libs/lib_show', :locals => {:seq_lib => @obj} %>
 <% elsif klass_name == 'Seq Run' %>
   <%= render :partial => 'flow_cells/flow_cell_show', :locals => {:flow_cell => @obj} %>
+<% elsif klass_name == 'Item' %>
+  <%= render :partial => 'items/item_show', :locals => {:item => @obj} %>
 <% end %>
 
 <%= render :partial => 'attached_files/show_file', :locals => {:obj => @obj, :add_file_button => 'no'} %>
 <%= render :partial => 'attached_files/add_file',  :locals => {:obj => @obj} %>
-

@@ -1,14 +1,24 @@
 <% add_file_button ||= 'yes'%>
 
-<div class="card col-sm-8">
+<div class="col-sm-8">
+<div class="card">
   <h6 class="card-header"><%= name_of_klass(obj) %>&nbsp;Attached Files:</h6>
   <div class="card-body" style="font-size: smaller">
     <% if obj.attached_files && !obj.attached_files.empty? %>
       <% obj.attached_files.each do |att_file| %>
         <div class="row row-bordered">
-          <div class="col-sm-5" style="min-width:95px"><%=link_to att_file.doc_filename, att_file %></div>
-          <div class="col-sm-5"><%=h att_file.notes %></div>
-          <div class="col-sm-2"><%=link_to 'Delete', att_file, data: {:confirm => 'Are you sure?'}, :method => :delete %></div>
+          <div class="col-sm-7" style="min-width:95px">
+          <% if att_file.previewable? %>
+            <%=link_to att_file.doc_filename, attached_file_path(id: att_file.id, disp: 'preview') %>
+          <% else %>
+            <%=h att_file.doc_filename %>
+          <% end %>
+          </div>
+          <div class="col-sm-3"><%=h att_file.notes %></div>
+          <div class="col-sm-2">
+            <div class="float-left"><%=link_to 'Download', attached_file_path(id: att_file.id, disp: 'download') %></div>
+            <div class="float-right"><%=link_to 'Delete', att_file, data: {:confirm => 'Are you sure?'}, :method => :delete %></div>
+          </div>
         </div>
       <% end %>
       <br/>
@@ -22,6 +32,7 @@
     <% end %>
 
   </div>
+</div>
 </div>
 
 <br/>

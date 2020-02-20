@@ -25,6 +25,7 @@
 
 class Item < ApplicationRecord
   belongs_to :order, optional: true
+  has_many :attached_files, :as => :sampleproc
   
   validates_presence_of :requester_name, :company_name, :chemical_flag, :catalog_nr,
                         :item_description, :item_quantity, :deliver_site
@@ -41,6 +42,10 @@ class Item < ApplicationRecord
     #requester_name > 'S'  #for testing purposes only
   end
 
+  def has_attachment?
+    (attached_files.size > 0 ? 'Y' : '')
+  end
+
   def received?
     item_received == 'Y'
   end
@@ -53,6 +58,10 @@ class Item < ApplicationRecord
       req_nm = [first_and_last[0], first_and_last[1][0,1]].join(' ')
     end
     return req_nm
+  end
+
+  def self.getwith_attach(id)
+    self.includes(:attached_files).find(id)
   end
   
   def self.find_all_unique(condition_array=[])
