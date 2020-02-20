@@ -69,7 +69,7 @@ class Ability
 #        end
         
         can :manage, [ConsentProtocol, Protocol, FreezerLocation, StorageContainer, StorageType]
-        cannot :delete, [ConsentProtocol, FreezerLocation, StorageContainer, StorageType]
+        cannot :delete, [ConsentProtocol, FreezerLocation, StorageType]
       end
       
       # Additional capabilities for clin_admin or lab_admin (update drop-down list values)
