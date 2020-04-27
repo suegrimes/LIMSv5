@@ -50,38 +50,27 @@ class DissectedSamplesController < ApplicationController
     # special edit form for ajax calls
     render :ajax_edit if request.xhr?
   end
-  
-  def update
-    @sample        = Sample.find(params[:id])
-    @source_sample = Sample.find(@sample.source_sample_id)
-    
-    #if @sample.update_attributes(params[:sample])
-    if @sample.update_attributes(update_params)
-      #@source_sample.update_attributes(:sample_remaining => params[:source_sample][:sample_remaining]) if params[:source_sample]
-      @source_sample.update_attributes(update_source_params) if params[:source_sample]
-      flash[:notice] = 'Dissected sample was successfully updated'
-      if request.xhr?
-        render :ajax_show
-      else
-        redirect_to(@sample)
-      end
-    else
-      flash[:error] = 'Error updating dissected sample'
-      redirect_to :action => 'edit'
-    end
-  end
-  
+
   # POST /dissected_samples
   def create
     authorize! :create, Sample
     
     params[:sample].merge!(:amount_rem => params[:sample][:amount_initial].to_f)
-    #@sample        = Sample.new(params[:sample])
     @sample        = Sample.new(create_params)
     @source_sample = Sample.find(params[:sample][:source_sample_id])
 
+    if params[:which_container] and params[:which_container] == 'new'
+      sample_storage_container_attributes = params[:sample][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'new', :source_sample_id => @source_sample.id
+        return
+      end
+    end
+
     if @sample.save
-      #@source_sample.update_attributes(:sample_remaining => params[:source_sample][:sample_remaining]) if params[:source_sample]
       @source_sample.update_attributes(update_source_params) if params[:source_sample]
       flash[:notice] = 'Sample successfully created'
       if request.xhr?
@@ -92,6 +81,36 @@ class DissectedSamplesController < ApplicationController
     else
       prepare_for_render_new(params[:sample][:source_sample_id])
       render :action => "new" 
+    end
+  end
+
+  def update
+    @sample        = Sample.find(params[:id])
+    @source_sample = Sample.find(@sample.source_sample_id)
+
+    # See if new storage container is specified, and if so create it
+    if (params[:new_storage_container])
+      sample_storage_container_attributes = params[:sample][:sample_storage_container_attributes]
+      ok, emsg = create_storage_container(sample_storage_container_attributes)
+      unless ok
+        dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'edit', :id => @sample.id
+        return
+      end
+    end
+
+    if @sample.update_attributes(update_params)
+      @source_sample.update_attributes(update_source_params) if params[:source_sample]
+      flash[:notice] = 'Dissected sample was successfully updated'
+      if request.xhr?
+        render :ajax_show
+      else
+        redirect_to(@sample)
+      end
+    else
+      flash[:error] = 'Error updating dissected sample'
+      redirect_to :action => 'edit'
     end
   end
 

@@ -19,6 +19,8 @@ class Patient < ApplicationRecord
   has_many :sample_characteristics
   has_many :samples
 
+  validates_lengths_from_database except: :clinical_id_encrypted
+  validate :mrn_length, on: :create
   validate :unique_mrn, on: :create
 
   after_save :upd_sample_characteristics
@@ -88,7 +90,7 @@ class Patient < ApplicationRecord
     EzCrypto::Key.with_password(EZ_PSWD, EZ_SALT)
   end
 
-  private
+private
   def key
     EzCrypto::Key.with_password(EZ_PSWD, EZ_SALT)
   end
@@ -108,6 +110,10 @@ class Patient < ApplicationRecord
   protected
   def validate
     errors.add(:clinical_id_encrypted, "mrn must be non-blank") if mrn.blank?
+  end
+
+  def mrn_length
+    errors.add(:clinical_id_encrypted, "mrn must be 15 characters or less") unless mrn.length < 16
   end
 
   def unique_mrn

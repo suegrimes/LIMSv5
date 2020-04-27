@@ -21,9 +21,11 @@ class SampleCharacteristicsController < ApplicationController
       new_patient       = false
     elsif !param_blank?(params[:mrn_nr])
       @patient_id, new_patient = Patient.get_patient_id(params[:mrn_nr], 'add')
-    else
+    end
+
+    if @patient_id.nil?
       error_found = true
-      flash.now[:error] = 'Error - invalid patient id/mrn# (cannot be blank)'  
+      flash.now[:error] = 'Error - invalid patient id/mrn# (must be non-blank, <= 15 characters)'
     end
     
     if !error_found
