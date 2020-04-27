@@ -18,6 +18,11 @@
   </tr>
 
   <tr>
+    <td class="label"><label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label></td>
+    <td><%= collection_select(:lib_default, :alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %></td>
+  </tr>
+
+  <tr>
     <td class="label"><label for="pcr_size" class="col-auto col-form-label col-form-label-sm">Size(Final PCR):</label></td>
     <td><%= text_field(:lib_default, :pcr_size, class: "form-control")%></td>
     <td class="label"><label for="quantitation_method" class="col-auto col-form-label col-form-label-sm">Quantitation:</label></td>
@@ -31,13 +36,6 @@
     <td class="label"><label for="pool_id" class="col-auto col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label></td>
     <td><%= collection_select(:lib_default, :pool_id, @oligo_pools, :id, :pool_string_dtl,
                               {:include_blank => 'Select Pool'}, class: "form-control") %></td>
-  </tr>
-
-  <tr>
-    <td class="label"><label for="alignment_ref_id" class="col-auto col-form-label col-form-label-sm">Align Ref:</label></td>
-    <td><%= collection_select(:lib_default, :alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %></td>
-    <td class="label"><label for="trim_bases" class="col-auto col-form-label col-form-label-sm">Trim Bases:</label></td>
-    <td><%= text_field(:lib_default, :trim_bases, class: "form-control") %></td>
   </tr>
 
   <tr>

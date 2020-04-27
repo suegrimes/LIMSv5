@@ -31,6 +31,7 @@
                                 {:include_blank => 'Select Project'}, class: "form-control") %>
       </td>
     </tr>
+
     <tr>
       <td><label for="protocol_id" class="col-form-label col-form-label-sm">Protocol:</label>
         <%= f.collection_select(:protocol_id, @protocols, :id, :protocol_name,
@@ -39,28 +40,37 @@
       <td><label for="alignment_ref_id" class="col-form-label col-form-label-sm">Align Ref:</label>
         <%= f.collection_select(:alignment_ref_id, @align_refs, :id, :alignment_key, {}, class: "form-control") %>
       </td>
+      <td>
+        <label for="oligo_pool" class="col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
+        <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control", style: "width:6rem" ) %>
+      </td>
     </tr>
+
     <tr>
+      <td><label for="sample_conc" class="col-form-label col-form-label-sm">Pooled Library Conc:</label>
+        <table class="nested-table table-borderless">
+          <td><%= f.text_field(:sample_conc, :size => 6, :value => format_conc(f.object.sample_conc, ''), class: "form-control") %></td>
+          <td><%= f.select(:sample_conc_uom, SeqLib::SAMPLE_CONC, {}, class: "form-control") %></td>
+        </table>
+      </td>
       <td><label for="lib_conc_requested" class="col-form-label col-form-label-sm">Loading Conc:</label>
         <table class="nested-table table-borderless">
           <td><%= f.text_field(:lib_conc_requested, :size => 6, :value => format_conc(f.object.lib_conc_requested, ''), class: "form-control") %></td>
           <td>&nbsp;&nbsp;pM</td>
         </table>
       </td>
-      <td>
-        <label for="trim_bases" class="col-form-label col-form-label-sm">Trim Bases:</label>
-        <%= f.text_field(:trim_bases, :size => 6, class: "form-control", style: "width:6rem" )%>
-      <td>
-        <label for="oligo_pool" class="col-form-label col-form-label-sm"><%=h Pool.human_attribute_name(:pool_name)%>:</label>
-        <%= f.text_field(:oligo_pool, disabled: true, size: 10, class: "form-control", style: "width:6rem" ) %>
+      <td><label for="pcr_size" class="col-form-label col-form-label-sm">PCR size:</label>
+        <%= f.text_field(:pcr_size, :size => 6, class: "form-control", style: "width:6rem") %>
       </td>
     </tr>
+
     <tr>
       <td colspan="2">
         <label for="notebook_ref" class="col-form-label col-form-label-sm">Notebook Ref:</label>
         <%= f.text_field(:notebook_ref, size: 50, class: "form-control") %>
       </td>
     </tr>
+
     <tr>
       <td colspan="2"><label for="notes" class="col-form-label col-form-label-sm">Library Notes:</label>
         <%= f.text_field(:notes, size: 50, class: "form-control") %>
