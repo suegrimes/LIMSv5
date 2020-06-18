@@ -14,6 +14,13 @@ class SampleLocsController < ApplicationController
     @sample_loc = SampleLoc.find(params[:id])
     authorize! :update, SampleStorageContainer
 
+    sscontainers = []
+    params[:sample_loc][:sample_storage_containers_attributes].each do |idx, container_params|
+      sscontainers[idx.to_i] = SampleStorageContainer.find_ssc_key(container_params[:freezer_location_id], container_params[:container_type],
+                                            container_params[:container_name])
+      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = sscontainers[idx.to_i]
+    end
+
     if @sample_loc.update_attributes(update_params)
       flash[:notice] = 'Sample location was successfully updated.'
       redirect_to edit_sample_loc_path(@sample_loc)
@@ -27,6 +34,7 @@ class SampleLocsController < ApplicationController
 protected
   def dropdowns
     @freezer_locations  = FreezerLocation.list_all_by_room
+    @container_types = StorageType.populate_dropdown
   end
 
   def update_params

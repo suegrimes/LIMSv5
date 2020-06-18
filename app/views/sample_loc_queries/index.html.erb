@@ -67,7 +67,7 @@
         <td><%=h psample.psample_remaining %></td>
         <td><%=h psample.room_and_freezer %></td>
         <td><% if can? :edit, sample_loc %>
-              <%=link_to psample.container_and_position, edit_sample_loc_path(psample) %>
+              <%=link_to psample.container_and_position, edit_psample_loc_path(psample) %>
           <% else %>
               <%=h psample.container_and_position %>
           <% end %>

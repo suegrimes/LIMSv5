@@ -100,6 +100,11 @@ class SampleStorageContainer < ApplicationRecord
         .order('freezer_locations.freezer_nr, freezer_locations.room_nr, storage_containers.container_type, storage_containers.container_name').all
   end
 
+  def self.find_ssc_key(freezer_id, container_type, container_name)
+    self.where("freezer_location_id = ? and container_type = ? and container_name = ?",
+                 freezer_id, container_type, container_name).first
+  end
+
   # This dropdown should now be populated from StorageType
   #def self.populate_dropdown
   #  self.where('container_type > ""').order(:container_type).uniq.pluck(:container_type)

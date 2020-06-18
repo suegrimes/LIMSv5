@@ -1,0 +1,47 @@
+<h5>Editing Sample Storage Locations</h5>
+<%= form_for(@psample_loc) do |f| %>
+    <%= render '/shared/errors', model: @psample_loc %>
+
+    <h6>Processed Sample Details:</h6>
+    <table class="table table-bordered table-sm table-font-sm">
+      <thead class="thead-light thead-font-sm">
+      <tr>
+        <th>Barcode</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Vial</th>
+        <th>Support</th>
+        <th>Buffer</th>
+        <th>Vol</th>
+        <th>Conc</th>
+        <th>Rem?</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tr>
+        <td><%=h link_to @psample_loc.barcode_key, processed_sample_path(@psample_loc) %></td>
+        <td><%=h @psample_loc.processing_date %></td>
+        <td><%=h @psample_loc.extraction_type %></td>
+        <td><%=h @psample_loc.vial %></td>
+        <td><%=h @psample_loc.support %></td>
+        <td><%=h @psample_loc.elution_buffer %></td>
+        <td><%=h @psample_loc.final_vol %></td>
+        <td><%=h @psample_loc.final_conc %></td>
+        <td><%=h @psample_loc.psample_remaining %></td>
+        <% if can? :edit, @psample_loc %> <td><%= link_to 'Edit', edit_processed_sample_path(@psample_loc) %></td><% end %>
+      </tr>
+
+      <% unless @psample_loc.comments.blank? %>
+          <tr><td></td><td colspan="9"><%=h @psample_loc.comments %></td></tr>
+      <% end %>
+    </table>
+
+    <div class="card">
+      <h6 class="card-header">Sample Storage Locations(s):</h6>
+      <div class="card-body">
+        <%= render :partial => 'sample_locs/sample_storage_edit', :locals => {:f => f} %>
+        <%=f.submit "Update", class: "btn btn-primary" %>
+      </div>
+    </div>
+<% end %>

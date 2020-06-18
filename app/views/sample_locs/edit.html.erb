@@ -2,37 +2,44 @@
 <%= form_for(@sample_loc) do |f| %>
     <%= render '/shared/errors', model: @sample_loc %>
 
-<%= render :partial => 'sample_loc_info', :locals => {:sample => @sample_loc} %>
+    <h6>Sample Details:</h6>
+    <table class="table table-bordered table-sm table-font-sm">
+      <thead class="thead-light thead-font-sm">
+      <tr>
+        <th>Barcode</th>
+        <th>Date</th>
+        <th>Patient Dx</th>
+        <th>Sample Type</th>
+        <th>Preservation</th>
+        <th>OR Designation</th>
+        <th>Histopath</th>
+        <th>Rem?</th>
+        <th></th>
+      </tr>
+      </thead>
 
-<div class="card">
-  <h6 class="card-header">Sample Storage Locations(s):</h6>
-  <div class="card-body">
+      <tr>
+        <td><%=h link_to @sample_loc.barcode_key, sample_path(@sample_loc) %></td>
+        <td><%=h @sample_loc.sample_date %></td>
+        <td><%=h (@sample_loc.sample_characteristic.pathology ? @sample_loc.sample_characteristic.pathology.pathology_classification : nil) %></td>
+        <td><%=h [@sample_loc.sample_tissue, @sample_loc.sample_type].join('/') %></td>
+        <td><%=h @sample_loc.tissue_preservation %></td>
+        <td><%=h @sample_loc.tumor_normal %></td>
+        <td><%=h (@sample_loc.histology ? @sample_loc.histology.histopathology : nil) %></td>
+        <td><%=h @sample_loc.sample_remaining %></td>
+        <% if can? :edit, @sample_loc %> <td><%= link_to 'Edit', edit_sample_path(@sample_loc) %></td><% end %>
+      </tr>
 
-    <div class="form-group row">
-      <div class="col-sm-2" style="font-weight: bold">Container Type</div>
-      <div class="col-sm-3" style="font-weight: bold">Container Name</div>
-      <div class="col-sm-2" style="font-weight: bold">Position</div>
-      <div class="col-sm-4" style="font-weight: bold">Freezer</div>
-    </div>
-
-    <div id="sloc">
-      <% i=0 %>
-      <%= f.fields_for :sample_storage_containers, :wrapper => 'inline' do |c| %>
-          <div class="form-group row">
-            <% i += 1 %>
-            <%= render :partial => 'sample_storage_container_fields', :locals => {f: c, i: i} %>
-          </div>
+      <% unless @sample_loc.comments.blank? %>
+          <tr><td></td><td colspan="9"><%=h @sample_loc.comments %></td></tr>
       <% end %>
-    </div>
+    </table>
 
-    <div class="form-group row">
-      <div class="col-sm-2 offset-sm-2">
-        <%= link_to_add_association 'Add Storage Location', f, :sample_storage_containers %>
+    <div class="card">
+    <h6 class="card-header">Sample Storage Locations(s):</h6>
+      <div class="card-body">
+        <%= render :partial => 'sample_storage_edit', :locals => {:f => f} %>
+        <%=f.submit "Update", class: "btn btn-primary" %>
       </div>
     </div>
-
-    <%=f.submit "Update", class: "btn btn-primary" %>
-
-  </div>
-</div>
 <% end %>
