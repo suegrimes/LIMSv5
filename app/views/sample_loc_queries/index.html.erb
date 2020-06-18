@@ -1,6 +1,6 @@
 <h5>Sample Storage Locations (Filtered) </h5>
 
-<%= form_tag :action => :export_samples do %>
+<%= form_tag :action => :export_samples, :controller => :sample_loc_queries do %>
     <b>Samples:</b> <% if @sample_locs %> (<%=h @sample_locs.size %> samples) <% end %>
       <%= submit_tag "Export Samples", class: "btn btn-secondary", data: {disable_with: false}-%>
     <br/><br/>

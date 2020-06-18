@@ -13,22 +13,36 @@ class PsampleLocsController < ApplicationController
   def update
     @psample_loc = PsampleLoc.find(params[:id])
     authorize! :update, SampleStorageContainer
-    
+
+    invalid_container = false; container_string = 'NA';
     params[:psample_loc][:sample_storage_containers_attributes].each do |idx, container_params|
       sscontainer = SampleStorageContainer.find_ssc_key(container_params[:freezer_location_id], container_params[:container_type],
                                                         container_params[:container_name])
-      ss_id = (sscontainer.nil? ? nil : sscontainer.id)
-      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = ss_id
+      container_string = [container_params[:container_type], container_params[:container_name]].join(': ')
+      invalid_container = (sscontainer.nil? ? true : false)
+      break if invalid_container
+      params[:psample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = sscontainer.id
     end
 
-    if @psample_loc.update_attributes(update_params)
-      flash[:notice] = 'Processed sample location was successfully updated.'
-      redirect_to edit_psample_loc_path(@psample_loc)
+    if invalid_container
+      dropdowns
+      flash.now[:error] = "ERROR - #{container_string} container not found in this freezer"
+      render :action => 'edit'
+
+    elsif @psample_loc.update_attributes(update_params)
+      flash[:notice] = "Sample #{@psample_loc.barcode_key} location was successfully updated."
+      redirect_to :action => 'show', :sample_id => @psample_loc.sample_id
+
     else
       dropdowns
       flash[:error] = 'ERROR - Unable to update processed sample location'
       render :action => 'edit' 
     end
+  end
+
+  def show
+    @sample_locs = SampleLoc.find_for_storage_query(["samples.id = ?", params[:sample_id]]).to_a
+    render 'sample_loc_queries/index'
   end
 
 protected

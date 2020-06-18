@@ -14,21 +14,35 @@ class SampleLocsController < ApplicationController
     @sample_loc = SampleLoc.find(params[:id])
     authorize! :update, SampleStorageContainer
 
+    invalid_container = false; container_string = 'NA';
     params[:sample_loc][:sample_storage_containers_attributes].each do |idx, container_params|
       sscontainer = SampleStorageContainer.find_ssc_key(container_params[:freezer_location_id], container_params[:container_type],
                                             container_params[:container_name])
-      ss_id = (sscontainer.nil? ? nil : sscontainer.id)
-      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = ss_id
+      container_string = [container_params[:container_type], container_params[:container_name]].join(': ')
+      invalid_container = (sscontainer.nil? ? true : false)
+      break if invalid_container
+      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = sscontainer.id
     end
 
-    if @sample_loc.update_attributes(update_params)
-      flash[:notice] = 'Sample location was successfully updated.'
-      redirect_to edit_sample_loc_path(@sample_loc)
+    if invalid_container
+      dropdowns
+      flash.now[:error] = "ERROR - #{container_string} container not found in this freezer"
+      render :action => 'edit'
+
+    elsif @sample_loc.update_attributes(update_params)
+      flash[:notice] = "Sample #{@sample_loc.barcode_key} location was successfully updated."
+      redirect_to :action => 'show'
+
     else
       dropdowns
       flash[:error] = 'ERROR - Unable to update sample location'
       render :action => 'edit' 
     end
+  end
+
+  def show
+    @sample_locs = SampleLoc.find_for_storage_query(["samples.id = ?", params[:id]]).to_a
+    render 'sample_loc_queries/index'
   end
 
 protected

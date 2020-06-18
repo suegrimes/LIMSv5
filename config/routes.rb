@@ -106,8 +106,8 @@ Rails.application.routes.draw do
   resources :sample_storage_containers, :only => [:edit, :update]
 
   # Routes for sample storage locations
-  resources :sample_locs, :only => [:edit, :update]
-  resources :psample_locs, :only => [:edit, :update]
+  resources :sample_locs, :only => [:show, :edit, :update]
+  resources :psample_locs, :only => [:show, :edit, :update]
   get 'sample_loc_query' => 'sample_loc_queries#new_query', :as => :sample_loc_query
   post 'export_sample_locs' => 'sample_loc_queries#export_samples', :as => :export_sample_locs
   resources :sample_loc_queries, :only => :index
