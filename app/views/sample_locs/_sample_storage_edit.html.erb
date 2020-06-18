@@ -1,3 +1,7 @@
+<div class="card">
+  <h6 class="card-header">Sample Storage Locations(s):</h6>
+  <div class="card-body">
+
     <div class="form-group row">
       <div class="col-sm-3" style="font-weight: bold">Freezer</div>
       <div class="col-sm-2" style="font-weight: bold">Container Type</div>
@@ -20,4 +24,11 @@
         <%= link_to_add_association 'Add Storage Location', f, :sample_storage_containers,
                                     partial: 'shared/sample_storage_container_fields' %>
       </div>
+      <div class="col-sm-7">
+        <span class="info-warn dkred">Note: Be careful if updating container name and/or position as there is currently no validation here</span>
+      </div>
     </div>
+
+    <%=f.submit "Update", class: "btn btn-primary" %>
+  </div>
+</div>

@@ -37,11 +37,6 @@
       <% end %>
     </table>
 
-    <div class="card">
-      <h6 class="card-header">Sample Storage Locations(s):</h6>
-      <div class="card-body">
-        <%= render :partial => 'sample_locs/sample_storage_edit', :locals => {:f => f} %>
-        <%=f.submit "Update", class: "btn btn-primary" %>
-      </div>
-    </div>
+    <%= render :partial => 'sample_locs/sample_storage_edit', :locals => {:f => f} %>
+
 <% end %>

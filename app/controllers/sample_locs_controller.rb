@@ -14,11 +14,11 @@ class SampleLocsController < ApplicationController
     @sample_loc = SampleLoc.find(params[:id])
     authorize! :update, SampleStorageContainer
 
-    sscontainers = []
     params[:sample_loc][:sample_storage_containers_attributes].each do |idx, container_params|
-      sscontainers[idx.to_i] = SampleStorageContainer.find_ssc_key(container_params[:freezer_location_id], container_params[:container_type],
+      sscontainer = SampleStorageContainer.find_ssc_key(container_params[:freezer_location_id], container_params[:container_type],
                                             container_params[:container_name])
-      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = sscontainers[idx.to_i]
+      ss_id = (sscontainer.nil? ? nil : sscontainer.id)
+      params[:sample_loc][:sample_storage_containers_attributes][idx][:storage_container_id] = ss_id
     end
 
     if @sample_loc.update_attributes(update_params)
