@@ -21,7 +21,7 @@ class Adapter < ActiveRecord::Base
                                 :allow_destroy => true
   #default_scope { where("adapters.runtype_adapter <> ?", "Multiple") }
 
-  IDS_FORCEI2 = self.where('runtype_adapter IN (?)', ['M_10nt_Illumina_UDI', 'M_8nt_TruSeq_UDIa']).pluck(:id)
+  IDS_FORCEI2 = self.where('force_i2 = "Y"').pluck(:id)
   #PLATE_FORMAT_ADAPTERS = %w(M_10X_v1Plate M_10X_v2Plate M_10nt_Illumina_UDI M_8nt_TruSeq_UDIa M_10X_SISet1 M_10X_SISet2)
 
   def index1_tags
@@ -29,7 +29,7 @@ class Adapter < ActiveRecord::Base
   end
 
   def index2_tags
-    (Adapter::IDS_FORCEI2.include?(self.id)? [] : self.index_tags.where('index_read = 2'))
+    (self.force_i2 == 'Y' ? self.index_tags.where('index_read = 2') : [])
   end
 
   def self.default_adapter

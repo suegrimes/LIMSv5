@@ -46,7 +46,7 @@ class LibSample < ApplicationRecord
 
   # Validation, callbacks
   def set_index2
-    if self.adapter && Adapter::IDS_FORCEI2.include?(self.adapter.id)
+    if self.adapter && self.adapter.force_i2 == 'Y'
       i2tag_id = IndexTag.i2id_for_i1tag(self.index1_tag_id)
       self.index2_tag = IndexTag.find(i2tag_id)
     end
