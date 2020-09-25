@@ -29,7 +29,7 @@ class Adapter < ActiveRecord::Base
   end
 
   def index2_tags
-    (self.force_i2 == 'Y' ? self.index_tags.where('index_read = 2') : [])
+    (force_i2 == 'Y' ? [] : self.index_tags.where('index_read = 2'))
   end
 
   def self.default_adapter
