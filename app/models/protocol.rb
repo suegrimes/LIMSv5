@@ -32,7 +32,7 @@ class Protocol < ApplicationRecord
   end
 
   def short_name
-    (protocol_abbrev.blank? ? protocol_name[1-15] : protocol_abbrev)
+    (protocol_abbrev.blank? ? protocol_name[0..15] : protocol_abbrev)
   end
   
   def molecule_type
