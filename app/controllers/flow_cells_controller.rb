@@ -322,13 +322,13 @@ protected
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params, date_fld)
     
     # Include control libraries, irrespective of other parameters entered
-    if @where_select.length > 0
-      @where_string = "seq_libs.lib_status = 'C' OR (" + @where_select.join(' AND ') + ")"
-    else
-      @where_string = "seq_libs.lib_status = 'C'"
-    end
-    
-    return [@where_string] | @where_values
+    #if @where_select.length > 0
+    #  @where_string = "seq_libs.lib_status = 'C' OR (" + @where_select.join(' AND ') + ")"
+    #else
+    #  @where_string = "seq_libs.lib_status = 'C'"
+    #end
+    #return [@where_string] | @where_values
+    return sql_where_clause(@where_select, @where_values)
   end
   
   def attrs_for_sequencing(params)
