@@ -6,7 +6,7 @@
 
     <%= f.text_field :login %>
     <%= f.email_field :email %>
-    <%= f.select(:lab_name, %w(JiLab FordLab IMH SGTC), {}, class: "col-sm-4") %>
+    <%= f.select(:lab_name, %w(JiLab FordLab LevyLab IMH SGTC), {}, class: "col-sm-4") %>
 
     <% if can? :update, Role %>
       <%= f.select(:active_inactive, %w(A I), {}, class: "col-sm-2") %>
