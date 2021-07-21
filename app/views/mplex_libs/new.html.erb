@@ -8,7 +8,7 @@
 
 <% @checked ||= false %>  
 <span class="notes"> Check boxes below, to include libraries in new multiplex library</span><br/>
-  <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAll(this);"}) %>
+  <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAllLibs(this);"}) %>
   <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
   <%= f.submit 'Create Library', class: "btn btn-primary" %><br/>
 

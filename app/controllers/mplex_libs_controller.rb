@@ -68,7 +68,7 @@ class MplexLibsController < ApplicationController
     @seq_lib       = SeqLib.new(create_params)
     @seq_lib[:library_type] = 'M'
     @seq_lib[:alignment_ref] = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
-
+    
     if params[:which_container] and params[:which_container] == 'new'
       sample_storage_container_attributes = params[:seq_lib][:sample_storage_container_attributes]
       ok, emsg = create_storage_container(sample_storage_container_attributes)
@@ -79,7 +79,7 @@ class MplexLibsController < ApplicationController
         return
       end
     end
-    
+
     #slib_params = array of arrays [][id, notes]; slib_ids = array of ids [id1, id2, ..]
     temp_params = params.to_unsafe_h
     lsample_params = temp_params[:lib_samples]
@@ -231,7 +231,14 @@ protected
   end
 
   def create_params
-    params.require(:seq_lib).permit(*(lib_params + [sample_params] + [storage_params]))
+    #Don't add blank container record
+    container_params = params[:seq_lib][:sample_storage_container_attributes].to_unsafe_h
+    container_params.delete(:sample_name_or_barcode)
+    if params_all_blank?(container_params)
+      params.require(:seq_lib).permit(*(lib_params + [sample_params]))
+    else
+      params.require(:seq_lib).permit(*(lib_params + [sample_params] + [storage_params]))
+    end
   end
 
   def update_params
