@@ -4,7 +4,7 @@ module SampleStorageContainersHelper
       edit_sample_path(sscontainer.stored_sample)
     elsif sscontainer.stored_sample && sscontainer.stored_sample.class.name == 'ProcessedSample'
       edit_processed_sample_path(sscontainer.stored_sample)
-    elsif sscontainer.stored_sample && sscontainer.stored_sample.class_name == 'SeqLib'
+    elsif sscontainer.stored_sample && sscontainer.stored_sample.class.name == 'SeqLib'
       edit_seq_lib_path(sscontainer.stored_sample)
     else
       edit_sample_storage_container_path(sscontainer)

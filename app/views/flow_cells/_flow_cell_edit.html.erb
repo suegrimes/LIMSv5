@@ -19,13 +19,11 @@
       <td style="vertical-align:middle"><%=h @partial_flowcell %><%= hidden_field_tag :partial_flowcell, @partial_flowcell %></td>
     </tr>
 
-    <% if can? :new, AlignmentRef %>
     <tr>
-      <td class="label"><label for="flowcell_status" class="col-form-label col-form-label-sm">Status:</label></td>
-      <td><%= f.select(:flowcell_status, FlowCell::STATUS, {}, class: "form-control", style: "width:6rem") %></td>
       <td colspan="4"></td>
+      <td class="label col-form-label-sm"><label for="failed_run" class="form-check-label">Run Failed?:</label></td>
+      <td style="background-color:#990000; border-color:#990000"><%= check_box_tag(:failed_run, "1", f.object.failed_run?) %></td>
     </tr>
-    <% end %>
 
     <tr>
       <td class="label"><label for="nr_bases_read1" class="col-form-label col-form-label-sm">R1,R2,I1,I2:</label></td>

@@ -133,6 +133,7 @@ class FlowCellsController < ApplicationController
   def update
     @flow_cell = FlowCell.find(params[:id])
     fc_attrs = update_params
+    fc_attrs[:flowcell_status] = params[:failed_run] == "1" ? "X" : "R"
     machine_type = @flow_cell.machine_type
 
     # NextSeq requires only 1 lane when entered (since all 4 lanes identical), but all 4 lanes needed for update

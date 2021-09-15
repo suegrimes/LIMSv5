@@ -49,6 +49,9 @@ class FlowCell < ApplicationRecord
   NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 4, :GAIIx => 8, :HiSeq => 8,
               :PromethION => 24}
   STATUS = %w{F R S Q N X}
+  #Status code values: F-Flow Cell created; R-Ready for sequencing; Q-QC uploaded; N-N/A; X-Failed.
+  #  S-Sequenced: no entries in database table.
+  #Only codes currently being used: F (flowcell created), R (run# assigned), X (failed run)
   RUN_NR_TYPES = %w{LIMS Illumina}
   
   def seq_kit_valid
@@ -69,6 +72,10 @@ class FlowCell < ApplicationRecord
   
   def sequenced?
     flowcell_status != 'F'
+  end
+
+  def failed_run?
+    flowcell_status == 'X'
   end
   
   def flowcell_qc

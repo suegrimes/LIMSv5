@@ -68,7 +68,7 @@ class MplexLibsController < ApplicationController
     @seq_lib       = SeqLib.new(create_params)
     @seq_lib[:library_type] = 'M'
     @seq_lib[:alignment_ref] = AlignmentRef.get_align_key(params[:seq_lib][:alignment_ref_id])
-    
+
     if params[:which_container] and params[:which_container] == 'new'
       sample_storage_container_attributes = params[:seq_lib][:sample_storage_container_attributes]
       ok, emsg = create_storage_container(sample_storage_container_attributes)
