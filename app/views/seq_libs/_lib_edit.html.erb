@@ -22,7 +22,7 @@
 
       <label for="owner" class="col-auto col-form-label col-form-label-sm">Owner:</label>
       <div class="col-auto">
-        <%= f.select(:owner, @owners, {:include_blank => "Select.."}, class: "form-control") %>
+        <%= f.select(:owner, @owners, {:selected => @seq_lib.owner, :include_blank => "Select.."}, class: "form-control") %>
       </div>
     </div>
 
