@@ -21,8 +21,10 @@
 
     <div class="form-group row">
       <div class="col-sm-4 offset-sm-1">
-        <%= link_to_add_association 'Add Storage Location', f, :sample_storage_containers,
-                                    partial: 'shared/sample_storage_container_fields' %>
+        <% if (can? :new, StorageType) || i == 0 %><!-- Limit access to clin_admin or admin roles, or no existing storage container -->
+          <%= link_to_add_association 'Add Storage Location', f, :sample_storage_containers,
+                                                         partial: 'shared/sample_storage_container_fields' %>
+        <% end %>
       </div>
       <div class="col-sm-7">
         <!--span class="info-warn dkred">Note: Be careful if updating container name and/or position as there is currently no validation here</span-->
@@ -32,3 +34,9 @@
     <%=f.submit "Update", class: "btn btn-primary" %>
   </div>
 </div>
+
+<script>
+    $(".add_fields").click(function() {
+        $(this).hide();
+    });
+</script>

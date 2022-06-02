@@ -28,7 +28,12 @@
     <td><%=h sample.sample_amt %></td>
     <td><%=h sample.sample_remaining %></td>
     <td><%=h sample.room_and_freezer %></td>
-    <td><%=h  sample.container_and_position %></td>
+    <td><% if sample.container_and_position == '' %>
+        <%=link_to 'Add', edit_sample_loc_path(sample) %>
+        <% else %>
+          <%=link_to sample.container_and_position, edit_sample_loc_path(sample) %>
+        <% end %>
+      </td>
     <td><% if can? :edit, sample %><%= link_to 'Edit', edit_sample_path(sample) %><% end %></td>
   </tr>
 

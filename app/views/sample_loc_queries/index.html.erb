@@ -41,10 +41,10 @@
       <td><%=h sample_loc.tumor_normal %></td>
       <td><%=h sample_loc.sample_remaining %></td>
       <td><%=h sample_loc.room_and_freezer %></td>
-      <td><% if can? :edit, sample_loc %>
-          <%=link_to sample_loc.container_and_position, edit_sample_loc_path(sample_loc) %>
+      <td><% if sample_loc.container_and_position == '' %>
+            <%=link_to 'Add', edit_sample_loc_path(sample_loc) %>
           <% else %>
-          <%=h sample_loc.container_and_position %>
+            <%=link_to sample_loc.container_and_position, edit_sample_loc_path(sample_loc) %>
           <% end %>
       </td>
       <%= hidden_field_tag("export_id[]", sample_loc.id)  %>
@@ -66,12 +66,7 @@
         <td><%=h sample_loc.tumor_normal %></td>
         <td><%=h psample.psample_remaining %></td>
         <td><%=h psample.room_and_freezer %></td>
-        <td><% if can? :edit, sample_loc %>
-              <%=link_to psample.container_and_position, edit_psample_loc_path(psample) %>
-          <% else %>
-              <%=h psample.container_and_position %>
-          <% end %>
-        </td>
+        <td><%=link_to psample.container_and_position, edit_psample_loc_path(psample) %></td>
       </tr>
     <% end %>
   <% end %>
