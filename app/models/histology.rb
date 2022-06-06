@@ -21,10 +21,32 @@
 class Histology < ApplicationRecord
   
   belongs_to :sample, optional: true
+  has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
   has_many :attached_files, :as => :sampleproc
-  
+
+  accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
+
+  before_validation :del_blank_storage
   validates_date :he_date
   validates_presence_of :pathologist
+
+  def barcode_key
+    he_barcode_key
+  end
+
+  def room_and_freezer
+    (sample_storage_container ? sample_storage_container.room_and_freezer : '')
+  end
+
+  def container_and_position
+    (sample_storage_container ? sample_storage_container.container_and_position : '')
+  end
+
+  def del_blank_storage
+    if self.sample_storage_container and self.sample_storage_container.container_blank?
+      self.sample_storage_container = nil
+    end
+  end
 
   def self.getwith_attach(id)
     self.includes(:attached_files).find(id)

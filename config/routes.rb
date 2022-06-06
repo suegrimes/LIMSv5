@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get :auto_complete_for_barcode_key, on: :collection
   end
   get 'new_histology' => 'histologies#new_params', :as => :new_he_slide
+  get 'edit_he_storage' => 'histologies#edit_storage', :as => :edit_he_storage
 
   resources :histology_queries, :only => :index
   get 'he_query' => 'histology_queries#new_query', :as => :he_query

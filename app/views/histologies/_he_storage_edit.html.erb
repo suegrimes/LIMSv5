@@ -1,0 +1,42 @@
+<div class="card">
+  <h6 class="card-header">H&E Storage Location:</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <div class="col-sm-3" style="font-weight: bold">Freezer</div>
+      <div class="col-sm-2" style="font-weight: bold">Container Type</div>
+      <div class="col-sm-3" style="font-weight: bold">Container Name</div>
+      <div class="col-sm-3" style="font-weight: bold">Position</div>
+    </div>
+
+    <div id="sloc">
+      <%= f.fields_for :sample_storage_container do |c| %>
+        <% if @edit_sample_storage %>
+          <%= render :partial => 'shared/storage_container_edit', :locals => {f: c, barcode: f.object.he_barcode_key} %>
+        <% else %>
+          <%= render :partial => 'shared/storage_container_new', :locals => {f: c, barcode: f.object.he_barcode_key} %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-4 offset-sm-1">
+        <% unless @edit_sample_storage %><!-- Only if no existing storage container for this slide -->
+          <%= link_to_add_association 'Add Storage Location', f, :sample_storage_containers,
+                                                         partial: 'shared/sample_storage_container_fields' %>
+        <% end %>
+      </div>
+      <div class="col-sm-7">
+        <!--span class="info-warn dkred">Note: Be careful if updating container name and/or position as there is currently no validation here</span-->
+      </div>
+    </div>
+
+    <%=f.submit "Update", class: "btn btn-primary" %>
+  </div>
+</div>
+
+<script>
+    $(".add_fields").click(function() {
+        $(this).hide();
+    });
+</script>

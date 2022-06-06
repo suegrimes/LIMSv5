@@ -41,4 +41,20 @@ logger.debug "storage_container_ui_data end"
     return true, nil
   end
 
+  def get_storage_container(sample_storage_container_attributes)
+    storage_container = StorageContainer.find_sc_key(sample_storage_container_attributes[:freezer_location_id],
+                                         sample_storage_container_attributes[:container_type],
+                                         sample_storage_container_attributes[:container_name])
+    container_string = [sample_storage_container_attributes[:container_type],
+                        sample_storage_container_attributes[:container_name]].join(': ')
+
+    if storage_container.nil?
+      error_message = "ERROR - #{container_string} container not found in this freezer"
+      return false, error_message
+    else
+      sample_storage_container_attributes.merge!(storage_container_id: storage_container.id)
+      return true, nil
+    end
+  end
+
 end

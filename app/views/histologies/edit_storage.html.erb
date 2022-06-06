@@ -1,0 +1,32 @@
+<h5>Editing Histology Storage Location</h5>
+<%= form_for(@histology) do |f| %>
+  <%= render '/shared/errors', model: @histology %>
+
+  <h6>H&E Details:</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
+    <tr>
+      <th>Barcode</th>
+      <th>Date</th>
+      <th>OR Designation</th>
+      <th>Histopath</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tr>
+      <td><%=h link_to @histology.he_barcode_key, histology_path(@histology) %></td>
+      <td><%=h @histology.he_date %></td>
+      <td><%=h @histology.sample.tumor_normal %></td>
+      <td><%=h @histology.histopathology %></td>
+      <% if can? :edit, @histology %> <td><%= link_to 'Edit', edit_histology_path(id: @histology.id) %></td><% end %>
+    </tr>
+
+    <% unless @histology.comments.blank? %>
+      <tr><td></td><td colspan="4"><%=h @histology.comments %></td></tr>
+    <% end %>
+  </table>
+
+  <%= render :partial => 'he_storage_edit', :locals => {:f => f} %>
+
+<% end %>

@@ -1,8 +1,8 @@
 class HistologiesController < ApplicationController
   layout  'main/main'
   #load_and_authorize_resource
-  
-  before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode]
+  include StorageManagement
+  before_action :dropdowns, :only => [:new, :edit, :edit_by_barcode, :edit_storage]
   
   def new_params
     authorize! :create, Histology
@@ -22,7 +22,8 @@ class HistologiesController < ApplicationController
         @histology = Histology.new(:sample_id => @sample.id,
                                    :he_barcode_key => Histology.new_he_barcode(@sample.barcode_key),
                                    :he_date => Date.today)
-        #@histology = @sample.build_histology 
+        #@histology = @sample.build_histology
+        @histology.build_sample_storage_container
         render :action => 'new'
         
       elsif @sample  #Have sample, and histology is not nil
@@ -38,6 +39,18 @@ class HistologiesController < ApplicationController
   
   def create
     @histology = Histology.new(create_params)
+    _deliberate_error_here
+
+    # If new storage container being created, add it before adding H&E slide
+    if params[:which_container] and params[:which_container] == 'new'
+      ok, emsg = create_storage_container(params[:histology][:sample_storage_container_attributes])
+      unless ok
+        flash[:error] = "Error: #{emsg}"
+        prepare_for_render_new(@histology.sample_id)
+        render :action => "new"
+        return
+      end
+    end
 
     if @histology.save
       flash[:notice] = 'H&E slide was successfully created.'
@@ -49,30 +62,47 @@ class HistologiesController < ApplicationController
   end
   
   def edit
-    @histology = Histology.find(params[:id])
+    @histology = Histology.includes(:sample_storage_container).find(params[:id])
+    @edit_sample_storage = (@histology.sample_storage_container.nil? ? false : true)
   end
 
   def edit_by_barcode
     @histology = Histology.find_by_he_barcode_key(params[:barcode_key],
-                                                  :include => {:sample => [{:sample_characteristic => :pathology}, :patient]})
+                          :include => {:sample => [{:sample_characteristic => :pathology}, :patient]})
     if @histology
-      render :action => :edit
+      redirect_to :action => :edit, :id => @histology.id
     else
       flash[:error] = 'No entry found for H&E barcode: ' + params[:barcode_key]
       redirect_to :action => :new_params
     end
   end
+
+  def edit_storage
+    @histology = Histology.includes(:sample_storage_container).find(params[:id])
+    @edit_sample_storage = (@histology.sample_storage_container.nil? ? false : true)
+  end
   
   def update
     @histology = Histology.find(params[:id])
-    
+    #_deliberate_error_here
+
+    if params[:new_storage_container]
+      ok, emsg = create_storage_container(params[:histology][:sample_storage_container_attributes])
+      unless ok
+        #dropdowns
+        flash[:error] = "Error: #{emsg}"
+        redirect_to :action => 'edit', :id => @histology.id
+        return
+      end
+    end
+
     if @histology.update_attributes(update_params)
       flash[:notice] = 'H&E slide was successfully updated'
       redirect_to(@histology)
     #render :action => 'debug'
     else
-      prepare_for_render_new(@histology.sample_id)
-      render :action => 'edit'
+      flash[:error] = 'Error in updating H&E slide or location'
+      redirect_to :action => 'edit'
     end
   end
 
@@ -104,6 +134,9 @@ protected
     @histopathology     = category_filter(@category_dropdowns, 'pathology')
     @inflam_type        = category_filter(@category_dropdowns, 'inflammation type')
     @inflam_infiltr     = category_filter(@category_dropdowns, 'inflammation infiltration')
+    @freezer_locations  = FreezerLocation.list_all_by_room
+    #@container_types = StorageType.populate_dropdown
+    storage_container_ui_data
   end
   
   def prepare_for_render_new(sample_id)
@@ -125,7 +158,12 @@ protected
   def histology_params
     params.require(:histology).permit(:sample_id, :he_barcode_key, :he_date, :histopathology, :he_classification,
            :pathologist, :tumor_cell_content, :inflammation_type, :inflammation_infiltration,
-           :comments)
+           :comments,
+           sample_storage_container_attributes: [
+               :id, :sample_name_or_barcode, :container_type, :container_name,
+               :position_in_container, :freezer_location_id, :storage_container_id, :notes, :_destroy
+           ]
+    )
   end
 
 end

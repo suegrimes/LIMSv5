@@ -26,6 +26,7 @@ class SampleStorageContainer < ApplicationRecord
   belongs_to :user, :foreign_key => :updated_by, optional: true
 
   validates_presence_of :storage_container, on: :create, message: "is invalid.  Please enter a valid container, or leave all location fields blank"
+  validate :container_valid_or_blank
   validate :position_must_be_valid_for_container_type
 
   before_validation :upd_storage_container_fields
@@ -36,12 +37,17 @@ class SampleStorageContainer < ApplicationRecord
     self.container_type.blank? and self.container_name.blank? and self.position_in_container.blank? and self.freezer_location_id.nil?
   end
 
+  def container_valid_or_blank
+    self.storage_container or self.container_blank?
+  end
+
   def position_must_be_valid_for_container_type
     unless self.container_type.nil?
       storage_type = StorageType.where('container_type = ?', self.container_type).first
       valid_positions = (storage_type.nil? ? nil : storage_type.valid_positions)
       if valid_positions and !valid_positions.include?(self.position_in_container)
-        errors.add(:position_in_container, "is not valid for this container type")
+        error_text = ["is not valid for this container type", self.position_in_container].join()
+        errors.add(:position_in_container, error_text)
       end
     end
   end

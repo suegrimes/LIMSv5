@@ -23,6 +23,11 @@ class StorageContainer < ApplicationRecord
     (container_name =~ /\A\d\Z/ ? '0' + container_name : container_name)
   end
 
+  def self.find_sc_key(freezer_id, container_type, container_name)
+    self.where("freezer_location_id = ? and container_type = ? and container_name = ?",
+               freezer_id, container_type, container_name).first
+  end
+
   def self.find_for_summary_query(condition_array)
     self.joins(:freezer_location)
         .left_joins(:sample_storage_containers)

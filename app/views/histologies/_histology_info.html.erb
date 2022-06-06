@@ -6,10 +6,10 @@
     <th>H&E date</th>
     <th>Pathologist</th>
     <th>Histopathology</th>
-    <th>H&E classification</th>
     <th>Tumor cell content</th>
     <th>Inflammation</th>
-    <th>Infiltration</th>
+    <th>Room/Freezer</th>
+    <th>Storage Container</th>
     <th></th>
     <th></th>
   </tr>
@@ -20,10 +20,11 @@
     <td><%=h histology.he_date %></td>
     <td><%=h histology.pathologist %></td>
     <td><%=h histology.histopathology %></td>
-    <td><%=h histology.he_classification %></td>
     <td><%=h histology.tumor_cell_content %></td>
     <td><%=h histology.inflammation_type %></td>
-    <td><%=h histology.inflammation_infiltration %></td>
+    <td><%=h histology.room_and_freezer %></td>
+    <% storage_link_text = (histology.container_and_position == '' ? 'Add' : histology.container_and_position) %>
+    <td><%=link_to storage_link_text, edit_he_storage_path(id: histology.id) %></td>
     <% if (can? :edit, histology) %> <td class="linkborder"><%= link_to 'Edit', edit_histology_path(histology) %></td><% end %>
     <% if (can? :delete, histology) %> <td class="linkborder"><%= link_to 'Delete', histology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
   </tr>
