@@ -46,7 +46,7 @@ class SampleStorageContainer < ApplicationRecord
       storage_type = StorageType.where('container_type = ?', self.container_type).first
       valid_positions = (storage_type.nil? ? nil : storage_type.valid_positions)
       if valid_positions and !valid_positions.include?(self.position_in_container)
-        error_text = ["is not valid for this container type", self.position_in_container].join()
+        error_text = [self.position_in_container, ", is not valid for this container type"].join()
         errors.add(:position_in_container, error_text)
       end
     end

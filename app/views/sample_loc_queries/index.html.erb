@@ -41,10 +41,10 @@
       <td><%=h sample_loc.tumor_normal %></td>
       <td><%=h sample_loc.sample_remaining %></td>
       <td><%=h sample_loc.room_and_freezer %></td>
-      <td><% if sample_loc.container_and_position == '' %>
-            <%=link_to 'Add', edit_sample_loc_path(sample_loc) %>
-          <% else %>
+      <td><% if sample_loc.container_and_position > '' %>
             <%=link_to sample_loc.container_and_position, edit_sample_loc_path(sample_loc) %>
+          <% elsif (can? :new, StorageType) %><!-- Limit access to clin_admin or admin roles -->
+            <%=link_to 'Add', edit_sample_loc_path(sample_loc) %>
           <% end %>
       </td>
       <%= hidden_field_tag("export_id[]", sample_loc.id)  %>

@@ -1,4 +1,4 @@
-<h5>Editing Sample Storage Locations</h5>
+<h5>Editing Extraction Storage Locations</h5>
 <%= form_for(@psample_loc) do |f| %>
     <%= render '/shared/errors', model: @psample_loc %>
 
@@ -37,6 +37,7 @@
       <% end %>
     </table>
 
-    <%= render :partial => 'sample_locs/sample_storage_edit', :locals => {:f => f} %>
+    <%= render :partial => 'shared/multi_storage_edit', :locals => {:f => f} %>
 
+  <!--%=f.submit "Update", class: "btn btn-primary" %-->
 <% end %>

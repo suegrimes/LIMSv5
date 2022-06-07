@@ -91,8 +91,13 @@ function edit_storage_container_init() {
             window.existing_new_container_fields = $("div.existing-new-container-fields").detach();
             $("div.current-container").append(window.current_container_fields);
             window.edit_current_container = true;
+
+        } else if (which == "new") {
+            $(".new-container-button").hide()
+            window.edit_current_container = false;
+
         } else {
-            my_alert("Unknown which_container value");
+            my_alert("Unknown which_container value: "+which);
         }
     });
 }
@@ -624,11 +629,13 @@ function hide_position_ui() {
 function display_new_fields() {
   $(".existing-container").hide();
   $(".new-fields").show();
+  which = 'new';
 }
 
 function hide_new_fields() {
   $(".new-fields").hide();
   $(".existing-container").show();
+  which = 'other';
 }
 
 function flash_selector() {

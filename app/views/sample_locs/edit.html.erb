@@ -35,6 +35,7 @@
       <% end %>
     </table>
 
-    <%= render :partial => 'sample_locs/sample_storage_edit', :locals => {:f => f} %>
+    <%= render :partial => 'shared/multi_storage_edit', :locals => {:f => f} %>
 
+    <!--%=f.submit "Update", class: "btn btn-primary" %-->
 <% end %>
