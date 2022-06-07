@@ -10,7 +10,9 @@ class SampleStorageContainersController < ApplicationController
   def edit
     @sample_storage_container = SampleStorageContainer.find(params[:id])
     @storage_container_id = @sample_storage_container.storage_container_id
+    @source_obj = get_source_obj(@sample_storage_container)
     render :action => 'edit'
+    #render :action => 'debug'
   end
 
   # PUT /sample_storage_containers/1
@@ -49,6 +51,12 @@ class SampleStorageContainersController < ApplicationController
   def sample_storage_container_params
     params.require(:sample_storage_container).permit(:container_type, :container_name, :position_in_container, :freezer_location_id,
                    :notes)
+  end
+
+  def get_source_obj(sample_storage_container)
+    klass = Object.const_get(sample_storage_container.stored_sample_type)
+    obj = klass.getwith_storage(sample_storage_container.stored_sample_id)
+    return obj
   end
 
 end

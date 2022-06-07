@@ -1,4 +1,14 @@
-<h5>Editing Sample Storage Location</h5>
+<h5>Editing <%= @sample_storage_container.stored_sample_type %> Storage Location</h5>
+
+<% if @sample_storage_container.stored_sample_type == 'Sample' %>
+  <%= render :partial => 'samples/sample_info', :locals => {:sample => @source_obj} %>
+<% elsif @sample_storage_container.stored_sample_type == 'Histology'%>
+  <%= render :partial => 'histologies/histology_summary', :locals => {:histology => @source_obj} %>
+<% elsif @sample_storage_container.stored_sample_type == 'ProcessedSample'%>
+  <%= render :partial => 'processed_samples/processed_sample_info', :locals => {:processed_sample => @source_obj} %>
+<% elsif @sample_storage_container.stored_sample_type == 'SeqLib'%>
+  <%= render :partial => 'seq_libs/lib_show', :locals => {:seq_lib => @source_obj} %>
+<% end %>
 
 <%= form_for(@sample_storage_container) do |f| %>
     <%= render '/shared/errors', model: @sample_storage_container %>
