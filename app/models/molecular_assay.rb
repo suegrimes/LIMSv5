@@ -23,7 +23,7 @@
 
 class MolecularAssay < ApplicationRecord
   include Attachable
-  
+
   belongs_to :protocol, optional: true
   belongs_to :processed_sample, optional: true
   has_many :attached_files, :as => :sampleproc
