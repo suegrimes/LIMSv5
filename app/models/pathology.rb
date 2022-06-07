@@ -21,7 +21,8 @@
 #
 
 class Pathology < ApplicationRecord
-  
+  include Attachable
+
   belongs_to :patient, optional: true
   has_many :sample_characteristics, :dependent => :nullify
   has_many :attached_files, :as => :sampleproc

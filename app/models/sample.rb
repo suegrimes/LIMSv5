@@ -32,6 +32,8 @@
 
 class Sample < ApplicationRecord
   include LimsCommon
+  include Attachable
+  include Storable
 
   # Rails 5 defaults to required: true, so make it explicitly optional
   # Patient and sample_characteristic are not really optional, but during edit or bulk upload foreign keys are not initially set
@@ -178,10 +180,6 @@ class Sample < ApplicationRecord
     #self.find(:first, :include => [:sample_characteristic, :patient, :sample_storage_container],
     #          :conditions => ["samples.sample_characteristic_id = ? AND samples.barcode_key = ?",
     #                           sample_characteristic_id, barcode_key])
-  end
-  
-  def self.getwith_attach(id)
-    self.includes(:attached_files).find(id)
   end
 
   def self.find_in_barcode_range(bcstart, bcend)

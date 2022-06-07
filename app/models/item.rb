@@ -24,6 +24,8 @@
 #
 
 class Item < ApplicationRecord
+  include Attachable
+
   belongs_to :order, optional: true
   has_many :attached_files, :as => :sampleproc
   
@@ -60,10 +62,6 @@ class Item < ApplicationRecord
     return req_nm
   end
 
-  def self.getwith_attach(id)
-    self.includes(:attached_files).find(id)
-  end
-  
   def self.find_all_unique(condition_array=[])
     self.where(sql_where(condition_array)).group('item_description, catalog_nr').all
     #self.find(:all, :group => "item_description, catalog_nr",

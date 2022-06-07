@@ -19,7 +19,9 @@
 #
 
 class Histology < ApplicationRecord
-  
+  include Attachable
+  include Storable
+
   belongs_to :sample, optional: true
   has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
   has_many :attached_files, :as => :sampleproc

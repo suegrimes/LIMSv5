@@ -33,6 +33,8 @@
 #  updated_at          :timestamp        not null
 #
 class SeqLib < ApplicationRecord
+  include Attachable
+  include Storable
   
   belongs_to :user, optional: true, foreign_key: :updated_by
   belongs_to :adapter, optional: true
@@ -233,10 +235,6 @@ class SeqLib < ApplicationRecord
   def self.unique_projects
     # Exclude blank or NULL projects
     self.where("project > ''").pluck(:project).uniq.sort
-  end
-  
-  def self.getwith_attach(id)
-    self.includes(:attached_files).find(id)
   end
   
   def self.upd_lib_status(flow_cell, lib_status)

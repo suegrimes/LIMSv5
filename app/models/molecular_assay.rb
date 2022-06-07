@@ -22,8 +22,7 @@
 #
 
 class MolecularAssay < ApplicationRecord
-  
-  #attr_accessible :owner, :preparation_date, :protocol_id, :notes
+  include Attachable
   
   belongs_to :protocol, optional: true
   belongs_to :processed_sample, optional: true

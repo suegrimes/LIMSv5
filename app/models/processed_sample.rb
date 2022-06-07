@@ -31,6 +31,9 @@
 #
 
 class ProcessedSample < ApplicationRecord
+  include Attachable
+  include Storable
+
   belongs_to :sample, optional: false
   belongs_to :patient, optional: true
   belongs_to :user, optional: true, foreign_key: 'updated_by'
@@ -111,10 +114,6 @@ class ProcessedSample < ApplicationRecord
   def self.barcode_search(search_string)
     #self.find(:all, :conditions => ["barcode_key LIKE ?", search_string + '%'])
     self.where("barcode_key LIKE ?", search_string + '%').all
-  end
-  
-  def self.getwith_attach(id)
-    self.includes(:attached_files).find(id)
   end
 
   def self.find_psample_id(source_DNA)

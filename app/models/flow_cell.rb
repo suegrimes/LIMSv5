@@ -25,6 +25,8 @@
 #
 
 class FlowCell < ApplicationRecord
+  include Attachable
+
   belongs_to :seq_machine, optional: true
   has_many :flow_lanes, :dependent => :destroy
   has_many :run_dirs,   :dependent => :destroy
@@ -123,11 +125,6 @@ class FlowCell < ApplicationRecord
   def self.find_flowcells_for_sequencing
     self.unsequenced.includes(:flow_lanes => :publications).desc_by_date.all
     #self.unsequenced.find(:all, :include => {:flow_lanes => :publications}, :order => 'flow_cells.flowcell_date DESC')
-  end
-  
-  def self.getwith_attach(id)
-    self.includes(:attached_files).find(id)
-    #self.find(id, :include => :attached_files)
   end
   
   def self.find_flowcell_incl_rundirs(condition_array=[])
