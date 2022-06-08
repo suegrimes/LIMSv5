@@ -39,13 +39,13 @@ class HistologiesController < ApplicationController
   
   def create
     @histology = Histology.new(create_params)
-    _deliberate_error_here
 
     # If new storage container being created, add it before adding H&E slide
     if params[:which_container] and params[:which_container] == 'new'
       ok, emsg = create_storage_container(params[:histology][:sample_storage_container_attributes])
       unless ok
         flash[:error] = "Error: #{emsg}"
+        dropdowns
         prepare_for_render_new(@histology.sample_id)
         render :action => "new"
         return
@@ -56,8 +56,10 @@ class HistologiesController < ApplicationController
       flash[:notice] = 'H&E slide was successfully created.'
       redirect_to(@histology)
     else
+      flash[:notice] = 'Error: Unable to add H&E slide'
       prepare_for_render_new(@histology.sample_id)
-      render :action => "new" 
+      dropdowns
+      render :action => "new"
     end
   end
   
@@ -84,14 +86,13 @@ class HistologiesController < ApplicationController
   
   def update
     @histology = Histology.find(params[:id])
-    #_deliberate_error_here
 
     if params[:new_storage_container]
       ok, emsg = create_storage_container(params[:histology][:sample_storage_container_attributes])
       unless ok
-        #dropdowns
+        dropdowns
         flash[:error] = "Error: #{emsg}"
-        redirect_to :action => 'edit', :id => @histology.id
+        render :action => 'edit'
         return
       end
     end
@@ -99,10 +100,11 @@ class HistologiesController < ApplicationController
     if @histology.update_attributes(update_params)
       flash[:notice] = 'H&E slide was successfully updated'
       redirect_to(@histology)
-    #render :action => 'debug'
+
     else
-      flash[:error] = 'Error in updating H&E slide or location'
-      redirect_to :action => 'edit'
+      dropdowns
+      flash[:error] = 'Error in updating H&E slide'
+      render :action => 'edit'
     end
   end
 
@@ -140,7 +142,6 @@ protected
   end
   
   def prepare_for_render_new(sample_id)
-    dropdowns
     @sample = Sample.includes(:sample_characteristic => :pathology).find(sample_id)
   end
 

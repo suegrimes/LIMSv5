@@ -104,7 +104,8 @@ Rails.application.routes.draw do
   get 'container_query' => 'storage_containers#new_query', :as => :container_query
   get 'container_contents' => 'storage_containers#list_contents', :as => :container_contents
 
-  resources :sample_storage_containers, :only => [:edit, :update]
+  resources :sample_storage_containers, :only => [:new, :create, :edit, :update]
+  get 'edit_ss_container' => 'sample_storage_containers#edit_from_source', :as => :edit_ss_container
 
   # Routes for sample storage locations
   resources :sample_locs, :only => [:show, :edit, :update]

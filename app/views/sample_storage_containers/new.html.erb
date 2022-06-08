@@ -1,0 +1,19 @@
+<h5>New <%= @source_obj.class.name %> Storage Location</h5>
+
+<% if @source_obj.class.name == 'Sample' %>
+  <%= render :partial => 'samples/sample_info', :locals => {:sample => @source_obj} %>
+<% elsif @source_obj.class.name == 'Histology'%>
+  <%= render :partial => 'histologies/histology_summary', :locals => {:histology => @source_obj} %>
+<% elsif @source_obj.class.name == 'ProcessedSample'%>
+  <%= render :partial => 'processed_samples/processed_sample_info', :locals => {:processed_sample => @source_obj} %>
+<% elsif @source_obj.class.name == 'SeqLib'%>
+  <%= render :partial => 'seq_libs/lib_show', :locals => {:seq_lib => @source_obj} %>
+<% end %>
+
+<%= form_for(@source_obj.sample_storage_container) do |f| %>
+    <%= render '/shared/errors', model: @source_obj.sample_storage_container %>
+
+    <%= render :partial => 'shared/storage_container_new', :locals => {f: f, barcode: @source_obj.barcode_key } %>
+
+    <%= f.submit "Update", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'Cancel', :back %>
+<% end %>

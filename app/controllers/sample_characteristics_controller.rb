@@ -78,7 +78,7 @@ class SampleCharacteristicsController < ApplicationController
     params[:sample_characteristic].merge!(:patient_id  => params[:patient][:id])
 
     # see if a new container is specified, if so create it
-    if (params[:new_storage_container])
+    if (params[:which_container] and params[:which_container] == 'new')
       sample_storage_container_attributes = params[:sample_characteristic][:samples_attributes]["0"][:sample_storage_container_attributes]
       ok, emsg = create_storage_container(sample_storage_container_attributes)
       unless ok
@@ -89,7 +89,7 @@ class SampleCharacteristicsController < ApplicationController
         return
       end
     end
-    
+
     #@sample_characteristic = SampleCharacteristic.new(params[:sample_characteristic])
     @sample_characteristic = SampleCharacteristic.new(sample_characteristic_params)
 

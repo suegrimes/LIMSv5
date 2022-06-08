@@ -4,13 +4,39 @@ class SampleStorageContainersController < ApplicationController
   load_and_authorize_resource
 
   include StorageManagement
-  before_action :dropdowns, :only => :edit
+  before_action :dropdowns, :only => [:new, :edit, :edit_from_source]
+
+  def new
+    klass = Object.const_get(params[:model_class])
+    @source_obj = klass.find(params[:id])
+    @source_obj.build_sample_storage_container
+  end
+
+  # POST /sample_storage_containers
+  def create
+    @sample_storage_container = SampleStorageContainer.new(create_params)
+
+    if @sample_storage_container.save
+      flash[:notice] = 'Sample storage container was successfully created.'
+      redirect_to :controller => @sample_storage_container.stored_sample_type.tableize, :action => 'show',
+                  :id => @sample_storage_container.stored_sample_id
+    else
+      render :action => "new"
+    end
+  end
 
   # GET /sample_storage_containers/1/edit
   def edit
     @sample_storage_container = SampleStorageContainer.find(params[:id])
-    @storage_container_id = @sample_storage_container.storage_container_id
-    @source_obj = get_source_obj(@sample_storage_container)
+    klass = Object.const_get(@sample_storage_container.stored_sample_type)
+    @source_obj = klass.find(@sample_storage_container.stored_sample_id)
+    render :action => 'edit'
+  end
+  #
+  def edit_from_source
+    klass = Object.const_get(params[:model_class])
+    @source_obj = klass.find(params[:source_id])
+    @sample_storage_container = @source_obj.sample_storage_container
     render :action => 'edit'
     #render :action => 'debug'
   end
@@ -21,7 +47,8 @@ class SampleStorageContainersController < ApplicationController
 
     if @sample_storage_container.update_attributes(update_params)
       flash[:notice] = 'Sample storage container was successfully updated.'
-      redirect_to :controller => :storage_containers, :action => :list_contents, :id => @sample_storage_container.storage_container_id
+      redirect_to :controller => @sample_storage_container.stored_sample_type.tableize, :action => 'show',
+        :id => @sample_storage_container.stored_sample_id
     else
       dropdowns
       flash[:error] = 'ERROR - Unable to update sample storage container'

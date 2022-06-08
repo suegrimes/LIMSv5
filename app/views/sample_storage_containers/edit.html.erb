@@ -13,7 +13,7 @@
 <%= form_for(@sample_storage_container) do |f| %>
     <%= render '/shared/errors', model: @sample_storage_container %>
 
-    <%= render :partial => 'shared/storage_container_edit', :locals => {f: f, barcode: f.object.sample_name_or_barcode } %>
+    <%= render :partial => 'shared/storage_container_edit', :locals => {f: f, barcode: @source_obj.barcode_key } %>
 
     <%= f.submit "Update", class: "btn btn-primary" -%>&nbsp;&nbsp;<%= link_to 'Cancel', :back %>
 <% end %>
