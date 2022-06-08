@@ -38,6 +38,12 @@
         <%=f.collection_select(:inflammation_type, @inflam_type, :c_value, :c_value,
                                {:include_blank => 'Select inflamm type'}, {class: "form-control"}) %>
       </div>
+
+      <label for="inflamation_infiltration" class="col-auto col-form-label col-form-label-sm">Infiltration:</label>
+      <div class="col-auto">
+        <%=f.collection_select(:inflamation_infiltration, @inflam_infiltr, :c_value, :c_value,
+                               {:include_blank => 'Select infiltration'}, {class: "form-control"}) %>
+      </div>
     </div>
 
     <div class="form-group row">

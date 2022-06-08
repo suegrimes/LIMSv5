@@ -6,8 +6,8 @@
     <th>H&E date</th>
     <th>Pathologist</th>
     <th>Histopathology</th>
-    <th>H&E classification</th>
     <th>Tumor cell content</th>
+    <th>Inflammation</th>
     <% if (can? :edit, histology) %><th></th><% end %>
     <% if (can? :delete, histology) %><th></th><% end %>
   </tr>
@@ -18,8 +18,8 @@
     <td><%=h histology.he_date %></td>
     <td><%=h histology.pathologist %></td>
     <td><%=h histology.histopathology %></td>
-    <td><%=h histology.he_classification %></td>
     <td><%=h histology.tumor_cell_content %></td>
+    <td><%=h histology.inflammation %></td>
     <% if (can? :edit, histology) %> <td class="linkborder"><%= link_to 'Edit', edit_histology_path(histology) %></td><% end %>
     <% if (can? :delete, histology) %> <td class="linkborder"><%= link_to 'Delete', histology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
   </tr>
