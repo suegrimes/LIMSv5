@@ -19,7 +19,7 @@
     <td><%=h histology.pathologist %></td>
     <td><%=h histology.histopathology %></td>
     <td><%=h histology.tumor_cell_content %></td>
-    <td><%=h histology.inflammation %></td>
+    <td><%=h histology.inflammation_type %></td>
     <% if (can? :edit, histology) %> <td class="linkborder"><%= link_to 'Edit', edit_histology_path(histology) %></td><% end %>
     <% if (can? :delete, histology) %> <td class="linkborder"><%= link_to 'Delete', histology, method: :delete, data: { confirm: 'Are you sure?' }%></td><% end %>
   </tr>
