@@ -1,0 +1,29 @@
+<table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Sample Name</th>
+    <th>Position</th>
+    <th>Sample Type</th>
+    <th>Upd By</th>
+    <th class="link-col">&nbsp;</th>
+  </tr>
+  </thead>
+
+  <% @container_contents.each do |ssc| %>
+      <%= hidden_field_tag("export_id[]", ssc.id)  %>
+      <tr>
+        <td>
+          <% if ssc.stored_sample %><%=link_to ssc.sample_name_or_barcode, ssc.stored_sample %>
+              <% else %><%=h ssc.sample_name_or_barcode %>
+          <% end %>
+        </td>
+        <td><%=h ssc.position_in_container %></td>
+        <td><%=h ssc.type_of_sample %></td>
+        <td><% if ssc.user %><%=h ssc.user.login %><% end %></td>
+        <td><% if can? :edit, ssc.stored_sample %>
+              <%=link_to 'Edit', edit_path_by_type(ssc) %>
+          <% end %>
+        </td>
+      </tr>
+  <% end %>
+</table>

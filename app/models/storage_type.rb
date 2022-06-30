@@ -13,6 +13,7 @@
 #
 
 class StorageType < ApplicationRecord
+  self.primary_key = :container_type
 
   def self.container_dimensions
     #self.select(:container_type, :freezer_location_id).distinct().to_a()
@@ -26,8 +27,12 @@ class StorageType < ApplicationRecord
     #self.pluck(:container_type)
   end
 
+  def display_in_grid?
+    display_format[0..1] == '2D'
+  end
+
   def max_row
-    if display_format == '2D'
+    if display_in_grid?
       return (first_row == '1' ? nr_rows.to_s : ('A'.ord + nr_rows - 1).chr )
     else
       return nil
@@ -35,15 +40,35 @@ class StorageType < ApplicationRecord
   end
 
   def max_col
-    if display_format == '2D'
+    if display_in_grid?
       return (first_col == '1' ? nr_cols.to_s : ('A'.ord + nr_cols - 1).chr )
     else
       return nil
     end
   end
 
+  def grid_rows
+    if !display_in_grid?
+      return nil
+    elsif display_format == '2Dseq'
+      return [*1..nr_rows].map(&:to_s)
+    else
+      return [*first_row..max_row]
+    end
+  end
+
+  def grid_cols
+    if !display_in_grid?
+      return nil
+    elsif display_format == '2Dseq'
+      return [*1..nr_cols].map(&:to_s)
+    else
+      return [*first_col..max_col]
+    end
+  end
+
   def valid_positions
-    if display_format[0..1] != '2D'
+    if !display_in_grid?
       return nil
     elsif display_format == '2Dseq'
       return [*1..nr_rows*nr_cols].map(&:to_s)

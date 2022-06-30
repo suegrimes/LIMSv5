@@ -1,0 +1,27 @@
+<table class="table table-bordered table-sm table-font-sm text-center">
+  <thead class="thead-light">
+  <tr>
+    <th>&nbsp;</th>
+    <% for col in @ss_container.storage_type.grid_cols %>
+    <th><%= col %></th>
+    <% end %>
+  </tr>
+  </thead>
+
+  <% for row in @ss_container.storage_type.grid_rows %>
+      <tr>
+        <th scope="row" class="th-grey-fill"><%= row %></th>
+        <% for col in @ss_container.storage_type.grid_cols %>
+          <% coord = grid_coords(row, col, @ss_container.storage_type.display_format, @ss_container.storage_type.max_col) %>
+          <% samples = @positions_used.select{|sample, pos | pos == coord}.map(&:first) %>
+          <% if samples.empty? %>
+            <td class="ltgrey"><%= coord %></td>
+          <% else %>
+            <td><%= samples.join(',') %></td>
+          <% end %>
+        <% end %>
+      </tr>
+  <% end %>
+</table>
+
+<p class="info-warn">If number of samples shown in grid is fewer than samples listed in heading, use list view to check for invalid storage positions</p>

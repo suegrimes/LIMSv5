@@ -71,7 +71,9 @@ class StorageContainersController < ApplicationController
   end
 
   def list_contents
-    @ss_container = StorageContainer.find_for_contents_query(params[:id])
+    @ss_container = StorageContainer.find(params[:id])
+    @container_contents = @ss_container.container_contents
+    @positions_used = @container_contents.pluck(:sample_name_or_barcode, :position_in_container)
     render :action => :list_contents
   end
 
@@ -105,8 +107,9 @@ class StorageContainersController < ApplicationController
       end
     end
 
-    ssc = @storage_container.sample_storage_containers.to_a
-    @positions_used = ssc.inject([]) {|array, r| array << r.position_in_container }
+    #ssc = @storage_container.sample_storage_containers.to_a
+    #@positions_used = ssc.inject([]) {|array, r| array << r.position_in_container }
+    @positions_used = @storage_container.positions_used
     respond_to do |format|
       format.json do
         render json: {positions_used: @positions_used}, status: :ok

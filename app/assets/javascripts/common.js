@@ -84,3 +84,12 @@ function showHideDiv(elementId1, elementId2) {
         }
     }
 }
+
+function toggleDiv(button_div, div1_id, div2_id) {
+    $('#' + button_div).find('button').click(function() {
+        $(this).addClass('active').siblings().removeClass('active').removeClass('focus');
+        var ix = $(this).index();
+        $('#' + div1_id).toggle( ix === 0 );
+        $('#' + div2_id).toggle( ix === 1 );
+    });
+}

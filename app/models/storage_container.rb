@@ -12,6 +12,7 @@
 
 class StorageContainer < ApplicationRecord
   belongs_to :freezer_location
+  belongs_to :storage_type, :foreign_key => :container_type
   has_many :sample_storage_containers
 
   validates_uniqueness_of :container_name, scope: [:freezer_location_id, :container_type]
@@ -36,11 +37,6 @@ class StorageContainer < ApplicationRecord
         .count('sample_storage_containers.id')
   end
 
-  def self.find_for_contents_query(id)
-    self.joins(:freezer_location, :sample_storage_containers)
-        .find(id)
-  end
-
   # construct dropdown data rows  with columns:
   # freezer_location_id, container_type, container_name, container_id, count of samples in container
   # nr_rows, nr_cols
@@ -63,5 +59,19 @@ HERE
     result = ActiveRecord::Base.connection.exec_query(sql)
     result.rows
   end
+
+  def container_contents
+    sample_storage_containers.to_a
+  end
+
+  def positions_used
+    container_fmt = storage_type ? storage_type.display_format[0,2] : 'NA'
+    if container_fmt == '2D'
+      return container_contents.inject([]) {|array, r| array << r.position_in_container }
+    else
+      return []
+    end
+  end
+
 
 end
