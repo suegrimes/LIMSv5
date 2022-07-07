@@ -237,9 +237,9 @@ protected
       lib_param = request.params['seq_lib_' + i.to_s]
       sample_param = request.params['lib_sample_' + i.to_s]
       @new_lib[i] ||= SeqLib.new(lib_param)
-      @lib_samples[i] = LibSample.new(:source_sample_name => lib_param[:source_sample_name],
-                                      :index1_tag_id => lib_param[:index1_tag_id],
-                                      :index2_tag_id => lib_param[:index2_tag_id])
+      @lib_samples[i] = LibSample.new(:source_sample_name => sample_param[:source_sample_name],
+                                      :index1_tag_id => sample_param[:index1_tag_id],
+                                      :index2_tag_id => sample_param[:index2_tag_id])
     end
     @nr_libs = nr_libs
   end
