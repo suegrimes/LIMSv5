@@ -10,6 +10,8 @@ class UsersController < ApplicationController
   
   ## role_authorization ##
   skip_before_action :login_required, :only => [:new, :create, :forgot, :reset]
+  before_action :dropdowns, :only => [:new, :edit]
+
   #require_role "admin", :for_all_except => [:new, :create]
   if DEMO_APP
     include SslRequirement   
@@ -147,8 +149,12 @@ class UsersController < ApplicationController
     end
   end
 
-  private
+protected
+  def dropdowns
+    @user_labs = Category.populate_dropdown_for_category('user labs')
+  end
 
+private
   def create_params_allowed
     params.require(:user).permit(:login, :email, :password, :password_confirmation, :active_inactive, :lab_name)
   end
