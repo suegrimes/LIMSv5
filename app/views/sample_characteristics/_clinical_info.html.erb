@@ -3,6 +3,7 @@
   <thead class="thead-light thead-font-sm">
   <tr>
     <th>Collection Date</th>
+    <th>Primary Dx</th>
     <th>Clinic</th>
     <th>Consent Protocol</th>
     <% if sample_characteristic.from_nccc? %>
@@ -15,6 +16,7 @@
 
   <tr>
     <td><%=h link_to sample_characteristic.collection_date, sample_characteristic_path(sample_characteristic) %></td>
+    <td><%=h sample_characteristic.disease_primary %></td>
     <td><%=h sample_characteristic.clinic_or_location %></td>
     <td><%=h sample_characteristic.consent_descr %></td>
     <% if sample_characteristic.from_nccc? %>

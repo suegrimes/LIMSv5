@@ -34,10 +34,11 @@ class SampleCharacteristicsController < ApplicationController
         @sample_characteristic = SampleCharacteristic.new(:patient_id => @patient_id,
                                                           :collection_date => Date.today)
       else
-        @existing_sample = SampleCharacteristic.find_by_patient_id(params[:patient_id])
+        @existing_sample = SampleCharacteristic.find_by_patient(@patient_id)
         if @existing_sample
           clinic_or_location = @existing_sample.clinic_or_location
           consent_protocol_id = @existing_sample.consent_protocol_id
+          disease_primary = @existing_sample.disease_primary
         end
         
         @sample_characteristic = SampleCharacteristic.new(:patient_id => @patient.id,
@@ -46,7 +47,8 @@ class SampleCharacteristicsController < ApplicationController
                                                            :race => @patient.race,
                                                            :collection_date => Date.today,
                                                            :clinic_or_location => clinic_or_location,
-                                                           :consent_protocol_id => consent_protocol_id)  
+                                                           :consent_protocol_id => consent_protocol_id,
+                                                           :disease_primary => disease_primary)
        end 
        
        @sample_characteristic.samples.build
@@ -263,6 +265,7 @@ protected
     @races              = category_filter(@category_dropdowns, 'race')
     @ethnicity          = category_filter(@category_dropdowns, 'ethnicity')
     @clinics            = category_filter(@category_dropdowns, 'clinic')
+    @dx_primary         = category_filter(@category_dropdowns, 'primary disease')
     #@etiology         = Category.populate_dropdown_for_category('etiology')
     #@diagnosis        = Category.populate_dropdown_for_category('diagnosis')
   end
@@ -347,7 +350,8 @@ private
 
   def sample_characteristic_params
     params.require(:sample_characteristic).permit(:patient_id,  # this was merged in
-      :collection_date, :clinic_or_location, :consent_protocol_id, :comments, samples_attributes: samples_attributes)
+      :collection_date, :clinic_or_location, :consent_protocol_id, :disease_primary, :comments,
+      samples_attributes: samples_attributes)
   end
 
   def sample_params

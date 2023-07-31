@@ -55,6 +55,7 @@ protected
     @protocols          = Protocol.find_for_protocol_type('E')  #Extraction protocols
     @category_dropdowns = Category.populate_dropdowns([Cgroup::CGROUPS['Clinical'], Cgroup::CGROUPS['Sample'], Cgroup::CGROUPS['Extraction']])
     @clinics            = category_filter(@category_dropdowns, 'clinic')
+    @dx_primary         = category_filter(@category_dropdowns, 'disease_primary')
     @sample_type        = category_filter(@category_dropdowns, 'sample type')
     @source_tissue      = category_filter(@category_dropdowns, 'source tissue')
     @preservation       = category_filter(@category_dropdowns, 'tissue preservation')
@@ -104,10 +105,11 @@ protected
   end
   
   def export_samples_setup
-    hdgs  = (%w{DownloadDt Patient_ID Consent_Protocol Barcode ExtrProtocol FromSample ProcessDt Amt(ug) Conc A260/280 A260/A230 Rem? Room_Freezer Container})
+    hdgs  = (%w{DownloadDt Patient_ID Consent_Protocol PrimaryDx Barcode ExtrProtocol FromSample ProcessDt Amt(ug) Conc A260/280 A260/A230 Rem? Room_Freezer Container})
     
     flds  = [['sm', 'patient_id'],
              ['cs', 'consent_name'],
+             ['sc', 'disease_primary'],
              ['ps', 'barcode_key'],
              ['pr', 'protocol_name'],
              ['sm', 'barcode_key'],
@@ -124,15 +126,16 @@ protected
   end
   
   def model_xref(psample)
-    return {:ps => psample, :sm => psample.sample, :cs => psample.sample.sample_characteristic.consent_protocol,
+    return {:ps => psample, :sm => psample.sample, :sc => psample.sample.sample_characteristic,
+            :cs => psample.sample.sample_characteristic.consent_protocol,
             :pr => psample.protocol, :pc => psample.sample_storage_container}
   end
     
   def psample_query_params
     params.require(:psample_query).permit(
       :mrn, :patient_string, :barcode_string, :consent_protocol_id, :clinic_or_location,
-      :sample_tissue, :sample_type, :tissue_preservation, :tumor_normal, :protocol_id,
-      :extraction_type, :from_date, :to_date, :updated_by
+      :protocol_id, :disease_primary, :sample_tissue, :sample_type, :tumor_normal,
+      :tissue_preservation, :extraction_type, :from_date, :to_date, :updated_by
     )
   end
 

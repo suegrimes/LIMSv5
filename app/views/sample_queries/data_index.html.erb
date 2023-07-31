@@ -43,6 +43,7 @@
     <th>Barcode</th>
     <th>Alt ID</th>
     <th>Sample Date</th>
+    <th>Primary Dx</th>
     <th>Sample Type</th>
     <th>OR Designation</th>
     <th>Sample H&E</th>
@@ -69,6 +70,7 @@
         <td><%=link_to sample.barcode_key, sample_path(sample) %></td>
         <td><%=h sample.alt_identifier %></td>
         <td><%=h sample.sample_date %></td>
+        <td><%=h sample.sample_characteristic.disease_primary %></td>
         <td><%=h sample.sample_category %></td>
         <td><%=h sample.tumor_normal %></td>
         <td><% if sample.sample_characteristic.pathology %><%=h sample.sample_characteristic.pathology.pathology_classification %><% end %></td>

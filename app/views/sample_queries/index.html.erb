@@ -13,6 +13,7 @@
     <th>Alt ID</th>
     <th>Source</th>
     <th>Sample Date</th>
+		<th>Primary Dx</th>
     <th>OR Designation</th>
     <th>Container Type</th>
     <th>Amount</th>
@@ -53,6 +54,7 @@
 		<td class=<%= "dotted_border_bottom" if nonblank_comments %>>Sample: <%=h sample.source_barcode_key %></td>
         <% end %>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_date %></td>
+				<td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_characteristic.disease_primary %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.tumor_normal %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_type %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_amt %></td>

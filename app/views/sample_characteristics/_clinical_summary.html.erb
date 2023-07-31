@@ -6,6 +6,7 @@
     <th>Gender</th>
     <th>Race/Ethnicity</th>
     <th>Collection Date</th>
+    <th>Primary Dx</th>
     <th>Clinic</th>
     <th>Consent Protocol</th>
     <th>&nbsp;</th>
@@ -17,6 +18,7 @@
     <td><%=h patient.gender %></td>
     <td><%=h [patient.race, patient.ethnicity].join('/') %></td>
     <td><%=h link_to sample_characteristic.collection_date, sample_characteristic_path(sample_characteristic) %></td>
+    <td><%=h sample_characteristic.disease_primary %></td>
     <td><%=h sample_characteristic.clinic_or_location %></td>
     <td><%=h sample_characteristic.consent_descr %></td>
     <% if can? :edit, sample_characteristic %> <td><%= link_to 'Edit', edit_sample_characteristic_path(sample_characteristic) %></td><% end %>

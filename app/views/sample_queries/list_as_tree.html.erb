@@ -24,7 +24,7 @@
       <th>Barcode</th>
       <th>Date Entered</th>
       <th>Alt ID</th>
-      <th>Patient DX</th>
+      <th>Primary Dx</th>
       <th>Sample Type</th>
       <th>OR Designation</th>
       <th>Sample H&E</th>
@@ -44,7 +44,8 @@
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h format_date(sample.created_at) %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.alt_identifier %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>>
-          <% if sample.sample_characteristic.pathology %><%=h sample.sample_characteristic.pathology.pathology_classification %><% end %>
+          <%=h sample.sample_characteristic.disease_primary %>
+          <% if sample.sample_characteristic.pathology %><!--%=h sample.sample_characteristic.pathology.pathology_classification %--><% end %>
         </td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_category %></td>
         <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.tumor_normal %></td>

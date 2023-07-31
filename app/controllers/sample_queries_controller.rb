@@ -144,6 +144,7 @@ protected
     @sample_type        = category_filter(@category_dropdowns, 'sample type')
     @source_tissue      = category_filter(@category_dropdowns, 'source tissue')
     @preservation       = category_filter(@category_dropdowns, 'tissue preservation')
+    @dx_primary         = category_filter(@category_dropdowns, 'primary disease')
     @tumor_normal       = category_filter(@category_dropdowns, 'tumor_normal')
     @users              = User.all
   end
@@ -221,6 +222,7 @@ protected
              ['sm', 'sample_category'],
              ['sm', 'sample_date'],
              ['cs', 'consent_name'],
+             ['sc', 'disease_primary'],
              ['pr', 'pathology_classification'],
              ['sm', 'tumor_normal'],
              ['sm', 'tissue_preservation'],
@@ -237,6 +239,7 @@ protected
              ['ps', 'extraction_type'],
              ['ps', 'processing_date'],
              ['cs', 'consent_name'],
+             ['ps', 'blank'],
              ['ps', 'blank'],
              ['sm', 'tumor_normal'],
              ['ps', 'blank'],
@@ -264,8 +267,8 @@ protected
   def sample_query_params
     params.require(:sample_query).permit(
       :mrn, :patient_string, :organism, :race, :gender, :ethnicity, :barcode_string, :alt_identifier,
-      :consent_protocol_id, :clinic_or_location, :tumor_normal, :sample_tissue, :sample_type,
-      :tissue_preservation, :date_filter, :from_date, :to_date, :updated_by
+      :consent_protocol_id, :clinic_or_location, :disease_primary, :tumor_normal, :sample_tissue,
+      :sample_type, :tissue_preservation, :date_filter, :from_date, :to_date, :updated_by
     )
   end
     

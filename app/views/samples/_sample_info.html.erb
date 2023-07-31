@@ -5,6 +5,7 @@
     <th>Barcode</th>
     <th>Alt ID</th>
     <th>Date</th>
+    <th>Primary Dx</th>
     <th>Sample Type</th>
     <th>Preservation</th>
     <th>OR Designation</th>
@@ -21,6 +22,7 @@
     <td><%=h link_to sample.barcode_key, sample_path(sample) %></td>
     <td><%=h sample.alt_identifier %></td>
     <td><%=h sample.sample_date %></td>
+    <td><%=h sample.sample_characteristic.disease_primary %></td>
     <td><%=h [sample.sample_tissue, sample.sample_type].join('/') %></td>
     <td><%=h sample.tissue_preservation %></td>
     <td><%=h sample.tumor_normal %></td>

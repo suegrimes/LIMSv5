@@ -27,7 +27,7 @@ class SampleQuery
 
   attr_accessor :mrn, :patient_string, :barcode_string, :alt_identifier, :gender, :consent_protocol_id,
     :clinic_or_location, :organism, :race, :ethnicity, :sample_tissue, :sample_type, :tissue_preservation,
-    :tumor_normal, :date_filter, :from_date, :to_date, :updated_by
+                :disease_primary, :tumor_normal, :date_filter, :from_date, :to_date, :updated_by
 
   #validates_format_of :patient_id, :with => /\A\d+\z/, :allow_blank => true, :message => "id must be an integer"
   validates_date :to_date, :from_date, :allow_blank => true
@@ -35,10 +35,10 @@ class SampleQuery
   validates :barcode_string, compound_string: {:datatype => 'alphanumeric'}, :allow_blank => true
 
   STD_FIELDS = {'patients' => %w(organism),
-                'sample_characteristics' => %w(patient_id gender race ethnicity consent_protocol_id clinic_or_location),
+                'sample_characteristics' => %w(patient_id gender race ethnicity consent_protocol_id clinic_or_location disease_primary),
                 'samples' => %w(alt_identifier tumor_normal sample_tissue sample_type tissue_preservation updated_by)}
   COMBO_FIELDS = {:patient_string => {:sql_attr => ['samples.patient_id']},
-                   :barcode_string => {:sql_attr => ['samples.barcode_key', 'samples.source_barcode_key']}}
+                  :barcode_string => {:sql_attr => ['samples.barcode_key', 'samples.source_barcode_key']}}
 
   QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

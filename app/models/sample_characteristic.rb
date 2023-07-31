@@ -11,6 +11,7 @@
 #  gender              :string(1)
 #  ethnicity           :string(35)
 #  race                :string(70)
+#  disease_primary     :string(25)
 #  nccc_tumor_id       :string(20)
 #  nccc_pathno         :string(20)
 #  pathology_id        :integer
@@ -56,6 +57,11 @@ class SampleCharacteristic < ApplicationRecord
   
   def from_nccc?
     (clinic_or_location == 'NCCC' ? true : false)
+  end
+
+  def self.find_by_patient(patient_id)
+    sample_characteristics = self.where('patient_id = ?', patient_id).order('collection_date DESC').to_a
+    return (sample_characteristics.empty? ? nil : sample_characteristics[0])
   end
   
   def self.find_with_samples(patient_id=nil)
