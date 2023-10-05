@@ -48,7 +48,7 @@ class FlowCell < ApplicationRecord
   
   DEFAULT_MACHINE_TYPE = 'iSeq'
   NR_LANES = {:iSeq => 1, :Genius => 1, :MinION => 1, :MiSeq => 1, :NextSeq => 1, :NovaSeq => 4, :GAIIx => 8, :HiSeq => 8,
-              :PromethION => 24, :Xenium => 1}
+              :PromethION => 24, :Xenium => 1, :PacBio => 1}
   STATUS = %w{F R S Q N X}
   #Status code values: F-Flow Cell created; R-Ready for sequencing; Q-QC uploaded; N-N/A; X-Failed.
   #  S-Sequenced: no entries in database table.
