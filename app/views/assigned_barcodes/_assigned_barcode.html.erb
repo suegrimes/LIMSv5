@@ -2,17 +2,20 @@
   <thead class="thead-light">
   <tr>
     <th>Assign Date</th>
-    <th>Group</th>
-    <th>Owner</th>
+    <th>Source Org</th>
+    <th>Receiving Org</th>
+    <th>Requestor</th>
     <th>Sample Type</th>
     <th>Start Barcode</th>
     <th>End Barcode</th>
   </tr>
   </thead>
   <tr>
-    <td><%=f.date_field :assign_date, value: Time.current.to_date %>
-    <td><%=f.text_field :group_name %></td>
-    <td><%=f.text_field :owner_name %></td>
+    <% assign_dt = f.object.assign_date.nil? ? Time.current.to_date : f.object.assign_date %>
+    <td><%=f.date_field :assign_date, value: assign_dt %>
+    <td><%=f.text_field :source_org %></td>
+    <td><%=f.text_field :receiving_org %></td>
+    <td><%=f.text_field :requested_by %></td>
     <td><%=f.text_field :sample_type %></td>
     <td><%=f.text_field :start_barcode, :size => 10 %></td>
     <td><%=f.text_field :end_barcode, :size => 10 %></td>

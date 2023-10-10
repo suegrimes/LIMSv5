@@ -25,30 +25,34 @@
 
 <h5>Assigned Barcode Ranges</h5>
 
-<table class="table table-bordered table-sm table-font-sm">
+<table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
-    <th>Assigned Date</th>
-    <th>Group</th>
-	<th>Owner</th>
-	<th>Sample Type</th>
-	<th>Range Start</th>
-	<th>Range End</th>
-    <th colspan="3"></th>
+    <th>Source Org</th>
+		<th>Receiving Org</th>
+	  <th>Requestor</th>
+	  <th>Sample Type</th>
+		<th>Assigned Date</th>
+		<th>Range Start</th>
+		<th>Range End</th>
+	  <th class="link-col"></th>
+	  <th class="link-col"></th>
+	  <th class="link-col"></th>
   </tr>
   </thead>
 
 <% for assigned_barcode in @assigned_barcodes %>
   <tr>
-    <td><%=h assigned_barcode.assign_date %></td>
-    <td><%=h assigned_barcode.group_name %></td>
-	<td><%=h assigned_barcode.owner_name %></td>
-	<td><%=h assigned_barcode.sample_type %></td>
-	<td><%=h assigned_barcode.start_barcode %></td>
-	<td><%=h assigned_barcode.end_barcode %></td>
-	<td><%= link_to 'List Samples', list_assigned_barcodes_path(:start => assigned_barcode.start_barcode, :end => assigned_barcode.end_barcode) %></td>
+    <td><%=h assigned_barcode.source_org %></td>
+	  <td><%=h assigned_barcode.receiving_org %></td>
+		<td><%=h assigned_barcode.requested_by %></td>
+	  <td><%=h assigned_barcode.sample_type %></td>
+		<td><%=h assigned_barcode.assign_date %></td>
+	  <td><%=h assigned_barcode.start_barcode %></td>
+	  <td><%=h assigned_barcode.end_barcode %></td>
+	  <td><%= link_to 'Show', list_assigned_barcodes_path(:start => assigned_barcode.start_barcode, :end => assigned_barcode.end_barcode) %></td>
 	<% if can? :edit, assigned_barcode %>
-      <td><%= link_to 'Edit Range', edit_assigned_barcode_path(assigned_barcode) %></td>
+      <td><%= link_to 'Edit', edit_assigned_barcode_path(assigned_barcode) %></td>
 	<% end %>
 	<% if can? :delete, assigned_barcode %>
       <td><%= link_to 'Remove', assigned_barcode, data: {:confirm => 'Are you sure?'}, :method => :delete %></td>

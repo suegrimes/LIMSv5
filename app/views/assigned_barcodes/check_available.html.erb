@@ -1,8 +1,12 @@
 <h5>Check Available Sample Barcodes from: <%=h @range_start %> to: <%= @range_end %></h5>
 
-<% warning = (@samples.size > 0? 'WARNING: ' : 'RANGE AVAILABLE: ' ) %>
-<p class=<%= "dkred" if @samples.size > 0 %>><%=h warning %><%=h @samples.size %> barcodes exist in LIMS in this range</p>
+<% bc_in_range = @range_end.to_i - @range_start.to_i + 1 %>
 
 <% if @samples.size > 0 %>
+  <% bc_available = bc_in_range - @samples.size %>
+  <p class="dkred">WARNING: <%=h @samples.size %> barcodes exist in LIMS in this range;
+    <%=h bc_available %> barcodes available for assignment</p>
   <%= render :partial => 'list_samples', :locals => {:samples => @samples} %>
+<% else %>
+  <p>RANGE AVAILABLE: All <%=h bc_in_range %> barcodes available for assignment</p>
 <% end %>

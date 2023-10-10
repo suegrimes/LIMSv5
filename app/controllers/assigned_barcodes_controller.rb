@@ -70,7 +70,8 @@ class AssignedBarcodesController < ApplicationController
   
 protected
   def create_params
-    params.require(:assigned_barcode).permit(:assign_date, :group_name, :owner_name, :sample_type, :start_barcode, :end_barcode)
+    params.require(:assigned_barcode).permit(:assign_date, :source_org, :receiving_org, :requested_by, :sample_type,
+                                             :start_barcode, :end_barcode)
   end
 
   def update_params

@@ -1,6 +1,8 @@
 <h5>List Samples in Barcode Range: <%=h @range_start %> to <%= @range_end %></h5>
+<% bc_in_range = @range_end.to_i - @range_start.to_i + 1 %>
+<% bc_available = bc_in_range - @samples.size %>
 
-<p><%=h @samples.size %> samples exist in LIMS in this barcode range</p>
+<p><%=h @samples.size %> samples exist in LIMS in this barcode range; <%=h bc_available %> remaining for assignment</p>
 
 <% if @samples.size > 0 %>
   <%= render :partial => 'list_samples', :locals => {:samples => @samples} %>
