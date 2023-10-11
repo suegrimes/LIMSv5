@@ -1,6 +1,5 @@
 <h5>Available Barcode Ranges</h5>
-
-<table class="table table-bordered table-sm table-font-sm">
+<table style="width:60%"; class="table table-bordered table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
 	<th>Range Start</th>
@@ -11,11 +10,16 @@
   </thead>
 
 <% for free_range in @free_ranges %>
+	<% f_barcodes_in_range = free_range[:end_range] - free_range[:start_range] + 1 %>
+  <% f_barcodes_assigned = @sample_barcodes.count {|bc| bc >= free_range[:start_range] && bc <= free_range[:end_range] } %>
   <tr>
     <td style="text-align:right"><%=h free_range[:start_range] %></td>
     <td style="text-align:right"><%=h free_range[:end_range] %></td>
-	<td style="text-align:right"><%=h free_range[:end_range].to_i - free_range[:start_range].to_i + 1 %></td>
-	<td><%= link_to 'Verify Available', check_available_barcodes_path(:start => free_range[:start_range], :end => free_range[:end_range]) %></td>
+		<td style="text-align:center"><%=h f_barcodes_in_range - f_barcodes_assigned %> / <%=h f_barcodes_in_range %></td>
+	  <td><% if f_barcodes_assigned > 0 %>
+				<%= link_to 'Show Samples', check_available_barcodes_path(:start => free_range[:start_range], :end => free_range[:end_range]) %>
+				<% end %>
+		</td>
 	<% if can? :new, AssignedBarcode %>
       <td><%= link_to 'Assign Range', new_assigned_barcode_path(:start => free_range[:start_range], :end => free_range[:end_range]) %></td>
 	<% end %>
@@ -24,7 +28,6 @@
 </table>
 
 <h5>Assigned Barcode Ranges</h5>
-
 <table class="data-table compact table table-bordered table-striped table-sm table-font-sm">
   <thead class="thead-light">
   <tr>
@@ -35,6 +38,7 @@
 		<th>Assigned Date</th>
 		<th>Range Start</th>
 		<th>Range End</th>
+		<th>#Available</th>
 	  <th class="link-col"></th>
 	  <th class="link-col"></th>
 	  <th class="link-col"></th>
@@ -42,14 +46,17 @@
   </thead>
 
 <% for assigned_barcode in @assigned_barcodes %>
+	<% a_barcodes_in_range = assigned_barcode.end_barcode - assigned_barcode.start_barcode + 1 %>
+	<% a_barcodes_assigned = @sample_barcodes.count {|bc| bc >= assigned_barcode.start_barcode && bc <= assigned_barcode.end_barcode } %>
   <tr>
     <td><%=h assigned_barcode.source_org %></td>
 	  <td><%=h assigned_barcode.receiving_org %></td>
 		<td><%=h assigned_barcode.requested_by %></td>
 	  <td><%=h assigned_barcode.sample_type %></td>
 		<td><%=h assigned_barcode.assign_date %></td>
-	  <td><%=h assigned_barcode.start_barcode %></td>
-	  <td><%=h assigned_barcode.end_barcode %></td>
+	  <td style="text-align:right"><%=h assigned_barcode.start_barcode %></td>
+	  <td style="text-align:right"><%=h assigned_barcode.end_barcode %></td>
+		<td style="text-align:center"><%=h a_barcodes_in_range - a_barcodes_assigned %></td>
 	  <td><%= link_to 'Show', list_assigned_barcodes_path(:start => assigned_barcode.start_barcode, :end => assigned_barcode.end_barcode) %></td>
 	<% if can? :edit, assigned_barcode %>
       <td><%= link_to 'Edit', edit_assigned_barcode_path(assigned_barcode) %></td>

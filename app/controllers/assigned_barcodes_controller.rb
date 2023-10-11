@@ -3,6 +3,7 @@ class AssignedBarcodesController < ApplicationController
  
   # GET /assigned_barcodes
   def index
+    @sample_barcodes = Sample.list_source_barcodes.map(&:to_i)
     @assigned_barcodes = AssignedBarcode.order(:start_barcode).all
     @assigned_ranges = assigned_contigs(@assigned_barcodes)
     @free_ranges     = free_contigs(@assigned_ranges)

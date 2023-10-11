@@ -240,5 +240,9 @@ class Sample < ApplicationRecord
   def self.count_samples_in_range(rstart, rend)
     return self.where("source_sample_id IS NULL AND CAST(barcode_key AS UNSIGNED) BETWEEN ? AND ?", rstart, rend).count
   end
+
+  def self.list_source_barcodes
+    return self.where("source_sample_id IS NULL AND barcode_key REGEXP '^-?[0-9]+$' > 0").pluck(:barcode_key)
+  end
  
 end
