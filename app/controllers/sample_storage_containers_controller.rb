@@ -56,6 +56,14 @@ class SampleStorageContainersController < ApplicationController
     end
   end
 
+  def destroy
+    @sample_storage_container = SampleStorageContainer.find(params[:id])
+    container_id = @sample_storage_container.storage_container_id
+    @sample_storage_container.destroy
+    redirect_to container_contents_url(id: container_id), notice: 'Sample deleted from storage container'
+  end
+
+
   protected
   def dropdowns
     @freezer_locations = FreezerLocation.populate_dropdown

@@ -20,9 +20,11 @@
         <td><%=h ssc.position_in_container %></td>
         <td><%=h ssc.type_of_sample %></td>
         <td><% if ssc.user %><%=h ssc.user.login %><% end %></td>
-        <td><% if can? :edit, ssc.stored_sample %>
+        <td><% if ssc.stored_sample and can? :edit, ssc.stored_sample %>
               <%=link_to 'Edit', edit_path_by_type(ssc) %>
-          <% end %>
+            <% elsif !ssc.stored_sample and can? :delete, SampleStorageContainer %>
+              <%= link_to 'Delete', ssc, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <% end %>
         </td>
       </tr>
   <% end %>

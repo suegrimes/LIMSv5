@@ -45,7 +45,7 @@ class StorageTypesController < ApplicationController
   # DELETE /storage_types/1
   def destroy
     @storage_type.destroy
-    redirect_to storage_types_url, notice: 'Storage type was successfully destroyed.'
+    redirect_to storage_types_url, notice: 'Storage type was successfully deleted'
   end
 
   private
