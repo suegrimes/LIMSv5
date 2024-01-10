@@ -138,8 +138,15 @@ class Sample < ApplicationRecord
   end
   
   def sample_category
-    type_of_sample = (clinical_sample == 'yes'? sample_type : 'Dissection')
-    return [type_of_sample, sample_tissue].join('/')
+    if clinical_sample == 'yes'
+      return [sample_type, sample_tissue].join('/')
+    elsif ["Tissue", "Core Biopsy", "Fine Needle Aspirate"].include?(sample_type)
+      return ["Dissection", sample_tissue].join('/')
+    else
+      return ["Aliquot", sample_type].join('/')
+    end
+    #type_of_sample = (clinical_sample == 'yes'? sample_type : 'Dissection')
+    #return [type_of_sample, sample_tissue].join('/')
   end
   
   def container_type
