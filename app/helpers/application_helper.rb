@@ -47,6 +47,10 @@ module ApplicationHelper
   def pct_with_parens(pct)
     (pct.nil? ? '' : sprintf('(%02d%s)', pct, '%'))
   end
+
+  def arr_tally_to_str(arr)
+    arr.group_by(&:itself).transform_values(&:count).map {|h| h.join '-' }.join '; '
+  end
   
   def user_role_is?(role)
     (current_user && current_user.has_role?(role, 'admin_defaults_to_true'))

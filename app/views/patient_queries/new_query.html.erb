@@ -1,0 +1,113 @@
+<%= form_for @patient_query, :url => {:action => "index" }, :html => { :method => :get} do |f| %>
+
+    <%= render '/shared/errors', model: @patient_query, header_message: "Error(s) in query parameters" %>
+
+<div class="card">
+  <h6 class="card-header">Patient Query Parameters</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <p class="font-italic font-sm">For patient IDs: Enter individual IDs separated by commas, enter ranges with '-'. Eg. '1160,1378-1400,1500-1600'</p>
+    </div>
+
+    <div class="form-group row">
+      <label for="patient_string" class="col-sm-2 col-form-label col-form-label-sm">Patient ID(s):</label>
+      <div class="col-sm-4">
+        <%= f.text_field(:patient_string, :size => "50", class: "form-control")%>
+      </div>
+
+    <% if can? :edit, Patient %>
+      <label for="mrn" class="col-sm-2 col-form-label col-form-label-sm">Patient MRN:</label>
+      <div class="col-sm-3">
+        <%= f.text_field(:mrn, :size => 10, class: "form-control") %>
+      </div>
+    <% end %>
+    </div>
+
+    <div class="form-group row">
+      <label for="organism" class="col-sm-2 col-form-label col-form-label-sm">Organism:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:organism, @organisms, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"})%>
+      </div>
+
+      <label for="gender" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm">Gender:</label>
+      <div class="col-sm-2">
+        <%= f.select(:gender, %w{M F}, {:include_blank => 'All'}, {class: "form-control"})%>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="consent_protocol_id" class="col-sm-2 col-form-label col-form-label-sm">Consent Protocol:</label>
+      <div class="col-sm-4">
+        <%= f.collection_select(:consent_protocol_id, @consent_protocols, :id, :name_ver, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+
+      <label for="clinic_or_location" class="col-sm-2 col-form-label col-form-label-sm">Clinic:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:clinic_or_location, @clinics, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="disease_primary" class="col-sm-2 col-form-label col-form-label-sm">Primary Dx:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:disease_primary, @dx_primary, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group row">
+      <label for="tumor_normal" class="col-sm-2 col-form-label col-form-label-sm">OR Designation:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:tumor_normal, @tumor_normal, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+
+      <label for="sample_tissue" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm">Sample Site:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:sample_tissue, @source_tissue, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="sample_type" class="col-sm-2 col-form-label col-form-label-sm">Sample Type:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:sample_type, @sample_type, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+
+      <label for="tissue_preservation" class="offset-sm-1 col-sm-2 col-form-label col-form-label-sm">Preservation:</label>
+      <div class="col-sm-3">
+        <%= f.collection_select(:tissue_preservation, @preservation, :c_value, :c_value, {:include_blank => 'All'}, {class: "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm">Collection Date:</label>
+      <span class="col-form-label-sm">From:</span>
+      <div class="col-sm-4">
+        <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
+      </div>
+
+      <span class="col-form-label-sm">To:</span>
+      <div class="col-sm-4">
+        <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="updated_by" class="col-sm-2 col-form-label col-form-label-sm">Last Upd By:</label>
+      <div class="col-sm-3">
+        <%=f.collection_select(:updated_by, @users, :id, :login, {:include_blank => 'Any'}, {class: "form-control"})%>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="form-group row">
+  <div class="col-auto">
+    <%=submit_tag "Submit", class: "btn btn-primary" %>
+  </div>
+</div>
+
+<%end%>

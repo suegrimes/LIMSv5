@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
   match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
 
-  # Routes for clinical samples/sample characteristics
+    # Routes for clinical samples/sample characteristics
   resources :sample_characteristics do
     post 'add_new_sample', on: :member
     post 'add_another_sample', on: :member
@@ -25,6 +25,11 @@ Rails.application.routes.draw do
 
   post 'patient_sample' => 'sample_characteristics#new_sample', :as => :add_pt_sample
   match 'modify_sample' => 'sample_characteristics#edit_params', :as => :modify_sample, :via => [:get, :post]
+
+  # Routes for patient queries
+  resources :patient_queries, :only => :index
+  match 'pt_query' => 'patient_queries#new_query', :as => :pt_query, :via => [:get]
+  match 'export_patients' => 'patient_queries#export_patients', :as => :export_patients,  :via => [:post]
 
   # Routes for pathology
   resources :pathologies

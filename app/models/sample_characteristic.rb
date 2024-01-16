@@ -30,6 +30,7 @@ class SampleCharacteristic < ApplicationRecord
   belongs_to :patient, optional: false
   belongs_to :consent_protocol, optional: true
   belongs_to :pathology, optional: true
+  belongs_to :user, optional: true, foreign_key: 'updated_by'
   
   accepts_nested_attributes_for :samples
   validates_associated :samples
@@ -80,6 +81,13 @@ class SampleCharacteristic < ApplicationRecord
                                  .order('sample_characteristics.patient_id, sample_characteristics.collection_date DESC').references(:patient_id)
     return sample_characteristics.size, 
            sample_characteristics.group_by {|samp_char| [samp_char.patient_id, samp_char.patient.mrn]}
+  end
+
+  def self.find_for_export(id_array)
+    self.includes(:patient, :consent_protocol, :samples)
+        .references(:patient, :consent_protocol, :samples)
+        .where("sample_characteristics.id IN (?) and samples.source_sample_id IS NULL", id_array)
+        .order("patients.id, collection_date").all
   end
 
 end

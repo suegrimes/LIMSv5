@@ -70,6 +70,12 @@ class Patient < ApplicationRecord
     return (patients.empty? ? nil : patients[0].id)
   end
 
+  def self.find_with_conditions(condition_array)
+    self.includes({:sample_characteristics => [:samples, :user]})
+        .references({:sample_characteristics => [:samples, :user]})
+        .where(sql_where(condition_array)).order('patients.id, sample_characteristics.collection_date')
+  end
+
   def mrn
     key.decrypt(clinical_id_encrypted)
   end
