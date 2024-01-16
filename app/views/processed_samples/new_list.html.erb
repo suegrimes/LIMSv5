@@ -8,7 +8,8 @@
 <thead class="thead-light">
 <tr>
   <th></th>
-  <%= render :partial => 'samples/sample_hdr', :locals => {:row_tags => 'no'} %>
+  <%= render :partial => 'samples/sample_hdr', :locals => {:row_tags => 'no',
+                                                           :aliquots => 'no'} %>
 </tr>
 </thead>
 
@@ -20,7 +21,8 @@
     </div>
   </td>
   <%= render :partial => 'samples/sample_row', :locals => {:sample => sample,
-                                                           :row_tags => 'no'} %>
+                                                           :row_tags => 'no',
+                                                           :aliquots => 'no' } %>
   </tr>
 <% end %>
 </table>

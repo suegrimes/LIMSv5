@@ -137,6 +137,10 @@ class Sample < ApplicationRecord
   def clinical_sample
     (source_sample_id.blank? ? 'yes' : 'no')
   end
+
+  def nr_dissections
+    (samples ? samples.count : 0)
+  end
   
   def sample_category
     if clinical_sample == 'yes'
@@ -173,7 +177,11 @@ class Sample < ApplicationRecord
   def container_and_position
     (sample_storage_container ? sample_storage_container.container_and_position : '')
   end
-  
+
+  def nr_dissections
+    (samples ? samples.where("samples.source_sample_id IS NULL").count : 0)
+  end
+
   def self.next_dissection_barcode(source_sample_id, source_barcode)
     barcode_max = self.where("source_sample_id = ? AND barcode_key LIKE ?", source_sample_id.to_i, source_barcode + '%').maximum(:barcode_key)
     #barcode_max = self.maximum(:barcode_key, :conditions => ["source_sample_id = ? AND barcode_key LIKE ?", source_sample_id.to_i, source_barcode + '%'])

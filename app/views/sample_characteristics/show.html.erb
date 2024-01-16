@@ -19,10 +19,10 @@
 </thead>
   
   <% for sample in @sample_characteristic.samples %>
-    <% if !sample.id.nil? %>
+    <% if !sample.id.nil? && sample.source_sample_id.nil? %>
       <%= render :partial => 'samples/sample_row', :locals => {:sample => sample, 
                                                                :barcode_link => 'show'} %>
-	<% else %>
+	<% elsif sample.id.nil? %>
 	  <% @new_sample_with_error = sample %>
 	<% end %>
   <% end %> 

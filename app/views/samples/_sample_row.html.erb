@@ -1,5 +1,6 @@
 <% row_tags     ||= 'yes' %>
 <% barcode_link ||= 'none' %>
+<% aliquots ||= 'yes' %>
 <% nonblank_comments = !sample.comments.blank? %>
 
 <% if row_tags == 'yes' %><tr><% end %>
@@ -25,6 +26,9 @@
 <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.sample_remaining%></td>
 <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.room_and_freezer %></td>
 <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.container_and_position%></td>
+<% if aliquots == 'yes' %>
+<td style="text-align:center" class=<%= "dotted_border_bottom" if nonblank_comments %>><%=h sample.samples.count%></td>
+<% end %>
 <% if can? :edit, sample %>
 <td class=<%= "dotted_border_bottom" if nonblank_comments %>><%=link_to 'Edit', edit_sample_path(sample) %></td>
 <% end %>

@@ -1,4 +1,5 @@
 <% row_tags  ||= 'yes' %>
+<% aliquots ||= 'yes' %>
 
 <% if row_tags == 'yes' %><tr><% end %>
 
@@ -13,6 +14,7 @@
   <th>Rem?</th>
   <th>Room /Freezer</th>
   <th>Container</th>
+  <% if aliquots == 'yes' %><th>#Aliquots</th><% end %>
   <th></th>
 
 <% if row_tags == 'yes' %></tr><% end %>
