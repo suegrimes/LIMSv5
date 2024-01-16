@@ -34,6 +34,7 @@ class Sample < ApplicationRecord
   include LimsCommon
   include Attachable
   include Storable
+  include NumFormatting
 
   # Rails 5 defaults to required: true, so make it explicitly optional
   # Patient and sample_characteristic are not really optional, but during edit or bulk upload foreign keys are not initially set
@@ -143,7 +144,8 @@ class Sample < ApplicationRecord
     elsif ["Tissue", "Core Biopsy", "Fine Needle Aspirate"].include?(sample_type)
       return ["Dissection", sample_tissue].join('/')
     else
-      return ["Aliquot", sample_type].join('/')
+      type_of_sample = sample_type.sub!('Peripheral ', '')
+      return ["Aliquot", type_of_sample].join('/')
     end
     #type_of_sample = (clinical_sample == 'yes'? sample_type : 'Dissection')
     #return [type_of_sample, sample_tissue].join('/')
@@ -155,12 +157,13 @@ class Sample < ApplicationRecord
   
   def sample_amt
     # Pull out value in parentheses (eg. from Volume (ul), pull out ul)
-    if (amount_uom =~ /\(/ && amount_uom =~ /\(/)
+    if (amount_uom =~ /\(/ && amount_uom =~ /\)/)
       uom = amount_uom.match(/\((.*)\)/)[1]
     else
-      uom = amount_uom
+      uom = amount_uom.sub!('Nr of ', '')
+      formatted_amt = uom == "cells" ? int_with_commas(amount_initial) : amount_initial.to_s
     end
-    return [amount_initial.to_s, uom].join(' ')
+    return [formatted_amt, uom].join(' ')
   end
   
   def room_and_freezer
