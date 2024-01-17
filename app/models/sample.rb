@@ -164,7 +164,7 @@ class Sample < ApplicationRecord
     if (amount_uom =~ /\(/ && amount_uom =~ /\)/)
       uom = amount_uom.match(/\((.*)\)/)[1]
     else
-      uom = amount_uom.sub!('Nr of ', '')
+      uom = amount_uom.nil? ? '' : amount_uom.sub!('Nr of ', '')
       formatted_amt = uom == "cells" ? int_with_commas(amount_initial) : amount_initial.to_s
     end
     return [formatted_amt, uom].join(' ')
