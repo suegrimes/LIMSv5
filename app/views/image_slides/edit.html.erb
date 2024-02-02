@@ -1,0 +1,37 @@
+<h5>Editing image_slide</h5>
+
+<%= form_for(@image_slide) do |f| %>
+  <%= render '/shared/errors', model: @image_slide %>
+
+  <%= render :partial => 'slide_form', :locals => {:f => f} %>
+  <br/>
+
+  <h6>Imaging Samples</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
+    <tr>
+      <td>&nbsp;</td>
+      <th>Sample Barcode</th>
+      <th>Patient ID</th>
+      <th>Sample Date</th>
+      <th>Sample Type</th>
+      <th>Sample Tissue</th>
+      <th>Preservation</th>
+      <th>Tumor/Normal</th>
+    </tr>
+    </thead>
+
+    <% @image_slide.samples.all.each_with_index do |sample, i| %>
+      <%= render :partial => 'image_samples', :locals => {sample: sample} %>
+    <% end %>
+  </table>
+
+  <div id='addl_samples' class="form-group row">
+    <label for="sample_nrs" class="col-auto col-form-label">Associate additional sample(s):</label>
+    <div class="col-auto">
+      <%= text_field_tag(:barcode_string, '', :size => 20, class: "form-control")-%>
+    </div>
+  </div>
+
+  <%= f.submit "Update", class: "btn btn-primary"%>
+<% end %>

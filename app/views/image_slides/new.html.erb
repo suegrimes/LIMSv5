@@ -1,0 +1,39 @@
+<h5>New Imaging Slide</h5>
+
+<%= form_for(@image_slide) do |f| %>
+  <%= render '/shared/errors', model: @image_slide %>
+
+  <%= render :partial => 'slide_form', :locals => {:f => f} %>
+  <br/>
+
+<% @checked ||= false %>  
+<span class="notes"> Check boxes below, to include samples on imaging slide</span><br/>
+  <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAllSamples(this);"}) %>
+  <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
+  <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/>
+
+<%= render '/shared/collected_errors', collection: @samples %>
+
+	<h6>Imaging Samples</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
+  	<tr>
+  	  <td>&nbsp;</td>
+			<th>Sample Barcode</th>
+			<th>Patient ID</th>
+			<th>Sample Date</th>
+			<th>Sample Type</th>
+			<th>Sample Tissue</th>
+			<th>Preservation</th>
+			<th>Tumor/Normal</th>
+    </tr>
+    </thead>
+
+    <% @samples.each_with_index do |sample, i| %>
+      <%= render :partial => 'image_samples', :locals => {sample: sample} %>
+	<% end %>
+  </table>
+<% end %>
+
+<br/>
+<%= link_to 'Back', :back %>

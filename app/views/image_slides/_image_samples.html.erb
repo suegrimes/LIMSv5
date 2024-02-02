@@ -1,0 +1,11 @@
+<tr>
+	<td><%= check_box(:image_slide, :sample_ids, {:checked => true, :name => 'image_slide[sample_ids][]',
+																								:wraptags => 'none'}, sample.id, nil) %></td>
+	<td><%=h sample.barcode_key %></td>
+	<td><%=h sample.patient_id %></td>
+	<td><%=h sample.sample_date %></td>
+	<td><%=h sample.sample_type %></td>
+	<td><%=h sample.sample_tissue %></td>
+	<td><%=h sample.tissue_preservation %></td>
+	<td><%=h sample.tumor_normal %></td>
+</tr>

@@ -47,6 +47,7 @@ class Sample < ApplicationRecord
   has_one    :histology, dependent: :destroy
   has_many :processed_samples
   has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
+  has_and_belongs_to_many :image_slides, :join_table => :sample_slides
   has_many :attached_files, as: :sampleproc
   
   accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank

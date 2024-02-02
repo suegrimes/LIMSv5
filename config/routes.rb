@@ -96,6 +96,10 @@ Rails.application.routes.draw do
   resources :molassay_queries, :only => :index
   get 'mol_assay_query' => 'molassay_queries#new_query'
 
+  # Routes for imaging slides
+  resources :image_slides
+  get 'slide_setup' => 'image_slides#setup_params', :as => 'slide_setup'
+
   # Routes for patients
   resources :patients
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]

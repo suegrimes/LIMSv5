@@ -43,10 +43,10 @@ class Ability
       can :manage, :all
     
     else
-      # Researchers can enter/update processed samples, seq libs, flow cells
+      # Researchers can enter/update processed samples, seq libs, flow cells, image_slides, image_runs
       if user.has_role?("researcher") || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
-                      FlowLane, Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
+                      FlowLane, Protocol, ImageSlide, ImagingRun, SampleStorageContainer, FreezerLocation, Researcher, Publication]
         cannot [:edit, :update], Sample do |sample|
           sample.source_sample_id.nil?
         end
@@ -87,10 +87,10 @@ class Ability
        
       elsif user.has_role?("lab_admin")
         can [:edit, :update], Category do |cval|
-          [4,5].include?(cval.cgroup_id)    # Drop-down lists for seq libraries, sequencing
+          [4,5,10].include?(cval.cgroup_id)    # Drop-down lists for seq libraries, sequencing, imaging
         end 
         can :manage, CategoryValue do |val|
-          [4,5].include?(val.category.cgroup_id)
+          [4,5,10].include?(val.category.cgroup_id)
         end
         can :manage, SequencerKit
         cannot :delete, SequencerKit
