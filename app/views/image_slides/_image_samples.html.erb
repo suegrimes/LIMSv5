@@ -1,6 +1,8 @@
 <tr>
-	<td><%= check_box(:image_slide, :sample_ids, {:checked => true, :name => 'image_slide[sample_ids][]',
-																								:wraptags => 'none'}, sample.id, nil) %></td>
+  <%= hidden_field_tag('image_slide[sample_ids][]', sample.id) %>
+	<!--td><%= check_box(:image_slide, :sample_ids, {:checked => true, :name => 'image_slide[sample_ids][]',
+																								:wraptags => 'none'}, sample.id, nil) %></td-->
+  <td><%= text_field_tag('image_slide[sample_position][]') %></td>
 	<td><%=h sample.barcode_key %></td>
 	<td><%=h sample.patient_id %></td>
 	<td><%=h sample.sample_date %></td>

@@ -6,7 +6,7 @@ class ImageSlidesController < ApplicationController
   # which is not a 'permitted' attribute since is not in model, so can't use load_and_authorize_resource
   #load_and_authorize_resource
 
-  before_action :setup_dropdowns, :only => :setup_params
+  before_action :setup_dropdowns, :only => [:setup_params, :new]
   def setup_params
     authorize! :new, ImageSlide
   end
@@ -33,7 +33,7 @@ class ImageSlidesController < ApplicationController
 
   # POST /image_slides
   def create
-    #_deliberate_error_here
+    _deliberate_error_here
     @image_slide = ImageSlide.new(create_params)
     authorize! :create, @image_slide
 

@@ -1,22 +1,23 @@
-  <div class="card">
-    <h6 class="card-header">Imaging Slide Details</h6>
-    <table class="table table-sm table-borderless">
-    <thead>
-    </thead>
-    <tbody>
-    <tr>
-      <td><label for="slide_number" class="col-form-label col-form-label-sm">Slide#:</label>
+<div class="card">
+  <h6 class="card-header">Imaging Slide Details</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="slide_number" class="col-form-label col-form-label-sm">Slide#:</label>
+      <div class="col-auto">
         <%= f.text_field :slide_number, class: "form-control" %>
-      </td>
-      <td><label for="slide_name" class="col-form-label col-form-label-sm">Slide Name:</label>
+      </div>
+
+      <label for="slide_name" class="col-form-label col-form-label-sm">Slide Name:</label>
+      <div class="col-auto">
         <%= f.text_field :slide_name, class: "form-control" %>
-      </td>
-      <td><label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label>
-        <%= f.text_field :machine_type, class: "form-control" %></div>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-    </tbody>
-    </table>
-  </div><!-- /card -->   
+      </div>
+
+      <label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:machine_type, @imager_types, :c_value, :c_value,
+                              {:include_blank => 'Select MachineType'}, class: "form-control") %>
+      </div>
+    </div>
+  </div>
+</div>

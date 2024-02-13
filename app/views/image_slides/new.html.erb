@@ -7,14 +7,14 @@
   <br/>
 
 <% @checked ||= false %>  
-<span class="notes"> Check boxes below, to include samples on imaging slide</span><br/>
+<!--span class="notes"> Check boxes below, to include samples on imaging slide</span><br/-->
   <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAllSamples(this);"}) %>
   <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
-  <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/>
+  <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
 
 <%= render '/shared/collected_errors', collection: @samples %>
 
-	<h6>Imaging Samples</h6>
+	<h6>Check Samples to include on Imaging Slide</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
   	<tr>

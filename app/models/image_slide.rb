@@ -14,6 +14,8 @@
 class ImageSlide < ApplicationRecord
   
   belongs_to :imaging_run, optional: true
-  has_and_belongs_to_many :samples, :join_table => :slide_samples
+  has_many :samples, through: :slide_samples
+  accepts_nested_attributes_for :slide_samples, :reject_if => proc {|attrs| attrs[:sample_id].blank?},
+                                :allow_destroy => true
 
 end

@@ -1,30 +1,29 @@
 <% default_imager =  @imager_types[0].c_value %>
-<h5>Prepare Image Slide</h5>
 
 <%= form_tag new_image_slide_path, method: :get  do %>
 <div class="card">
-  <h6 class="card-header">Image Slide Parameters</h6>
-  <p class="font-italic font-sm" style="text-align:center; margin-bottom:0; margin-top:0.75rem">Enter individual sample barcodes separated by commas, eg '5607A,12872B'</p>
+  <h6 class="card-header">Imaging Slide Parameters</h6>
+  <div class="card-body">
 
-  <table class="table table-borderless table-sm">
-  <tbody>
-    <tr>
-      <td class="label"><label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Barcode(s):</label></td>
-      <td><%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %></td>
-      <td class="label"><label for="image_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label></td>
-      <td><%= collection_select(:image_slide, :machine_type, @imager_types, :c_value, :c_value,
-                                {:include_blank => 'Select MachineType', :selected => default_imager},
-                                  class: "form-control") %></td>
-      <td></td>
-    </tr>
+    <div class="form-group-row">
+      <div class="col-auto" style="font-size:.85rem"><em>Enter individual sample barcodes separated by commas, eg '5607A,12872B'</em></div>
+    </div>
 
-    <tr>
-      <td></td>
-      <td colspan="4"><%=submit_tag "Submit", class: "btn btn-primary" %></td>
-    </tr>
+    <div class="form-group row">
+      <label for="barcode_string" class="col-auto col-form-label col-form-label-sm">Sample barcode(s):</label>
+      <div class="col-auto">
+        <%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %>
+      </div>
 
-    </tbody>
-  </table>
-</div><!-- /card -->
-<%end%>
-
+      <label for="image_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
+      <div class="col-auto">
+        <%= collection_select(:image_slide, :machine_type, @imager_types, :c_value, :c_value,
+                              {:include_blank => 'Select MachineType', :selected => default_imager},
+                              class: "form-control") %>
+      </div>
+    </div>
+    <div class="col-auto"><%=submit_tag "Submit", class: "btn btn-primary" %></div>
+  </div>
+</div>
+<p></p>
+<% end %>
