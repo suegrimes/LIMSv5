@@ -6,7 +6,7 @@ class ImageSlidesController < ApplicationController
   # which is not a 'permitted' attribute since is not in model, so can't use load_and_authorize_resource
   #load_and_authorize_resource
 
-  before_action :setup_dropdowns, :only => [:setup_params, :new]
+  before_action :setup_dropdowns, :only => [:setup_params, :new, :edit]
   def setup_params
     authorize! :new, ImageSlide
   end
@@ -33,15 +33,14 @@ class ImageSlidesController < ApplicationController
 
   # POST /image_slides
   def create
-    _deliberate_error_here
+    #_deliberate_error_here
     @image_slide = ImageSlide.new(create_params)
     authorize! :create, @image_slide
 
-    if params[:image_slide][:samples_ids].nil?
+    if params[:image_slide][:slide_samples_attributes].empty?
       flash[:error] = 'ERROR - No valid samples provided for this slide'
       redirect_to(slide_setup_path)
     else
-      @image_slide.samples = Sample.find(params[:image_slide][:sample_ids])
       if !@image_slide.save
         #error_found = true  # Validation or other error when saving to database
         flash.now[:error] = 'ERROR - Unable to create imaging slide'
@@ -58,10 +57,11 @@ class ImageSlidesController < ApplicationController
     @image_slide = ImageSlide.find(params[:id])
     authorize! :update, @image_slide
 
-    # Deal with situation where samples may be been deleted from slide
-    params[:image_slide][:sample_ids] ||= []
-    params[:image_slide][:sample_ids].reject!{|id| id.blank? || id == '0'}
-    @image_slide.samples = Sample.find(params[:image_slide][:sample_ids])
+    # If sample position has not been changed it will be blank => remove from params so that
+    # duplicate record is not created
+    #params[:image_slide][:slide_samples_attributes][:sample_id] ||= []
+    #params[:image_slide][:sample_ids].reject!{|id| id.blank? || id == '0'}
+    #@image_slide.samples = Sample.find(params[:image_slide][:sample_ids])
 
     # Deal with new samples which may have been added to slide
     sample_error = false
@@ -80,7 +80,8 @@ class ImageSlidesController < ApplicationController
       render :action => 'edit'
     elsif @image_slide.update_attributes(update_params)
       flash[:notice] = "Image slide has been updated"
-      redirect_to @image_slide
+      #redirect_to @image_slide
+      render :action => 'show'
     else
       flash.now[:error] = "Error updating image slide"
       render :action => 'edit'
@@ -120,10 +121,12 @@ protected
   end
 
   def create_params
-    params.require(:image_slide).permit(:machine_type, :slide_number, :slide_name, :sample_ids)
+    params.require(:image_slide).permit(:machine_type, :slide_number, :slide_name,
+                                        slide_samples_attributes: [:sample_id, :sample_position])
   end
 
   def update_params
-    create_params
+    params.require(:image_slide).permit(:machine_type, :slide_number, :slide_name,
+                                        slide_samples_attributes: [:id, :sample_id, :sample_position])
   end
 end

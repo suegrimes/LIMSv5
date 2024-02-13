@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   # Routes for imaging slides
   resources :image_slides
   get 'slide_setup' => 'image_slides#setup_params', :as => 'slide_setup'
+  #match 'add_samples' => 'image_slides#get_samples', :as => :get_samples, :via => [:get, :post]
 
   # Routes for patients
   resources :patients

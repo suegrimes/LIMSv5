@@ -47,6 +47,7 @@ class Sample < ApplicationRecord
   has_one    :histology, dependent: :destroy
   has_many :processed_samples
   has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
+  has_many :slide_samples, dependent: :destroy
   has_many :image_slides, through: :slide_samples
   has_many :attached_files, as: :sampleproc
   

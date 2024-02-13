@@ -9,7 +9,6 @@
 #
 
 class SlideSample < ApplicationRecord
-  has_one :sample
-  has_one :image_slide
-
+  belongs_to :sample
+  belongs_to :image_slide
 end

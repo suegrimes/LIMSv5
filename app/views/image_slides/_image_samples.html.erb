@@ -1,13 +1,15 @@
 <tr>
-  <%= hidden_field_tag('image_slide[sample_ids][]', sample.id) %>
-	<!--td><%= check_box(:image_slide, :sample_ids, {:checked => true, :name => 'image_slide[sample_ids][]',
-																								:wraptags => 'none'}, sample.id, nil) %></td-->
-  <td><%= text_field_tag('image_slide[sample_position][]') %></td>
-	<td><%=h sample.barcode_key %></td>
-	<td><%=h sample.patient_id %></td>
-	<td><%=h sample.sample_date %></td>
-	<td><%=h sample.sample_type %></td>
-	<td><%=h sample.sample_tissue %></td>
-	<td><%=h sample.tissue_preservation %></td>
-	<td><%=h sample.tumor_normal %></td>
+	<% prefix = "slide_samples_attributes[]" %>
+	<%= f.fields_for prefix, slide_sample do |s| %>
+		<td><%= s.text_field(:sample_position, size: 4, class: "form-control") %></td>
+		<td><%=h sample.barcode_key %></td>
+		<td><%=h sample.patient_id %></td>
+		<td><%=h sample.sample_date %></td>
+		<td><%=h sample.sample_type %></td>
+		<td><%=h sample.sample_tissue %></td>
+		<td><%=h sample.tissue_preservation %></td>
+		<td><%=h sample.tumor_normal %></td>
+		<%= s.hidden_field(:id, :value => slide_sample.id ) %>
+		<%= s.hidden_field(:sample_id, :value => sample.id) %>
+	<% end %>
 </tr>

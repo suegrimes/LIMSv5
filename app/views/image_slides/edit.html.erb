@@ -10,7 +10,7 @@
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
     <tr>
-      <td>&nbsp;</td>
+      <th>Sample Position</th>
       <th>Sample Barcode</th>
       <th>Patient ID</th>
       <th>Sample Date</th>
@@ -21,9 +21,11 @@
     </tr>
     </thead>
 
-    <% @image_slide.samples.all.each_with_index do |sample, i| %>
-      <%= render :partial => 'image_samples', :locals => {sample: sample} %>
+    <% @image_slide.slide_samples.all.each_with_index do |slide_sample, i| %>
+      <%= render :partial => 'image_samples', :locals => {:sample => slide_sample.sample, :f => f,
+                                                          :slide_sample => slide_sample} %>
     <% end %>
+
   </table>
 
   <div id='addl_samples' class="form-group row">

@@ -5,20 +5,15 @@
 
   <%= render :partial => 'slide_form', :locals => {:f => f} %>
   <br/>
-
-<% @checked ||= false %>  
-<!--span class="notes"> Check boxes below, to include samples on imaging slide</span><br/-->
-  <%= check_box_tag("checkall", '1', @checked, {:onclick => "checkUncheckAllSamples(this);"}) %>
-  <span style="font-size:90%">Check/Uncheck All</span>&nbsp;&nbsp;&nbsp;
   <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
 
-<%= render '/shared/collected_errors', collection: @samples %>
+  <%= render '/shared/collected_errors', collection: @samples %>
 
-	<h6>Check Samples to include on Imaging Slide</h6>
+	<h6>Samples to include on Imaging Slide</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
   	<tr>
-  	  <td>&nbsp;</td>
+  	  <th>Sample Position</th>
 			<th>Sample Barcode</th>
 			<th>Patient ID</th>
 			<th>Sample Date</th>
@@ -29,9 +24,12 @@
     </tr>
     </thead>
 
-    <% @samples.each_with_index do |sample, i| %>
-      <%= render :partial => 'image_samples', :locals => {sample: sample} %>
-	<% end %>
+		<% (0..@samples.size-1).each do |i| %>
+			<tr><%= render :partial => 'image_samples', :locals => {:sample => @samples[i], :f => f,
+																															:slide_sample => SlideSample.new } %>
+			</tr>
+	  <% end %>
+
   </table>
 <% end %>
 
