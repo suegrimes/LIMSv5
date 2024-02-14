@@ -13,10 +13,10 @@
         <%= f.text_field :slide_name, class: "form-control" %>
       </div>
 
-      <label for="machine_type" class="col-form-label col-form-label-sm">Machine Type:</label>
+      <label for="machine_type" class="col-form-label col-form-label-sm">Imaging Protocol:</label>
       <div class="col-auto">
-        <%= f.collection_select(:machine_type, @imager_types, :c_value, :c_value,
-                              {:include_blank => 'Select MachineType'}, class: "form-control") %>
+        <%= f.collection_select(:imaging_protocol, @imaging_protocols, :short_name, :short_name,
+                              {:include_blank => 'Select Protocol'}, class: "form-control") %>
       </div>
     </div>
   </div>

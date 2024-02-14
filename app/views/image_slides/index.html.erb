@@ -5,7 +5,7 @@
     <th>Slide Number</th>
 	  <th>Slide Name</th>
 	  <th>Samples</th>
-		<th>Machine Type</th>
+		<th>Imaging Protocol</th>
 		<th>Imaging Run</th>
 	  <th colspan="2">&nbsp;</th>
   </tr>
@@ -16,7 +16,7 @@
 		<td><%=h image_slide.slide_number %></td>
 		<td><%=h image_slide.slide_name %></td>
 		<td><%=h image_slide.samples.collect{|s| s.barcode_key }.join(', ') %></td>
-		<td><%=h image_slide.machine_type %></td>
+		<td><%=h image_slide.imaging_protocol %></td>
 		<td><% if image_slide.imaging_run %>
 				<%=h image_slide.imaging_run.imaging_key %>
 			<% end %>

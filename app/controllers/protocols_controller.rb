@@ -4,14 +4,8 @@ class ProtocolsController < ApplicationController
 
   def query_params
     if request.post?
-      case params[:protocol_type]
-        when 'Extraction'
-          redirect_to :action => :index, :type => 'E'
-        when 'Library Prep'
-          redirect_to :action => :index, :type => 'L'
-        when 'Molecular Assay'
-          redirect_to :action => :index, :type => 'M'
-      end
+      selected_type = Protocol::PROTOCOL_TYPES[params[:protocol_type]]
+      redirect_to :action => :index, :type => selected_type
     else
       @protocol_types = Protocol::PROTOCOL_TYPES.keys
     end

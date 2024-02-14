@@ -14,7 +14,7 @@ class ImageSlidesController < ApplicationController
     authorize! :new, ImageSlide
     @requester = (current_user.researcher ? current_user.researcher.researcher_name : nil)
     @image_slide  = ImageSlide.new(:updated_by => @requester,
-                                   :machine_type => params[:image_slide][:machine_type],
+                                   :imaging_protocol => params[:image_slide][:imaging_protocol],
                                    :created_at => Date.today,)
 
     # Get samples (dissections) based on parameters entered
@@ -34,6 +34,9 @@ class ImageSlidesController < ApplicationController
   # POST /image_slides
   def create
     #_deliberate_error_here
+    # TODO: Add error checking
+    #       Require at least one sample with sample position number
+    #       Require integer sample position numbers (sequential integers?)
     @image_slide = ImageSlide.new(create_params)
     authorize! :create, @image_slide
 
@@ -54,14 +57,12 @@ class ImageSlidesController < ApplicationController
   # PUT /image_slides/1
   def update
     #_deliberate_error_here
+    # TODO: Add error checking
+    #       Use javascript to allow adding a sample to slide
+    #       Also allow deleting a sample from slide
+    #       Make sure at least one valid sample remains after deleting
     @image_slide = ImageSlide.find(params[:id])
     authorize! :update, @image_slide
-
-    # If sample position has not been changed it will be blank => remove from params so that
-    # duplicate record is not created
-    #params[:image_slide][:slide_samples_attributes][:sample_id] ||= []
-    #params[:image_slide][:sample_ids].reject!{|id| id.blank? || id == '0'}
-    #@image_slide.samples = Sample.find(params[:image_slide][:sample_ids])
 
     # Deal with new samples which may have been added to slide
     sample_error = false
@@ -80,7 +81,6 @@ class ImageSlidesController < ApplicationController
       render :action => 'edit'
     elsif @image_slide.update_attributes(update_params)
       flash[:notice] = "Image slide has been updated"
-      #redirect_to @image_slide
       render :action => 'show'
     else
       flash.now[:error] = "Error updating image slide"
@@ -108,8 +108,7 @@ class ImageSlidesController < ApplicationController
 
 protected
   def setup_dropdowns
-    @category_dropdowns = Category.populate_dropdowns([Cgroup::CGROUPS['Imaging']])
-    @imager_types      = category_filter(@category_dropdowns, 'imager_type')
+    @imaging_protocols = Protocol.find_for_protocol_type('I')
   end
   def define_sample_conditions(params)
     combo_fields = {:barcode_string => {:sql_attr => ['samples.barcode_key']}}
@@ -121,12 +120,12 @@ protected
   end
 
   def create_params
-    params.require(:image_slide).permit(:machine_type, :slide_number, :slide_name,
+    params.require(:image_slide).permit(:imaging_protocol, :slide_number, :slide_name,
                                         slide_samples_attributes: [:sample_id, :sample_position])
   end
 
   def update_params
-    params.require(:image_slide).permit(:machine_type, :slide_number, :slide_name,
+    params.require(:image_slide).permit(:imaging_protocol, :slide_number, :slide_name,
                                         slide_samples_attributes: [:id, :sample_id, :sample_position])
   end
 end
