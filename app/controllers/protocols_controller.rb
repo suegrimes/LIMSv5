@@ -13,8 +13,11 @@ class ProtocolsController < ApplicationController
   
   # GET /protocols
   def index
-    params[:type] ||= 'E'
-    @protocols = Protocol.find_for_protocol_type(params[:type])
+    if params[:type].blank?
+      @protocols = Protocol.all.order(:protocol_type, :protocol_name)
+    else
+      @protocols = Protocol.find_for_protocol_type(params[:type])
+    end
   end
 
   # GET /protocols/1
@@ -25,7 +28,11 @@ class ProtocolsController < ApplicationController
 
   # GET /protocols/new
   def new
-    @protocol = Protocol.new(:protocol_type => params[:protocol_type])
+    #If passed protocol_type exists and is a single value (string or single value array),
+    #  set protocol_type in the new object (to set selected value in drop-down)
+    protocol_type = params[:protocol_type] ||= "TBD"
+    protocol_type = protocol_type.length == 1 ? protocol_type[0] : "TBD"
+    @protocol = Protocol.new(:protocol_type => protocol_type)
   end
 
   # GET /protocols/1/edit

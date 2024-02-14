@@ -32,5 +32,5 @@
   </tr>
 <% end %>
 </table>
-
-<%= link_to 'New protocol', new_protocol_path(:protocol_type => 'E') %>
+<% protocol_type = @protocols.all.pluck(:protocol_type).uniq %>
+<%= link_to 'New protocol', new_protocol_path(:protocol_type => protocol_type) %>
