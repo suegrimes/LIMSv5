@@ -1,0 +1,37 @@
+<h5>New Imaging Slide</h5>
+
+<%= form_for(@image_slide) do |f| %>
+  <%= render '/shared/errors', model: @image_slide %>
+
+  <%= render :partial => 'slide_form', :locals => {:f => f} %>
+  <br/>
+  <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
+
+  <%= render '/shared/collected_errors', collection: @samples %>
+
+	<h6>Samples to include on Imaging Slide</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
+  	<tr>
+  	  <th>Sample Position</th>
+			<th>Sample Barcode</th>
+			<th>Patient ID</th>
+			<th>Sample Date</th>
+			<th>Sample Type</th>
+			<th>Sample Tissue</th>
+			<th>Preservation</th>
+			<th>Tumor/Normal</th>
+    </tr>
+    </thead>
+
+		<% (0..@samples.size-1).each do |i| %>
+			<tr><%= render :partial => 'image_samples', :locals => {:sample => @samples[i], :f => f,
+																															:slide_sample => SlideSample.new } %>
+			</tr>
+	  <% end %>
+
+  </table>
+<% end %>
+
+<br/>
+<%= link_to 'Back', :back %>

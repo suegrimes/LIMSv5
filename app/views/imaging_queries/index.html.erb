@@ -1,0 +1,48 @@
+<h5>Image Processing (Filtered) </h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+  	<th>Slide Number</th>
+		<th>Slide Name</th>
+		<th>Protocol</th>
+		<th>Owner</th>
+		<th>Slide Date</th>
+		<th>Imaging Run</th>
+		<th>Run Date</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+<% for image_slide in @image_slides %>
+  <tr>
+  	<td><%= link_to image_slide.slide_number, image_slide %></td>
+		<td><%=h image_slide.slide_name %></td>
+		<td><%=h image_slide.imaging_protocol %></td>
+		<td><%=h image_slide.user.login %></td>
+		<td><%=h image_slide.imaging_date %></td>
+
+		<% if image_slide.imaging_run %>
+			<td><!--%= link_to image_slide.imaging_run.imaging_key, image_slide.imaging_run %-->
+				  <%=h image_slide.imaging_run.imaging_key %>
+			</td>
+			<td><%=h image_slide.imaging_run.run_date %></td>
+		<% else %>
+			<td colspan="2">&nbsp;</td>
+		<% end %>
+	
+	<% if can? :edit, image_slide %>
+	  <td><%= link_to 'Edit', edit_image_slide_path(image_slide) %></td>
+	<% else %>
+      <td class="ltgrey"> Edit </td>
+    <% end %>
+	
+	<% if can? :delete, image_slide %>
+	  <td><%= link_to 'Delete', image_slide, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
+    <% else %>
+      <td class="ltgrey"> Delete </td>
+	<% end %>  
+  </tr>
+  <% end %>
+</table>
+

@@ -1,0 +1,59 @@
+<% default_imager =  @imager_types[0].c_value %>
+
+<%= form_tag new_imaging_run_path, method: :get  do %>
+  <h5>Prepare Imaging Run</h5>
+    <div class="card">
+      <h6 class="card-header">Imaging Slide Parameters</h6>
+      <p class="font-italic font-sm" style="text-align:center; margin-bottom:0; margin-top:0.75rem">Enter individual slide numbers separated by commas'</p>
+
+      <table class="table table-borderless table-sm">
+        <tbody>
+
+        <tr><!-- row to control col widths -->
+          <td style="width:15%"></td>
+          <td style="width:15%"></td>
+          <td style="width:15%"></td>
+          <td style="width:15%"></td>
+          <td style="width:30%"></td>
+        </tr>
+
+        <tr>
+          <td class="label"><label for="slide_string" class="col-auto col-form-label col-form-label-sm">Barcode:</label></td>
+          <td><%= text_field_tag(:slide_string, '', {:size => 40, class: "form-control"}) %></td>
+          <td class="label"><label for="imaging_run_adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label></td>
+          <td><%= collection_select(:imaging_run, :adapter_id, @mplex_adapters, :id, :runtype_adapter, {}, class: "form-control") %></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td class="label"><label for="imaging_run_owner" class="col-auto col-form-label col-form-label-sm">Owner(s):</label></td>
+          <td>
+            <%= select(
+                  :imaging_run,
+                  :owner,
+                  @owners,
+                  {:include_blank => '(All)'},
+                  {size: 3, multiple: :multiple, class: "form-control"}) %>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td class="label"><label for="date_range_from_date" class="col-auto col-form-label col-form-label-sm">Prepared From:</label></td>
+          <td><%= date_field('date_range', 'from_date', class: "form-control") %></td>
+          <td class="label"><label for="date_range_to_date" class="col-auto col-form-label col-form-label-sm">To:</label></td>
+          <td><%= date_field('date_range', 'to_date', class: "form-control") %></td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td colspan="4"><%=submit_tag "Submit", class: "btn btn-primary" %></td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div><!-- /card -->
+  <%end%>

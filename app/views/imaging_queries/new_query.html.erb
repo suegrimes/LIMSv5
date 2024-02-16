@@ -1,0 +1,42 @@
+<%= form_for @imaging_query, :action => 'index', :method => :get do |f| %>
+<%= render '/shared/errors', model: @imaging_query, header_message: 'Error(s) in query parameters' %>
+
+<div class="card">
+  <h6 class="card-header">Imaging Query</h6>
+  <div class="card-body">
+
+  <div class="form-group row">
+    <label for="slide_nr_string" class="col-sm-2 col-form-label col-form-label-sm">Slide #(s):</label>
+    <div class="col-sm-4">
+      <%= f.text_field(:slide_nr_string, :size => "50", class: "form-control")%>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="owner" class="col-sm-2 col-form-label col-form-label-sm">Owner(s):</label>
+    <div class="col-sm-3">
+      <%= f.select(:owner, @owners, {:include_blank => '(All)'},{:size => 3, :multiple => :multiple, class: "form-control"}) %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="from_date" class="col-sm-2 col-form-label col-form-label-sm">Assay Date From:</label>
+    <div class="col-auto">
+      <%= f.date_field 'from_date', max: Time.current.to_date, class: "form-control" %>
+    </div>
+
+    <label for="to_date" class="col-auto col-form-label col-form-label-sm">To:</label>
+    <div class="col-auto">
+      <%= f.date_field 'to_date', max: Time.current.to_date, class: "form-control" %>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+  <div class="form-group row">
+    <div class="col-auto">
+      <%=submit_tag "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
+<%end%>

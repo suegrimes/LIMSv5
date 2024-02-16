@@ -19,7 +19,8 @@ class Protocol < ApplicationRecord
                          'Imaging' => 'I'}
   PROTOCOL_TYPE_NAMES = PROTOCOL_TYPES.invert
   
-  validates_presence_of :protocol_code, :if => Proc.new{|p| %w[M I].include?(p.protocol_type)}, :message => 'must be supplied for molecular assays'
+  validates_presence_of :protocol_code, :if => Proc.new{|p| %w[M I].include?(p.protocol_type)},
+                        :message => 'must be supplied for molecular and imaging assays'
   validates :protocol_code, length: {is: 3}, :if => Proc.new{|p| p.protocol_type == "I"}
 
   def self.find_for_protocol_type(protocol_type)

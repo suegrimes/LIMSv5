@@ -4,6 +4,7 @@
 #
 #  id               :integer          not null, primary key
 #  imaging_run_id   :integer
+#  imaging_date     :date
 #  slide_number     :string
 #  slide_name       :string
 #  updated_by       :integer
@@ -14,10 +15,15 @@
 class ImageSlide < ApplicationRecord
   
   belongs_to :imaging_run, optional: true
+  belongs_to :user, optional: true, foreign_key: :updated_by
   has_many :slide_samples, dependent: :destroy
   has_many :samples, through: :slide_samples
   accepts_nested_attributes_for :slide_samples, :reject_if => proc {|attrs| attrs[:sample_id].blank?},
                                 :allow_destroy => true
 
+  def self.find_for_query(condition_array=[])
+    self.includes(:imaging_run).where(sql_where(condition_array))
+        .order('imaging_date DESC').all
+  end
 end
 
