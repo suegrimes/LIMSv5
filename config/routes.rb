@@ -101,6 +101,9 @@ Rails.application.routes.draw do
   get 'slide_setup' => 'image_slides#setup_params', :as => 'slide_setup'
   #match 'add_samples' => 'image_slides#get_samples', :as => :get_samples, :via => [:get, :post]
 
+  resources :imaging_queries, :only => :index
+  get 'imaging_query' => 'imaging_queries#new_query'
+
   # Routes for patients
   resources :patients
   match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
