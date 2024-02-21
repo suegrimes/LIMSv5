@@ -17,9 +17,9 @@ class ImagingQuery
   validates_date :to_date, :from_date, :allow_blank => true
   validates :slide_nr_string, compound_string: {:datatype => 'alpha_dot_numeric'}, :allow_blank => true
 
-  STD_FIELDS = {'image_slides' => %w(protocol_id updated_by)}
+  STD_FIELDS = {'imaging_slides' => %w(protocol_id updated_by)}
 
-  COMBO_FIELDS = {:slide_nr_string => {:sql_attr => ['image_slides.slide_number']}}
+  COMBO_FIELDS = {:slide_nr_string => {:sql_attr => ['imaging_slides.slide_number']}}
 
   QUERY_FLDS = {'standard' => STD_FIELDS, 'multi_range' => COMBO_FIELDS, 'search' => {}}
 end

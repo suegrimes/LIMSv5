@@ -1,0 +1,29 @@
+<h5>View Image Slide</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Slide Number</th>
+		<th>Slide Name</th>
+    <th>Samples</th>
+		<th>Machine Type</th>
+		<th>Imaging Run(s)</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+  <tr>
+    <td><%=h @imaging_slide.slide_number %></td>
+    <td><%=h @imaging_slide.slide_name %></td>
+		<td><%=h @imaging_slide.samples.collect{|s| s.barcode_key }.join(', ') %></td>
+		<td><%=h @imaging_slide.protocol.short_name %></td>
+		<td><% if @imaging_slide.imaging_runs %>
+				  <%=h @imaging_slide.imaging_runs.collect{|r| r.imaging_key }.join(', ') %>
+				<% end %>
+		</td>
+    <td><% if can? :edit, @imaging_slide %><%=link_to 'Edit', edit_imaging_slide_path(@imaging_slide) %><% end %></td>
+    <td><% if can? :delete, @imaging_slide %><%=link_to 'Delete', @imaging_slide, data: {confirm: 'Are you sure?'}, :method => :delete %><% end %></td>
+  </tr>
+</table>
+
+<%= link_to 'List All imaging slides', imaging_slides_path %>
+													  
