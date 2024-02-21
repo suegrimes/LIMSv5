@@ -1,32 +1,26 @@
-<h5>New Imaging Slide</h5>
+<h5>New Imaging Run</h5>
 
-<%= form_for(@image_slide) do |f| %>
-  <%= render '/shared/errors', model: @image_slide %>
+<%= form_for(@imaging_run) do |f| %>
+  <%= render '/shared/errors', model: @imaging_run %>
 
-  <%= render :partial => 'slide_form', :locals => {:f => f} %>
+  <%= render :partial => 'imaging_run_form', :locals => {:f => f} %>
   <br/>
-  <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
+  <%= f.submit 'Create Imaging Run', class: "btn btn-primary" %><br/><br/>
 
-  <%= render '/shared/collected_errors', collection: @samples %>
-
-	<h6>Samples to include on Imaging Slide</h6>
+	<h6>Slides to include on Imaging Run</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
   	<tr>
-  	  <th>Sample Position</th>
-			<th>Sample Barcode</th>
-			<th>Patient ID</th>
-			<th>Sample Date</th>
-			<th>Sample Type</th>
-			<th>Sample Tissue</th>
-			<th>Preservation</th>
-			<th>Tumor/Normal</th>
+  	  <th>Slide Number</th>
+			<th>Slide Name</th>
+			<th>Owner</th>
+			<th>Notebook Ref</th>
     </tr>
     </thead>
 
-		<% (0..@samples.size-1).each do |i| %>
-			<tr><%= render :partial => 'image_samples', :locals => {:sample => @samples[i], :f => f,
-																															:slide_sample => SlideSample.new } %>
+		<% (0..@image_slides.size-1).each do |i| %>
+			<tr><%= render :partial => 'image_slides', :locals => {:image_slide => @image_slides[i], :f => f,
+																														 :samples => @image_slides[i].samples} %>
 			</tr>
 	  <% end %>
 

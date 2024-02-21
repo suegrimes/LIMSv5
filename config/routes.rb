@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   match '/forgot' => 'users#forgot', :as => :forgot, :via => [:get, :post]
   match 'reset/:reset_code' => 'users#reset', :as => :reset, :via => [:get, :post]
 
-    # Routes for clinical samples/sample characteristics
+  # Routes for patients
+  resources :patients
+  match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
+  match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
+
+  # Routes for clinical samples/sample characteristics
   resources :sample_characteristics do
     post 'add_new_sample', on: :member
     post 'add_another_sample', on: :member
@@ -97,17 +102,16 @@ Rails.application.routes.draw do
   get 'mol_assay_query' => 'molassay_queries#new_query'
 
   # Routes for imaging slides
-  resources :image_slides
-  get 'slide_setup' => 'image_slides#setup_params', :as => 'slide_setup'
-  #match 'add_samples' => 'image_slides#get_samples', :as => :get_samples, :via => [:get, :post]
+  resources :imaging_slides
+  get 'slide_setup' => 'imaging_slides#setup_params', :as => 'slide_setup'
+  #match 'add_samples' => 'imaging_slides#get_samples', :as => :get_samples, :via => [:get, :post]
 
   resources :imaging_queries, :only => :index
   get 'imaging_query' => 'imaging_queries#new_query'
 
-  # Routes for patients
-  resources :patients
-  match 'modify_patient' => 'patients#edit_params', :as => :modify_patient, :via => [:get, :post]
-  match 'encrypt_patient' => 'patients#loadtodb', :as => :encrypt_patient, :via => [:get, :post]
+  # Routes for imaging_runs
+  resources :imaging_runs
+  get 'imaging_setup' => 'imaging_runs#setup_params', :as => :imaging_setup, :via => [:get, :post]
 
   # Routes for storage containers
   resources :storage_containers do

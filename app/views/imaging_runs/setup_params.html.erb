@@ -1,10 +1,8 @@
-<% default_imager =  @imager_types[0].c_value %>
-
 <%= form_tag new_imaging_run_path, method: :get  do %>
   <h5>Prepare Imaging Run</h5>
     <div class="card">
       <h6 class="card-header">Imaging Slide Parameters</h6>
-      <p class="font-italic font-sm" style="text-align:center; margin-bottom:0; margin-top:0.75rem">Enter individual slide numbers separated by commas'</p>
+      <p class="font-italic font-sm" style="margin-bottom:0; margin-top:0.75rem">Enter individual slide numbers separated by commas'</p>
 
       <table class="table table-borderless table-sm">
         <tbody>
@@ -18,10 +16,10 @@
         </tr>
 
         <tr>
-          <td class="label"><label for="slide_string" class="col-auto col-form-label col-form-label-sm">Barcode:</label></td>
-          <td><%= text_field_tag(:slide_string, '', {:size => 40, class: "form-control"}) %></td>
-          <td class="label"><label for="imaging_run_adapter_id" class="col-auto col-form-label col-form-label-sm">Runtype Adapter:</label></td>
-          <td><%= collection_select(:imaging_run, :adapter_id, @mplex_adapters, :id, :runtype_adapter, {}, class: "form-control") %></td>
+          <td class="label"><label for="slide_string" class="col-auto col-form-label col-form-label-sm">Slide #(s):</label></td>
+          <td><%= text_field_tag(:slide_nr_string, '', {:size => 40, class: "form-control"}) %></td>
+          <td class="label"><label for="imaging_run_adapter_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label></td>
+          <td><%= collection_select(:imaging_run, :protocol_id, @imaging_protocols, :id, :protocol_abbrev, {}, class: "form-control") %></td>
           <td></td>
         </tr>
 

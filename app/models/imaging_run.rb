@@ -19,10 +19,13 @@
 class ImagingRun < ApplicationRecord
   include Attachable
 
-  has_many :image_slides, :dependent => :destroy
+  has_many :slide_imagings, :dependent => :destroy
+  has_many :imaging_slides, :through => :slide_imagings
+  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:slide_imaging_id].blank?},
+                                :allow_destroy => true
   has_many :attached_files, :as => :sampleproc
   
-  validates_presence_of :machine_type
+  validates_presence_of :protocol_id
   validates_date :run_date, :allow_blank => true
 
   DEFAULT_MACHINE_TYPE = 'Xenium'
@@ -30,10 +33,10 @@ class ImagingRun < ApplicationRecord
 
   def self.find_imaging_runs(rptorder='runnr',condition_array=[])
     rpt_order = (rptorder == 'rundt' ? 'imaging_runs.run_date DESC' : 'imaging_runs.seq_run_nr DESC')
-    self.includes(:image_slides).where(sql_where(condition_array)).order(rpt_order).all
+    self.includes(:imaging_slides).where(sql_where(condition_array)).order(rpt_order).all
   end
 
   def self.find_for_export(imaging_ids)
-    self.includes(:image_slides).where("imaging_runs.id IN (?)", imaging_ids).desc_by_run.all
+    self.includes(:imaging_slides).where("imaging_runs.id IN (?)", imaging_ids).desc_by_run.all
   end
 end
