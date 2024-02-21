@@ -3,9 +3,9 @@
 # Table name: slide_samples
 #
 #  id   :integer          not null, primary key
-#  sample_id :integer
 #  imaging_slide_id :integer
-#  sample_position :integer
+#  imaging_run_id   :integer
+#  imaging_position :integer
 #
 
 class SlideImaging < ApplicationRecord
