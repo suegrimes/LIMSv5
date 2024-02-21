@@ -8,7 +8,7 @@
 #  sample_position :integer
 #
 
-class SlideSample < ApplicationRecord
-  belongs_to :sample
+class SlideImaging < ApplicationRecord
   belongs_to :imaging_slide
+  belongs_to :imaging_run
 end

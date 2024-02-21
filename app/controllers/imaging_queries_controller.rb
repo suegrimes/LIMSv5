@@ -14,7 +14,7 @@ class ImagingQueriesController < ApplicationController
      
     if @imaging_query.valid?
       condition_array = define_conditions(params)
-      @image_slides = ImageSlide.find_for_query(sql_where(condition_array))
+      @imaging_slides = ImagingSlide.find_for_query(sql_where(condition_array))
       render :action => :index
     else
       dropdowns
@@ -31,7 +31,7 @@ protected
   def define_conditions(params)
     @where_select, @where_values = build_sql_where(params[:imaging_query], ImagingQuery::QUERY_FLDS, [], [])
 
-    dt_fld = 'image_slides.imaging_date'
+    dt_fld = 'imaging_slides.imaging_date'
     @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:imaging_query], dt_fld)
 
     return sql_where_clause(@where_select, @where_values)

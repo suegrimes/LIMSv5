@@ -1,0 +1,23 @@
+<div class="card">
+  <h6 class="card-header">Imaging Slide Details</h6>
+  <div class="card-body">
+
+    <div class="form-group row">
+      <label for="slide_number" class="col-form-label col-form-label-sm">Slide#:</label>
+      <div class="col-auto">
+        <%= f.text_field :slide_number, class: "form-control" %>
+      </div>
+
+      <label for="slide_name" class="col-form-label col-form-label-sm">Slide Name:</label>
+      <div class="col-auto">
+        <%= f.text_field :slide_name, class: "form-control" %>
+      </div>
+
+      <label for="machine_type" class="col-form-label col-form-label-sm">Imaging Protocol:</label>
+      <div class="col-auto">
+        <%= f.collection_select(:protocol_id, @imaging_protocols, :id, :short_name,
+                              {:include_blank => 'Select Protocol'}, class: "form-control") %>
+      </div>
+    </div>
+  </div>
+</div>

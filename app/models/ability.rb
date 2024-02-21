@@ -43,10 +43,10 @@ class Ability
       can :manage, :all
     
     else
-      # Researchers can enter/update processed samples, seq libs, flow cells, image_slides, image_runs
+      # Researchers can enter/update processed samples, seq libs, flow cells, imaging_slides, image_runs
       if user.has_role?("researcher") || user.has_role?("lab_admin")
         can :manage, [Sample, ProcessedSample, MolecularAssay, SeqLib, LibSample, FlowCell,
-                      FlowLane, Protocol, ImageSlide, ImagingRun, SampleStorageContainer, FreezerLocation, Researcher, Publication]
+                      FlowLane, Protocol, ImagingSlide, ImagingRun, SampleStorageContainer, FreezerLocation, Researcher, Publication]
         cannot [:edit, :update], Sample do |sample|
           sample.source_sample_id.nil?
         end

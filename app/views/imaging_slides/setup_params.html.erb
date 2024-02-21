@@ -1,6 +1,6 @@
 <% default_imager =  @imaging_protocols[0].short_name %>
 
-<%= form_tag new_image_slide_path, method: :get  do %>
+<%= form_tag new_imaging_slide_path, method: :get  do %>
 <div class="card">
   <h6 class="card-header">Imaging Slide Parameters</h6>
   <div class="card-body">
@@ -15,9 +15,9 @@
         <%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %>
       </div>
 
-      <label for="image_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
+      <label for="imaging_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
       <div class="col-auto">
-        <%= collection_select(:image_slide, :imaging_protocol, @imaging_protocols, :short_name, :short_name,
+        <%= collection_select(:imaging_slide, :protocol_id, @imaging_protocols, :id, :short_name,
                               {:include_blank => 'Select Protocol', :selected => default_imager},
                               class: "form-control") %>
       </div>

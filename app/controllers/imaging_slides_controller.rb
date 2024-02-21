@@ -1,4 +1,4 @@
-class ImageSlidesController < ApplicationController
+class ImagingSlidesController < ApplicationController
   include SqlQueryBuilder
   layout 'main/main'
   
@@ -8,13 +8,13 @@ class ImageSlidesController < ApplicationController
 
   before_action :setup_dropdowns, :only => [:setup_params, :new, :edit]
   def setup_params
-    authorize! :new, ImageSlide
+    authorize! :new, ImagingSlide
   end
   def new
-    authorize! :new, ImageSlide
+    authorize! :new, ImagingSlide
     @requester = (current_user.researcher ? current_user.researcher.researcher_name : nil)
-    @image_slide  = ImageSlide.new(:updated_by => @requester,
-                                   :imaging_protocol => params[:image_slide][:imaging_protocol],
+    @imaging_slide  = ImagingSlide.new(:updated_by => @requester,
+                                   :protocol_id => params[:imaging_slide][:protocol_id],
                                    :created_at => Date.today,)
 
     # Get samples (dissections) based on parameters entered
@@ -25,44 +25,44 @@ class ImageSlidesController < ApplicationController
     render :action => 'new'
   end
   
-  # GET /image_slides/1/edit
+  # GET /imaging_slides/1/edit
   def edit
-    @image_slide = ImageSlide.includes(:samples).find(params[:id])
-    authorize! :update, @image_slide
+    @imaging_slide = ImagingSlide.includes(:samples).find(params[:id])
+    authorize! :update, @imaging_slide
   end
 
-  # POST /image_slides
+  # POST /imaging_slides
   def create
     #_deliberate_error_here
     # TODO: Add error checking
     #       Require at least one sample with sample position number
     #       Require integer sample position numbers (sequential integers?)
-    @image_slide = ImageSlide.new(create_params)
-    authorize! :create, @image_slide
+    @imaging_slide = ImagingSlide.new(create_params)
+    authorize! :create, @imaging_slide
 
-    if params[:image_slide][:slide_samples_attributes].empty?
+    if params[:imaging_slide][:slide_samples_attributes].empty?
       flash[:error] = 'ERROR - No valid samples provided for this slide'
       redirect_to(slide_setup_path)
     else
-      if !@image_slide.save
+      if !@imaging_slide.save
         #error_found = true  # Validation or other error when saving to database
         flash.now[:error] = 'ERROR - Unable to create imaging slide'
       else
         flash[:notice] = "Imaging slide successfully created"
-        redirect_to(@image_slide)
+        redirect_to(@imaging_slide)
       end
     end
   end
 
-  # PUT /image_slides/1
+  # PUT /imaging_slides/1
   def update
     #_deliberate_error_here
     # TODO: Add error checking
     #       Use javascript to allow adding a sample to slide
     #       Also allow deleting a sample from slide
     #       Make sure at least one valid sample remains after deleting
-    @image_slide = ImageSlide.find(params[:id])
-    authorize! :update, @image_slide
+    @imaging_slide = ImagingSlide.find(params[:id])
+    authorize! :update, @imaging_slide
 
     # Deal with new samples which may have been added to slide
     sample_error = false
@@ -72,14 +72,14 @@ class ImageSlidesController < ApplicationController
       if @samples.empty?
         sample_error = true
       else
-        @image_slide.samples << @samples
+        @imaging_slide.samples << @samples
       end
     end
 
     if sample_error == true
       flash.now[:error] = "Invalid sample barcode(s) #{params[:barcode_string]} entered"
       render :action => 'edit'
-    elsif @image_slide.update_attributes(update_params)
+    elsif @imaging_slide.update_attributes(update_params)
       flash[:notice] = "Image slide has been updated"
       render :action => 'show'
     else
@@ -89,27 +89,28 @@ class ImageSlidesController < ApplicationController
   end
 
   def show
-    @image_slide = ImageSlide.find(params[:id])
+    @imaging_slide = ImagingSlide.find(params[:id])
   end
 
   def index
-    @image_slides = ImageSlide.all
+    @imaging_slides = ImagingSlide.all
   end
 
-  # DELETE /image_slides/1
+  # DELETE /imaging_slides/1
   def destroy
-    @image_slide = ImageSlide.find(params[:id])
-    authorize! :delete, @image_slide
+    @imaging_slide = ImagingSlide.find(params[:id])
+    authorize! :delete, @imaging_slide
 
-    @image_slide.destroy
+    @imaging_slide.destroy
     flash[:notice] = 'Imaging slide successfully deleted'
-    redirect_to image_slides_url
+    redirect_to imaging_slides_url
   end
 
 protected
   def setup_dropdowns
     @imaging_protocols = Protocol.find_for_protocol_type('I')
   end
+
   def define_sample_conditions(params)
     combo_fields = {:barcode_string => {:sql_attr => ['samples.barcode_key']}}
     query_flds = {'standard' => {}, 'multi_range' => combo_fields, 'search' => {}}
@@ -120,12 +121,12 @@ protected
   end
 
   def create_params
-    params.require(:image_slide).permit(:imaging_protocol, :slide_number, :slide_name,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name,
                                         slide_samples_attributes: [:sample_id, :sample_position])
   end
 
   def update_params
-    params.require(:image_slide).permit(:imaging_protocol, :slide_number, :slide_name,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name,
                                         slide_samples_attributes: [:id, :sample_id, :sample_position])
   end
 end

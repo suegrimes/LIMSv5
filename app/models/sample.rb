@@ -48,7 +48,7 @@ class Sample < ApplicationRecord
   has_many :processed_samples
   has_one :sample_storage_container, as: :stored_sample, dependent: :destroy
   has_many :slide_samples, dependent: :destroy
-  has_many :image_slides, through: :slide_samples
+  has_many :imaging_slides, through: :slide_samples
   has_many :attached_files, as: :sampleproc
   
   accepts_nested_attributes_for :sample_storage_container, :allow_destroy => true, :reject_if => :all_blank
