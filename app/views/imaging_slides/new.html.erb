@@ -23,7 +23,7 @@
     </thead>
 
 		<% (0..@samples.size-1).each do |i| %>
-			<tr><%= render :partial => 'image_samples', :locals => {:sample => @samples[i], :f => f,
+			<tr><%= render :partial => 'imaging_samples', :locals => {:sample => @samples[i], :f => f,
 																															:slide_sample => SlideSample.new } %>
 			</tr>
 	  <% end %>

@@ -1,7 +1,7 @@
 <tr>
 	<% prefix = "slide_samples_attributes[]" %>
 	<%= f.fields_for prefix, slide_sample do |s| %>
-		<td><%= s.text_field(:sample_position, size: 4, class: "form-control") %></td>
+		<td><%= s.text_field(:sample_position, class: "form-control w-50") %></td>
 		<td><%=h sample.barcode_key %></td>
 		<td><%=h sample.patient_id %></td>
 		<td><%=h sample.sample_date %></td>

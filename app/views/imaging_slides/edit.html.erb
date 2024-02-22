@@ -22,7 +22,7 @@
     </thead>
 
     <% @imaging_slide.slide_samples.all.each_with_index do |slide_sample, i| %>
-      <%= render :partial => 'image_samples', :locals => {:sample => slide_sample.sample, :f => f,
+      <%= render :partial => 'imaging_samples', :locals => {:sample => slide_sample.sample, :f => f,
                                                           :slide_sample => slide_sample} %>
     <% end %>
 

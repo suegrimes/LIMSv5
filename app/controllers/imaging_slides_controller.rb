@@ -121,12 +121,12 @@ protected
   end
 
   def create_params
-    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name, :imaging_date, :notebook_ref,
                                         slide_samples_attributes: [:sample_id, :sample_position])
   end
 
   def update_params
-    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name, :imaging_date, :notebook_ref,
                                         slide_samples_attributes: [:id, :sample_id, :sample_position])
   end
 end

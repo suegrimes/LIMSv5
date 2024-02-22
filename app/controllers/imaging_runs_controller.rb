@@ -19,14 +19,14 @@ class ImagingRunsController < ApplicationController
 
     # Get samples (dissections) based on parameters entered
     @condition_array = define_slide_conditions(params)
-    @image_slides = ImageSlide.where(sql_where(@condition_array)).order('slide_number').all.to_a
+    @imaging_slides = ImagingSlide.where(sql_where(@condition_array)).order('slide_number').all.to_a
 
     render :action => 'new'
   end
   
   # GET /imaging_runs/1/edit
   def edit
-    @imaging_run = ImagingRun.includes(:samples).find(params[:id])
+    @imaging_run = ImagingRun.includes(:imaging_slides).find(params[:id])
     authorize! :update, @imaging_run
   end
 
@@ -90,7 +90,7 @@ protected
   end
 
   def define_slide_conditions(params)
-    combo_fields = {:slide_nr_string => {:sql_attr => ['image_slides.slide_number']}}
+    combo_fields = {:slide_nr_string => {:sql_attr => ['imaging_slides.slide_number']}}
     query_flds = {'standard' => {}, 'multi_range' => combo_fields, 'search' => {}}
     #query_params = params[:imaging_run].merge({:slide_nr_string => params[:slide_nr_string]})
     query_params = {:slide_nr_string => params[:slide_nr_string]}
@@ -100,14 +100,14 @@ protected
   end
 
   def create_params
-    params.require(:imaging_run).permit(:machine_type, :slide_number, :slide_name, :protocol_id,
-                                        :owner,
-                                        slide_samples_attributes: [:sample_id, :sample_position])
+    params.require(:imaging_run).permit(:imaging_key, :imaging_alt_id, :protocol_id, :run_date,
+                                        :run_description, :notebook_ref, :owner,
+                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position])
   end
 
   def update_params
-    params.require(:imaging_run).permit(:machine_type, :slide_number, :slide_name, :protocol_id,
-                                        :owner,
-                                        slide_samples_attributes: [:id, :sample_id, :sample_position])
+    params.require(:imaging_run).permit(:imaging_key, :imaging_alt_id, :protocol_id, :run_date,
+                                        :run_description, :notebook_ref, :owner,
+                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position])
   end
 end

@@ -21,7 +21,7 @@ class ImagingRun < ApplicationRecord
 
   has_many :slide_imagings, :dependent => :destroy
   has_many :imaging_slides, :through => :slide_imagings
-  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:slide_imaging_id].blank?},
+  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_slide_id].blank?},
                                 :allow_destroy => true
   has_many :attached_files, :as => :sampleproc
   

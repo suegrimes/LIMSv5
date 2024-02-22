@@ -11,6 +11,8 @@
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
   	<tr>
+			<th>Slide Pos</th>
+			<th>Date</th>
   	  <th>Slide Number</th>
 			<th>Slide Name</th>
 			<th>Owner</th>
@@ -18,9 +20,9 @@
     </tr>
     </thead>
 
-		<% (0..@image_slides.size-1).each do |i| %>
-			<tr><%= render :partial => 'image_slides', :locals => {:image_slide => @image_slides[i], :f => f,
-																														 :samples => @image_slides[i].samples} %>
+		<% (0..@imaging_slides.size-1).each do |i| %>
+			<tr><%= render :partial => 'imaging_slides', :locals => {:imaging_slide => @imaging_slides[i], :f => f,
+																														 :slide_imaging => SlideImaging.new} %>
 			</tr>
 	  <% end %>
 

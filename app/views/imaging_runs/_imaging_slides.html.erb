@@ -1,0 +1,13 @@
+<tr>
+	<% prefix = "slide_imagings_attributes[]" %>
+	<%= f.fields_for prefix, slide_imaging do |s| %>
+		<td><%= s.text_field(:imaging_position, size: 4, class: "form-control") %></td>
+		<td><%=h imaging_slide.imaging_date %></td>
+		<td><%=h imaging_slide.slide_number %></td>
+		<td><%=h imaging_slide.slide_name %></td>
+		<td><%=h imaging_slide.user.login %></td>
+		<td><%=h imaging_slide.notebook_ref %></td>
+		<%= s.hidden_field(:id, :value => slide_imaging.id ) %>
+		<%= s.hidden_field(:imaging_slide_id, :value => imaging_slide.id) %>
+	<% end %>
+</tr>

@@ -3,30 +3,30 @@
   <div class="card-body">
 
     <div class="form-group row">
-      <label for="imaging_key" class="col-form-label col-form-label-sm">Slide#:</label>
+      <label for="imaging_key" class="col-form-label col-form-label-sm">Imaging Run:</label>
       <div class="col-auto">
         <%= f.text_field :imaging_key, class: "form-control" %>
       </div>
 
-      <label for="imaging_alt_id" class="col-form-label col-form-label-sm">Slide Name:</label>
+      <label for="imaging_alt_id" class="col-form-label col-form-label-sm">Imaging Alt ID:</label>
       <div class="col-auto">
         <%= f.text_field :imaging_alt_id, class: "form-control" %>
       </div>
 
       <label for="protocol_id" class="col-form-label col-form-label-sm">Imaging Protocol:</label>
       <div class="col-auto">
-        <%= f.collection_select(:protocol_id, @imaging_protocols, :short_name, :id,
+        <%= f.collection_select(:protocol_id, @imaging_protocols, :id, :short_name,
                               {:include_blank => 'Select Protocol'}, class: "form-control") %>
       </div>
     </div>
 
     <div class="form-group row">
-      <label for="run_description" class="col-form-label col-form-label-sm">Slide#:</label>
+      <label for="run_description" class="col-form-label col-form-label-sm">Description</label>
       <div class="col-auto">
         <%= f.text_field :run_description, class: "form-control" %>
       </div>
 
-      <label for="notebook_ref" class="col-form-label col-form-label-sm">Slide Name:</label>
+      <label for="notebook_ref" class="col-form-label col-form-label-sm">Notebook Ref:</label>
       <div class="col-auto">
         <%= f.text_field :notebook_ref, class: "form-control" %>
       </div>
