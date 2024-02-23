@@ -15,7 +15,7 @@
         <%= text_field_tag(:barcode_string, '', {:size => 40, class: "form-control"}) %>
       </div>
 
-      <label for="imaging_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Machine Type:</label>
+      <label for="imaging_slide_machine_type" class="col-auto col-form-label col-form-label-sm">Imaging Protocol:</label>
       <div class="col-auto">
         <%= collection_select(:imaging_slide, :protocol_id, @imaging_protocols, :id, :short_name,
                               {:include_blank => 'Select Protocol', :selected => default_imager},

@@ -24,8 +24,10 @@ class ImagingSlide < ApplicationRecord
   has_many :imaging_runs, through: :slide_imagings
   accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_run_id].blank?},
                                 :allow_destroy => true
+
+  validates_presence_of :slide_number
   validates_presence_of :protocol_id
-  validates_date :imaging_date, :allow_blank => true
+  validates_date :imaging_date
 
   def self.find_for_query(condition_array=[])
     self.includes(:imaging_runs).where(sql_where(condition_array))

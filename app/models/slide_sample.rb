@@ -11,4 +11,7 @@
 class SlideSample < ApplicationRecord
   belongs_to :sample
   belongs_to :imaging_slide
+
+  validates_numericality_of :sample_position, :only_integer => true, :less_than => 20,
+                            :message => "is not a valid integer < 20"
 end
