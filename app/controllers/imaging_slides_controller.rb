@@ -12,8 +12,10 @@ class ImagingSlidesController < ApplicationController
   end
   def new
     authorize! :new, ImagingSlide
+    @current_user = current_user
     @requester = (current_user.researcher ? current_user.researcher.researcher_name : nil)
-    @imaging_slide  = ImagingSlide.new(:updated_by => @requester,
+    @imaging_slide  = ImagingSlide.new(:updated_by => current_user.id,
+                                       :owner => @requester,
                                    :protocol_id => params[:imaging_slide][:protocol_id],
                                    :imaging_date => Date.today,
                                    :created_at => Date.today,)
@@ -130,7 +132,7 @@ protected
 
   def create_params
     params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
-                                        slide_samples_attributes: [:sample_id, :sample_position])
+                                        slide_samples_attributes: [:sample_id, :sample_position, :_destroy])
   end
 
   def update_params
