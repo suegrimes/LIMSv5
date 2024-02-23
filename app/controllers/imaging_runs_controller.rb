@@ -15,6 +15,7 @@ class ImagingRunsController < ApplicationController
     @requester = (current_user.researcher ? current_user.researcher.researcher_name : nil)
     @imaging_run  = ImagingRun.new(:updated_by => @requester,
                                    :protocol_id => params[:imaging_run][:protocol_id],
+                                   :run_date => Date.today,
                                    :created_at => Date.today,)
 
     # Get samples (dissections) based on parameters entered
@@ -35,9 +36,9 @@ class ImagingRunsController < ApplicationController
     #_deliberate_error_here
     # TODO: Add error checking
     #       Require at least one slide per run
-
+    authorize! :create, ImagingRun
     @imaging_run = ImagingRun.new(create_params)
-    authorize! :create, @imaging_run
+    @imaging_run.imaging_key = "%s_%s_%04d" % [@imaging_run.run_date.to_s, "XEN", 4]
 
     if !@imaging_run.save
       #error_found = true  # Validation or other error when saving to database

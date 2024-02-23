@@ -19,6 +19,8 @@
 class ImagingRun < ApplicationRecord
   include Attachable
 
+  belongs_to :user, optional: true, foreign_key: :updated_by
+  belongs_to :protocol, optional: true
   has_many :slide_imagings, :dependent => :destroy
   has_many :imaging_slides, :through => :slide_imagings
   accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_slide_id].blank?},

@@ -1,0 +1,29 @@
+<h5>View Imaging Run</h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+  <thead class="thead-light">
+  <tr>
+    <th>Imaging Key</th>
+		<th>Imaging Alt ID</th>
+    <th>Protocol</th>
+		<th>Run Description</th>
+		<th>Slide(s)</th>
+		<th>Notebook Ref</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+  <tr>
+    <td><%=h @imaging_run.imaging_key %></td>
+    <td><%=h @imaging_run.imaging_alt_id %></td>
+		<td><%=h @imaging_run.protocol.short_name %></td>
+		<td><%=h @imaging_run.run_description %></td>
+		<td><%=h @imaging_run.imaging_slides.collect{|s| s.slide_number }.join(', ') %></td>
+		<td><%=h @imaging_run.notebook_ref %>
+		</td>
+    <td><% if can? :edit, @imaging_run %><%=link_to 'Edit', edit_imaging_run_path(@imaging_run) %><% end %></td>
+    <td><% if can? :delete, @imaging_run %><%=link_to 'Delete', @imaging_run, data: {confirm: 'Are you sure?'}, :method => :delete %><% end %></td>
+  </tr>
+</table>
+
+<%= link_to 'List All imaging runs', imaging_runs_path %>
+													  

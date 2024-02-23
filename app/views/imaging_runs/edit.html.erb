@@ -1,0 +1,29 @@
+<h5>Editing imaging run</h5>
+
+<%= form_for(@imaging_run) do |f| %>
+  <%= render '/shared/errors', model: @imaging_run %>
+
+  <%= render :partial => 'imaging_run_form', :locals => {:f => f} %>
+  <br/>
+
+  <h6>Imaging Slides</h6>
+  <table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light">
+    <tr>
+      <th>Slide Position</th>
+      <th>Date</th>
+      <th>Slide Number</th>
+      <th>Slide Name</th>
+      <th>Owner</th>
+      <th>Notebook Ref</th>
+    </tr>
+    </thead>
+
+    <% @imaging_run.slide_imagings.all.each_with_index do |slide_imaging, i| %>
+      <%= render :partial => 'imaging_slides', :locals => {:imaging_slide => slide_imaging.imaging_slide, :f => f,
+                                                          :slide_imaging => slide_imaging} %>
+    <% end %>
+  </table>
+
+  <%= f.submit "Update", class: "btn btn-primary"%>
+<% end %>
