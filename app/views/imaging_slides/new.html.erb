@@ -1,3 +1,5 @@
+<%= @imaging_slide.inspect %>
+<%= @positions.inspect %>
 <h5>New Imaging Slide</h5>
 
 <%= form_for(@imaging_slide) do |f| %>
@@ -7,6 +9,7 @@
   <br/>
   <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
 
+	<%= render '/shared/collected_errors', collection: @samples %>
 	<h6>Samples to include on Imaging Slide</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
