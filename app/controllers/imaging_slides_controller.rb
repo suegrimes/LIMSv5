@@ -6,7 +6,7 @@ class ImagingSlidesController < ApplicationController
   # which is not a 'permitted' attribute since is not in model, so can't use load_and_authorize_resource
   #load_and_authorize_resource
 
-  before_action :setup_dropdowns, :only => [:setup_params, :new, :edit]
+  before_action :dropdowns, :only => [:setup_params, :new, :edit]
   def setup_params
     authorize! :new, ImagingSlide
   end
@@ -15,11 +15,12 @@ class ImagingSlidesController < ApplicationController
     @requester = (current_user.researcher ? current_user.researcher.researcher_name : nil)
     @imaging_slide  = ImagingSlide.new(:updated_by => @requester,
                                    :protocol_id => params[:imaging_slide][:protocol_id],
+                                   :imaging_date => Date.today,
                                    :created_at => Date.today,)
 
     # Get samples (dissections) based on parameters entered
-    @condition_array = define_sample_conditions(params)
-    @samples = Sample.where(sql_where(@condition_array)).order('barcode_key').all.to_a
+    condition_array = define_sample_conditions(params)
+    @samples = Sample.where(sql_where(condition_array)).order('barcode_key').all.to_a
 
     @checked = true
     render :action => 'new'
@@ -47,6 +48,10 @@ class ImagingSlidesController < ApplicationController
       if !@imaging_slide.save
         #error_found = true  # Validation or other error when saving to database
         flash.now[:error] = 'ERROR - Unable to create imaging slide'
+        dropdowns
+        @samples = Sample.find(params[:imaging_slide][:slide_samples_attributes].pluck(:sample_id))
+        @positions = params[:imaging_slide][:slide_samples_attributes].pluck(:sample_position)
+        render :new
       else
         flash[:notice] = "Imaging slide successfully created"
         redirect_to(@imaging_slide)
@@ -107,8 +112,9 @@ class ImagingSlidesController < ApplicationController
   end
 
 protected
-  def setup_dropdowns
+  def dropdowns
     @imaging_protocols = Protocol.find_for_protocol_type('I')
+    @owners = Researcher.populate_dropdown('active_only')
   end
 
   def define_sample_conditions(params)
@@ -121,12 +127,12 @@ protected
   end
 
   def create_params
-    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name, :imaging_date, :notebook_ref,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
                                         slide_samples_attributes: [:sample_id, :sample_position])
   end
 
   def update_params
-    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_name, :imaging_date, :notebook_ref,
+    params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
                                         slide_samples_attributes: [:id, :sample_id, :sample_position])
   end
 end

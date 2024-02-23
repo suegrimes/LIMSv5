@@ -21,15 +21,20 @@
         <%= f.text_field :slide_number, class: "form-control" %>
       </div>
 
-      <label for="slide_name" class="col-sm-2 col-form-label col-form-label-sm text-right">Slide Name:</label>
-      <div class="col-sm-3">
-        <%= f.text_field :slide_name, class: "form-control" %>
+      <label for="slide_description" class="col-sm-2 col-form-label col-form-label-sm text-right">Slide Description:</label>
+      <div class="col-sm-5">
+        <%= f.text_field :slide_description, class: "form-control" %>
       </div>
     </div>
 
     <div class="form-group row">
+      <label for="owner" class="col-sm-2 col-form-label col-form-label-sm text-right">Owner:</label>
+      <div class="col-sm-2">
+        <%= f.select(:owner, options_for_select(@owners, @requester), {}, class: "form-control")%>
+      </div>
+
       <label for="notebook_ref" class="col-sm-2 col-form-label col-form-label-sm text-right">Notebook Ref:</label>
-      <div class="col-sm-6">
+      <div class="col-sm-4">
         <%= f.text_field :notebook_ref, class: "form-control" %>
       </div>
     </div>
