@@ -11,4 +11,7 @@
 class SlideImaging < ApplicationRecord
   belongs_to :imaging_slide
   belongs_to :imaging_run
+
+  validates_numericality_of :imaging_position, :only_integer => true, :less_than => 10,
+                            :message => "is not a valid integer < 10"
 end

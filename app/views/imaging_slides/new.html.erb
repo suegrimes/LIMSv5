@@ -1,5 +1,3 @@
-<%= @imaging_slide.inspect %>
-<%= @positions.inspect %>
 <h5>New Imaging Slide</h5>
 
 <%= form_for(@imaging_slide) do |f| %>
@@ -9,7 +7,6 @@
   <br/>
   <%= f.submit 'Create Slide', class: "btn btn-primary" %><br/><br/>
 
-	<%= render '/shared/collected_errors', collection: @samples %>
 	<h6>Samples to include on Imaging Slide</h6>
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
@@ -22,12 +19,15 @@
 			<th>Sample Tissue</th>
 			<th>Preservation</th>
 			<th>Tumor/Normal</th>
+			<th>Remove?</th>
     </tr>
     </thead>
 
 		<% (0..@samples.size-1).each do |i| %>
+			<% position = @positions.nil? ? nil : @positions[i] %>
 			<tr><%= render :partial => 'imaging_samples', :locals => {:sample => @samples[i], :f => f,
-																															:slide_sample => SlideSample.new } %>
+																															  :slide_sample => SlideSample.new,
+																																:position => position } %>
 			</tr>
 	  <% end %>
 

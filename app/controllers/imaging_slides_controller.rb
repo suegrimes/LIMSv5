@@ -77,18 +77,20 @@ class ImagingSlidesController < ApplicationController
       if @samples.empty?
         sample_error = true
       else
-        @imaging_slide.samples << @samples
+        @imaging_slide.slide_samples.build(:sample_id => @samples[0].id, :sample_position => 9)
       end
     end
 
     if sample_error == true
       flash.now[:error] = "Invalid sample barcode(s) #{params[:barcode_string]} entered"
+      dropdowns
       render :action => 'edit'
     elsif @imaging_slide.update_attributes(update_params)
-      flash[:notice] = "Image slide has been updated"
+      flash[:notice] = "Imaging slide has been updated"
       render :action => 'show'
     else
-      flash.now[:error] = "Error updating image slide"
+      flash.now[:error] = "Error updating imaging slide"
+      dropdowns
       render :action => 'edit'
     end
   end
@@ -132,7 +134,10 @@ protected
   end
 
   def update_params
+    # Need to have :id in slide_samples_attributes to avoid duplicating existing samples
+    #   on the slide, when adding another sample
     params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
-                                        slide_samples_attributes: [:id, :sample_id, :sample_position])
+                                          slide_samples_attributes: [:id, :sample_id, :sample_position, :_destroy])
   end
+
 end

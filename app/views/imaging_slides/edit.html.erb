@@ -18,12 +18,15 @@
       <th>Sample Tissue</th>
       <th>Preservation</th>
       <th>Tumor/Normal</th>
+      <th>Remove?</th>
     </tr>
     </thead>
 
     <% @imaging_slide.slide_samples.all.each_with_index do |slide_sample, i| %>
+      <% position = @positions.nil? ? slide_sample.sample_position : @positions[i]  %>
       <%= render :partial => 'imaging_samples', :locals => {:sample => slide_sample.sample, :f => f,
-                                                          :slide_sample => slide_sample} %>
+                                                            :slide_sample => slide_sample,
+                                                            :position => position} %>
     <% end %>
 
   </table>
