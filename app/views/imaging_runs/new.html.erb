@@ -11,18 +11,21 @@
   <table class="table table-bordered table-sm table-font-sm">
     <thead class="thead-light">
   	<tr>
-			<th>Slide Position</th>
+			<th style="width:10%">Slide Position</th>
+			<th>Slide Number</th>
 			<th>Date</th>
-  	  <th>Slide Number</th>
-			<th>Slide Name</th>
+			<th>Description</th>
 			<th>Owner</th>
 			<th>Notebook Ref</th>
+			<th>Remove?</th>
     </tr>
     </thead>
 
 		<% (0..@imaging_slides.size-1).each do |i| %>
+			<% position = @positions.nil? ? nil : @positions[i] %>
 			<tr><%= render :partial => 'imaging_slides', :locals => {:imaging_slide => @imaging_slides[i], :f => f,
-																														 :slide_imaging => SlideImaging.new} %>
+																														 :slide_imaging => SlideImaging.new,
+																														 :position => position} %>
 			</tr>
 	  <% end %>
 

@@ -18,12 +18,10 @@ class ImagingSlide < ApplicationRecord
   belongs_to :protocol, optional: true
   has_many :slide_samples, dependent: :destroy
   has_many :samples, through: :slide_samples
-  accepts_nested_attributes_for :slide_samples, :reject_if => proc {|attrs| attrs[:sample_id].blank?},
+  accepts_nested_attributes_for :slide_samples, :reject_if => proc {|attrs| attrs[:sample_position].blank?},
                                 :allow_destroy => true
   has_many :slide_imagings, dependent: :destroy
   has_many :imaging_runs, through: :slide_imagings
-  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_run_id].blank?},
-                                :allow_destroy => true
 
   validates_presence_of :slide_number
   validates_presence_of :protocol_id
@@ -34,4 +32,3 @@ class ImagingSlide < ApplicationRecord
         .order('imaging_date DESC').all
   end
 end
-

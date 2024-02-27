@@ -2,7 +2,7 @@ class ImagingRunsController < ApplicationController
   include SqlQueryBuilder
   layout 'main/main'
 
-  before_action :setup_dropdowns, :only => [:setup_params, :new, :edit]
+  before_action :dropdowns, :only => [:setup_params, :new, :edit, :create, :update]
   def setup_params
     authorize! :new, ImagingRun
     @from_date = (Date.today - 90).beginning_of_month
@@ -38,11 +38,14 @@ class ImagingRunsController < ApplicationController
     #       Require at least one slide per run
     authorize! :create, ImagingRun
     @imaging_run = ImagingRun.new(create_params)
-    @imaging_run.imaging_key = "%s_%s_%04d" % [@imaging_run.run_date.to_s, "XEN", 4]
+    @imaging_run.imaging_key = "%s_%s_%04d" % [@imaging_run.run_date.strftime("%Y%m%d"), "XEN", ImagingRun.last_run_nr + 1]
 
     if !@imaging_run.save
       #error_found = true  # Validation or other error when saving to database
       flash.now[:error] = 'ERROR - Unable to create imaging run'
+      @imaging_slides = ImagingSlide.find(params[:imaging_run][:slide_imagings_attributes].pluck(:imaging_slide_id))
+      @positions = params[:imaging_run][:slide_imagings_attributes].pluck(:imaging_position)
+      render :new
     else
       flash[:notice] = "Imaging run successfully created"
       redirect_to(@imaging_run)
@@ -62,6 +65,8 @@ class ImagingRunsController < ApplicationController
       render :action => 'show'
     else
       flash.now[:error] = "Error updating imaging run"
+      @imaging_slides = ImagingSlide.find(params[:imaging_run][:slide_imagings_attributes].pluck(:imaging_slide_id))
+      @positions = params[:imaging_run][:slide_imagings_attributes].pluck(:imaging_position)
       render :action => 'edit'
     end
   end
@@ -71,7 +76,7 @@ class ImagingRunsController < ApplicationController
   end
 
   def index
-    @imaging_runs = ImagingRun.all
+    @imaging_runs = ImagingRun.find_for_query([])
   end
 
   # DELETE /imaging_runs/1
@@ -85,7 +90,7 @@ class ImagingRunsController < ApplicationController
   end
 
 protected
-  def setup_dropdowns
+  def dropdowns
     @owners    =  Researcher.populate_dropdown('incl_inactive')
     @imaging_protocols = Protocol.find_for_protocol_type('I')
   end
@@ -103,12 +108,12 @@ protected
   def create_params
     params.require(:imaging_run).permit(:imaging_key, :imaging_alt_id, :protocol_id, :run_date,
                                         :run_description, :notebook_ref, :owner,
-                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position])
+                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position, :_destroy])
   end
 
   def update_params
     params.require(:imaging_run).permit(:imaging_key, :imaging_alt_id, :protocol_id, :run_date,
                                         :run_description, :notebook_ref, :owner,
-                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position])
+                                        slide_imagings_attributes: [:id, :imaging_slide_id, :imaging_position, :_destroy])
   end
 end

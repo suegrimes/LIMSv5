@@ -23,7 +23,7 @@ class ImagingRun < ApplicationRecord
   belongs_to :protocol, optional: true
   has_many :slide_imagings, :dependent => :destroy
   has_many :imaging_slides, :through => :slide_imagings
-  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_slide_id].blank?},
+  accepts_nested_attributes_for :slide_imagings, :reject_if => proc {|attrs| attrs[:imaging_position].blank?},
                                 :allow_destroy => true
   has_many :attached_files, :as => :sampleproc
   
@@ -33,6 +33,11 @@ class ImagingRun < ApplicationRecord
   DEFAULT_MACHINE_TYPE = 'Xenium'
   NR_SLIDES = {:Xenium => 2}
 
+  def self.last_run_nr
+    last_run_key = self.order("id DESC").limit(1).pluck(:imaging_key)[0]
+    last_run_key.split("_")[2].to_i
+  end
+
   def self.find_imaging_runs(rptorder='runnr',condition_array=[])
     rpt_order = (rptorder == 'rundt' ? 'imaging_runs.run_date DESC' : 'imaging_runs.seq_run_nr DESC')
     self.includes(:imaging_slides).where(sql_where(condition_array)).order(rpt_order).all
@@ -40,5 +45,12 @@ class ImagingRun < ApplicationRecord
 
   def self.find_for_export(imaging_ids)
     self.includes(:imaging_slides).where("imaging_runs.id IN (?)", imaging_ids).desc_by_run.all
+  end
+
+  def self.find_for_query(condition_array=[])
+    self.includes(:imaging_slides)
+        .references(:slide_imaging, :imaging_slides)
+        .where(sql_where(condition_array))
+        .order('imaging_runs.id DESC, slide_imagings.imaging_position').all
   end
 end
