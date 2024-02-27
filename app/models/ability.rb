@@ -87,10 +87,10 @@ class Ability
        
       elsif user.has_role?("lab_admin")
         can [:edit, :update], Category do |cval|
-          [4,5,10].include?(cval.cgroup_id)    # Drop-down lists for seq libraries, sequencing, imaging
+          [4,5].include?(cval.cgroup_id)    # Drop-down lists for seq libraries, sequencing
         end 
         can :manage, CategoryValue do |val|
-          [4,5,10].include?(val.category.cgroup_id)
+          [4,5].include?(val.category.cgroup_id)
         end
         can :manage, SequencerKit
         cannot :delete, SequencerKit

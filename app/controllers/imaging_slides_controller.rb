@@ -6,7 +6,7 @@ class ImagingSlidesController < ApplicationController
   # which is not a 'permitted' attribute since is not in model, so can't use load_and_authorize_resource
   #load_and_authorize_resource
 
-  before_action :dropdowns, :only => [:setup_params, :new, :edit]
+  before_action :dropdowns, :only => [:setup_params, :new, :edit, :update, :create]
   def setup_params
     authorize! :new, ImagingSlide
   end
@@ -50,7 +50,6 @@ class ImagingSlidesController < ApplicationController
       if !@imaging_slide.save
         #error_found = true  # Validation or other error when saving to database
         flash.now[:error] = 'ERROR - Unable to create imaging slide'
-        dropdowns
         @samples = Sample.find(params[:imaging_slide][:slide_samples_attributes].pluck(:sample_id))
         @positions = params[:imaging_slide][:slide_samples_attributes].pluck(:sample_position)
         render :new
@@ -92,7 +91,6 @@ class ImagingSlidesController < ApplicationController
       render :action => 'show'
     else
       flash.now[:error] = "Error updating imaging slide"
-      dropdowns
       render :action => 'edit'
     end
   end

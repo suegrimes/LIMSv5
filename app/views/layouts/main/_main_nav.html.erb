@@ -14,7 +14,9 @@
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/seqlib_query">Seq Libs</a>
       <a class="dropdown-item" href="/seq_run_query">Seq Runs</a>
-      <a class="dropdown-item" href="/imaging_query">Imaging</a>
+      <% if user_has_access?(user_roles, ["admin"]) %>
+        <a class="dropdown-item" href="/imaging_query">Imaging</a>
+      <% end %>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/sample_loc_query">Sample Storage Locs</a>
       <a class="dropdown-item" href="/container_query">Storage Containers</a>
@@ -78,7 +80,9 @@
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/flow_cell_setup">Prepare Flowcell</a>
       <a class="dropdown-item" href="/flow_cells?rpt_type=seq">Sequence Flowcell</a>
-      <a class="dropdown-item" href="/imaging_setup">Run Imaging</a>
+      <% if user_has_access?(user_roles, ["admin"]) %>
+        <a class="dropdown-item" href="/imaging_setup">Run Imaging</a>
+      <% end %>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/publications">Publication Data</a>
     </div>
