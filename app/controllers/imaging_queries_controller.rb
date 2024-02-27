@@ -14,7 +14,7 @@ class ImagingQueriesController < ApplicationController
      
     if @imaging_query.valid?
       condition_array = define_conditions(params)
-      @imaging_slides = ImagingSlide.find_for_query(sql_where(condition_array))
+      @imaging_runs = ImagingRun.find_for_query(sql_where(condition_array))
       render :action => :index
     else
       dropdowns
