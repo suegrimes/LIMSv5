@@ -28,7 +28,7 @@ class ImagingSlide < ApplicationRecord
   validates_date :imaging_date
 
   def self.find_for_query(condition_array=[])
-    self.includes(:imaging_runs).where(sql_where(condition_array))
+    self.includes(:imaging_runs).references(:imaging_runs).where(sql_where(condition_array))
         .order('imaging_date DESC').all
   end
 end

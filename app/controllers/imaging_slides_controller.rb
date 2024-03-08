@@ -130,6 +130,7 @@ protected
 
   def create_params
     params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
+                                          :owner,
                                         slide_samples_attributes: [:sample_id, :sample_position, :_destroy])
   end
 
@@ -137,6 +138,7 @@ protected
     # Need to have :id in slide_samples_attributes to avoid duplicating existing samples
     #   on the slide, when adding another sample
     params.require(:imaging_slide).permit(:protocol_id, :slide_number, :slide_description, :imaging_date, :notebook_ref,
+                                          :owner,
                                           slide_samples_attributes: [:id, :sample_id, :sample_position, :_destroy])
   end
 

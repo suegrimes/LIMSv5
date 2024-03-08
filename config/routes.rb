@@ -106,8 +106,11 @@ Rails.application.routes.draw do
   get 'slide_setup' => 'imaging_slides#setup_params', :as => 'slide_setup'
   #match 'add_samples' => 'imaging_slides#get_samples', :as => :get_samples, :via => [:get, :post]
 
+  # Routes for imaging queries
   resources :imaging_queries, :only => :index
   get 'imaging_query' => 'imaging_queries#new_query'
+  get 'imaging_runs_list' => 'imaging_queries#imaging_runs'
+  get 'imaging_slides_list' => 'imaging_queries#imaging_slides'
 
   # Routes for imaging_runs
   resources :imaging_runs

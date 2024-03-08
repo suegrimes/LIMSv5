@@ -30,7 +30,7 @@
     <div class="form-group row">
       <label for="owner" class="col-sm-2 col-form-label col-form-label-sm text-right">Owner:</label>
       <div class="col-sm-2">
-        <%= f.select(:owner, options_for_select(@owners, @requester), {}, class: "form-control")%>
+        <%= f.select(:owner, options_for_select(@owners, f.object.owner), {}, class: "form-control")%>
       </div>
 
       <label for="notebook_ref" class="col-sm-2 col-form-label col-form-label-sm text-right">Notebook Ref:</label>

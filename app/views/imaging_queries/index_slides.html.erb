@@ -1,0 +1,45 @@
+<h5>Imaging Slides (Filtered) </h5>
+
+<table class="table table-bordered table-sm table-font-sm">
+	  <thead class="thead-light">
+  <tr>
+	  	<th>Slide Number</th>
+		  <th>Slide Date</th>
+			<th>Protocol</th>
+		  <th>Description</th>
+			<th>Owner</th>
+			<th>Imaging Run(s)</th>
+	    <th colspan="2"></th>
+	  </tr>
+  </thead>
+
+	<% for imaging_slide in @imaging_slides %>
+			<tr>
+			  <td><%= link_to imaging_slide.slide_number, imaging_slide %></td>
+				<td><%=h imaging_slide.imaging_date %></td>
+				<td><%=h imaging_slide.protocol.short_name %></td>
+				<td><%=h imaging_slide.slide_description %></td>
+				<td><%=h imaging_slide.owner %></td>
+
+				<% if imaging_slide.imaging_runs %>
+					<td><!--%= link_to imaging_slide.imaging_run.imaging_key, imaging_slide.imaging_run %-->
+				  <%=h imaging_slide.imaging_runs.collect{|r| r.imaging_key }.join(', ') %>
+					</td>
+				<% else %>
+					<td>&nbsp;</td>
+				<% end %>
+
+				<% if can? :edit, imaging_slide %>
+				  <td><%= link_to 'Edit', edit_imaging_slide_path(imaging_slide) %></td>
+				<% else %>
+					<td class="ltgrey"> Edit </td>
+				<% end %>
+
+				<% if can? :delete, imaging_slide %>
+				  <td><%= link_to 'Delete', imaging_slide, data: { confirm: 'Are you sure?' }, :method => :delete %></td>
+				<% else %>
+					<td class="ltgrey"> Delete </td>
+				<% end %>
+	  </tr>
+	<% end %>
+</table>

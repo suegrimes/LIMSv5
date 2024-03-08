@@ -6,9 +6,18 @@
   <div class="card-body">
 
   <div class="form-group row">
-    <label for="slide_nr_string" class="col-sm-2 col-form-label col-form-label-sm">Slide #(s):</label>
+    <p class="font-italic font-sm col-sm-10 ml-sm-auto">Enter multiple slides separated by commas;
+      Enter run numbers as integers separated by commas and/or dashes e.g. '1-3,5,7'</p>
+  </div>
+
+  <div class="form-group row">
+    <label for="slide_nr_string" class="col-sm-2 col-form-label col-form-label-sm">Slide#(s):</label>
     <div class="col-sm-4">
       <%= f.text_field(:slide_nr_string, :size => "50", class: "form-control")%>
+    </div>
+    <label for="slide_nr_string" class="col-sm-1 col-form-label col-form-label-sm">Run#(s):</label>
+    <div class="col-sm-3">
+      <%= f.text_field(:run_nr_string, :size => "50", class: "form-control")%>
     </div>
   </div>
 
@@ -33,10 +42,17 @@
 
   </div>
 </div>
+<br/>
 
-  <div class="form-group row">
-    <div class="col-auto">
-      <%=submit_tag "Submit", class: "btn btn-primary" %>
-    </div>
+<div class="form-group row">
+  <label for="rpt_type" class="col-auto col-form-label col-form-label-sm pt-2">List By:</label>
+  <div class="col-auto pt-2">
+    <%= select_tag(:rpt_order, options_for_select([["Slide", "slides"], ["Run:not-implemented", "slides"]]),
+                   {class: "form-control"}) %>
   </div>
+
+  <div class="col-auto pt-0">
+    <%= submit_tag "Submit", class: "btn btn-primary" %>
+  </div>
+</div>
 <%end%>
