@@ -14,9 +14,7 @@
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/seqlib_query">Seq Libs</a>
       <a class="dropdown-item" href="/seq_run_query">Seq Runs</a>
-      <% if user_has_access?(user_roles, ["admin"]) %>
-        <a class="dropdown-item" href="/imaging_query">Imaging</a>
-      <% end %>
+      <a class="dropdown-item" href="/imaging_query">Imaging</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="/sample_loc_query">Sample Storage Locs</a>
       <a class="dropdown-item" href="/container_query">Storage Containers</a>
