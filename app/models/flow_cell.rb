@@ -104,7 +104,7 @@ class FlowCell < ApplicationRecord
   end
   
   def id_name
-  (sequenced? ? "Run #: #{sequencing_key}" : "Flow Cell: #{id.to_s}")
+  (sequenced? ? "Run: #{sequencing_key}" : "Flow Cell: #{id.to_s}")
   end
 
   def alt_run_or_descr

@@ -26,6 +26,7 @@ class ImagingSlide < ApplicationRecord
   validates_presence_of :slide_number
   validates_presence_of :protocol_id
   validates_date :imaging_date
+  validates_uniqueness_of :slide_number, message: 'is not unique'
 
   def self.find_for_query(condition_array=[])
     self.includes(:imaging_runs).references(:imaging_runs).where(sql_where(condition_array))

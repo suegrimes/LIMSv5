@@ -34,8 +34,12 @@ class ImagingRun < ApplicationRecord
   NR_SLIDES = {:Xenium => 2}
 
   def self.last_run_nr
-    last_run_key = self.order("id DESC").limit(1).pluck(:imaging_key)[0]
-    last_run_key.split("_")[2].to_i
+    run_nr = 0
+    if self.count > 0
+      last_run_key = self.order("id DESC").limit(1).pluck(:imaging_key)[0]
+      run_nr = last_run_key.split("_")[2].to_i
+    end
+    return run_nr
   end
 
   def self.find_imaging_runs(rptorder='runnr',condition_array=[])

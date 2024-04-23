@@ -56,6 +56,8 @@ class ImagingRunsController < ApplicationController
   def update
     #_deliberate_error_here
     # TODO: Add error checking
+    #       Use javascript to allow adding a slide to a run
+    #       Make sure at least one valid slide remains after deleting
 
     @imaging_run = ImagingRun.find(params[:id])
     authorize! :update, @imaging_run

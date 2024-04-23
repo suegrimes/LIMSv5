@@ -63,9 +63,7 @@ class ImagingSlidesController < ApplicationController
   # PUT /imaging_slides/1
   def update
     #_deliberate_error_here
-    # TODO: Add error checking
-    #       Use javascript to allow adding a sample to slide
-    #       Also allow deleting a sample from slide
+    # TODO: Use javascript to allow adding a sample to slide
     #       Make sure at least one valid sample remains after deleting
     @imaging_slide = ImagingSlide.find(params[:id])
     authorize! :update, @imaging_slide
