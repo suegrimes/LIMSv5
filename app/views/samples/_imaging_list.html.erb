@@ -1,0 +1,25 @@
+<% nr_slides = (sample.imaging_slides ? sample.imaging_slides.size : 0) %>
+<h6>Imaging Slides (<%= nr_slides %>):</h6>
+<% if nr_slides > 0 %>
+<table class="table table-bordered table-sm table-font-sm">
+    <thead class="thead-light thead-font-sm">
+    <tr>
+      <th>Slide#</th>
+	    <th>Imaging Date</th>
+      <th>Description</th>
+      <th>Owner</th>
+    </tr>
+    </thead>
+  <% for imaging_slide in sample.imaging_slides %>
+    <tr>
+      <td><%=link_to imaging_slide.slide_number, imaging_slide %></td>
+      <td><%=h imaging_slide.imaging_date %></td>
+      <td><%=h imaging_slide.slide_description %></td>
+      <td><%=h imaging_slide.owner %></td>
+	</tr>
+  <% end %>
+</table>
+
+<% else %>
+<div class="row"></div>
+<% end %>

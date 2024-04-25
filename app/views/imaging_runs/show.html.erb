@@ -17,7 +17,12 @@
     <td><%=h @imaging_run.imaging_key %></td>
     <td><%=h @imaging_run.imaging_alt_id %></td>
 		<td><%=h @imaging_run.protocol.short_name %></td>
-		<td><%=h @imaging_run.imaging_slides.collect{|s| s.slide_number }.join(', ') %></td>
+		<td>
+			<% @imaging_run.imaging_slides.each_with_index do |imaging_slide, i| %>
+				<%= link_to imaging_slide.slide_number, imaging_slide %>
+				<% if i < @imaging_run.imaging_slides.size - 1 %>, <% end %>
+			<% end %>
+		</td>
 		<td><%=h @imaging_run.run_description %></td>
 		<td><%=h @imaging_run.notebook_ref %>
 		<td><%=h @imaging_run.user.login %>

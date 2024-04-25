@@ -14,11 +14,18 @@
   <tr>
     <td><%=h @imaging_slide.slide_number %></td>
     <td><%=h @imaging_slide.slide_description %></td>
-		<td><%=h @imaging_slide.samples.collect{|s| s.barcode_key }.join(', ') %></td>
+		<td>
+			<% @imaging_slide.samples.each_with_index do |sample, i| %>
+				<%= link_to sample.barcode_key, sample %>
+				<% if i < @imaging_slide.samples.size - 1 %>, <% end %>
+			<% end %>
+		</td>
 		<td><%=h @imaging_slide.protocol.short_name %></td>
-		<td><% if @imaging_slide.imaging_runs %>
-				  <%=h @imaging_slide.imaging_runs.collect{|r| r.imaging_key }.join(', ') %>
-				<% end %>
+		<td>
+			<% @imaging_slide.imaging_runs.each_with_index do |imaging_run, i| %>
+				<%= link_to imaging_run.imaging_key, imaging_run %>
+				<% if i < @imaging_slide.imaging_runs.size - 1 %>, <% end %>
+			<% end %>
 		</td>
     <td><% if can? :edit, @imaging_slide %><%=link_to 'Edit', edit_imaging_slide_path(@imaging_slide) %><% end %></td>
     <td><% if can? :delete, @imaging_slide %><%=link_to 'Delete', @imaging_slide, data: {confirm: 'Are you sure?'}, :method => :delete %><% end %></td>

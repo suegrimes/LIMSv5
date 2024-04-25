@@ -19,6 +19,10 @@
                                                                         :last_info_box => 'yes'} %>
   <% end %>
   <%= render :partial => 'extraction_list', :locals => {:sample => @sample} %>
+
+  <% if @sample.imaging_slides && @sample.imaging_slides.size > 0 %>
+    <%= render :partial => 'imaging_list', :locals => {:sample => @sample} %>
+  <% end %>
   
 <% else %>
   <%= render :partial => 'sample_info', :locals => {:sample => @sample,
@@ -32,7 +36,7 @@
   
   <!-- if extractions taken directly from source sample (eg blood), list extractions -->
   <% if @sample.processed_samples && @sample.processed_samples.size > 0 %>
-  <%= render :partial => 'extraction_list', :locals => {:sample => @sample} %>
+    <%= render :partial => 'extraction_list', :locals => {:sample => @sample} %>
   <% end %>
   
 <% end %>

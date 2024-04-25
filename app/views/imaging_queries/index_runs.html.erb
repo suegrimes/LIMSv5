@@ -19,13 +19,12 @@
 		<td><%=h imaging_run.run_description %></td>
 		<td><%=h imaging_run.user.login %></td>
 
-		<% if imaging_run.imaging_slides %>
-			<td><!--%= link_to imaging_slide.imaging_run.imaging_key, imaging_slide.imaging_run %-->
-			    <%=h imaging_run.imaging_slides.collect{|s| s.slide_number }.join(', ') %>
-			</td>
-		<% else %>
-			<td>&nbsp;</td>
-		<% end %>
+		<td>
+			<% imaging_run.imaging_slides.each_with_index do |imaging_slide, i| %>
+			  <%= link_to imaging_slide.slide_number, imaging_slide %>
+				<% if i < imaging_run.imaging_slides.size - 1 %>, <% end %>
+			<% end %>
+		</td>
 	
 	<% if can? :edit, imaging_run %>
 	  <td><%= link_to 'Edit', edit_imaging_run_path(imaging_run) %></td>

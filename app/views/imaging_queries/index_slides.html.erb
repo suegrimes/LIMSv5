@@ -21,13 +21,12 @@
 				<td><%=h imaging_slide.slide_description %></td>
 				<td><%=h imaging_slide.owner %></td>
 
-				<% if imaging_slide.imaging_runs %>
-					<td><!--%= link_to imaging_slide.imaging_run.imaging_key, imaging_slide.imaging_run %-->
-				  <%=h imaging_slide.imaging_runs.collect{|r| r.imaging_key }.join(', ') %>
-					</td>
-				<% else %>
-					<td>&nbsp;</td>
-				<% end %>
+				<td>
+					<% imaging_slide.imaging_runs.each_with_index do |imaging_run, i| %>
+						<%= link_to imaging_run.imaging_key, imaging_run %>
+						<% if i < imaging_slide.imaging_runs.size - 1 %>, <% end %>
+					<% end %>
+				</td>
 
 				<% if can? :edit, imaging_slide %>
 				  <td><%= link_to 'Edit', edit_imaging_slide_path(imaging_slide) %></td>
