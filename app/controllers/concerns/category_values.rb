@@ -19,7 +19,8 @@ module CategoryValues
     {
     'gender' => [
         [['Male', 'male', 'M'], 'M'],
-        [['Female', 'female', 'F'], 'F']
+        [['Female', 'female', 'F'], 'F'],
+        [['Unknown', 'unknown', 'U'], 'U']
       ]
     }
   end
