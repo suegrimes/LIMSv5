@@ -92,6 +92,15 @@ module CategoryValues
     return mapped
   end
 
+  def imaging_slide_mapped_values
+    mapped = {'protocol_id' => []}
+    pa = Protocol.find_for_protocol_type('I').to_a
+    pa.each do |p|
+      mapped['protocol_id'] << [[p.protocol_name, p.protocol_abbrev], p.id]
+    end
+    return mapped
+  end
+
   def lib_sample_values
     category_values_for([['quantitation', 'quantitation_method']])
   end

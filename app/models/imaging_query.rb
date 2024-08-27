@@ -19,7 +19,8 @@ class ImagingQuery
   validates :slide_nr_string, compound_string: {:datatype => 'alpha_dot_numeric'}, :allow_blank => true
   validates :run_nr_string, compound_string: {:datatype => 'numeric'}, :allow_blank => true
 
-  STD_FIELDS = {'imaging_runs' => %w(protocol_id updated_by)}
+  STD_FIELDS = {'imaging_runs' => %w(protocol_id),
+                'imaging_slides' => %w(owner)}
 
   COMBO_FIELDS = {:slide_nr_string => {:sql_attr => ['imaging_slides.slide_number']},
                   :run_nr_string => {:sql_attr => ['CAST(SUBSTR(imaging_runs.imaging_key,14,19) AS UNSIGNED)']}}

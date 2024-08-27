@@ -16,7 +16,8 @@ class BulkUploadController < ApplicationController
       sample_locs: { models: [SampleStorageContainer] },
       dissections: { models: [Sample, SampleStorageContainer] },
       extractions: { models: [ProcessedSample, SampleStorageContainer] },
-      seq_libs: { models: [SeqLib, LibSample] }
+      seq_libs: { models: [SeqLib, LibSample] },
+      imaging_slides: { models: [ImagingSlide, SlideSample] }
     }
   end
 
@@ -128,7 +129,8 @@ logger.debug "#{self.class}#process_upload sheets: #{@ss.sheets}, expected: #{@s
       sample_locs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       dissections: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
       extractions: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
-      seq_libs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
+      seq_libs: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} },
+      imaging_slides: { header: [], saved_rows: [], _refs: {}, _ref_ids: {} }
     }
     # get the sheets to process mapped to the sheet index (0 based)
     @sheet_map = sheets_to_process(@ss.sheets, @sheet_info.keys)

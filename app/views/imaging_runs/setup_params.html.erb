@@ -19,7 +19,7 @@
           <td class="label"><label for="slide_string" class="col-auto col-form-label col-form-label-sm">Slide #(s):</label></td>
           <td><%= text_field_tag(:slide_nr_string, '', {:size => 40, class: "form-control"}) %></td>
           <td class="label"><label for="imaging_run_adapter_id" class="col-auto col-form-label col-form-label-sm">Protocol:</label></td>
-          <td><%= collection_select(:imaging_run, :protocol_id, @imaging_protocols, :id, :protocol_abbrev, {}, class: "form-control") %></td>
+          <td><%= collection_select(:imaging_run, :protocol_id, @imaging_protocols, :id, :protocol_abbrev, {:include_blank => 'All'}, class: "form-control") %></td>
           <td></td>
         </tr>
 

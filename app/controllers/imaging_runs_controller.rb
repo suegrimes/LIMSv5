@@ -98,11 +98,16 @@ protected
   end
 
   def define_slide_conditions(params)
+    std_fields = {'imaging_slides' => %w(protocol_id owner)}
     combo_fields = {:slide_nr_string => {:sql_attr => ['imaging_slides.slide_number']}}
-    query_flds = {'standard' => {}, 'multi_range' => combo_fields, 'search' => {}}
-    #query_params = params[:imaging_run].merge({:slide_nr_string => params[:slide_nr_string]})
-    query_params = {:slide_nr_string => params[:slide_nr_string]}
+    query_flds = {'standard' => std_fields, 'multi_range' => combo_fields, 'search' => {}}
+    query_params = params[:imaging_run].merge({:slide_nr_string => params[:slide_nr_string]})
+    #query_params = {:slide_nr_string => params[:slide_nr_string]}
     @where_select, @where_values = build_sql_where(query_params, query_flds, [], [])
+
+    dt_fld = 'imaging_slides.imaging_date'
+    @where_select, @where_values = sql_conditions_for_date_range(@where_select, @where_values, params[:imaging_run], dt_fld)
+    return sql_where_clause(@where_select, @where_values)
 
     return sql_where_clause(@where_select, @where_values)
   end
