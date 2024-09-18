@@ -110,15 +110,15 @@ protected
   
   def export_patients_setup(with_mrn='no')
     hdg1  =(with_mrn == 'yes'? ['Download_Dt', 'PatientID', 'MRN'] : ['Download_Dt', 'PatientID'])
-    hdgs  = hdg1.concat(%w{Organism Gender CollectionDt ConsentNr Protocol Clinic PatientDX NrSamples Tumor_Normal})
+    hdgs  = hdg1.concat(%w{Gender Race Ethnicity CollectionDt ConsentNr Clinic PatientDX NrSamples Tumor_Normal})
     
     flds   = [['pt', 'id'],
              ['pt', 'mrn'],
-             ['pt', 'organism'],
              ['pt', 'gender'],
+             ['pt', 'race'],
+             ['pt', 'ethnicity'],
              ['sc', 'collection_date'],
              ['sc', 'consent_nr'],
-             ['cs', 'consent_name'],
              ['sc', 'clinic_or_location'],
              ['sc', 'disease_primary']]
              

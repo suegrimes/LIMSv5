@@ -9,11 +9,11 @@
   <tr>
     <th>Patient ID</th>
     <th><% if can? :edit, Patient %>MRN<% else %><% end %></th>
-    <th>Organism</th>
     <th>Gender</th>
+		<th>Race</th>
+		<th>Ethnicity</th>
 		<th>Collection Date</th>
 		<th>Consent Nr</th>
-		<th>Consent Protocol</th>
     <th>Clinic</th>
     <th>Primary Disease</th>
     <th>#Samples</th>
@@ -26,11 +26,11 @@
 	<tr>
 		<td><%=h s_characteristic.patient_id %> </td>
 		<td><% if can? :edit, Patient %><%=h patient.mrn %><% else %><% end %></td>
-    <td><%=h patient.organism %></td>
 		<td><%=h patient.gender %></td>
+		<td><%=h patient.race %></td>
+		<td><%=h patient.ethnicity %></td>
 		<td><%=h s_characteristic.collection_date %></td>
 		<td><%=h s_characteristic.consent_nr %></td>
-		<td><%=h s_characteristic.consent_protocol.consent_name %></td>
 		<td><%=h s_characteristic.clinic_or_location %></td>
 		<td><%=h s_characteristic.disease_primary %></td>
 		<td><%=link_to s_characteristic.samples.size, sample_characteristic_path(s_characteristic) %></td>
