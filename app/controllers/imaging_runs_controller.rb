@@ -38,7 +38,8 @@ class ImagingRunsController < ApplicationController
     #       Require at least one slide per run
     authorize! :create, ImagingRun
     @imaging_run = ImagingRun.new(create_params)
-    @imaging_run.imaging_key = "%s_%s_%04d" % [@imaging_run.run_date.strftime("%Y%m%d"), "XEN", ImagingRun.last_run_nr + 1]
+    @protocol = Protocol.find(params[:imaging_run][:protocol_id])
+    @imaging_run.imaging_key = "%s_%s_%04d" % [@imaging_run.run_date.strftime("%Y%m%d"), @protocol.protocol_code, ImagingRun.last_run_nr + 1]
 
     if !@imaging_run.save
       #error_found = true  # Validation or other error when saving to database
