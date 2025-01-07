@@ -56,7 +56,8 @@ class StorageTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def create_params
-      params.require(:storage_type).permit(:container_type, :nr_cols, :nr_rows, :first_col, :first_row, :freezer_type, :notes)
+      params.require(:storage_type).permit(:container_type, :nr_cols, :nr_rows, :first_col, :first_row,
+                                           :display_format, :freezer_type, :notes)
     end
 
     def update_params

@@ -19,6 +19,12 @@ class PatientQueriesController < ApplicationController
       @patients = Patient.find_with_conditions(@condition_array)
 
       flash.now[:notice] = 'No samples found for parameters entered' if @patients.nil?
+      @nr_samples = 0
+      @patients.each do |patient|
+        patient.sample_characteristics.each do |scharacteristic|
+          @nr_samples += scharacteristic.samples.size
+        end
+      end
       render :action => :index
 
     else  # Validation errors found

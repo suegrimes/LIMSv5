@@ -1,6 +1,7 @@
 <h5>Listing Selected Patients</h5>
 
 <%= form_tag :action => :export_patients do %>
+	<%=h @patients.size %> patients with <%=h @nr_samples %> total samples <br/>
 	<%= submit_tag "Export Patients", class: "btn btn-secondary", data: {disable_with: false} -%>
 <br/><br/>
 
