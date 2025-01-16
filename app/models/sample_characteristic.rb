@@ -41,6 +41,7 @@ class SampleCharacteristic < ApplicationRecord
 
   before_create :upd_from_patient
   before_save :upd_consent
+  after_update :upd_sample_date
   
   def upd_from_patient
     self.gender    = self.patient.gender
@@ -90,4 +91,10 @@ class SampleCharacteristic < ApplicationRecord
         .order("patients.id, collection_date").all
   end
 
+  private
+  def upd_sample_date
+    self.samples.each do |sample|
+      sample.update_attributes(:sample_date => self.collection_date)
+    end
+  end
 end
