@@ -4,10 +4,10 @@
   <tr>
     <th>Container Type</th>
     <th>Display Format</th>
-    <th>Nr Cols</th>
     <th>Nr Rows</th>
-    <th>First Col</th>
+    <th>Nr Cols</th>
     <th>First Row</th>
+    <th>First Col</th>
     <th>Freezer Type</th>
     <th>Notes</th>
     <% if can? :edit, StorageType %><th>&nbsp;</th><% end %>
@@ -20,10 +20,10 @@
       <tr>
         <td><%=h storage_type.container_type %></td>
         <td><%=h storage_type.display_format %></td>
-        <td><%=h storage_type.nr_cols %></td>
         <td><%=h storage_type.nr_rows %></td>
-        <td><%=h storage_type.first_row %></td>
+        <td><%=h storage_type.nr_cols %></td>
         <td><%=h storage_type.first_col %></td>
+        <td><%=h storage_type.first_row %></td>
         <td><%=h storage_type.freezer_type %></td>
         <td><%=h storage_type.notes %></td>
         <% if can? :edit, storage_type %>

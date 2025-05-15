@@ -55,8 +55,8 @@ class Ability
     
       # Clinical users can enter/update patient and clinical samples
       if user.has_role?("clinical") || user.has_role?("clin_admin")
-        can :manage, [Patient, SampleCharacteristic, Pathology, Sample, Histology, ProcessedSample, MolecularAssay,
-                      Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
+        can :manage, [Patient, SampleCharacteristic, Pathology, Sample, SampleLoc, Histology, ProcessedSample,
+                      MolecularAssay, Protocol, SampleStorageContainer, FreezerLocation, Researcher, Publication]
         cannot :delete, [Patient, SampleCharacteristic, Sample]
       end
       
