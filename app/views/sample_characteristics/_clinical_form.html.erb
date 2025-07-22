@@ -26,8 +26,12 @@
     <div class="col-auto">
       <%=f.collection_select(:disease_primary, @dx_primary, :c_value, :c_value, {:include_blank => 'Select disease'}, {class: "form-control"}) %>
     </div>
-  </div>
 
+    <label for="patient_age" class="col-auto col-form-label col-form-label-sm">Patient Age:</label>
+    <div class="col-auto">
+      <%=f.text_field(:patient_age, class: "form-control") %>
+    </div>
+  </div>
 
 <% if controller.action_name == 'edit' && f.object.clinic_or_location == 'NCCC' %>
   <div class="form-group row">
@@ -42,7 +46,6 @@
     </div>
   </div>
 <% end %>
-
 
   <div class="form-group row">
     <label for="comments" class="col-auto col-form-label col-form-label-sm">Comments:</label>

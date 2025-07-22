@@ -38,6 +38,7 @@ class SampleCharacteristic < ApplicationRecord
   validates_presence_of :collection_date, :if => Proc.new { |a| a.new_record? }
   validates_date :collection_date, :allow_blank => true
   validates_presence_of :consent_protocol_id, :clinic_or_location
+  validates_numericality_of :patient_age, :only_integer => true, :allow_blank => true
 
   before_create :upd_from_patient
   before_save :upd_consent

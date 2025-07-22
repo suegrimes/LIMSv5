@@ -17,6 +17,7 @@
 		<th>Consent Nr</th>
     <th>Clinic</th>
     <th>Primary Disease</th>
+		<th>Patient Age</th>
     <th>#Samples</th>
 		<th>Tumor/Normal</th>
   </tr>
@@ -34,13 +35,14 @@
 		<td><%=h s_characteristic.consent_nr %></td>
 		<td><%=h s_characteristic.clinic_or_location %></td>
 		<td><%=h s_characteristic.disease_primary %></td>
+		<td><%=h s_characteristic.patient_age %></td>
 		<td><%=link_to s_characteristic.samples.size, sample_characteristic_path(s_characteristic) %></td>
 		<% tn_values = s_characteristic.samples.pluck(:tumor_normal).reject(&:blank?) %>
 		<td><%= tn_values.size < 2 ? tn_values[0] : arr_tally_to_str(tn_values) %></td>
 		<%= hidden_field_tag("export_ids[]", s_characteristic.id)  %>
 	</tr>
   <% end %>
-	<tr><td colspan=11 style="background-color: #e9e9e9; height:2px"></td></tr>
+	<tr><td colspan=12 style="background-color: #e9e9e9; height:2px"></td></tr>
 <% end %>
 </tbody>
 </table>

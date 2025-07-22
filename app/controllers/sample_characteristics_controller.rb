@@ -350,8 +350,8 @@ private
 
   def sample_characteristic_params
     params.require(:sample_characteristic).permit(:patient_id,  # this was merged in
-      :collection_date, :clinic_or_location, :consent_protocol_id, :disease_primary, :comments,
-      samples_attributes: samples_attributes)
+      :collection_date, :clinic_or_location, :consent_protocol_id, :disease_primary,
+      :patient_age, :comments, samples_attributes: samples_attributes)
   end
 
   def sample_params
